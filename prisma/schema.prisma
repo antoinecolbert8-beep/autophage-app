@@ -1,0 +1,135 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                 String     @id @default(cuid())
+  stripeCustomerId   String     @unique
+  subscriptionStatus SubscriptionStatus
+  posts              Post[]
+
+  saveAttempts       SaveAttempt[]
+  
+  // Spore (Referrals)
+  referralCode String?  @unique
+  referredBy   String?
+  
+  inviter      User?    @relation("Referrals", fields: [referredBy], references: [referralCode])
+  referrals    User[]   @relation("Referrals")
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELED
+}
+
+model TreasuryLedger {
+  id                String     @id @default(cuid())
+  createdAt         DateTime   @default(now())
+  amount_cents      Int
+  type              LedgerType
+  referenceId       String
+  resulting_balance Int
+  stripeCustomerId  String?
+  
+  // Immutable Ledger (Crypto-Chaining)
+  previousHash      String?
+  currentHash       String?
+  idempotencyKey    String?    @unique
+}
+
+model SaveAttempt {
+  id        String   @id @default(cuid())
+  userId    String
+  createdAt DateTime @default(now())
+  trigger   String
+  offerSent String
+  status    String
+
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+enum LedgerType {
+  REVENUE_IN
+  AD_SPEND_OUT
+  TAX_RESERVE
+  SERVER_COST
+}
+
+model WarChest {
+  id                             Int      @id @default(1)
+  available_budget_cents         Int      @default(0)
+  reinvestment_rate_basis_points Int      @default(4000)
+  last_updated                   DateTime @updatedAt
+}
+
+model Post {
+  id               String   @id @default(cuid())
+  createdAt        DateTime @default(now())
+  content          String
+  performance_score Int     @default(0)
+  is_gold_standard Boolean @default(false)
+  status           PostStatus @default(TESTING)
+  
+  User             User?   @relation(fields: [userId], references: [id])
+  userId           String?
+  metrics          PerformanceMetric[]
+}
+
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+  TESTING
+  WINNER
+  BURNER
+  PAUSED
+}
+
+model PerformanceMetric {
+  id          String   @id @default(cuid())
+  postId      String
+  post        Post     @relation(fields: [postId], references: [id])
+  spend       Int
+  impressions Int
+  clicks      Int
+  ctr         Float
+  roas        Float
+  
+  recordedAt  DateTime @default(now())
+}
+// Pour le Module 8 : Le contenu qui change tout seul
+model LandingContent {
+  id          String   @id @default(cuid())
+  heroTitle   String   // Le gros titre (ex: "La première IA qui...")
+  heroSubtitle String  // Le sous-titre
+  ctaText     String   // Le texte du bouton (ex: "Initialiser le système")
+  active      Boolean  @default(false) // Est-ce la version active ?
+  conversionScore Float @default(0)    // Module 6 : Score de performance
+  createdAt   DateTime @default(now())
+}
+
+// Pour le Module 1 : Les articles de blog SEO
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  content     String   // Le contenu HTML généré par l'IA
+  slug        String   @unique // L'url (ex: /blog/comment-devenir-riche)
+  published   Boolean  @default(false)
+  keywords    String[] // Module 1 : Mots clés invisibles
+  createdAt   DateTime @default(now())
+}
+model LandingPage {
+  id           String   @id @default(cuid())
+  style        String   @unique
+  heroTitle    String
+  heroSubtitle String
+  ctaText      String
+  createdAt    DateTime @default(now())
+}

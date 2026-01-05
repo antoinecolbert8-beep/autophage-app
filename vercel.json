@@ -1,0 +1,12 @@
+{
+    "crons": [
+        {
+            "path": "/api/cron/heartbeat?type=growth",
+            "schedule": "0 * * * *"
+        },
+        {
+            "path": "/api/cron/heartbeat?type=analytics",
+            "schedule": "0 8 * * *"
+        }
+    ]
+}
