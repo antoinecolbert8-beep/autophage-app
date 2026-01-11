@@ -1,0 +1,128 @@
+# 🐳 Docker Compose - Infrastructure Complète Souveraine
+# Déploiement en une commande : docker-compose up -d
+
+version: '3.8'
+
+services:
+  # Frontend Next.js
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+    depends_on:
+      - chromadb
+      - redis
+      - postgres
+    volumes:
+      - ./public:/app/public
+      - ./data:/app/data
+    restart: unless-stopped
+
+  # ChromaDB (Alternative souveraine à Pinecone)
+  chromadb:
+    image: ghcr.io/chroma-core/chroma:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+      - ANONYMIZED_TELEMETRY=FALSE
+    restart: unless-stopped
+
+  # PostgreSQL (Base de données)
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=autophage
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=autophage
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # Redis (Cache + Queue)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+
+  # Bot Python LinkedIn
+  bot-linkedin:
+    build:
+      context: ./SaaS_Bot_LinkedIn
+      dockerfile: Dockerfile
+    environment:
+      - API_ENDPOINT=http://app:3000
+    volumes:
+      - ./SaaS_Bot_LinkedIn:/app
+      - bot_storage:/app/storage
+    depends_on:
+      - app
+      - redis
+    restart: unless-stopped
+
+  # Worker pour tâches asynchrones
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    environment:
+      - NODE_ENV=production
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
+      - chromadb
+    restart: unless-stopped
+
+  # Monitoring (Prometheus + Grafana)
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+volumes:
+  chroma_data:
+  postgres_data:
+  redis_data:
+  bot_storage:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  default:
+    name: autophage-network
+
+
+
+
+

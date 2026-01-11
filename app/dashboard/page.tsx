@@ -1,253 +1,186 @@
-"use client"
+"use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { generateWithBrainAction } from "@/actions/ai-logic";
+import {
+  LineIconZap,
+  LineIconShield,
+  LineIconBarChart,
+  LineIconBell,
+  LineIconSearch,
+  LineIconChevronDown,
+  LineIconUsers
+} from "@/components/LineIcons";
+import { OmniscienceTerminal } from "@/components/omniscience-terminal";
 
-// Configuration des styles selon l'abonnement
-const THEMES = {
-  BASIC: { bg: "bg-slate-950", accent: "text-slate-400", border: "border-slate-800" },
-  ADVANCED: { bg: "bg-[#051010]", accent: "text-emerald-400", border: "border-emerald-900" },
-  ELITE: { bg: "bg-[#050515]", accent: "text-blue-400", border: "border-blue-900" },
-  GOD_MODE: { bg: "bg-black", accent: "text-purple-500", border: "border-purple-500/50" }
-};
-
-export default function ClientDashboard() {
-  const router = useRouter();
-  
-  // --- ÉTATS GLOBAUX ---
-  const [prompt, setPrompt] = useState("");
-  const [result, setResult] = useState("");
-  const [loading, setLoading] = useState(false);
-  
-  const [tier, setTier] = useState("BASIC");
-  const [paymentStatus, setPaymentStatus] = useState("checking");
-  
-  // États pour l'autonomie (God Mode)
-  const [revenue, setRevenue] = useState(12450);
-  const [autoLogs, setAutoLogs] = useState<string[]>([]);
+export default function DashboardPage() {
+  const [userName, setUserName] = useState("Utilisateur");
+  const [userTier, setUserTier] = useState("standard"); // standard, pro, grand_horloger
 
   useEffect(() => {
-    // 1. VÉRIFICATION SÉCURITÉ & PAIEMENT
-    const userTier = localStorage.getItem("user_tier");
-    const status = localStorage.getItem("payment_status");
-    
-    if (!userTier) {
-      router.push("/"); // Pas connecté ? Dehors.
-      return;
-    }
-    
-    setTier(userTier);
+    // In a real app, fetch from Supabase profile
+    // For now, we simulate based on potential local storage or just default
+    // We can also check if the user just signed up with God Mode
+    const checkUser = async () => {
+      // Mock fetch
+      const storedTier = typeof window !== 'undefined' ? localStorage.getItem('genesis_tier') : null;
+      const storedName = typeof window !== 'undefined' ? localStorage.getItem('genesis_user_name') : "Alexandre";
 
-    // Simulation check mensuel
-    setTimeout(() => {
-      // Pour le test, on considère que c'est payé si le localStorage dit 'active' ou rien
-      if (status === "failed") setPaymentStatus("failed");
-      else setPaymentStatus("authorized");
-    }, 1000);
+      setUserName(storedName || "Alexandre");
+      // Only set Grand Horloger if it was explicitly stored (Admin flow)
+      setUserTier(storedTier || "standard");
+    };
+    checkUser();
+  }, []);
 
-    // 2. LANCEMENT DU SYSTÈME AUTONOME (Uniquement God Mode)
-    if (userTier === "GOD_MODE") {
-      const actions = [
-        "✅ Client 'Studio 44' signé (Virement reçu)",
-        "🤖 Post LinkedIn viral publié (+450 vues en 10min)",
-        "🔍 150 Prospects qualifiés extraits",
-        "📧 Campagne de relance : 45% taux d'ouverture"
-      ];
-      let i = 0;
-      const interval = setInterval(() => {
-        setAutoLogs(prev => [actions[i % actions.length], ...prev].slice(0, 5));
-        if (i % 4 === 0) setRevenue(prev => prev + 297); // Encaissement auto
-        i++;
-      }, 3500);
-      return () => clearInterval(interval);
-    }
-  }, [router]);
+  const stats = [
+    { title: "Leads Générés", value: "1,284", change: "+12%", icon: LineIconUsers, color: "text-blue-400" },
+    { title: "Contenus Créés", value: "342", change: "+8%", icon: LineIconZap, color: "text-purple-400" },
+    { title: "Taux de Conversion", value: "3.4%", change: "+2.1%", icon: LineIconBarChart, color: "text-green-400" },
+    { title: "Sécurité", value: "100%", change: "Optimale", icon: LineIconShield, color: "text-emerald-400" },
+  ];
 
-  const theme = THEMES[tier as keyof typeof THEMES] || THEMES.BASIC;
-
-  // --- ÉCRAN DE BLOCAGE (Paiement échoué) ---
-  if (paymentStatus === "failed") {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center p-6">
-        <div className="max-w-md w-full bg-red-950/30 border border-red-500 p-8 rounded-2xl text-center backdrop-blur-xl">
-          <div className="text-4xl mb-4">⛔</div>
-          <h2 className="text-2xl font-black text-red-500 uppercase mb-2">Accès Suspendu</h2>
-          <p className="text-red-200 text-sm mb-6">Le prélèvement mensuel pour votre abonnement {tier} a échoué.</p>
-          <button onClick={() => router.push("/")} className="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded-lg uppercase">
-            Mettre à jour la carte bancaire
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // --- ÉCRAN DE CHARGEMENT ---
-  if (paymentStatus === "checking") {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center text-slate-500 font-mono text-xs animate-pulse">
-        VÉRIFICATION DES DROITS D'ACCÈS...
-      </div>
-    );
-  }
-
-  // --- INTERFACE PRINCIPALE ---
   return (
-    <div className={`min-h-screen ${theme.bg} text-white font-sans transition-colors duration-1000 flex`}>
-      
-      {/* SIDEBAR POLYMORPHE */}
-      <aside className={`w-20 lg:w-64 border-r ${theme.border} p-6 flex flex-col justify-between hidden md:flex`}>
-        <div>
-          <div className="text-2xl font-black italic mb-10 tracking-tighter">A<span className={theme.accent}>.</span></div>
-          <nav className="space-y-2">
-            <div className={`p-3 rounded-lg ${theme.bg === 'bg-black' ? 'bg-purple-900/20 text-white' : 'text-slate-500'} font-bold text-sm cursor-pointer`}>Dashboard</div>
-            <div className="p-3 text-slate-500 hover:text-white text-sm cursor-pointer">Campagnes</div>
-            <div className="p-3 text-slate-500 hover:text-white text-sm cursor-pointer">Facturation</div>
-          </nav>
+    <div className="min-h-screen bg-[#0a0a0f] text-white">
+      {/* Top Header */}
+      <header className="h-20 border-b border-white/5 flex items-center justify-between px-8 bg-[#0a0a0f]/80 backdrop-blur-md sticky top-0 z-20">
+        <div className="flex items-center gap-4 text-gray-400 w-1/3">
+          <LineIconSearch size={18} />
+          <input
+            type="text"
+            placeholder="Rechercher une action..."
+            className="bg-transparent border-none outline-none text-white w-full placeholder-gray-500 font-light focus:ring-0"
+          />
         </div>
-        
-        {/* UPSELL POUR LES NON-GOD MODE */}
-        {tier !== "GOD_MODE" && (
-          <div className="p-4 rounded-xl bg-gradient-to-br from-slate-900 to-black border border-slate-800">
-            <p className="text-[10px] text-slate-400 mb-2 uppercase font-bold">Passez au niveau supérieur</p>
-            <button onClick={() => { localStorage.setItem("user_tier", "GOD_MODE"); window.location.reload(); }} className="w-full py-2 bg-white text-black text-xs font-black uppercase rounded hover:scale-105 transition-transform">
-              Upgrade God Mode
-            </button>
-          </div>
-        )}
-      </aside>
 
-      {/* CONTENU PRINCIPAL */}
-      <main className="flex-1 p-8 overflow-y-auto">
-        <header className="flex justify-between items-end mb-12">
-          <div>
-            <h1 className="text-4xl font-bold mb-2">Vue d'ensemble</h1>
-            <p className="text-slate-500 text-sm flex items-center gap-2">
-              <span className={`w-2 h-2 rounded-full ${tier === 'GOD_MODE' ? 'bg-green-500 animate-pulse' : 'bg-slate-500'}`}></span>
-              Mode Actif : <span className={`${theme.accent} font-black uppercase`}>{tier}</span>
-            </p>
+        <div className="flex items-center gap-6">
+          <button className="relative text-gray-400 hover:text-white transition-colors">
+            <LineIconBell size={20} />
+            <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+          </button>
+          <div className="flex items-center gap-3 border-l border-white/10 pl-6">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500"></div>
+            <div className="text-sm">
+              <p className="font-semibold text-white">{userName}</p>
+              <p className={`text-xs ${userTier === 'grand_horloger' ? 'text-pink-500 font-bold animate-pulse' : 'text-gray-500'}`}>
+                {userTier === 'grand_horloger' ? 'GOD MODE /// ADMIN' : 'Admin'}
+              </p>
+            </div>
+            <LineIconChevronDown size={14} className="text-gray-500" />
           </div>
-          {tier === "GOD_MODE" && (
-            <div className="text-right">
-              <p className="text-[10px] text-slate-500 uppercase tracking-widest">Revenu Généré (Auto)</p>
-              <p className="text-3xl font-black text-white">{revenue.toLocaleString()} €</p>
-            </div>
-          )}
-        </header>
+        </div>
+      </header>
 
-        {/* SECTION AUTONOME : UNIQUEMENT GOD MODE */}
-        {tier === "GOD_MODE" ? (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-            {/* Colonne 1 : Prospection Auto */}
-            <div className="bg-[#0A0A0A] p-6 rounded-3xl border border-purple-900/30 relative overflow-hidden group">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-blue-500"></div>
-              <h3 className="text-sm font-bold text-slate-300 uppercase mb-4 flex items-center justify-between">
-                Acquisition Clients <span className="text-[10px] bg-green-500/20 text-green-400 px-2 rounded">LIVE</span>
-              </h3>
-              <div className="space-y-3 font-mono text-xs h-32 overflow-hidden">
-                {autoLogs.map((log, i) => (
-                  <div key={i} className="text-slate-400 animate-in fade-in slide-in-from-left-4">{log}</div>
-                ))}
-              </div>
-            </div>
+      <div className="p-8 max-w-7xl mx-auto">
+        <div className="mb-8">
 
-            {/* Colonne 2 : Stratégie Organique */}
-            <div className="bg-[#0A0A0A] p-6 rounded-3xl border border-purple-900/30">
-              <h3 className="text-sm font-bold text-slate-300 uppercase mb-4">Viralité Organique</h3>
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-xs text-slate-500">LinkedIn</span>
-                <span className="text-xs text-green-400 font-bold">3 Posts/Jour ✅</span>
+          <h1 className="text-3xl font-bold mb-2">Tableau de bord</h1>
+          <p className="text-gray-400">
+            {userTier === 'grand_horloger'
+              ? `Bienvenue, Initiateur ${userName}. Le système est à vos ordres.`
+              : `Bienvenue sur votre centre de commandement, ${userName}.`}
+          </p>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {stats.map((stat, i) => (
+            <div key={i} className="bg-[#13131f] border border-white/5 rounded-2xl p-6 hover:border-white/10 transition-colors">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <p className="text-gray-500 text-sm font-medium mb-1">{stat.title}</p>
+                  <h3 className="text-2xl font-bold text-white">{stat.value}</h3>
+                </div>
+                <div className={`p-2 rounded-lg bg-white/5 ${stat.color}`}>
+                  <stat.icon size={20} />
+                </div>
               </div>
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-xs text-slate-500">Instagram</span>
-                <span className="text-xs text-green-400 font-bold">3 Reels/Jour ✅</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-xs text-slate-500">Twitter (X)</span>
-                <span className="text-xs text-green-400 font-bold">Auto-Thread ✅</span>
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-green-400 font-medium bg-green-400/10 px-2 py-0.5 rounded">{stat.change}</span>
+                <span className="text-gray-600">vs mois dernier</span>
               </div>
             </div>
-            
-            {/* Colonne 3 : SEO Darwinien */}
-            <div className="bg-[#0A0A0A] p-6 rounded-3xl border border-purple-900/30 flex flex-col justify-center items-center text-center">
-               <div className="w-16 h-16 rounded-full border-4 border-purple-500 flex items-center justify-center text-xl font-black mb-4 shadow-[0_0_20px_rgba(168,85,247,0.3)]">98%</div>
-               <h3 className="text-sm font-bold text-white uppercase">Score SEO</h3>
-               <p className="text-[10px] text-slate-500 mt-2">Votre Landing Page s'est auto-optimisée 4 fois ce matin.</p>
+          ))}
+        </div>
+
+        {/* OMNISCIENCE: THE GOD VIEW (Visible only to Grand Horloger) */}
+        {userTier === 'grand_horloger' && (
+          <div className="mb-8 p-1 rounded-2xl bg-gradient-to-r from-pink-500/50 via-purple-600/50 to-pink-500/50 animate-gradient-xy">
+            <div className="bg-black rounded-[14px] overflow-hidden font-mono text-xs border border-white/10 shadow-2xl">
+              {/* Terminal Header */}
+              <div className="flex items-center justify-between px-4 py-2 bg-white/5 border-b border-white/10">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                  <span className="ml-2 text-gray-400">OMNISCIENCE.EXE /// SYSTEM_LOGS</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                  <span className="text-green-500">LIVE FEED</span>
+                </div>
+              </div>
+
+              {/* Terminal Body */}
+              <OmniscienceTerminal />
             </div>
-          </div>
-        ) : (
-          /* VERSION RESTREINTE (BASIC/ADVANCED) */
-          <div className="bg-slate-900/50 border border-slate-800 p-10 rounded-3xl text-center mb-8">
-            <h3 className="text-xl font-bold text-slate-400 mb-2">Mode Pilote Manuel</h3>
-            <p className="text-slate-600 mb-6">L'automatisation complète, l'encaissement et le SEO Darwinien sont réservés aux membres GOD MODE.</p>
-            <button onClick={() => { localStorage.setItem("user_tier", "GOD_MODE"); window.location.reload(); }} className="px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg font-black uppercase text-sm hover:scale-105 transition-transform shadow-lg">
-              Débloquer l'Autonomie (2997€/mois)
-            </button>
           </div>
         )}
 
-        {/* SECTION CONTENU : CONNECTÉE AU CERVEAU RÉEL */}
-        <div className={`p-8 rounded-3xl border ${theme.border} bg-black/20 mt-8`}>
-          <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-            Générateur de Contenu Stratégique
-            {tier === "GOD_MODE" && <span className="text-[10px] bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded border border-purple-500/30">MOTEUR GPT-4o CONNECTÉ</span>}
-          </h3>
-          
-          <div className="space-y-4">
-            <textarea 
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder={tier === "GOD_MODE" ? "Ex: 'Vends mon coaching High-Ticket pour des dentistes' (Je génère les 3 réseaux)..." : "Sujet du post (Limité à 1)..."} 
-              className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-purple-500 outline-none transition-all h-32 resize-none placeholder:text-slate-600"
-            />
-            
-            <div className="flex justify-between items-center">
-               <div className="text-xs text-slate-500 flex gap-3 font-mono">
-                  <span className={tier === "GOD_MODE" ? "text-green-400 font-bold" : "text-slate-600"}>[LINKEDIN]</span>
-                  <span className={tier === "GOD_MODE" ? "text-pink-400 font-bold" : "text-slate-600"}>[INSTA]</span>
-                  <span className={tier === "GOD_MODE" ? "text-white font-bold" : "text-slate-600"}>[X]</span>
-               </div>
-               
-               <button 
-                  disabled={loading}
-                  onClick={async () => {
-                    if (!prompt) return;
-                    setLoading(true);
-                    // On force l'IA à agir selon le rang de l'utilisateur
-                    const contextPrompt = tier === "GOD_MODE" 
-                      ? `[MODE GOD_MODE ACTIVÉ] Agis comme une Agence Média Autonome. Génère 3 posts distincts (LinkedIn expert, Twitter punchy, Instagram script Reel) sur ce sujet : "${prompt}". Utilise mes modules de persuasion.`
-                      : `[MODE BASIC] Génère un seul post LinkedIn simple sur : "${prompt}".`;
-                      
-                    const res = await generateWithBrainAction(contextPrompt);
-                    if (res.output) setResult(res.output);
-                    setLoading(false);
-                  }}
-                  className={`px-8 py-4 rounded-xl font-black uppercase text-xs tracking-widest transition-all hover:scale-105 active:scale-95 ${tier === "GOD_MODE" ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)]' : 'bg-slate-800 text-slate-400 border border-slate-700'}`}
-               >
-                  {loading ? "Création des posts..." : (tier === "GOD_MODE" ? "🚀 Lancer la Production (x3)" : "Poster (x1)")}
-               </button>
+        {/* Charts Area Mockup */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          <div className="lg:col-span-2 bg-[#13131f] border border-white/5 rounded-2xl p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="font-bold text-lg">Activité des Agents</h3>
+              <select className="bg-white/5 border border-white/10 rounded-lg px-3 py-1 text-sm text-gray-400 outline-none">
+                <option>7 derniers jours</option>
+                <option>30 derniers jours</option>
+              </select>
+            </div>
+            <div className="h-64 flex items-end justify-between gap-4 px-2">
+              {[40, 70, 45, 90, 65, 85, 45, 60, 75, 50, 95, 80].map((h, i) => (
+                <div key={i} className="w-full bg-white/5 rounded-t-sm hover:bg-[#667eea] transition-colors relative group">
+                  <div style={{ height: `${h}%` }} className="absolute bottom-0 w-full bg-gradient-to-t from-[#667eea] to-[#764ba2] rounded-t-sm opacity-60 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* AFFICHAGE DU RÉSULTAT RÉEL */}
-          {result && (
-            <div className="mt-8 animate-in fade-in slide-in-from-bottom-4">
-              <div className="h-px w-full bg-gradient-to-r from-transparent via-slate-700 to-transparent mb-6"></div>
-              <div className="bg-[#050505] rounded-xl border border-white/10 p-6 shadow-inner">
-                <h4 className="text-xs font-bold text-slate-500 uppercase mb-4 tracking-widest">Contenu Généré par le Cerveau :</h4>
-                <div className="text-slate-300 whitespace-pre-wrap leading-relaxed font-light text-sm">
-                  {result}
+          <div className="bg-[#13131f] border border-white/5 rounded-2xl p-6">
+            <h3 className="font-bold text-lg mb-6">Actions Rapides</h3>
+            <div className="space-y-4">
+              <button className="w-full p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors text-left flex items-center gap-4 group">
+                <div className="w-10 h-10 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <LineIconZap size={20} />
                 </div>
-                <div className="mt-4 flex justify-end gap-2">
-                  <button className="text-[10px] uppercase font-bold text-green-400 hover:text-green-300">Copier tout</button>
-                  <button className="text-[10px] uppercase font-bold text-purple-400 hover:text-purple-300">Planifier Auto</button>
+                <div>
+                  <p className="font-bold text-sm">Lancer une campagne</p>
+                  <p className="text-xs text-gray-500">Email & Réseaux Sociaux</p>
                 </div>
-              </div>
-            </div>
-          )}
-        </div>
+              </button>
 
-      </main>
+              <button className="w-full p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors text-left flex items-center gap-4 group">
+                <div className="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <LineIconUsers size={20} />
+                </div>
+                <div>
+                  <p className="font-bold text-sm">Ajouter un prospect</p>
+                  <p className="text-xs text-gray-500">Enrichissement auto</p>
+                </div>
+              </button>
+
+              <button className="w-full p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors text-left flex items-center gap-4 group">
+                <div className="w-10 h-10 rounded-lg bg-green-500/20 text-green-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <LineIconBarChart size={20} />
+                </div>
+                <div>
+                  <p className="font-bold text-sm">Générer un rapport</p>
+                  <p className="text-xs text-gray-500">PDF & Excel</p>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

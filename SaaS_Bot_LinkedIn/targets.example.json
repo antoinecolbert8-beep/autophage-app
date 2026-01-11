@@ -1,0 +1,11 @@
+[
+  { "action": "VISIT", "url": "https://www.linkedin.com/in/satyanadella/" },
+  { "action": "LIKE",  "url": "https://www.linkedin.com/feed/" },
+  { "action": "COMMENT", "url": "https://www.linkedin.com/posts/...", "comment": "Super insight, merci pour le partage !" }
+]
+
+
+
+
+
+

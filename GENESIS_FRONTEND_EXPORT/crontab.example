@@ -1,0 +1,126 @@
+# 🤖 CRONTAB AUTOPHAGE - AUTOMATISATION COMPLÈTE
+# Copier ces lignes dans votre crontab : crontab -e
+# Remplacer /path/to/autophage par le chemin réel
+
+# Format : minute hour day month dayofweek command
+
+# ============================================
+# SURVEILLANCE & SANTÉ
+# ============================================
+
+# Health check toutes les 15 minutes
+*/15 * * * * cd /path/to/autophage && npm run health >> /var/log/autophage-health.log 2>&1
+
+# Self-healing toutes les 15 minutes
+*/15 * * * * cd /path/to/autophage && npm run self-healing:check >> /var/log/autophage-healing.log 2>&1
+
+# ============================================
+# COLLECTE DE DONNÉES
+# ============================================
+
+# Stats LinkedIn toutes les heures
+0 * * * * cd /path/to/autophage/SaaS_Bot_LinkedIn && source venv/bin/activate && python stats_collector.py >> /var/log/autophage-stats.log 2>&1
+
+# Scraping de leads toutes les 2 heures
+0 */2 * * * cd /path/to/autophage/SaaS_Bot_LinkedIn && source venv/bin/activate && python engagement_bot.py --mode=scrape >> /var/log/autophage-scrape.log 2>&1
+
+# ============================================
+# INTELLIGENCE & OPTIMISATION
+# ============================================
+
+# Feedback loop quotidien à 3h du matin
+0 3 * * * cd /path/to/autophage && npm run feedback:loop >> /var/log/autophage-feedback.log 2>&1
+
+# Agent Swarm check toutes les 30 minutes
+*/30 * * * * cd /path/to/autophage && npm run agents:check >> /var/log/autophage-agents.log 2>&1
+
+# Opportunité detection toutes les heures
+0 * * * * cd /path/to/autophage && npm run agents:opportunist >> /var/log/autophage-opportunities.log 2>&1
+
+# ============================================
+# BACKUP & MAINTENANCE
+# ============================================
+
+# Backup complet quotidien à 4h du matin
+0 4 * * * cd /path/to/autophage && npm run backup >> /var/log/autophage-backup.log 2>&1
+
+# Nettoyage des logs anciens (> 30 jours) chaque dimanche à 5h
+0 5 * * 0 find /var/log/autophage-*.log -mtime +30 -delete
+
+# Backup base de données quotidien à 4h30
+30 4 * * * cd /path/to/autophage && npm run db:backup >> /var/log/autophage-db-backup.log 2>&1
+
+# ============================================
+# CONTENU & PUBLICATION
+# ============================================
+
+# Génération de contenu quotidienne à 7h
+0 7 * * * cd /path/to/autophage && npm run content:generate >> /var/log/autophage-content.log 2>&1
+
+# Publication multi-plateformes à 9h, 14h, 18h
+0 9,14,18 * * * cd /path/to/autophage && npm run social:publish >> /var/log/autophage-social.log 2>&1
+
+# ============================================
+# PROSPECTION & VENTE
+# ============================================
+
+# Campagne d'appels sortants du lundi au vendredi à 10h
+0 10 * * 1-5 cd /path/to/autophage && npm run telephony:outbound-campaign >> /var/log/autophage-calls.log 2>&1
+
+# Relance des leads tièdes du lundi au vendredi à 15h
+0 15 * * 1-5 cd /path/to/autophage && npm run sales:follow-up >> /var/log/autophage-followup.log 2>&1
+
+# ============================================
+# RAPPORTS
+# ============================================
+
+# Rapport hebdomadaire le lundi à 8h
+0 8 * * 1 cd /path/to/autophage && npm run reports:weekly >> /var/log/autophage-reports.log 2>&1
+
+# Rapport mensuel le 1er du mois à 9h
+0 9 1 * * cd /path/to/autophage && npm run reports:monthly >> /var/log/autophage-reports.log 2>&1
+
+# ============================================
+# SÉCURITÉ & CONFORMITÉ
+# ============================================
+
+# Scan de sécurité quotidien à 2h
+0 2 * * * cd /path/to/autophage && npm run security:scan >> /var/log/autophage-security.log 2>&1
+
+# Vérification RGPD quotidienne à 2h30
+30 2 * * * cd /path/to/autophage && npm run legal:check >> /var/log/autophage-legal.log 2>&1
+
+# ============================================
+# REDÉMARRAGE & NETTOYAGE
+# ============================================
+
+# Redémarrage hebdomadaire des services le dimanche à 4h
+0 4 * * 0 cd /path/to/autophage && docker-compose restart >> /var/log/autophage-restart.log 2>&1
+
+# Nettoyage du cache toutes les 6 heures
+0 */6 * * * cd /path/to/autophage && npm run cache:clear >> /var/log/autophage-cache.log 2>&1
+
+# ============================================
+# NOTES D'UTILISATION
+# ============================================
+
+# Pour installer ce crontab :
+# 1. Éditer : crontab -e
+# 2. Copier/coller les lignes ci-dessus
+# 3. Remplacer /path/to/autophage
+# 4. Sauvegarder : Ctrl+X, Y, Enter
+# 5. Vérifier : crontab -l
+
+# Pour voir les logs :
+# tail -f /var/log/autophage-*.log
+
+# Pour désactiver temporairement :
+# Ajouter # devant la ligne
+
+# Pour désactiver tout :
+# crontab -r (⚠️ ATTENTION : supprime tout)
+
+
+
+
+

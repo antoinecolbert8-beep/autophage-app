@@ -1,144 +1,529 @@
-import Link from 'next/link';
-import { db } from "@/core/db";
-import { ArrowRight, Bot, Zap, TrendingUp, ShieldCheck, Activity, Users, DollarSign } from 'lucide-react';
+"use client";
+import Link from "next/link";
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { Star, ArrowRight, Zap, Check, CheckCircle2, Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  LineIconChevronRight,
+  LineIconZap,
+  LineIconStar,
+  LineIconCheck,
+  LineIconArrowRight,
+  LineIconGlobe,
+  LineIconTrendingUp,
+} from "@/components/LineIcons";
 
-export const dynamic = 'force-dynamic';
+export default function Home() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-export default async function LandingPage() {
-    // Live Stats Fetching
-    const totalUsers = await db.user.count();
-    const warChest = await db.warChest.findUnique({ where: { id: 1 } });
-    const budgetFormatted = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format((warChest?.available_budget_cents || 0) / 100);
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-    return (
-        <div className="min-h-screen bg-slate-950 text-white selection:bg-blue-500 selection:text-white font-sans">
-            {/* Navbar */}
-            <nav className="border-b border-slate-800 backdrop-blur-md fixed w-full z-50 top-0">
-                <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                            <Bot className="w-5 h-5 text-white" />
-                        </div>
-                        <span className="font-bold text-xl tracking-tight">Autophage</span>
-                    </div>
-                    <div className="flex gap-4 text-sm font-medium text-slate-400">
-                        <Link href="#features" className="hover:text-white transition-colors">Features</Link>
-                        <Link href="/dashboard" className="text-white hover:text-blue-400 transition-colors">Login</Link>
-                    </div>
-                </div>
-            </nav>
+  return (
+    <div className="min-h-screen bg-[#0a0a0f] text-white font-sans selection:bg-pink-500/30 overflow-x-hidden">
+      {/* --- HEADER --- */}
+      <header
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? "bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-white/5 py-4" : "bg-transparent py-6"
+          }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-pink-500 flex items-center justify-center overflow-hidden border border-white/20 group-hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(59,130,246,0.5)]">
+              <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-30"></div>
+              <img src="/chip.svg" alt="chip" className="w-6 h-6 text-white relative z-10" />
+              {/* Fallback Icon if chip.svg invalid */}
+              <Zap className="w-6 h-6 text-white relative z-10" />
+            </div>
+            <span className="text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 group-hover:to-white transition-all">
+              GENESIS
+            </span>
+          </Link>
 
-            {/* Hero Section */}
-            <section className="pt-40 pb-20 px-6 relative overflow-hidden">
-                <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-20 pointer-events-none"></div>
+          <nav className="hidden md:flex items-center gap-8">
+            <Link href="/agents" className="text-sm font-bold text-gray-400 hover:text-white transition-colors hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]">AGENTS</Link>
+            <Link href="/features" className="text-sm font-bold text-gray-400 hover:text-white transition-colors">FONCTIONNALITÉS</Link>
+            <Link href="/pricing" className="text-sm font-bold text-gray-400 hover:text-white transition-colors">TARIFS</Link>
+            <Link href="/contact" className="text-sm font-bold text-gray-400 hover:text-white transition-colors">CONTACT</Link>
+          </nav>
 
-                <div className="max-w-5xl mx-auto text-center relative z-10">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm mb-8 animate-fade-in">
-                        <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                        </span>
-                        System Online • v1.0.4
-                    </div>
-                    <h1 className="text-6xl md:text-8xl font-bold tracking-tight mb-8 bg-gradient-to-b from-white via-slate-200 to-slate-500 text-transparent bg-clip-text">
-                        The First AI that <br />
-                        <span className="text-blue-500">Grows Itself.</span>
-                    </h1>
-                    <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-                        Autophage is a closed-loop organism. It generates content, buys ads,
-                        harvests revenue, and rewrites its own growth logic.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link
-                            href="/dashboard"
-                            className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-lg transition-all hover:scale-105 shadow-lg shadow-blue-900/50"
-                        >
-                            Initialize System <ArrowRight className="w-5 h-5 ml-2" />
-                        </Link>
-                    </div>
-                </div>
-            </section>
+          <div className="hidden md:flex items-center gap-6">
+            <Link href="/login" className="text-sm font-bold hover:text-blue-400 transition-colors">SE CONNECTER</Link>
+            <Link
+              href="/signup"
+              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-pink-600 rounded-lg font-bold text-sm tracking-wide hover:shadow-[0_0_30px_rgba(236,72,153,0.5)] transition-all transform hover:-translate-y-1 relative overflow-hidden group"
+            >
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+              <span className="relative flex items-center gap-2"><Zap size={16} fill="currentColor" /> ESSAI GRATUIT</span>
+            </Link>
+          </div>
 
-            {/* Live Stats Section */}
-            <section className="py-10 border-y border-slate-900 bg-slate-950/50">
-                <div className="max-w-4xl mx-auto px-6 grid grid-cols-2 md:grid-cols-3 gap-8 text-center divide-x divide-slate-800/50">
-                    <div>
-                        <div className="flex items-center justify-center gap-2 mb-1 text-slate-400 uppercase text-xs tracking-wider">
-                            <Users className="w-4 h-4" /> Assimilated Users
-                        </div>
-                        <div className="text-3xl font-mono font-bold text-white">{totalUsers.toLocaleString()}</div>
-                    </div>
-                    <div>
-                        <div className="flex items-center justify-center gap-2 mb-1 text-slate-400 uppercase text-xs tracking-wider">
-                            <DollarSign className="w-4 h-4" /> WarChest Reserves
-                        </div>
-                        <div className="text-3xl font-mono font-bold text-green-400">{budgetFormatted}</div>
-                    </div>
-                    <div>
-                        <div className="flex items-center justify-center gap-2 mb-1 text-slate-400 uppercase text-xs tracking-wider">
-                            <Activity className="w-4 h-4" /> System Status
-                        </div>
-                        <div className="text-3xl font-mono font-bold text-blue-400">AUTONOMOUS</div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Features Grid */}
-            <section id="features" className="py-32 px-6 bg-slate-900/20">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center mb-20">
-                        <h2 className="text-3xl md:text-5xl font-bold mb-6">The Cycle</h2>
-                        <p className="text-slate-400 text-lg">How the organism sustains itself.</p>
-                    </div>
-                    <div className="grid md:grid-cols-3 gap-8">
-                        {/* Card 1: Hunt */}
-                        <div className="p-8 rounded-2xl bg-slate-950 border border-slate-800 hover:border-red-500/50 transition-all group hover:-translate-y-2">
-                            <div className="w-14 h-14 bg-red-900/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <Zap className="w-7 h-7 text-red-500" />
-                            </div>
-                            <h3 className="text-2xl font-bold mb-4 text-white">1. Hunt (Ads)</h3>
-                            <p className="text-slate-400 leading-relaxed">
-                                Campaign Commander scans the horizon, deploying capital into Meta&apos;s ad network.
-                                It identifies &quot;Winner&quot; patterns and kills weak creatives instantly.
-                            </p>
-                        </div>
-
-                        {/* Card 2: Feed */}
-                        <div className="p-8 rounded-2xl bg-slate-950 border border-slate-800 hover:border-green-500/50 transition-all group hover:-translate-y-2">
-                            <div className="w-14 h-14 bg-green-900/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <DollarSign className="w-7 h-7 text-green-500" />
-                            </div>
-                            <h3 className="text-2xl font-bold mb-4 text-white">2. Feed (Revenue)</h3>
-                            <p className="text-slate-400 leading-relaxed">
-                                Converted users generate revenue. The &quot;Spore&quot; engine incentivizes viral sharing,
-                                funneling 40% of all profits directly back into the WarChest.
-                            </p>
-                        </div>
-
-                        {/* Card 3: Evolve */}
-                        <div className="p-8 rounded-2xl bg-slate-950 border border-slate-800 hover:border-blue-500/50 transition-all group hover:-translate-y-2">
-                            <div className="w-14 h-14 bg-blue-900/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <TrendingUp className="w-7 h-7 text-blue-500" />
-                            </div>
-                            <h3 className="text-2xl font-bold mb-4 text-white">3. Evolve (Reinvest)</h3>
-                            <p className="text-slate-400 leading-relaxed">
-                                The organism learns. High ROAS strategies are fed back into the Content Forge AI,
-                                creating smarter, more effective genetic iterations of ad copy.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Footer */}
-            <footer className="py-12 px-6 border-t border-slate-900 text-center text-slate-600 bg-slate-950">
-                <div className="flex items-center justify-center gap-2 mb-4">
-                    <Bot className="w-5 h-5" />
-                    <span className="font-bold text-slate-400">Autophage</span>
-                </div>
-                <p className="mb-4">© 2026 Autophage Systems. Self-Replicating Codebase.</p>
-            </footer>
+          <button className="md:hidden text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? <X /> : <Menu />}
+          </button>
         </div>
-    );
-}
+      </header>
 
+      {/* --- HERO SECTION --- */}
+      <section className="relative pt-40 pb-20 px-6 overflow-hidden min-h-[90vh] flex items-center justify-center">
+        {/* Animated Background Grid */}
+        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-20"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none animate-pulse-slow"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-pink-600/10 blur-[100px] rounded-full pointer-events-none mix-blend-screen"></div>
+
+        <div className="relative max-w-7xl mx-auto text-center z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-md animate-float">
+              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+              <span className="text-sm font-medium text-gray-300">L'ÈRE DES AGENTS EST ARRIVÉE</span>
+            </div>
+
+            <h1 className="text-6xl md:text-9xl font-black tracking-tighter mb-8 leading-[0.9]">
+              <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 hover:to-white transition-all duration-700">AUTOMATISEZ</span>
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 animate-gradient-x">TOUT</span>
+            </h1>
+
+            <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed h-20">
+              9 agents autonomes ultra-puissants qui automatisent votre business
+              <span className="block text-white font-bold mt-2">24/7</span>
+            </p>
+
+            <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+              <Link href="/agents" className="group px-8 py-4 bg-transparent border border-white/20 rounded-xl font-bold flex items-center gap-3 hover:bg-white/10 transition-all hover:scale-105 hover:border-white/50">
+                <Star className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500 text-yellow-500" />
+                ACTIVER LES AGENTS
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <button className="group px-8 py-4 bg-transparent border border-white/10 rounded-xl font-bold flex items-center gap-3 hover:bg-white/5 transition-all text-gray-400 hover:text-white">
+                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/10 group-hover:scale-110 transition-transform">
+                  <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[10px] border-l-white border-b-[6px] border-b-transparent ml-1"></div>
+                </div>
+                VOIR DÉMO
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* --- SOCIAL PROOF (Marquee) --- */}
+      <section className="py-10 border-y border-white/5 bg-white/5 backdrop-blur-sm overflow-hidden relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0f] via-transparent to-[#0a0a0f] z-10 pointer-events-none"></div>
+        <div className="max-w-7xl mx-auto px-6 relative">
+          <div className="flex items-center gap-12 justify-center opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+            <div className="flex animate-marquee whitespace-nowrap gap-28 items-center w-max hover:paused">
+              {[...Array(4)].map((_, setIndex) => (
+                <div key={setIndex} className="flex gap-28 shrink-0 items-center animate-marquee">
+                  <span className="text-2xl font-black tracking-widest text-white">ACME</span>
+                  <span className="text-2xl font-black tracking-widest text-white">STARK</span>
+                  <span className="text-2xl font-black tracking-widest text-white">WAYNE</span>
+                  <span className="text-2xl font-black tracking-widest text-white">CYBERDYNE</span>
+                  <span className="text-2xl font-black tracking-widest text-white">TYRELL</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- VALUE PROP (Keep Focus) --- */}
+      <section className="py-32 px-6 bg-[#0f0f16]" id="features">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-3xl mx-auto mb-20">
+            <h2 className="text-4xl md:text-5xl font-black mb-6">Restez concentré sur l'essentiel.</h2>
+            <p className="text-lg text-gray-400">
+              Laissez l'IA gérer le chaos. Nos agents spécialisés s'occupent de la prospection, du contenu et du service client, 24/7, sans erreur humaine.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { title: "Productivité x5", desc: "Un seul agent accomplit le travail de 5 employés qualifiés.", color: "from-blue-500 to-cyan-500", icon: LineIconZap, visual: "⚡", illustration: "/assets/feat_productivity.png" },
+              { title: "Coûts /10", desc: "Réduisez vos charges opérationnelles de 90% immédiatement.", color: "from-purple-500 to-pink-500", icon: LineIconStar, visual: "💎", illustration: "/assets/feat_costs.png" },
+              { title: "Onboarding 2min", desc: "Connectez vos outils et lancez vos agents en quelques clics.", color: "from-emerald-500 to-lime-500", icon: LineIconCheck, visual: "🚀", illustration: "/assets/feat_onboarding.png" }
+            ].map((item, i) => (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                key={i}
+                className="p-10 rounded-[2rem] bg-[#13131f] border border-white/5 hover:border-[#667eea]/30 transition-all relative overflow-hidden group hover:-translate-y-2"
+              >
+                <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${item.color} opacity-10 blur-3xl group-hover:opacity-20 transition-opacity`}></div>
+                <div className="absolute top-4 right-4 text-4xl opacity-10 grayscale group-hover:grayscale-0 group-hover:opacity-50 transition-all duration-500">{item.visual}</div>
+                <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-8 text-white group-hover:scale-110 transition-transform duration-300 relative z-10 border border-white/10 group-hover:border-white/30">
+                  <item.icon size={28} />
+                </div>
+                <h3 className="text-2xl font-bold mb-4">{item.title}</h3>
+                <p className="text-gray-400 leading-relaxed mb-6">{item.desc}</p>
+                <div className="relative h-32 w-full rounded-xl overflow-hidden opacity-40 group-hover:opacity-100 transition-opacity duration-500 border border-white/10">
+                  <Image src={item.illustration} alt={item.title} fill className="object-cover" />
+                </div>
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/10 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- AGENTS GRID --- */}
+      <section className="py-32 px-6 relative" id="agents">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-6">
+            <div>
+              <h2 className="text-4xl md:text-6xl font-black mb-6">Rencontrez l'Équipe.</h2>
+              <p className="text-gray-400 max-w-xl text-lg">
+                Chaque agent est un expert dans son domaine, entraîné sur des milliards de points de données pour exceller instantanément.
+              </p>
+            </div>
+            <Link href="/agents" className="px-8 py-4 rounded-xl border border-white/10 hover:bg-white/5 hover:border-white/30 transition-all font-bold flex items-center gap-3 group">
+              Voir tous les agents <LineIconChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { name: "VOX", role: "Telephony Expert", img: "/agents/vox.png", desc: "Gère vos appels entrants et sortants avec une voix humaine indiscernable.", gradient: "from-blue-500 to-indigo-500" },
+              { name: "NEXUS", role: "Sales & Outreach", img: "/agents/nexus.png", desc: "Prospecte sur LinkedIn et Email, qualifie les leads et booke vos RDV.", gradient: "from-[#667eea] to-[#764ba2]" },
+              { name: "SENTINEL", role: "Legal & Compliance", img: "/agents/sentinel.png", desc: "Vérifie vos contrats, assure la conformité RGPD et protège votre business.", gradient: "from-emerald-500 to-teal-500" },
+              { name: "HIVE", role: "Swarm Commander", img: "/agents/hive.png", desc: "Pilote l'ensemble de votre flotte d'agents via WhatsApp.", gradient: "from-amber-500 to-orange-500" },
+            ].map((agent, i) => (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                key={i}
+                className="group relative rounded-[2.5rem] overflow-hidden aspect-[3/4] border border-white/10 bg-[#13131f] shadow-2xl hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all"
+              >
+                <Image
+                  src={agent.img}
+                  alt={agent.name}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-[#0a0a0f]/40 to-transparent opacity-90"></div>
+
+                <div className="absolute bottom-0 left-0 w-full p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                  <div className={`w-fit px-4 py-1.5 rounded-full bg-gradient-to-r ${agent.gradient} text-xs font-black mb-4 uppercase tracking-wider`}>
+                    {agent.role}
+                  </div>
+                  <h3 className="text-4xl font-black mb-2">{agent.name}</h3>
+                  <p className="text-sm text-gray-300 line-clamp-2 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                    {agent.desc}
+                  </p>
+                  <Link href="/agents" className="w-full py-4 bg-white text-black rounded-xl font-bold text-sm hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-200">
+                    Déployer <LineIconArrowRight size={16} />
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- WHATSAPP SECTION --- */}
+      <section className="py-32 px-6 bg-gradient-to-b from-[#0f0f16] to-[#0a0a0f] border-y border-white/5">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-20">
+          <div className="flex-1">
+            <div className="w-20 h-20 rounded-3xl bg-[#25D366]/20 flex items-center justify-center mb-10 text-[#25D366]">
+              <span className="text-5xl">💬</span>
+            </div>
+            <h2 className="text-5xl md:text-6xl font-black mb-8 leading-tight">Gérez votre business<br />depuis WhatsApp.</h2>
+            <p className="text-xl text-gray-400 mb-10 leading-relaxed">
+              Plus besoin de dashboards complexes. Envoyez simplement un message vocal à HIVE pour lancer une campagne, vérifier vos stats ou générer un contrat. C'est aussi simple que de parler à un ami.
+            </p>
+            <div className="space-y-4 mb-12">
+              <div className="flex items-center gap-4 text-emerald-400 bg-emerald-400/10 p-4 rounded-xl border border-emerald-400/20">
+                <CheckCircle2 className="w-6 h-6 shrink-0" />
+                <span className="font-medium text-lg">Commandes vocales & textuelles en langage naturel : parlez comme à un humain.</span>
+              </div>
+              <div className="flex items-center gap-4 text-emerald-400 bg-emerald-400/10 p-4 rounded-xl border border-emerald-400/20">
+                <CheckCircle2 className="w-6 h-6 shrink-0" />
+                <span className="font-medium text-lg">Rapports PDF & Excel générés instantanément : finis les exports manuels.</span>
+              </div>
+              <div className="flex items-center gap-4 text-emerald-400 bg-emerald-400/10 p-4 rounded-xl border border-emerald-400/20">
+                <CheckCircle2 className="w-6 h-6 shrink-0" />
+                <span className="font-medium text-lg">Notifications de leads en temps réel : ne manquez plus jamais une opportunité.</span>
+              </div>
+              <div className="flex items-center gap-4 text-emerald-400 bg-emerald-400/10 p-4 rounded-xl border border-emerald-400/20">
+                <CheckCircle2 className="w-6 h-6 shrink-0" />
+                <span className="font-medium text-lg">Multi-Utilisateurs : donnez accès à toute votre équipe commercial.</span>
+              </div>
+              <div className="flex items-center gap-4 text-emerald-400 bg-emerald-400/10 p-4 rounded-xl border border-emerald-400/20">
+                <CheckCircle2 className="w-6 h-6 shrink-0" />
+                <span className="font-medium text-lg">Sécurité Chiffrée : vos données sensibles restent protégées.</span>
+              </div>
+              <div className="flex items-center gap-4 text-emerald-400 bg-emerald-400/10 p-4 rounded-xl border border-emerald-400/20">
+                <CheckCircle2 className="w-6 h-6 shrink-0" />
+                <span className="font-medium text-lg">Disponibilité 24/7 : votre business ne dort jamais, HIVE non plus.</span>
+              </div>
+            </div>
+            <a href="#pricing" className="px-10 py-5 bg-[#25D366] text-black font-bold text-lg rounded-2xl hover:shadow-[0_0_50px_rgba(37,211,102,0.5)] transition-all transform hover:-translate-y-1 hover:scale-105 flex items-center gap-3 group cursor-pointer text-center justify-center">
+              Connecter WhatsApp Maintenant
+              <LineIconArrowRight className="group-hover:translate-x-1 transition-transform" />
+            </a>
+            <p className="mt-4 text-sm text-[#25D366]/80 font-mono animate-pulse">⚡ Place limitée : accès Beta disponible.</p>
+          </div>
+          <div className="flex-1 relative mx-auto w-full max-w-md">
+            <div className="absolute inset-0 bg-[#25D366] rounded-full blur-[120px] opacity-20 animate-pulse-slow"></div>
+            <div className="relative z-10 bg-[#0a0a0f] border border-white/10 rounded-[3rem] p-4 shadow-2xl">
+              <div className="bg-[#13131f] rounded-[2.5rem] h-[650px] overflow-hidden border border-white/5 relative flex flex-col">
+                {/* Fake Chat Header */}
+                <div className="bg-[#202c33] p-6 flex items-center gap-4 border-b border-white/5">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 p-[2px]">
+                    <Image src="/agents/hive.png" alt="Hive" width={48} height={48} className="rounded-full" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-white text-lg">HIVE (Genesis)</p>
+                    <p className="text-xs text-[#25D366] font-mono">En ligne</p>
+                  </div>
+                </div>
+                {/* Fake Chat Body */}
+                <div className="p-6 space-y-6 mt-auto bg-[url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')] bg-opacity-10">
+                  <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="bg-[#005c4b] p-4 rounded-2xl rounded-tr-none ml-auto w-fit max-w-[85%] text-sm shadow-lg border border-white/5"
+                  >
+                    Lance une campagne de prospection sur les CEO tech à Paris.
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="bg-[#202c33] p-4 rounded-2xl rounded-tl-none w-fit max-w-[85%] text-sm shadow-lg border border-white/5"
+                  >
+                    Bien reçu. J'active NEXUS sur LinkedIn. Cible : CEO Tech @ Paris.
+                    <br /><br />
+                    Je commence l'extraction des profils. Je t'envoie un rapport dans 5 minutes. 🚀
+                  </motion.div>
+                </div>
+                {/* Fake Input */}
+                <div className="p-4 bg-[#202c33] border-t border-white/5 flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400">+</div>
+                  <div className="flex-1 h-10 bg-[#2a3942] rounded-full px-4 flex items-center text-gray-400 text-sm">Message...</div>
+                  <div className="w-10 h-10 rounded-full bg-[#005c4b] flex items-center justify-center text-white"><Zap size={18} /></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- 3 STEPS --- */}
+      <section className="py-32 px-6 bg-[#0f0f16] relative overflow-hidden">
+        {/* Ambient Background Elements */}
+        <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none -translate-x-1/2"></div>
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-600/10 blur-[120px] rounded-full pointer-events-none translate-x-1/2"></div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-center mb-24 cursor-default">
+            <h2 className="text-4xl md:text-5xl font-black mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500">Pourquoi vous allez perdre si vous n'automatisez pas.</h2>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+              Vos concurrents saturent déjà l'espace numérique. HIVE vous donne l'avantage injuste de l'omniprésence.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Omniprésence Sociale",
+                desc: "Ne laissez plus aucune plateforme vide. HIVE inonde LinkedIn, X, Instagram et TikTok de contenu pertinent simultanément. Soyez partout, tout le temps.",
+                color: "blue",
+                bgIcons: (
+                  <>
+                    <LineIconGlobe className="absolute top-4 right-4 w-12 h-12 text-blue-500/10 rotate-12" />
+                    <div className="absolute bottom-4 left-4 font-black text-6xl text-blue-500/5 -rotate-12 z-0">IN</div>
+                    <div className="absolute bottom-12 right-12 font-black text-6xl text-blue-500/5 rotate-6 z-0">X</div>
+                  </>
+                ),
+                accent: "LinkedIn & X"
+              },
+              {
+                title: "Neuromarketing IA",
+                desc: "L'IA analyse les biais cognitifs de votre audience pour rédiger des hooks impossibles à ignorer. Capturez l'attention reptilienne de vos prospects en 0.3 seconde.",
+                color: "purple",
+                bgIcons: (
+                  <>
+                    <LineIconZap className="absolute top-4 right-4 w-12 h-12 text-purple-500/10 -rotate-6" />
+                    <div className="absolute bottom-8 right-8 font-black text-6xl text-purple-500/5 rotate-12 z-0">🧠</div>
+                  </>
+                ),
+                accent: "Conversion Max"
+              },
+              {
+                title: "Monétisation Passive",
+                desc: "Chaque interaction est une opportunité de vente. HIVE transforme votre audience en revenus récurrents pendant que vous dormez. L'automatisation est votre meilleur commercial.",
+                color: "pink",
+                bgIcons: (
+                  <>
+                    <LineIconTrendingUp className="absolute top-4 right-4 w-12 h-12 text-pink-500/10 rotate-45" />
+                    <div className="absolute bottom-4 left-4 font-black text-6xl text-pink-500/5 -rotate-6 z-0">€</div>
+                  </>
+                ),
+                accent: "Revenus 24/7"
+              }
+            ].map((item, i) => (
+              <div key={i} className={`relative overflow-hidden flex flex-col items-center text-center p-10 rounded-[2.5rem] border transition-all duration-500 group hover:-translate-y-3 cursor-default
+                ${item.color === 'blue' ? 'bg-[#13131f] border-blue-500/20 hover:border-blue-500 hover:shadow-[0_0_50px_rgba(59,130,246,0.2)]' : ''}
+                ${item.color === 'purple' ? 'bg-[#13131f] border-purple-500/20 hover:border-purple-500 hover:shadow-[0_0_50px_rgba(168,85,247,0.2)]' : ''}
+                ${item.color === 'pink' ? 'bg-[#13131f] border-pink-500/20 hover:border-pink-500 hover:shadow-[0_0_50px_rgba(236,72,153,0.2)]' : ''}
+              `}>
+                {/* Visual Background Elements */}
+                {item.bgIcons}
+                <div className={`absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-700 pointer-events-none
+                    ${item.color === 'blue' ? 'from-blue-500/10 to-cyan-500/5' : ''}
+                    ${item.color === 'purple' ? 'from-purple-500/10 to-indigo-500/5' : ''}
+                    ${item.color === 'pink' ? 'from-pink-500/10 to-rose-500/5' : ''}
+                `}></div>
+
+                {/* Accent Tag */}
+                <div className={`mb-8 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border transition-colors relative z-10
+                    ${item.color === 'blue' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20 group-hover:bg-blue-500 group-hover:text-white' : ''}
+                    ${item.color === 'purple' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20 group-hover:bg-purple-500 group-hover:text-white' : ''}
+                    ${item.color === 'pink' ? 'bg-pink-500/10 text-pink-400 border-pink-500/20 group-hover:bg-pink-500 group-hover:text-white' : ''}
+                `}>
+                  {item.accent}
+                </div>
+
+                <h3 className="text-3xl font-black mb-6 relative z-10">{item.title}</h3>
+                <p className="text-gray-400 text-lg leading-relaxed relative z-10">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- PRICING --- */}
+      <section className="py-32 px-6 bg-[#0a0a0f]" id="pricing">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-black mb-6">Investissez dans votre domination.</h2>
+            <p className="text-gray-400">Des tarifs transparents. Rentabilité dès le premier mois.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+            {/* STARTER */}
+            <div className="p-8 rounded-[2rem] bg-[#13131f] border border-white/5 flex flex-col hover:border-[#667eea]/30 transition-all">
+              <h3 className="text-2xl font-bold mb-2">Starter</h3>
+              <div className="flex items-baseline gap-1 mb-6">
+                <span className="text-5xl font-black">99€</span>
+                <span className="text-gray-500">/mois</span>
+              </div>
+              <p className="text-sm text-gray-400 mb-8 min-h-[40px]">L'essentiel pour automatiser vos premières tâches.</p>
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> 1 Agent (au choix)</div>
+                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> 1.000 Crédits/mois</div>
+                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> Support Email</div>
+                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> Accès Dashboard</div>
+
+                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> Mises à jour Hebdomadaires</div>
+                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> Sécurité SSL</div>
+                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> Accès Mobile</div>
+              </div>
+              <Link href="/signup?plan=starter" className="w-full py-4 border border-white/20 rounded-xl font-bold text-center hover:bg-white hover:text-black transition-colors">Commencer</Link>
+            </div>
+
+            {/* PRO (Highlighted) */}
+            <div className="p-8 rounded-[2rem] bg-[#1a1a2e] border border-[#667eea] flex flex-col relative transform md:-translate-y-8 shadow-[0_0_50px_rgba(102,126,234,0.1)]">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 py-1 bg-[#667eea] rounded-full text-xs font-bold uppercase tracking-widest shrink-0 whitespace-nowrap">
+                Recommandé
+              </div>
+              <h3 className="text-2xl font-bold mb-2 text-[#667eea]">Pro</h3>
+              <div className="flex items-baseline gap-1 mb-6">
+                <span className="text-5xl font-black">299€</span>
+                <span className="text-gray-500">/mois</span>
+              </div>
+              <p className="text-sm text-gray-400 mb-8 min-h-[40px]">La suite complète pour scaler votre entreprise rapidement.</p>
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> 3 Agents IA</div>
+                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> 2,500 Crédits/mois</div>
+                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> WhatsApp Command (HIVE)</div>
+                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> Accès API (Limité)</div>
+                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> Support Prioritaire</div>
+
+                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> Intégration CRM (HubSpot)</div>
+                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> Exports Ilimités</div>
+                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> Accès Beta Fonctionnalités</div>
+                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> Formation Vidéo Offerte</div>
+              </div>
+              <Link href="/signup?plan=growth" className="w-full py-4 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-xl font-bold text-white text-center hover:shadow-lg hover:shadow-[#667eea]/25 transition-all transform hover:-translate-y-1">S'abonner maintenant</Link>
+            </div>
+
+            {/* GOD MODE (Divine/Gold Edition) */}
+            <div className="relative p-1 bg-[#1a1005] rounded-[2.5rem] group transform hover:scale-105 transition-all duration-500 shadow-[0_0_100px_rgba(217,119,6,0.3)]">
+              {/* Animated Border Gradient */}
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-500 via-purple-600 to-amber-500 rounded-[2.5rem] opacity-50 blur-lg group-hover:opacity-100 animate-gradient-xy transition-opacity"></div>
+
+              <div className="relative h-full p-10 bg-[#0c0a09] rounded-[2.3rem] flex flex-col overflow-hidden">
+                {/* Cosmic Background Effect */}
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+                <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-amber-600/20 blur-[100px] rounded-full pointer-events-none"></div>
+
+                <div className="relative z-10">
+                  <div className="inline-block px-4 py-1 mb-4 rounded-full bg-amber-500/10 border border-amber-500/50 text-amber-500 text-xs font-black tracking-[0.2em] uppercase">
+                    Souveraineté Totale
+                  </div>
+                  <h3 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-600 mb-2">
+                    GOD MODE
+                  </h3>
+                  <div className="mb-8 flex items-baseline gap-1">
+                    <span className="text-6xl font-black text-white tracking-tighter">999€</span>
+                    <span className="text-gray-400 font-mono">/mois</span>
+                  </div>
+
+                  <p className="text-base text-gray-300 mb-8 border-l-2 border-amber-500 pl-4 italic">
+                    "Pour ceux qui ne concurrencent pas, mais qui règnent."
+                  </p>
+
+                  <div className="space-y-5 mb-10">
+                    {[
+                      "Agents Illimités & Autonomes",
+                      "Crédits Infinis (Fair Usage)",
+                      "Machine d'Auto-Promotion Incluse",
+                      "Accès API 'Souverain' (Priority)",
+                      "Dedicated Server (Tenant Unique)",
+                      "Audit de Domination Mensuel",
+                      "Accès Direct aux Fondateurs"
+                    ].map((feature, i) => (
+                      <div key={i} className="flex items-center gap-4 group/item">
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center shadow-lg shadow-amber-500/20 text-black">
+                          <Zap className="w-5 h-5 fill-current" />
+                        </div>
+                        <span className="text-gray-200 font-medium group-hover/item:text-amber-200 transition-colors">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Link href="/signup?plan=god_mode" className="block w-full py-5 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-black text-lg font-black text-center shadow-[0_0_40px_rgba(245,158,11,0.4)] hover:shadow-[0_0_60px_rgba(245,158,11,0.6)] hover:scale-[1.02] transition-all relative overflow-hidden group/btn">
+                    <span className="relative z-10 flex items-center justify-center gap-2">
+                      INITIALISER LE PROTOCOLE <Zap className="w-5 h-5 fill-black" />
+                    </span>
+                    <div className="absolute inset-0 bg-white/30 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer className="py-12 border-t border-white/5 bg-[#0a0a0f]">
+        <div className="max-w-7xl mx-auto px-6 text-center text-gray-500">
+          &copy; 2026 GENESIS Corp. All rights reserved.
+        </div>
+      </footer>
+    </div>
+  );
+}

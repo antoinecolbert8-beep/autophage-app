@@ -1,0 +1,79 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Mockup Dashboard réaliste en SVG -->
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="10" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#0f172a"/>
+  
+  <!-- Main window -->
+  <rect x="100" y="100" width="1000" height="600" rx="20" fill="url(#grad1)" opacity="0.1"/>
+  <rect x="100" y="100" width="1000" height="600" rx="20" fill="none" stroke="url(#grad1)" stroke-width="2"/>
+  
+  <!-- Window header -->
+  <rect x="100" y="100" width="1000" height="60" rx="20" fill="#1e293b"/>
+  <circle cx="130" cy="130" r="8" fill="#ef4444"/>
+  <circle cx="160" cy="130" r="8" fill="#f59e0b"/>
+  <circle cx="190" cy="130" r="8" fill="#10b981"/>
+  
+  <!-- Sidebar -->
+  <rect x="120" y="180" width="200" height="480" rx="10" fill="#1e293b" opacity="0.8"/>
+  <rect x="140" y="200" width="160" height="40" rx="8" fill="url(#grad1)" opacity="0.3"/>
+  <rect x="140" y="260" width="160" height="40" rx="8" fill="#334155" opacity="0.3"/>
+  <rect x="140" y="320" width="160" height="40" rx="8" fill="#334155" opacity="0.3"/>
+  <rect x="140" y="380" width="160" height="40" rx="8" fill="#334155" opacity="0.3"/>
+  
+  <!-- Main content area -->
+  <rect x="340" y="180" width="740" height="480" rx="10" fill="#1e293b" opacity="0.5"/>
+  
+  <!-- Stats cards -->
+  <rect x="360" y="200" width="220" height="120" rx="12" fill="url(#grad1)" opacity="0.2" filter="url(#glow)"/>
+  <text x="380" y="240" fill="#06b6d4" font-size="32" font-weight="bold">127K€</text>
+  <text x="380" y="270" fill="#94a3b8" font-size="14">Revenus générés</text>
+  <text x="380" y="295" fill="#10b981" font-size="12">+42%</text>
+  
+  <rect x="610" y="200" width="220" height="120" rx="12" fill="url(#grad2)" opacity="0.2" filter="url(#glow)"/>
+  <text x="630" y="240" fill="#8b5cf6" font-size="32" font-weight="bold">8,432</text>
+  <text x="630" y="270" fill="#94a3b8" font-size="14">Tâches automatisées</text>
+  <text x="630" y="295" fill="#10b981" font-size="12">+156%</text>
+  
+  <rect x="860" y="200" width="200" height="120" rx="12" fill="#334155" opacity="0.3"/>
+  <text x="880" y="240" fill="#06b6d4" font-size="32" font-weight="bold">342h</text>
+  <text x="880" y="270" fill="#94a3b8" font-size="14">Temps économisé</text>
+  
+  <!-- Chart -->
+  <rect x="360" y="340" width="700" height="300" rx="12" fill="#1e293b" opacity="0.8"/>
+  <text x="380" y="370" fill="#f1f5f9" font-size="16" font-weight="bold">Performance en temps réel</text>
+  
+  <!-- Chart bars -->
+  <rect x="380" y="510" width="40" height="100" rx="4" fill="url(#grad1)" opacity="0.7"/>
+  <rect x="430" y="480" width="40" height="130" rx="4" fill="url(#grad1)" opacity="0.8"/>
+  <rect x="480" y="500" width="40" height="110" rx="4" fill="url(#grad1)" opacity="0.7"/>
+  <rect x="530" y="450" width="40" height="160" rx="4" fill="url(#grad1)" opacity="0.9"/>
+  <rect x="580" y="490" width="40" height="120" rx="4" fill="url(#grad1)" opacity="0.8"/>
+  <rect x="630" y="420" width="40" height="190" rx="4" fill="url(#grad1)"/>
+  <rect x="680" y="460" width="40" height="150" rx="4" fill="url(#grad1)" opacity="0.9"/>
+  <rect x="730" y="400" width="40" height="210" rx="4" fill="url(#grad1)"/>
+  <rect x="780" y="440" width="40" height="170" rx="4" fill="url(#grad1)" opacity="0.9"/>
+  <rect x="830" y="380" width="40" height="230" rx="4" fill="url(#grad1)"/>
+  <rect x="880" y="410" width="40" height="200" rx="4" fill="url(#grad1)" opacity="0.9"/>
+  <rect x="930" y="360" width="40" height="250" rx="4" fill="url(#grad1)"/>
+  
+  <!-- Glow effects -->
+  <ellipse cx="600" cy="400" rx="400" ry="200" fill="url(#grad1)" opacity="0.1" filter="url(#glow)"/>
+</svg>
