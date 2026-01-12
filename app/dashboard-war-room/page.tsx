@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   LineIconChevronLeft,
   LineIconGlobe
-} from "@/components/DesignSystemIcons";
+} from "@/components/icons";
 
 export default function WarRoomPage() {
   return (

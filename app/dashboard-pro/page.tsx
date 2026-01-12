@@ -7,7 +7,7 @@ import {
     LineIconUsers,
     LineIconZap,
     LineIconBarChart
-} from "@/components/DesignSystemIcons";
+} from "@/components/icons";
 
 export default function DashboardProPage() {
     return (
