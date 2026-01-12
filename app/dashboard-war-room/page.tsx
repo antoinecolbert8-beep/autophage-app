@@ -1,5 +1,5 @@
 "use client";
-// Force git update
+// VERCEL_CACHE_BUST_FINAL
 
 import Link from "next/link";
 import {
@@ -15,7 +15,6 @@ export default function WarRoomPage() {
       <div className="relative z-10 h-screen flex flex-col">
         <div className="p-6 border-b border-white/10 flex items-center justify-between bg-black/80 backdrop-blur-md">
           <div className="flex items-center gap-4">
-            {/* Fixed the typo in href or passed props if necessary, though href looks fine. Assuming LineIcon might be the issue if it wasn't exported correctly, but checking previous file, it seems ok. The error was likely due to a malformed tag or import in previous version. */}
             <Link href="/dashboard" className="p-2 hover:bg-white/5 rounded-full transition-colors">
               <LineIconChevronLeft size={20} className="text-gray-400" />
             </Link>
