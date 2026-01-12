@@ -4,7 +4,7 @@ import Link from "next/link";
 import {
     LineIconChevronLeft,
     LineIconPlus,
-} from "@/components/LineIcons";
+} from "@/components/AppIcons";
 
 export default function CampaignsPage() {
     return (

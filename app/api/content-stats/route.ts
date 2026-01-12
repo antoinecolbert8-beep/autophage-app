@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  const stat = await db.contentStat.create({ data: parsed.data });
+  const stat = await db.contentStat.create({ data: parsed.data as any });
   return NextResponse.json({ success: true, stat });
 }
 

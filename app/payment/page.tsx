@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { LineIconCheck, LineIconShield, LineIconZap } from "@/components/LineIcons";
+import { LineIconCheck, LineIconShield, LineIconZap } from "@/components/AppIcons";
 import { CheckCircle2, CreditCard, Lock } from "lucide-react";
 
 export default function PaymentPage() {

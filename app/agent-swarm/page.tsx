@@ -5,7 +5,7 @@ import {
   LineIconChevronLeft,
   LineIconUsers,
   LineIconGlobe
-} from "@/components/LineIcons";
+} from "@/components/AppIcons";
 
 export default function AgentSwarmPage() {
   return (

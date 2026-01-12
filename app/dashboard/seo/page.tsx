@@ -6,7 +6,7 @@ import {
     LineIconGlobe,
     LineIconSearch,
     LineIconTrendingUp
-} from "@/components/LineIcons";
+} from "@/components/AppIcons";
 
 export default function SEOPage() {
     return (

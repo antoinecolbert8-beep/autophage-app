@@ -7,7 +7,7 @@ import {
   LineIconTrendingUp,
   LineIconUsers,
   LineIconGlobe
-} from "@/components/LineIcons";
+} from "@/components/AppIcons";
 
 export default function AnalyticsPage() {
   return (

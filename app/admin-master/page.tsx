@@ -5,7 +5,7 @@ import {
   LineIconChevronLeft,
   LineIconShield,
   LineIconUsers
-} from "@/components/LineIcons";
+} from "@/components/AppIcons";
 
 export default function AdminMasterPage() {
   return (

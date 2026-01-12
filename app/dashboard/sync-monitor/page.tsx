@@ -5,7 +5,7 @@ import {
     LineIconChevronLeft,
     LineIconZap,
     LineIconCheck
-} from "@/components/LineIcons";
+} from "@/components/AppIcons";
 
 export default function SyncMonitorPage() {
     return (

@@ -21,6 +21,23 @@ export async function middleware(request: NextRequest) {
             return fortressResponse;
         }
 
+        // 3. RBAC: ACCESS CONTROL
+        // Protect /admin-master and /dashboard-war-room
+        const protectedPaths = ['/admin-master', '/dashboard-war-room'];
+        const isProtected = protectedPaths.some(path => request.nextUrl.pathname.startsWith(path));
+
+        if (isProtected) {
+            // Check for admin session/cookie (Simplified for demo)
+            // In real prod, verify JWT signature or DB session
+            const adminCookie = request.cookies.get('admin-session');
+
+            // If strictly checking for 'admin' role
+            if (!adminCookie || adminCookie.value !== 'true') {
+                console.warn(`[Fortress] Blocked unauthorized access to ${request.nextUrl.pathname}`);
+                return NextResponse.redirect(new URL('/login', request.url));
+            }
+        }
+
         // Copy security headers from fortress response to final response
         const response = NextResponse.next();
         if (fortressResponse) {

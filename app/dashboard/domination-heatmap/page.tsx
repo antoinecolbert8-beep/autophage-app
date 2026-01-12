@@ -4,7 +4,7 @@ import Link from "next/link";
 import {
     LineIconChevronLeft,
     LineIconGlobe
-} from "@/components/LineIcons";
+} from "@/components/AppIcons";
 
 export default function HeatmapPage() {
     return (

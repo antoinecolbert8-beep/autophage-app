@@ -9,7 +9,7 @@ import {
   LineIconLogOut,
   LineIconZap,
   LineIconBarChart,
-} from "@/components/LineIcons";
+} from "@/components/AppIcons";
 
 export default function Navigation() {
   const pathname = usePathname();

@@ -4,7 +4,7 @@ import Link from "next/link";
 import {
     LineIconChevronLeft,
     LineIconZap
-} from "@/components/LineIcons";
+} from "@/components/AppIcons";
 
 export default function WhatsAppCommandPage() {
     return (

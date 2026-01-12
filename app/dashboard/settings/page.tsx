@@ -3,7 +3,7 @@
 import Link from "next/link";
 import {
   LineIconChevronLeft,
-} from "@/components/LineIcons";
+} from "@/components/AppIcons";
 
 export default function SettingsPage() {
   return (

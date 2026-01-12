@@ -5,7 +5,7 @@ import {
   LineIconChevronLeft,
   LineIconShield,
   LineIconCheck
-} from "@/components/LineIcons";
+} from "@/components/AppIcons";
 
 export default function LegalShieldPage() {
   return (

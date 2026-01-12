@@ -28,20 +28,34 @@ export abstract class BaseAgent {
    * Prise de décision autonome
    */
   protected async decide(context: string, options: string[]): Promise<string> {
+    // Hajime Protocol: Robustness Check
+    const optionsWithFallback = [...options, "DEMANDER_AIDE"];
     const prompt = `Tu es ${this.name}, ${this.role}.
 
 **Contexte** : ${context}
 
 **Options disponibles** :
-${options.map((o, i) => `${i + 1}. ${o}`).join("\n")}
+${optionsWithFallback.map((o, i) => `${i + 1}. ${o}`).join("\n")}
 
-**Décide quelle action prendre** et réponds uniquement avec le numéro de l'option choisie.`;
+**Décide quelle action prendre**.
+Si la demande est impossible, dangereuse ou incompréhensible, choisis la dernière option (DEMANDER_AIDE).
+Réponds UNIQUEMENT avec le numéro de l'option choisie.`;
 
-    const result = await this.model.generateContent(prompt);
-    const decision = result.response.text().trim();
+    try {
+      const result = await this.model.generateContent(prompt);
+      const decisionText = result.response.text().trim();
+      const baseIndex = parseInt(decisionText, 10) - 1;
 
-    const optionIndex = parseInt(decision, 10) - 1;
-    return options[optionIndex] || options[0];
+      if (isNaN(baseIndex) || baseIndex < 0 || baseIndex >= optionsWithFallback.length) {
+        console.warn(`[${this.name}] Décision invalide (${decisionText}), repli sur sécurité.`);
+        return "DEMANDER_AIDE";
+      }
+
+      return optionsWithFallback[baseIndex];
+    } catch (e) {
+      console.error(`[${this.name}] Erreur cognitive:`, e);
+      return "DEMANDER_AIDE";
+    }
   }
 
   /**

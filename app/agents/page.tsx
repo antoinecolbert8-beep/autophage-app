@@ -2,7 +2,7 @@
 import React from 'react';
 import Image from "next/image";
 import Link from "next/link";
-import { LineIconArrowRight, LineIconCheck } from "@/components/LineIcons";
+import { LineIconArrowRight, LineIconCheck } from "@/components/AppIcons";
 
 export default function AgentsPage() {
     const agents = [

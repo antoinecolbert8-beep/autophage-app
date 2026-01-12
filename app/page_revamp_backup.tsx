@@ -13,7 +13,7 @@ import {
   LineIconGlobe,
   LineIconStar,
   LineIconArrowRight
-} from "@/components/LineIcons";
+} from "@/components/AppIcons";
 
 // --- ANIMATION VARIANTS --- //
 const fadeInUp = {

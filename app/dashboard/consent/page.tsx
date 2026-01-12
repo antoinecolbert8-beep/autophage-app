@@ -6,7 +6,7 @@ import {
     LineIconChevronLeft,
     LineIconShield,
     LineIconCheck
-} from "@/components/LineIcons";
+} from "@/components/AppIcons";
 
 export default function ConsentPage() {
     const router = useRouter();

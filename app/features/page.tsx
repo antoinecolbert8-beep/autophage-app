@@ -14,7 +14,7 @@ import {
   LineIconGlobe,
   LineIconClock,
   LineIconCheck
-} from "@/components/LineIcons";
+} from "@/components/AppIcons";
 
 export default function FeaturesPage() {
   return (

@@ -9,7 +9,7 @@ import {
   LineIconSearch,
   LineIconChevronDown,
   LineIconUsers
-} from "@/components/LineIcons";
+} from "@/components/AppIcons";
 import { OmniscienceTerminal } from "@/components/omniscience-terminal";
 
 export default function DashboardPage() {

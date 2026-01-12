@@ -6,7 +6,7 @@ import {
     LineIconChevronLeft,
     LineIconZap,
     LineIconCheck
-} from "@/components/LineIcons";
+} from "@/components/AppIcons";
 
 export default function ContentGeneratorPage() {
     const [generating, setGenerating] = useState(false);

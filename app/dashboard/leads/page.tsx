@@ -5,7 +5,7 @@ import {
     LineIconChevronLeft,
     LineIconUsers,
     LineIconPlus,
-} from "@/components/LineIcons";
+} from "@/components/AppIcons";
 
 export default function LeadsPage() {
     return (

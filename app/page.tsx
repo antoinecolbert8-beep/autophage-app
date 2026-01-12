@@ -12,7 +12,7 @@ import {
   LineIconArrowRight,
   LineIconGlobe,
   LineIconTrendingUp,
-} from "@/components/LineIcons";
+} from "@/components/AppIcons";
 
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);

@@ -5,7 +5,7 @@ import {
   LineIconChevronLeft,
   LineIconUsers,
   LineIconZap
-} from "@/components/LineIcons";
+} from "@/components/AppIcons";
 
 export default function SalesFactoryPage() {
   return (

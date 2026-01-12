@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  const data = parsed.data;
+  const data = parsed.data as any;
   const prefs = await db.userPreference.upsert({
     where: { userId: data.userId },
     update: { ...data },
