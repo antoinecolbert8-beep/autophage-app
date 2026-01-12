@@ -80,4 +80,10 @@
     "dotenv": "^17.2.3",
     "prisma": "^5.22.0"
   }
+},
+"overrides": {
+  "@langchain/community": {
+    "@pinecone-database/pinecone": "$@pinecone-database/pinecone"
+  }
+}
 }
