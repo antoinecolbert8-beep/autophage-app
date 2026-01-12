@@ -6,7 +6,7 @@ import {
     LineIconChevronLeft,
     LineIconUsers,
     LineIconZap
-} from "@/components/AppIcons";
+} from "@/components/DesignSystemIcons";
 
 export default function DashboardAdminPage() {
     return (

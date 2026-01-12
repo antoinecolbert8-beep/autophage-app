@@ -37,6 +37,7 @@
     ],
     "exclude": [
         "node_modules",
-        "GENESIS_FRONTEND_EXPORT"
+        "GENESIS_FRONTEND_EXPORT",
+        "_BACKUP_gen_export"
     ]
 }
