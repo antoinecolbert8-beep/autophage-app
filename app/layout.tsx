@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "./main.css";
+import "./globals.css";
 import ClientLayoutWrapper from "@/components/client-layout-wrapper";
 
 export const metadata: Metadata = {

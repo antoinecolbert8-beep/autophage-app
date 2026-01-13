@@ -25,69 +25,76 @@ export default function Navigation() {
         <span className="font-bold text-xl tracking-tight text-white">GENESIS</span>
       </div>
 
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 p-4 overflow-y-auto">
+        <div className="mb-2 px-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Pilotage</div>
         <Link
           href="/dashboard"
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${pathname === "/dashboard"
-              ? "bg-white/10 text-white border border-white/5"
-              : "text-gray-400 hover:text-white hover:bg-white/5"
+          className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors mb-4 ${pathname === "/dashboard"
+            ? "bg-white/10 text-white border border-white/5"
+            : "text-gray-400 hover:text-white hover:bg-white/5"
             }`}
         >
           <LineIconLayoutDashboard size={18} />
           <span>Vue d'ensemble</span>
         </Link>
 
-        <Link
-          href="/dashboard/agent"
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${isActive("/dashboard/agent")
+        <div className="mb-2 px-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Opérations</div>
+        <div className="space-y-1 mb-6">
+          <Link
+            href="/dashboard/agent"
+            className={`flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium transition-colors ${isActive("/dashboard/agent")
               ? "bg-white/10 text-white border border-white/5"
               : "text-gray-400 hover:text-white hover:bg-white/5"
-            }`}
-        >
-          <LineIconUsers size={18} />
-          <span>Mes Agents</span>
-        </Link>
+              }`}
+          >
+            <LineIconUsers size={18} />
+            <span>Mes Agents</span>
+          </Link>
 
-        <Link
-          href="/dashboard/content"
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${isActive("/dashboard/content")
+          <Link
+            href="/dashboard/content"
+            className={`flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium transition-colors ${isActive("/dashboard/content")
               ? "bg-white/10 text-white border border-white/5"
               : "text-gray-400 hover:text-white hover:bg-white/5"
-            }`}
-        >
-          <LineIconZap size={18} />
-          <span>Générateur</span>
-        </Link>
+              }`}
+          >
+            <LineIconZap size={18} />
+            <span>Générateur</span>
+          </Link>
+        </div>
 
-        <Link
-          href="/dashboard/analytics"
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${isActive("/dashboard/analytics")
+        <div className="mb-2 px-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Performance</div>
+        <div className="space-y-1">
+          <Link
+            href="/dashboard/analytics"
+            className={`flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium transition-colors ${isActive("/dashboard/analytics")
               ? "bg-white/10 text-white border border-white/5"
               : "text-gray-400 hover:text-white hover:bg-white/5"
-            }`}
-        >
-          <LineIconBarChart size={18} />
-          <span>Analytique</span>
-        </Link>
+              }`}
+          >
+            <LineIconBarChart size={18} />
+            <span>Analytique</span>
+          </Link>
 
-        <Link
-          href="/dashboard/billing"
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${isActive("/dashboard/billing")
+          <Link
+            href="/dashboard/billing"
+            className={`flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium transition-colors ${isActive("/dashboard/billing")
               ? "bg-white/10 text-white border border-white/5"
               : "text-gray-400 hover:text-white hover:bg-white/5"
-            }`}
-        >
-          <LineIconZap size={18} />
-          <span>Facturation</span>
-        </Link>
+              }`}
+          >
+            <LineIconSettings size={18} />
+            <span>Abonnement</span>
+          </Link>
+        </div>
       </nav>
 
       <div className="p-4 border-t border-white/5 bg-[#0f0f16]">
         <Link
           href="/dashboard/settings"
           className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${isActive("/dashboard/settings")
-              ? "bg-white/10 text-white border border-white/5"
-              : "text-gray-400 hover:text-white hover:bg-white/5"
+            ? "bg-white/10 text-white border border-white/5"
+            : "text-gray-400 hover:text-white hover:bg-white/5"
             }`}
         >
           <LineIconSettings size={18} />
