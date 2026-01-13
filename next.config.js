@@ -21,7 +21,7 @@ const nextConfig = {
         pathname: '**',
       },
     ],
-    unoptimized: false,
+    unoptimized: true, // NUCLEAR FIX: Bypass Next.js image optimization to prevent stale cache
   },
 
   // Compression
