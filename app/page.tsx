@@ -81,9 +81,21 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-md animate-float">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-              <span className="text-sm font-medium text-gray-300">L'ÈRE DES AGENTS EST ARRIVÉE</span>
+            {/* Trust Counter Badge */}
+            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 mb-6 backdrop-blur-md">
+              <div className="flex -space-x-2">
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 border-2 border-[#0a0a0f]"></div>
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-pink-500 to-orange-500 border-2 border-[#0a0a0f]"></div>
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-teal-500 border-2 border-[#0a0a0f]"></div>
+              </div>
+              <span className="text-sm font-bold text-white">+2,847 entreprises</span>
+              <span className="text-sm text-gray-400">nous font confiance</span>
+            </div>
+
+            {/* Urgency Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/30 mb-8 ml-4">
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+              <span className="text-sm font-bold text-red-400">🔥 24 places restantes cette semaine</span>
             </div>
 
             <h1 className="text-6xl md:text-9xl font-black tracking-tighter mb-8 leading-[0.9]">
@@ -97,17 +109,26 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+              {/* Primary CTA - Most prominent */}
+              <Link href="/signup" className="group px-10 py-5 bg-gradient-to-r from-blue-600 to-pink-600 rounded-xl font-bold text-lg flex items-center gap-3 hover:shadow-[0_0_40px_rgba(236,72,153,0.5)] transition-all transform hover:-translate-y-1 hover:scale-105 relative overflow-hidden">
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                <Zap className="w-5 h-5 relative z-10" fill="currentColor" />
+                <span className="relative z-10">ESSAI GRATUIT 7 JOURS</span>
+                <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
+              </Link>
+
+              {/* Secondary CTA */}
               <Link href="/agents" className="group px-8 py-4 bg-transparent border border-white/20 rounded-xl font-bold flex items-center gap-3 hover:bg-white/10 transition-all hover:scale-105 hover:border-white/50">
                 <Star className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500 text-yellow-500" />
-                ACTIVER LES AGENTS
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                DÉCOUVRIR LES AGENTS
               </Link>
-              <button className="group px-8 py-4 bg-transparent border border-white/10 rounded-xl font-bold flex items-center gap-3 hover:bg-white/5 transition-all text-gray-400 hover:text-white">
-                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/10 group-hover:scale-110 transition-transform">
-                  <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[10px] border-l-white border-b-[6px] border-b-transparent ml-1"></div>
-                </div>
-                VOIR DÉMO
-              </button>
+            </div>
+
+            {/* Trust indicators */}
+            <div className="mt-8 flex items-center justify-center gap-6 text-sm text-gray-500">
+              <span className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Sans carte bancaire</span>
+              <span className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Annulation en 1 clic</span>
+              <span className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Support 24/7</span>
             </div>
           </motion.div>
         </div>
