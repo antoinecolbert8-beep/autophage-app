@@ -82,9 +82,45 @@ export default function PaymentPage() {
                         </div>
                     </div>
 
-                    <div className="mt-8 flex items-center gap-2 text-xs text-gray-500">
-                        <LineIconShield size={14} />
-                        <span>Paiement sécurisé SSL 256-bits. Satisfait ou remboursé 30 jours.</span>
+                    {/* Plan Features */}
+                    <div className="mt-6 p-4 bg-white/5 rounded-xl border border-white/5">
+                        <h4 className="font-bold text-sm mb-3 text-white">✅ Inclus dans votre plan :</h4>
+                        <ul className="space-y-2 text-sm text-gray-400">
+                            <li className="flex items-center gap-2">
+                                <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
+                                {plan === 'god_mode' ? 'Agents illimités' : plan === 'growth' ? '5 agents inclus' : '2 agents inclus'}
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
+                                {plan === 'god_mode' ? 'Crédits illimités' : plan === 'growth' ? '10,000 crédits/mois' : '2,000 crédits/mois'}
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
+                                Support {plan === 'god_mode' ? 'prioritaire dédié' : plan === 'growth' ? 'prioritaire' : 'email'}
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
+                                Accès Dashboard complet
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* Trust Badges */}
+                    <div className="mt-6 p-4 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-xl border border-green-500/20">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
+                                <LineIconShield className="text-green-500" size={20} />
+                            </div>
+                            <div>
+                                <p className="font-bold text-sm text-white">Garantie 30 jours</p>
+                                <p className="text-xs text-gray-400">Satisfait ou 100% remboursé, sans condition.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mt-4 flex items-center gap-2 text-xs text-gray-500">
+                        <Lock size={12} className="text-blue-400" />
+                        <span>Paiement sécurisé SSL 256-bits via Stripe.</span>
                     </div>
                 </div>
 
