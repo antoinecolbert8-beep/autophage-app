@@ -158,9 +158,12 @@ export default function Home() {
       <section className="py-32 px-6 bg-[#0f0f16]" id="features">
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <h2 className="text-4xl md:text-5xl font-black mb-6">Restez concentré sur l'essentiel.</h2>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/30 mb-6">
+              <span className="text-blue-400 font-bold text-sm">💡 POURQUOI GENESIS</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black mb-6">Votre Concurrent Dort.<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">Vous Dominez.</span></h2>
             <p className="text-lg text-gray-400">
-              Laissez l'IA gérer le chaos. Nos agents spécialisés s'occupent de la prospection, du contenu et du service client, 24/7, sans erreur humaine.
+              Pendant que d'autres perdent du temps sur des tâches répétitives, vos agents IA génèrent des leads, du contenu et des revenus — <span className="text-white font-semibold">24 heures sur 24</span>.
             </p>
           </div>
 
@@ -200,9 +203,12 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-6">
             <div>
-              <h2 className="text-4xl md:text-6xl font-black mb-6">Rencontrez l'Équipe.</h2>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/30 mb-6">
+                <span className="text-purple-400 font-bold text-sm">🤖 L'ÉQUIPE</span>
+              </div>
+              <h2 className="text-4xl md:text-6xl font-black mb-6">9 Experts.<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">Zéro Salaire.</span></h2>
               <p className="text-gray-400 max-w-xl text-lg">
-                Chaque agent est un expert dans son domaine, entraîné sur des milliards de points de données pour exceller instantanément.
+                Chaque agent maîtrise son domaine. Ils travaillent ensemble, sans pause café, sans RTT, sans erreur.
               </p>
             </div>
             <Link href="/agents" className="px-8 py-4 rounded-xl border border-white/10 hover:bg-white/5 hover:border-white/30 transition-all font-bold flex items-center gap-3 group">
@@ -259,7 +265,10 @@ export default function Home() {
             <div className="w-20 h-20 rounded-3xl bg-[#25D366]/20 flex items-center justify-center mb-10 text-[#25D366]">
               <span className="text-5xl">💬</span>
             </div>
-            <h2 className="text-5xl md:text-6xl font-black mb-8 leading-tight">Gérez votre business<br />depuis WhatsApp.</h2>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#25D366]/10 border border-[#25D366]/30 mb-6">
+              <span className="text-[#25D366] font-bold text-sm">📱 CONTRÔLE TOTAL</span>
+            </div>
+            <h2 className="text-5xl md:text-6xl font-black mb-8 leading-tight">Pilotez l'Empire<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#25D366] to-emerald-400">Depuis WhatsApp.</span></h2>
             <p className="text-xl text-gray-400 mb-10 leading-relaxed">
               Plus besoin de dashboards complexes. Envoyez simplement un message vocal à HIVE pour lancer une campagne, vérifier vos stats ou générer un contrat. C'est aussi simple que de parler à un ami.
             </p>

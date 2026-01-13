@@ -129,9 +129,9 @@ Swipe Up pour tester avant que ce soit patché ! 🔥
         // Using production domain with correct .jpg extension for social media compatibility.
         const PRODUCTION_DOMAIN = process.env.NEXT_PUBLIC_BASE_URL || 'https://genesis-ai.com';
         const ASSETS = [
-            `${PRODUCTION_DOMAIN}/assets/feat_productivity.jpg`,
-            `${PRODUCTION_DOMAIN}/assets/feat_costs.jpg`,
-            `${PRODUCTION_DOMAIN}/assets/feat_onboarding.jpg`
+            `${PRODUCTION_DOMAIN}/assets/feat_productivity.png?v=2`,
+            `${PRODUCTION_DOMAIN}/assets/feat_costs.png?v=2`,
+            `${PRODUCTION_DOMAIN}/assets/feat_onboarding.png?v=2`
         ];
         const randomAsset = ASSETS[Math.floor(Math.random() * ASSETS.length)];
 
