@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { fetchRedditInsights, fetchHackerNewsInsights, fetchWikipediaData } from '@/lib/data-ingestion';
 
-export async function GET(request: NextRequest) {
+export const dynamic = 'force-dynamic';
+
+export async function GET(req: NextRequest) {
     try {
-        const searchParams = request.nextUrl.searchParams;
+        const searchParams = req.nextUrl.searchParams;
         const topic = searchParams.get('topic');
         const source = searchParams.get('source') || 'all';
 

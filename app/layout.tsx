@@ -1,6 +1,13 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import ClientLayoutWrapper from "@/components/client-layout-wrapper";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#000000",
+};
 
 export const metadata: Metadata = {
   title: "ELA - API d'Intelligence Artificielle pour Entreprises | Powered by Genesis",
@@ -54,12 +61,6 @@ export const metadata: Metadata = {
     images: ["/twitter-image.png"],
     creator: "@genesis_ai",
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5,
-  },
-  themeColor: "#000000",
   manifest: "/manifest.json",
   icons: {
     icon: [
@@ -78,6 +79,7 @@ export const metadata: Metadata = {
     },
   },
 };
+
 
 export default function RootLayout({
   children,

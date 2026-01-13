@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { GenesisSelfPromoter } from '@/lib/god-mode/self-promotion';
 
+export const dynamic = 'force-dynamic';
+
+
 /**
  * CRON: GATEWAY TO THE INFINITE
  * This endpoint is called daily by Vercel Cron (09:00 AM).

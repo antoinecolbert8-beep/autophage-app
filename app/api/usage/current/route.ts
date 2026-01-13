@@ -5,36 +5,38 @@ import { prisma } from "@/core/db";
  * GET /api/usage/current
  * Récupérer les quotas et l'usage actuel
  */
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
-    
+
     if (!userId) {
       return NextResponse.json(
         { error: "Missing userId" },
         { status: 400 }
       );
     }
-    
+
     const user = await prisma.user.findUnique({
       where: { id: userId },
       include: {
         subscription: true,
       },
     });
-    
+
     if (!user) {
       return NextResponse.json(
         { error: "User not found" },
         { status: 404 }
       );
     }
-    
+
     // Récupérer l'usage du mois en cours
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    
+
     const usageThisMonth = await prisma.usageRecord.findMany({
       where: {
         userId,
@@ -43,17 +45,17 @@ export async function GET(request: NextRequest) {
         },
       },
     });
-    
+
     const totalSpent = usageThisMonth.reduce(
       (sum, record) => sum + (record.withinQuota ? 0 : record.totalCharge),
       0
     );
-    
+
     const usageByType = usageThisMonth.reduce((acc, record) => {
       acc[record.type] = (acc[record.type] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
-    
+
     return NextResponse.json({
       plan: user.currentPlan,
       quota: {
@@ -79,7 +81,7 @@ export async function GET(request: NextRequest) {
         cancelAtPeriodEnd: user.subscription.cancelAtPeriodEnd,
       } : null,
     });
-    
+
   } catch (error: any) {
     console.error("Error fetching usage:", error);
     return NextResponse.json(
