@@ -186,6 +186,35 @@ export async function publishToTikTok(post: SocialPost): Promise<PostResult> {
 }
 
 /**
+ * Publication sur YouTube Shorts (YouTube Data API)
+ */
+export async function publishToYouTubeShort(post: SocialPost): Promise<PostResult> {
+  const apiKey = process.env.YOUTUBE_API_KEY;
+
+  if (!apiKey) {
+    return { success: false, error: "YOUTUBE_API_KEY manquante" };
+  }
+
+  try {
+    // YouTube Shorts nécessite OAuth2 + upload vidéo
+    // Implémentation simplifiée - nécessite un flow OAuth complet en production
+
+    const videoUrl = post.mediaUrls?.[0];
+    if (!videoUrl) {
+      return { success: false, error: "URL vidéo requise pour YouTube Shorts" };
+    }
+
+    // Note: En production, utiliser google-auth-library pour OAuth2
+    return {
+      success: false,
+      error: "YouTube Shorts nécessite OAuth2 - À configurer manuellement",
+    };
+  } catch (error) {
+    return { success: false, error: (error as Error).message };
+  }
+}
+
+/**
  * Publication sur LinkedIn (UGC Posts API)
  */
 export async function publishToLinkedIn(post: SocialPost): Promise<PostResult> {
