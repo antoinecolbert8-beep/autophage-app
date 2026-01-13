@@ -289,7 +289,7 @@ export default function Home() {
                   </div>
                 </div>
                 {/* Fake Chat Body */}
-                <div className="p-6 space-y-6 mt-auto bg-[url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')] bg-opacity-10">
+                <div className="p-6 space-y-6 mt-auto bg-[url('/assets/whatsapp-bg.png')] bg-opacity-10">
                   <motion.div
                     initial={{ opacity: 0, x: 20 }}
                     whileInView={{ opacity: 1, x: 0 }}
@@ -468,7 +468,7 @@ export default function Home() {
 
               <div className="relative h-full p-10 bg-[#0c0a09] rounded-[2.3rem] flex flex-col overflow-hidden">
                 {/* Cosmic Background Effect */}
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+                <div className="absolute inset-0 bg-[url('/assets/noise.png')] opacity-20 mix-blend-overlay"></div>
                 <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-amber-600/20 blur-[100px] rounded-full pointer-events-none"></div>
 
                 <div className="relative z-10">
