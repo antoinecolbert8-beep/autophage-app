@@ -24,7 +24,7 @@ export default function AgentsPage() {
                 {agents.map((agent, i) => (
                     <div key={i} className="rounded-[2.5rem] bg-[#13131f] border border-white/5 overflow-hidden flex flex-col md:flex-row group hover:border-white/20 transition-all">
                         <div className="w-full md:w-1/2 aspect-square relative">
-                            <Image src={agent.img} alt={agent.name} fill className="object-cover" />
+                            <img src={agent.img} alt={agent.name} className="absolute inset-0 w-full h-full object-cover" loading="eager" />
                             <div className="absolute inset-0 bg-gradient-to-t from-[#13131f] to-transparent opacity-50 md:hidden"></div>
                         </div>
                         <div className="p-8 flex flex-col justify-center w-full md:w-1/2">

@@ -188,8 +188,8 @@ export default function Home() {
                 </div>
                 <h3 className="text-2xl font-bold mb-4">{item.title}</h3>
                 <p className="text-gray-400 leading-relaxed mb-6">{item.desc}</p>
-                <div className="relative h-32 w-full rounded-xl overflow-hidden opacity-40 group-hover:opacity-100 transition-opacity duration-500 border border-white/10">
-                  <Image src={item.illustration} alt={item.title} fill className="object-cover" />
+                <div className="relative h-32 w-full rounded-xl overflow-hidden opacity-40 group-hover:opacity-100 transition-opacity duration-500 border border-white/10 bg-gradient-to-br from-white/5 to-transparent">
+                  <img src={item.illustration} alt={item.title} className="w-full h-full object-cover" loading="eager" />
                 </div>
                 <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/10 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
               </motion.div>
@@ -231,12 +231,11 @@ export default function Home() {
                 key={i}
                 className="group relative rounded-[2.5rem] overflow-hidden aspect-[3/4] border border-white/10 bg-[#13131f] shadow-2xl hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all"
               >
-                <Image
+                <img
                   src={agent.img}
                   alt={agent.name}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  loading="eager"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-[#0a0a0f]/40 to-transparent opacity-90"></div>
 
@@ -310,8 +309,8 @@ export default function Home() {
               <div className="bg-[#13131f] rounded-[2.5rem] h-[650px] overflow-hidden border border-white/5 relative flex flex-col">
                 {/* Fake Chat Header */}
                 <div className="bg-[#202c33] p-6 flex items-center gap-4 border-b border-white/5">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 p-[2px]">
-                    <Image src="/agents/hive_v2.png?v=2" alt="Hive" width={48} height={48} className="rounded-full" />
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 p-[2px] overflow-hidden">
+                    <img src="/agents/hive_v2.png?v=2" alt="Hive" className="w-full h-full rounded-full object-cover" />
                   </div>
                   <div>
                     <p className="font-bold text-white text-lg">HIVE (Genesis)</p>

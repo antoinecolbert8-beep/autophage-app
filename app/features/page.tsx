@@ -1,11 +1,13 @@
 "use client";
 
 /**
- * 💎 PAGE FEATURES - VERSION GENESIS (DARK)
+ * 💎 PAGE FEATURES - VERSION GENESIS PREMIUM
+ * Consistent styling with landing page
  */
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { ArrowLeft, Zap } from "lucide-react";
 import {
   LineIconRocket,
   LineIconZap,
@@ -18,118 +20,99 @@ import {
 
 export default function FeaturesPage() {
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-[#0a0a0f]/80 backdrop-blur-md border-b border-white/5">
-        <div className="container mx-auto px-6">
-          <div className="flex items-center justify-between h-20">
-            <Link href="/" className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-[#667eea] to-[#764ba2] rounded-lg flex items-center justify-center">
-                <LineIconRocket size={20} className="text-white" />
-              </div>
-              <span className="text-2xl font-bold text-white tracking-tight">Genesis</span>
-            </Link>
-            <Link href="/" className="text-gray-400 hover:text-white font-medium transition-colors">
-              ← Retour
-            </Link>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-[#0a0a0f] text-white font-sans selection:bg-pink-500/30 overflow-x-hidden">
+      {/* HEADER - Consistent with other pages */}
+      <header className="fixed top-0 left-0 w-full z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-white/5 py-4">
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 group text-gray-400 hover:text-white transition-colors">
+            <ArrowLeft size={20} />
+            <span className="font-bold">Retour</span>
+          </Link>
 
-      {/* Header */}
-      <section className="py-20 relative overflow-hidden">
-        {/* Background Glows */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none opacity-40" />
-
-        <div className="container mx-auto px-6 text-center relative z-10">
-          <h1 className="text-5xl font-black text-white mb-6 leading-tight">
-            Toutes les fonctionnalités <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#667eea] to-[#764ba2]">
-              dont vous avez besoin.
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="relative w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-pink-500 flex items-center justify-center overflow-hidden border border-white/20 shadow-[0_0_20px_rgba(59,130,246,0.5)]">
+              <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-30"></div>
+              <Zap className="w-4 h-4 text-white relative z-10" />
+            </div>
+            <span className="text-lg font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 group-hover:to-white transition-all">
+              GENESIS
             </span>
-          </h1>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            Genesis regroupe tous les outils essentiels pour automatiser votre entreprise de A à Z.
-          </p>
-        </div>
-      </section>
+          </Link>
 
-      {/* Features Grid */}
-      <section className="py-20">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-16">
+          <div className="w-20"></div>
+        </div>
+      </header>
+
+      <div className="pt-32 pb-24 px-6 relative">
+        {/* Background Elements */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none"></div>
+        <div className="absolute bottom-0 right-0 w-[600px] h-[400px] bg-purple-600/10 blur-[100px] rounded-full pointer-events-none"></div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Header Section */}
+          <div className="text-center mb-20">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <div className="inline-block px-4 py-1 mb-6 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 text-sm font-bold text-blue-400 backdrop-blur-md">
+                🚀 FONCTIONNALITÉS
+              </div>
+              <h1 className="text-5xl md:text-7xl font-black mb-8 tracking-tight">
+                <span className="text-white">Puissance</span>{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">Illimitée.</span>
+              </h1>
+              <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+                Genesis regroupe tous les outils pour automatiser et dominer votre marché.
+              </p>
+            </motion.div>
+          </div>
+
+          {/* Features Grid */}
+          <div className="grid md:grid-cols-2 gap-10">
             {[
               {
                 icon: LineIconZap,
-                title: "Automatisation Complète",
-                description: "Automatisez l'intégralité de vos processus métiers avec nos 9 agents IA spécialisés. De la comptabilité au marketing, tout est géré automatiquement.",
-                features: [
-                  "9 agents IA spécialisés",
-                  "Workflows personnalisables",
-                  "Déclencheurs intelligents",
-                  "Intégrations natives"
-                ],
-                color: "text-yellow-400"
+                title: "Automatisation Totale",
+                description: "9 agents IA spécialisés travaillent 24/7 sans pause, sans erreur, sans limite.",
+                features: ["Workflows intelligents", "Déclencheurs auto", "Intégrations natives", "Zéro maintenance"],
+                gradient: "from-yellow-500 to-orange-500"
               },
               {
                 icon: LineIconBarChart,
                 title: "Analytics Temps Réel",
-                description: "Suivez les performances de vos agents en temps réel avec des dashboards interactifs et des rapports automatiques.",
-                features: [
-                  "Tableaux de bord personnalisables",
-                  "Rapports automatiques",
-                  "Prédictions IA",
-                  "Export de données"
-                ],
-                color: "text-blue-400"
+                description: "Dashboards interactifs et rapports automatiques pour piloter votre croissance.",
+                features: ["Tableaux de bord live", "Prédictions IA", "Export illimité", "Alertes intelligentes"],
+                gradient: "from-blue-500 to-cyan-500"
               },
               {
                 icon: LineIconGlobe,
                 title: "Multi-Plateformes",
-                description: "Connectez tous vos outils favoris : YouTube, TikTok, Instagram, LinkedIn, Stripe, Shopify, Slack, Notion et bien plus.",
-                features: [
-                  "10+ intégrations natives",
-                  "API complète",
-                  "Webhooks personnalisés",
-                  "Synchronisation bidirectionnelle"
-                ],
-                color: "text-purple-400"
+                description: "Connectez tous vos outils : YouTube, TikTok, Instagram, LinkedIn, Stripe, Shopify.",
+                features: ["10+ intégrations", "API complète", "Webhooks", "Sync bidirectionnelle"],
+                gradient: "from-purple-500 to-pink-500"
               },
               {
                 icon: LineIconShield,
-                title: "Sécurité Maximale",
-                description: "Vos données sont protégées par un chiffrement de niveau bancaire et hébergées sur des serveurs certifiés en France.",
-                features: [
-                  "Chiffrement SSL 256-bit",
-                  "Conformité RGPD",
-                  "ISO 27001 certifié",
-                  "Sauvegardes quotidiennes"
-                ],
-                color: "text-green-400"
+                title: "Sécurité Bancaire",
+                description: "Chiffrement 256-bit, conformité RGPD, hébergement certifié en France.",
+                features: ["SSL 256-bit", "RGPD compliant", "ISO 27001", "Backups quotidiens"],
+                gradient: "from-green-500 to-emerald-500"
               },
               {
                 icon: LineIconClock,
-                title: "Support 24/7",
-                description: "Notre équipe d'experts est disponible 24h/24 et 7j/7 pour répondre à toutes vos questions et vous accompagner.",
-                features: [
-                  "Chat en direct",
-                  "Support prioritaire",
-                  "Base de connaissances",
-                  "Vidéos tutoriels"
-                ],
-                color: "text-red-400"
+                title: "Support Premium",
+                description: "Équipe d'experts disponible 24/7 pour vous accompagner vers le succès.",
+                features: ["Chat en direct", "Support prioritaire", "Onboarding dédié", "Tutoriels vidéo"],
+                gradient: "from-red-500 to-pink-500"
               },
               {
                 icon: LineIconRocket,
-                title: "Scalabilité Illimitée",
-                description: "Genesis grandit avec vous. Passez de 10 à 10 000 utilisateurs sans aucune limite de performance.",
-                features: [
-                  "Infrastructure cloud",
-                  "Auto-scaling",
-                  "99.9% uptime garanti",
-                  "CDN global"
-                ],
-                color: "text-orange-400"
+                title: "Scalabilité Infinie",
+                description: "De 10 à 10 000 utilisateurs sans limite de performance. 99.9% uptime.",
+                features: ["Cloud infrastructure", "Auto-scaling", "CDN global", "Zero downtime"],
+                gradient: "from-orange-500 to-amber-500"
               }
             ].map((feature, i) => (
               <motion.div
@@ -138,49 +121,60 @@ export default function FeaturesPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="flex gap-6 group"
+                className="group p-[1px] rounded-[2rem] bg-gradient-to-br from-white/10 via-transparent to-white/5 hover:from-blue-500/30 hover:to-purple-500/30 transition-all duration-500"
               >
-                <div className="flex-shrink-0">
-                  <div className="w-16 h-16 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 group-hover:border-white/20 transition-colors">
-                    <feature.icon size={32} className={`${feature.color}`} />
+                <div className="bg-[#13131f]/95 backdrop-blur-xl rounded-[2rem] p-8 h-full">
+                  <div className="flex items-start gap-6">
+                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.gradient} p-[1px] shrink-0`}>
+                      <div className="w-full h-full bg-[#13131f] rounded-2xl flex items-center justify-center">
+                        <feature.icon size={28} className={`bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent`} />
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-black text-white mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-blue-400 transition-all">{feature.title}</h3>
+                      <p className="text-gray-400 mb-6 leading-relaxed">{feature.description}</p>
+                      <ul className="grid grid-cols-2 gap-3">
+                        {feature.features.map((item, j) => (
+                          <li key={j} className="flex items-center gap-2 text-sm text-gray-300">
+                            <LineIconCheck size={16} className="text-green-500 shrink-0" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold text-white mb-3">{feature.title}</h3>
-                  <p className="text-gray-400 mb-6 leading-relaxed">{feature.description}</p>
-                  <ul className="space-y-2">
-                    {feature.features.map((item, j) => (
-                      <li key={j} className="flex items-center space-x-2 text-gray-300">
-                        <LineIconCheck size={18} className="text-[#667eea] flex-shrink-0" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
                 </div>
               </motion.div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* CTA */}
-      <section className="py-24 relative">
-        <div className="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent pointer-events-none" />
-        <div className="container mx-auto px-6 text-center relative z-10">
-          <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
-            Prêt à découvrir Genesis ?
-          </h2>
-          <p className="text-xl text-indigo-200 mb-10 max-w-2xl mx-auto">
-            Commencez votre essai gratuit de 7 jours. Sans carte bancaire. Annulation en 1 clic.
-          </p>
-          <Link
-            href="/signup"
-            className="inline-flex items-center space-x-2 px-10 py-4 bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white font-bold rounded-full hover:shadow-[0_0_30px_rgba(118,75,162,0.5)] transition-all transform hover:-translate-y-1"
+          {/* CTA Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-24 text-center"
           >
-            <span>Essayer gratuitement</span>
-          </Link>
+            <div className="inline-block p-[1px] rounded-3xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
+              <div className="bg-[#0a0a0f] rounded-3xl px-16 py-12">
+                <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
+                  Prêt à <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-pink-500">Dominer</span> ?
+                </h2>
+                <p className="text-gray-400 mb-8 max-w-xl mx-auto">
+                  Essai gratuit 7 jours. Sans carte bancaire. Annulation en 1 clic.
+                </p>
+                <Link
+                  href="/signup"
+                  className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-blue-600 to-pink-600 text-white font-bold text-lg rounded-xl hover:shadow-[0_0_40px_rgba(236,72,153,0.5)] transition-all transform hover:-translate-y-1"
+                >
+                  <Zap size={20} fill="currentColor" />
+                  ESSAI GRATUIT
+                </Link>
+              </div>
+            </div>
+          </motion.div>
         </div>
-      </section>
+      </div>
     </div>
   );
 }
