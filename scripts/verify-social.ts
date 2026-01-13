@@ -10,7 +10,7 @@ async function verifySocialWiring() {
         platform: "LINKEDIN",
         content: "System Check: Production API Wiring Verified.",
         hashtags: ["SystemCheck", "DevOps"],
-        mediaUrls: ["https://genesis-ai.com/assets/feat_productivity.png"]
+        mediaUrls: ["https://genesis-ai.com/assets/feat_productivity.jpg"]
     };
 
     console.log("1. Testing LinkedIn Dispatch...");
