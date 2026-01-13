@@ -5,6 +5,9 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Loading from "@/app/loading";
+import SovereignCursor from "./SovereignCursor";
+import GoldenParticles from "./GoldenParticles";
+import LiveSocialProof from "./LiveSocialProof";
 
 /**
  * PAGE TRANSITION VARIANTS
@@ -91,6 +94,11 @@ export default function ClientLayoutWrapper({
                     {children}
                 </motion.main>
             </AnimatePresence>
+
+            {/* 🔱 SOVEREIGN COMPONENTS */}
+            <SovereignCursor />
+            <GoldenParticles count={40} />
+            <LiveSocialProof />
         </div>
     );
 }

@@ -6,10 +6,10 @@ import { LineIconArrowRight, LineIconCheck } from "@/components/AppIcons";
 
 export default function AgentsPage() {
     const agents = [
-        { name: "VOX", role: "Telephony Expert", img: "/agents/vox_v2.png?v=2", desc: "Gère vos appels entrants et sortants avec une voix humaine indiscernable.", gradient: "from-blue-500 to-indigo-500", capabilities: ["Appels entrants/sortants", "Synthèse vocale émotionnelle", "Gestion de calendrier"] },
-        { name: "NEXUS", role: "Sales & Outreach", img: "/agents/nexus_v2.png?v=2", desc: "Prospecte sur LinkedIn et Email, qualifie les leads et booke vos RDV.", gradient: "from-[#667eea] to-[#764ba2]", capabilities: ["Outreach Multi-canal", "Rédaction Copywriting", "Lead Scoring"] },
-        { name: "SENTINEL", role: "Legal & Compliance", img: "/agents/sentinel_v2.png?v=2", desc: "Vérifie vos contrats, assure la conformité RGPD et protège votre business.", gradient: "from-emerald-500 to-teal-500", capabilities: ["Audit Contractuel", "Veille Juridique", "Conformité Automatique"] },
-        { name: "HIVE", role: "Swarm Commander", img: "/agents/hive_v2.png?v=2", desc: "Pilote l'ensemble de votre flotte d'agents via WhatsApp.", gradient: "from-amber-500 to-orange-500", capabilities: ["Orchestration d'agents", "Interface WhatsApp", "Reporting Unifié"] },
+        { name: "VOX", role: "Telephony Expert", img: "/agents/vox_v2.png?v=3", desc: "Gère vos appels entrants et sortants avec une voix humaine indiscernable.", gradient: "from-blue-500 to-indigo-500", capabilities: ["Appels entrants/sortants", "Synthèse vocale émotionnelle", "Gestion de calendrier"] },
+        { name: "NEXUS", role: "Sales & Outreach", img: "/agents/nexus_v2.png?v=3", desc: "Prospecte sur LinkedIn et Email, qualifie les leads et booke vos RDV.", gradient: "from-[#667eea] to-[#764ba2]", capabilities: ["Outreach Multi-canal", "Rédaction Copywriting", "Lead Scoring"] },
+        { name: "SENTINEL", role: "Legal & Compliance", img: "/agents/sentinel_v2.png?v=3", desc: "Vérifie vos contrats, assure la conformité RGPD et protège votre business.", gradient: "from-emerald-500 to-teal-500", capabilities: ["Audit Contractuel", "Veille Juridique", "Conformité Automatique"] },
+        { name: "HIVE", role: "Swarm Commander", img: "/agents/hive_v2.png?v=3", desc: "Pilote l'ensemble de votre flotte d'agents via WhatsApp.", gradient: "from-amber-500 to-orange-500", capabilities: ["Orchestration d'agents", "Interface WhatsApp", "Reporting Unifié"] },
     ];
 
     return (

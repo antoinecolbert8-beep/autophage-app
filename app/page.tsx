@@ -2,8 +2,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Star, ArrowRight, Zap, Check, CheckCircle2, Menu, X } from "lucide-react";
+import { Star, ArrowRight, Zap, Check, CheckCircle2, Menu, X, Crown, Target, Rocket } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import UrgencyTimer from "@/components/UrgencyTimer";
 import {
   LineIconChevronRight,
   LineIconZap,
@@ -81,46 +82,42 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {/* Trust Counter Badge */}
-            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 mb-6 backdrop-blur-md">
-              <div className="flex -space-x-2">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 border-2 border-[#0a0a0f]"></div>
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-pink-500 to-orange-500 border-2 border-[#0a0a0f]"></div>
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-green-500 to-teal-500 border-2 border-[#0a0a0f]"></div>
-              </div>
-              <span className="text-sm font-bold text-white">+2,847 entreprises</span>
-              <span className="text-sm text-gray-400">nous font confiance</span>
+            {/* Sovereign Badge */}
+            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border border-yellow-500/40 mb-4 backdrop-blur-md shadow-lg shadow-yellow-500/20">
+              <Crown className="w-5 h-5 text-yellow-500" />
+              <span className="text-sm font-black text-yellow-400 uppercase tracking-widest">SYSTÈME SOUVERAIN</span>
             </div>
 
-            {/* Urgency Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/30 mb-8 ml-4">
-              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-              <span className="text-sm font-bold text-red-400">🔥 24 places restantes cette semaine</span>
+            {/* Urgency Timer */}
+            <div className="mb-8">
+              <UrgencyTimer initialMinutes={27} label="OFFRE EXPIRE DANS" />
             </div>
 
-            <h1 className="text-6xl md:text-9xl font-black tracking-tighter mb-8 leading-[0.9]">
-              <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 hover:to-white transition-all duration-700">AUTOMATISEZ</span>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 animate-gradient-x">TOUT</span>
+            <h1 className="text-6xl md:text-9xl font-black tracking-tighter mb-8 leading-[0.9] uppercase">
+              <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">ÉCRASEZ LA</span>
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500">CONCURRENCE.</span>
             </h1>
 
-            <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed h-20">
-              9 agents autonomes ultra-puissants qui automatisent votre business
-              <span className="block text-white font-bold mt-2">24/7</span>
+            <p className="text-xl md:text-3xl text-gray-300 max-w-4xl mx-auto mb-6 leading-relaxed font-bold">
+              9 ARMES ULTIMES. ZÉRO PITIÉ.
+            </p>
+            <p className="text-lg md:text-xl text-gray-500 max-w-3xl mx-auto mb-12">
+              Pendant qu'ils dorment, vous <span className="text-yellow-500 font-bold">DOMINEZ</span> le marché. 24/7. Sans limite.
             </p>
 
             <div className="flex flex-col md:flex-row items-center justify-center gap-6">
               {/* Primary CTA - Most prominent */}
-              <Link href="/signup" className="group px-10 py-5 bg-gradient-to-r from-blue-600 to-pink-600 rounded-xl font-bold text-lg flex items-center gap-3 hover:shadow-[0_0_40px_rgba(236,72,153,0.5)] transition-all transform hover:-translate-y-1 hover:scale-105 relative overflow-hidden">
-                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-                <Zap className="w-5 h-5 relative z-10" fill="currentColor" />
-                <span className="relative z-10">ESSAI GRATUIT 7 JOURS</span>
-                <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
+              <Link href="/signup" className="group px-12 py-6 bg-gradient-to-r from-yellow-500 to-amber-600 rounded-xl font-black text-xl flex items-center gap-4 hover:shadow-[0_0_60px_rgba(234,179,8,0.6)] transition-all transform hover:-translate-y-2 hover:scale-110 relative overflow-hidden text-black">
+                <div className="absolute inset-0 bg-white/30 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                <Target className="w-6 h-6 relative z-10" />
+                <span className="relative z-10 uppercase tracking-wider">PRENEZ LE POUVOIR</span>
+                <Rocket className="w-6 h-6 relative z-10 group-hover:translate-x-2 group-hover:-translate-y-1 transition-transform" />
               </Link>
 
               {/* Secondary CTA */}
-              <Link href="/agents" className="group px-8 py-4 bg-transparent border border-white/20 rounded-xl font-bold flex items-center gap-3 hover:bg-white/10 transition-all hover:scale-105 hover:border-white/50">
-                <Star className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500 text-yellow-500" />
-                DÉCOUVRIR LES AGENTS
+              <Link href="/agents" className="group px-8 py-4 bg-transparent border-2 border-yellow-500/30 rounded-xl font-bold flex items-center gap-3 hover:bg-yellow-500/10 transition-all hover:scale-105 hover:border-yellow-500 text-yellow-500">
+                <Crown className="w-5 h-5 group-hover:rotate-12 transition-transform duration-500" />
+                VOIR L'ARSENAL
               </Link>
             </div>
 
@@ -169,9 +166,9 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { title: "Productivité x5", desc: "Un seul agent accomplit le travail de 5 employés qualifiés.", color: "from-blue-500 to-cyan-500", icon: LineIconZap, visual: "⚡", illustration: "/assets/productivity.png?v=2" },
-              { title: "Coûts /10", desc: "Réduisez vos charges opérationnelles de 90% immédiatement.", color: "from-purple-500 to-pink-500", icon: LineIconStar, visual: "💎", illustration: "/assets/feat_costs.png?v=2" },
-              { title: "Onboarding 2min", desc: "Connectez vos outils et lancez vos agents en quelques clics.", color: "from-emerald-500 to-lime-500", icon: LineIconCheck, visual: "🚀", illustration: "/assets/feat_onboarding.png?v=2" }
+              { title: "Productivité x5", desc: "Un seul agent accomplit le travail de 5 employés qualifiés.", color: "from-blue-500 to-cyan-500", icon: LineIconZap, visual: "⚡", illustration: "/assets/productivity.png?v=3" },
+              { title: "Coûts /10", desc: "Réduisez vos charges opérationnelles de 90% immédiatement.", color: "from-purple-500 to-pink-500", icon: LineIconStar, visual: "💎", illustration: "/assets/feat_costs.png?v=3" },
+              { title: "Onboarding 2min", desc: "Connectez vos outils et lancez vos agents en quelques clics.", color: "from-emerald-500 to-lime-500", icon: LineIconCheck, visual: "🚀", illustration: "/assets/feat_onboarding.png?v=3" }
             ].map((item, i) => (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -218,10 +215,10 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { name: "VOX", role: "Telephony Expert", img: "/agents/vox_v2.png?v=2", desc: "Gère vos appels entrants et sortants avec une voix humaine indiscernable.", gradient: "from-blue-500 to-indigo-500" },
-              { name: "NEXUS", role: "Sales & Outreach", img: "/agents/nexus_v2.png?v=2", desc: "Prospecte sur LinkedIn et Email, qualifie les leads et booke vos RDV.", gradient: "from-[#667eea] to-[#764ba2]" },
-              { name: "SENTINEL", role: "Legal & Compliance", img: "/agents/sentinel_v2.png?v=2", desc: "Vérifie vos contrats, assure la conformité RGPD et protège votre business.", gradient: "from-emerald-500 to-teal-500" },
-              { name: "HIVE", role: "Swarm Commander", img: "/agents/hive_v2.png?v=2", desc: "Pilote l'ensemble de votre flotte d'agents via WhatsApp.", gradient: "from-amber-500 to-orange-500" },
+              { name: "VOX", role: "Telephony Expert", img: "/agents/vox_v2.png?v=3", desc: "Gère vos appels entrants et sortants avec une voix humaine indiscernable.", gradient: "from-blue-500 to-indigo-500" },
+              { name: "NEXUS", role: "Sales & Outreach", img: "/agents/nexus_v2.png?v=3", desc: "Prospecte sur LinkedIn et Email, qualifie les leads et booke vos RDV.", gradient: "from-[#667eea] to-[#764ba2]" },
+              { name: "SENTINEL", role: "Legal & Compliance", img: "/agents/sentinel_v2.png?v=3", desc: "Vérifie vos contrats, assure la conformité RGPD et protège votre business.", gradient: "from-emerald-500 to-teal-500" },
+              { name: "HIVE", role: "Swarm Commander", img: "/agents/hive_v2.png?v=3", desc: "Pilote l'ensemble de votre flotte d'agents via WhatsApp.", gradient: "from-amber-500 to-orange-500" },
             ].map((agent, i) => (
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -310,7 +307,7 @@ export default function Home() {
                 {/* Fake Chat Header */}
                 <div className="bg-[#202c33] p-6 flex items-center gap-4 border-b border-white/5">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 p-[2px] overflow-hidden">
-                    <img src="/agents/hive_v2.png?v=2" alt="Hive" className="w-full h-full rounded-full object-cover" />
+                    <img src="/agents/hive_v2.png?v=3" alt="Hive" className="w-full h-full rounded-full object-cover" />
                   </div>
                   <div>
                     <p className="font-bold text-white text-lg">HIVE (Genesis)</p>
