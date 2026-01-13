@@ -145,9 +145,9 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { title: "Productivité x5", desc: "Un seul agent accomplit le travail de 5 employés qualifiés.", color: "from-blue-500 to-cyan-500", icon: LineIconZap, visual: "⚡", illustration: "/assets/feat_productivity.jpg" },
-              { title: "Coûts /10", desc: "Réduisez vos charges opérationnelles de 90% immédiatement.", color: "from-purple-500 to-pink-500", icon: LineIconStar, visual: "💎", illustration: "/assets/feat_costs.jpg" },
-              { title: "Onboarding 2min", desc: "Connectez vos outils et lancez vos agents en quelques clics.", color: "from-emerald-500 to-lime-500", icon: LineIconCheck, visual: "🚀", illustration: "/assets/feat_onboarding.jpg" }
+              { title: "Productivité x5", desc: "Un seul agent accomplit le travail de 5 employés qualifiés.", color: "from-blue-500 to-cyan-500", icon: LineIconZap, visual: "⚡", illustration: "/assets/feat_productivity.png" },
+              { title: "Coûts /10", desc: "Réduisez vos charges opérationnelles de 90% immédiatement.", color: "from-purple-500 to-pink-500", icon: LineIconStar, visual: "💎", illustration: "/assets/feat_costs.png" },
+              { title: "Onboarding 2min", desc: "Connectez vos outils et lancez vos agents en quelques clics.", color: "from-emerald-500 to-lime-500", icon: LineIconCheck, visual: "🚀", illustration: "/assets/feat_onboarding.png" }
             ].map((item, i) => (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
