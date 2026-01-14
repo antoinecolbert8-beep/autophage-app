@@ -162,13 +162,9 @@ export default function Home() {
               { title: "Coûts /10", desc: "Réduisez vos charges opérationnelles de 90% immédiatement.", color: "from-purple-500 to-pink-500", icon: LineIconStar, visual: "💎", illustration: "/images/costs.png" },
               { title: "Onboarding 2min", desc: "Connectez vos outils et lancez vos agents en quelques clics.", color: "from-emerald-500 to-lime-500", icon: LineIconCheck, visual: "🚀", illustration: "/images/onboarding.png" }
             ].map((item, i) => (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
+              <div
                 key={i}
-                className="p-10 rounded-[2rem] bg-[#13131f] border border-white/5 hover:border-[#667eea]/30 transition-all relative overflow-hidden group hover:-translate-y-2"
+                className="p-10 rounded-[2rem] bg-[#13131f] border border-white/5 hover:border-[#667eea]/30 transition-all relative overflow-hidden group hover:-translate-y-2 cursor-default"
               >
                 <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${item.color} opacity-10 blur-3xl group-hover:opacity-20 transition-opacity`}></div>
                 <div className="absolute top-4 right-4 text-4xl opacity-10 grayscale group-hover:grayscale-0 group-hover:opacity-50 transition-all duration-500">{item.visual}</div>
@@ -177,7 +173,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-2xl font-bold mb-4">{item.title}</h3>
                 <p className="text-gray-400 leading-relaxed mb-6">{item.desc}</p>
-                <div className="relative h-32 w-full rounded-xl overflow-hidden opacity-40 group-hover:opacity-100 transition-opacity duration-500 border border-white/10 bg-gradient-to-br from-white/5 to-transparent">
+                <div className="relative h-32 w-full rounded-xl overflow-hidden opacity-100 transition-opacity duration-500 border border-white/10 bg-gradient-to-br from-white/5 to-transparent">
                   <Image
                     src={item.illustration}
                     alt={item.title}
@@ -185,10 +181,11 @@ export default function Home() {
                     className="object-cover"
                     priority={true}
                     sizes="(max-width: 768px) 100vw, 33vw"
+                    quality={90}
                   />
                 </div>
                 <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/10 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
