@@ -41,10 +41,16 @@ export default function ClientLayoutWrapper({
     const pathname = usePathname();
     // LOGIQUE STRICTE ET CORRIGÉE
     // On affiche la Sidebar UNIQUEMENT si l'URL commence par ces chemins précis :
+    // LOGIQUE STRICTE ET CORRIGÉE
+    // On affiche la Sidebar UNIQUEMENT si l'URL commence par ces chemins précis :
+    // ET qu'elle ne fait pas partie des exceptions (pages marketing vues depuis le dashboard)
     const isProtectedPage =
-        pathname?.startsWith("/dashboard") ||       // Tout le dashboard
-        pathname?.startsWith("/admin") ||           // L'admin
-        pathname?.startsWith("/agent-swarm");       // L'outil spécifique (et PAS "/agents" tout court)
+        (pathname?.startsWith("/dashboard") ||       // Tout le dashboard
+            pathname?.startsWith("/admin") ||           // L'admin
+            pathname?.startsWith("/agent-swarm")) &&    // L'outil spécifique
+
+        pathname !== "/dashboard/agents" &&          // Exception : Page "9 Armes"
+        pathname !== "/features";                    // Exception : Page Features
 
     // SYSTEM BOOT STATE
     const [isBooting, setIsBooting] = useState(true);
