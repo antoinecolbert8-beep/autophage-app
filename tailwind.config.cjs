@@ -11,9 +11,9 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Inter', 'system-ui', 'sans-serif'],
+                sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
                 mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
-                display: ['Outfit', 'sans-serif'],
+                display: ['var(--font-outfit)', 'sans-serif'],
             },
             colors: {
                 // Cyberpunk Palette

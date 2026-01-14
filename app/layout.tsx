@@ -1,6 +1,19 @@
-import type { Metadata, Viewport } from "next";
+import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import ClientLayoutWrapper from "@/components/client-layout-wrapper";
+
+// Configure Fonts (Binary Rhythm)
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+  display: "swap",
+});
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -89,8 +102,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr">
-      <body>
+    <html lang="fr" className={`${inter.variable} ${outfit.variable}`}>
+      <body className="font-sans antialiased">
         <GlobalErrorBoundary>
           <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
         </GlobalErrorBoundary>
