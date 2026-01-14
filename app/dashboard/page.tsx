@@ -11,9 +11,15 @@ import {
   LineIconUsers
 } from "@/components/AppIcons";
 import { OmniscienceTerminal } from "@/components/omniscience-terminal";
-import NeuroSchema from "@/components/NeuroSchema";
+import dynamic from 'next/dynamic';
 import BlurFade from "@/components/ui/blur-fade";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+
+// Dynamic import to avoid SSR issues with Three.js Canvas
+const NeuroSchema = dynamic(() => import("@/components/NeuroSchema"), {
+  ssr: false,
+  loading: () => <div className="absolute inset-0 bg-[#0a0a0f] opacity-50" />
+});
 
 // --- FINANCIAL SOVEREIGNTY LOGIC ---
 const calculateSovereigntyScore = (cRate: number, impact: number, retention: number, friction: number) => {
