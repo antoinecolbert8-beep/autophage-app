@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
@@ -68,10 +68,12 @@ function Network({ count = 100 }) {
 export default function NeuroSchema() {
     return (
         <div className="w-full h-full min-h-[300px] absolute inset-0 pointer-events-none opacity-40">
-            <Canvas camera={{ position: [0, 0, 5], fov: 60 }}>
-                <fog attach="fog" args={["#000", 5, 15]} />
-                <Network />
-            </Canvas>
+            <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-blue-500/20 text-xs">Initialisation du Cortex...</div>}>
+                <Canvas camera={{ position: [0, 0, 5], fov: 60 }}>
+                    <fog attach="fog" args={["#000", 5, 15]} />
+                    <Network />
+                </Canvas>
+            </Suspense>
         </div>
     );
 }
