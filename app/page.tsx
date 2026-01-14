@@ -14,6 +14,8 @@ import {
   LineIconTrendingUp,
 } from "@/components/AppIcons";
 
+import BlurFade from "@/components/ui/blur-fade";
+
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -121,7 +123,7 @@ export default function Home() {
               <span className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Annulation en 1 clic</span>
               <span className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Support 24/7</span>
             </div>
-          </motion.div>
+          </BlurFade>
         </div>
       </section>
 
