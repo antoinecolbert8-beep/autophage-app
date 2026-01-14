@@ -39,18 +39,23 @@ export default function ClientLayoutWrapper({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
-    // LOGIQUE STRICTE ET CORRIGÉE
-    // On affiche la Sidebar UNIQUEMENT si l'URL commence par ces chemins précis :
-    // LOGIQUE STRICTE ET CORRIGÉE
-    // On affiche la Sidebar UNIQUEMENT si l'URL commence par ces chemins précis :
-    // ET qu'elle ne fait pas partie des exceptions (pages marketing vues depuis le dashboard)
-    const isProtectedPage =
-        (pathname?.startsWith("/dashboard") ||       // Tout le dashboard
-            pathname?.startsWith("/admin") ||           // L'admin
-            pathname?.startsWith("/agent-swarm")) &&    // L'outil spécifique
+    // --- LA LOGIQUE MATRICE (GOLD VERSION) ---
 
-        pathname !== "/dashboard/agents" &&          // Exception : Page "9 Armes"
-        pathname !== "/features";                    // Exception : Page Features
+    // 1. Définition des zones STRICTEMENT protégées (où la Sidebar DOIT apparaître)
+    const isProtectedZone =
+        pathname?.startsWith("/dashboard") ||
+        pathname?.startsWith("/admin") ||
+        pathname?.startsWith("/agent-swarm"); // Note: On cible l'outil précis, pas juste "/agent"
+
+    // 2. Définition des exceptions (Pages qui commencent par les mots ci-dessus mais qui sont publiques)
+    // Par exemple, si tu as une page marketing qui s'appelle "/agents", elle ne doit pas avoir de sidebar.
+    const isPublicException =
+        pathname === "/agents" ||
+        pathname === "/dashboard/agents" || // Exception spécifique demandée précédemment
+        pathname === "/features";
+
+    // 3. Verdict final : On affiche la Sidebar seulement si on est en zone protégée ET pas dans une exception
+    const showSidebar = isProtectedZone && !isPublicException;
 
     // SYSTEM BOOT STATE
     const [isBooting, setIsBooting] = useState(true);
@@ -84,9 +89,8 @@ export default function ClientLayoutWrapper({
                 <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03]" />
             </div>
 
-            {/* Global Navigation - Controlled internally by Navigation.tsx via Strict Check, 
-                but we keep it here in JSX. The component itself returns null if not protected. */}
-            <Navigation />
+            {/* Global Navigation - Controlled by Matrix Logic */}
+            {showSidebar && <Navigation />}
 
             {/* Main Content Area with Page Transitions */}
             <AnimatePresence mode="wait">
@@ -96,7 +100,7 @@ export default function ClientLayoutWrapper({
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
                     transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1.0] }}
-                    className={`relative z-10 ${isProtectedPage ? "ml-20 lg:ml-64 p-4 md:p-8" : ""
+                    className={`relative z-10 ${showSidebar ? "ml-20 lg:ml-64 p-4 md:p-8" : ""
                         }`}
                 >
                     {children}
