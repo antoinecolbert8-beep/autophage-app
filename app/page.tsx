@@ -166,9 +166,9 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { title: "Productivité x5", desc: "Un seul agent accomplit le travail de 5 employés qualifiés.", color: "from-blue-500 to-cyan-500", icon: LineIconZap, visual: "⚡", illustration: "/assets/productivity.png?v=3" },
-              { title: "Coûts /10", desc: "Réduisez vos charges opérationnelles de 90% immédiatement.", color: "from-purple-500 to-pink-500", icon: LineIconStar, visual: "💎", illustration: "/assets/feat_costs.png?v=3" },
-              { title: "Onboarding 2min", desc: "Connectez vos outils et lancez vos agents en quelques clics.", color: "from-emerald-500 to-lime-500", icon: LineIconCheck, visual: "🚀", illustration: "/assets/feat_onboarding.png?v=3" }
+              { title: "Productivité x5", desc: "Un seul agent accomplit le travail de 5 employés qualifiés.", color: "from-blue-500 to-cyan-500", icon: LineIconZap, visual: "⚡", illustration: "/assets/productivity.png?v=4" },
+              { title: "Coûts /10", desc: "Réduisez vos charges opérationnelles de 90% immédiatement.", color: "from-purple-500 to-pink-500", icon: LineIconStar, visual: "💎", illustration: "/assets/feat_costs.png?v=4" },
+              { title: "Onboarding 2min", desc: "Connectez vos outils et lancez vos agents en quelques clics.", color: "from-emerald-500 to-lime-500", icon: LineIconCheck, visual: "🚀", illustration: "/assets/feat_onboarding.png?v=4" }
             ].map((item, i) => (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -215,10 +215,10 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { name: "VOX", role: "Telephony Expert", img: "/agents/vox_v2.png?v=3", desc: "Gère vos appels entrants et sortants avec une voix humaine indiscernable.", gradient: "from-blue-500 to-indigo-500" },
-              { name: "NEXUS", role: "Sales & Outreach", img: "/agents/nexus_v2.png?v=3", desc: "Prospecte sur LinkedIn et Email, qualifie les leads et booke vos RDV.", gradient: "from-[#667eea] to-[#764ba2]" },
-              { name: "SENTINEL", role: "Legal & Compliance", img: "/agents/sentinel_v2.png?v=3", desc: "Vérifie vos contrats, assure la conformité RGPD et protège votre business.", gradient: "from-emerald-500 to-teal-500" },
-              { name: "HIVE", role: "Swarm Commander", img: "/agents/hive_v2.png?v=3", desc: "Pilote l'ensemble de votre flotte d'agents via WhatsApp.", gradient: "from-amber-500 to-orange-500" },
+              { name: "VOX", role: "Telephony Expert", img: "/agents/vox_v2.png?v=4", desc: "Gère vos appels entrants et sortants avec une voix humaine indiscernable.", gradient: "from-blue-500 to-indigo-500" },
+              { name: "NEXUS", role: "Sales & Outreach", img: "/agents/nexus_v2.png?v=4", desc: "Prospecte sur LinkedIn et Email, qualifie les leads et booke vos RDV.", gradient: "from-[#667eea] to-[#764ba2]" },
+              { name: "SENTINEL", role: "Legal & Compliance", img: "/agents/sentinel_v2.png?v=4", desc: "Vérifie vos contrats, assure la conformité RGPD et protège votre business.", gradient: "from-emerald-500 to-teal-500" },
+              { name: "HIVE", role: "Swarm Commander", img: "/agents/hive_v2.png?v=4", desc: "Pilote l'ensemble de votre flotte d'agents via WhatsApp.", gradient: "from-amber-500 to-orange-500" },
             ].map((agent, i) => (
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
