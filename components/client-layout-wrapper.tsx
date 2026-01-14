@@ -38,6 +38,7 @@ export default function ClientLayoutWrapper({
 }: {
     children: React.ReactNode;
 }) {
+    const pathname = usePathname();
     // LOGIQUE STRICTE ET CORRIGÉE
     // On affiche la Sidebar UNIQUEMENT si l'URL commence par ces chemins précis :
     const isProtectedPage =
