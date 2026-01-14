@@ -78,11 +78,7 @@ export default function Home() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-pink-600/10 blur-[100px] rounded-full pointer-events-none mix-blend-screen"></div>
 
         <div className="relative max-w-7xl mx-auto text-center z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
+          <BlurFade delay={0.2} duration={0.8} yOffset={20} blur="12px">
             {/* Trust Badge */}
             <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 mb-8 backdrop-blur-md">
               <Zap className="w-5 h-5 text-blue-500" fill="currentColor" />
