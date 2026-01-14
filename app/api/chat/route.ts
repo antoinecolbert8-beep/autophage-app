@@ -60,6 +60,8 @@ const tools = [
     }
 ];
 
+import { NeuroLinguisticArchitect } from '@/lib/neuro_architect';
+
 export async function POST(req: Request) {
     try {
         const { messages, agent, system_prompt } = await req.json();
@@ -81,9 +83,20 @@ export async function POST(req: Request) {
             "apex": "You are APEX, the Performance Max. Focus on ROI and execution."
         };
 
-        let selectedSystemPrompt = personas[agent?.toLowerCase()] ||
+        let basePrompt = personas[agent?.toLowerCase()] ||
             system_prompt ||
             "You are GENESIS. You have access to real-time tools. ALWAYS use them when asked to perform an action (like 'launch analysis', 'start agents'). Do not simulate.";
+
+        // --- NEURO-LINGUISTIC ARCHITECTURE INJECTION ---
+        // 1. Analyze user spectrum from last message
+        const lastUserMessage = messages.filter((m: any) => m.role === 'user').pop()?.content || "";
+        const neuroProfile = await NeuroLinguisticArchitect.analyzeSpectrum([lastUserMessage]);
+
+        // 2. Generate Calibration Instructions
+        const architectInstructions = NeuroLinguisticArchitect.generateSystemPrompt(neuroProfile);
+
+        // 3. Fuse with Base Persona
+        const selectedSystemPrompt = `${basePrompt}\n\n${architectInstructions}`;
 
         // 1. First Call to LLM
         const completion = await openai.chat.completions.create({
