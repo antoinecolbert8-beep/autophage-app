@@ -50,8 +50,12 @@ export default function PaymentPage() {
                         <span>Annuler la commande</span>
                     </Link>
 
-                    <h1 className="text-3xl font-black mb-2">Récapitulatif</h1>
-                    <p className="text-gray-400 mb-8">Vous êtes sur le point d'activer votre domination.</p>
+                    <h1 className="text-3xl font-black mb-2 uppercase">🚀 VALIDATION FINALE</h1>
+                    <p className="text-gray-300 mb-4 font-bold">Vous êtes à <span className="text-yellow-500">30 secondes</span> de la domination absolue.</p>
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/30 mb-8">
+                        <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                        <span className="text-sm font-bold text-red-400">🔥 Offre valable 27 minutes</span>
+                    </div>
 
                     <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/5 mb-6">
                         <div className="flex items-center gap-4">
