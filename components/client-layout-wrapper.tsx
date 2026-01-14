@@ -39,6 +39,7 @@ export default function ClientLayoutWrapper({
     children: React.ReactNode;
 }) {
     // LOGIQUE STRICTE (Alignée avec Navigation.tsx)
+    const pathname = usePathname();
     const isProtectedPage = pathname?.startsWith("/dashboard") ||
         pathname?.startsWith("/admin") ||
         pathname?.startsWith("/agent");
