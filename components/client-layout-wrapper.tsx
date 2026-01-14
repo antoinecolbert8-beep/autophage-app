@@ -38,11 +38,12 @@ export default function ClientLayoutWrapper({
 }: {
     children: React.ReactNode;
 }) {
-    // LOGIQUE STRICTE (Alignée avec Navigation.tsx)
-    const pathname = usePathname();
-    const isProtectedPage = pathname?.startsWith("/dashboard") ||
-        pathname?.startsWith("/admin") ||
-        pathname?.startsWith("/agent");
+    // LOGIQUE STRICTE ET CORRIGÉE
+    // On affiche la Sidebar UNIQUEMENT si l'URL commence par ces chemins précis :
+    const isProtectedPage =
+        pathname?.startsWith("/dashboard") ||       // Tout le dashboard
+        pathname?.startsWith("/admin") ||           // L'admin
+        pathname?.startsWith("/agent-swarm");       // L'outil spécifique (et PAS "/agents" tout court)
 
     // SYSTEM BOOT STATE
     const [isBooting, setIsBooting] = useState(true);
