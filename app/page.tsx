@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Star, ArrowRight, Zap, Check, CheckCircle2, Menu, X, Crown, Target, Rocket } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import UrgencyTimer from "@/components/UrgencyTimer";
 import {
   LineIconChevronRight,
   LineIconZap,
@@ -83,14 +82,9 @@ export default function Home() {
             transition={{ duration: 0.8 }}
           >
             {/* Trust Badge */}
-            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 mb-4 backdrop-blur-md">
+            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 mb-8 backdrop-blur-md">
               <Zap className="w-5 h-5 text-blue-500" fill="currentColor" />
               <span className="text-sm font-bold text-white">SYSTÈME AUTONOME</span>
-            </div>
-
-            {/* Urgency Timer */}
-            <div className="mb-8">
-              <UrgencyTimer initialMinutes={27} label="OFFRE EXPIRE DANS" />
             </div>
 
             <h1 className="text-6xl md:text-9xl font-black tracking-tighter mb-8 leading-[0.9] uppercase">
