@@ -38,10 +38,10 @@ export default function PricingPage() {
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border border-yellow-500/40 mb-6 backdrop-blur-md shadow-lg shadow-yellow-500/20">
-              <span className="text-sm font-black text-yellow-400 uppercase tracking-widest">👑 TARIFICATION SOUVERAINE</span>
+            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 mb-6 backdrop-blur-md">
+              <span className="text-sm font-bold text-blue-400 uppercase tracking-widest">💰 TARIFS PREMIUM</span>
             </div>
-            <h1 className="text-5xl md:text-7xl font-black mb-8 tracking-tight uppercase">INVESTISSEZ DANS<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500">VOTRE  EMPIRE.</span></h1>
+            <h1 className="text-5xl md:text-7xl font-black mb-8 tracking-tight uppercase">INVESTISSEZ DANS<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">VOTRE EMPIRE.</span></h1>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-10 font-bold">
               Choisissez votre arsenal. Dominez dès le premier mois.
             </p>

@@ -15,11 +15,11 @@ export default function AgentsPage() {
     return (
         <div className="min-h-screen bg-[#0a0a0f] text-white font-sans selection:bg-[#ec4899] selection:text-white overflow-x-hidden pt-32 px-6">
             <div className="max-w-7xl mx-auto mb-20">
-                <Link href="/" className="text-yellow-500 hover:text-yellow-400 mb-8 inline-block font-bold">← Retour</Link>
-                <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border border-yellow-500/40 mb-6 backdrop-blur-md shadow-lg shadow-yellow-500/20">
-                    <span className="text-sm font-black text-yellow-400 uppercase tracking-widest">💥 L'ARSENAL</span>
+                <Link href="/" className="text-purple-400 hover:text-purple-300 mb-8 inline-block font-bold">← Retour</Link>
+                <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 mb-6 backdrop-blur-md">
+                    <span className="text-sm font-bold text-purple-400 uppercase tracking-widest">💥 L'ARSENAL</span>
                 </div>
-                <h1 className="text-5xl md:text-7xl font-black mb-8 uppercase">9 ARMES<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500">ULTIMES.</span></h1>
+                <h1 className="text-5xl md:text-7xl font-black mb-8 uppercase">9 ARMES<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">ULTIMES.</span></h1>
                 <p className="text-xl text-gray-300 max-w-3xl font-bold">Chaque agent est une machine de guerre. Zéro pitié. Zéro compromis.</p>
             </div>
 

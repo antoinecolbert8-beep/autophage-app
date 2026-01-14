@@ -95,9 +95,7 @@ export default function ClientLayoutWrapper({
                 </motion.main>
             </AnimatePresence>
 
-            {/* 🔱 SOVEREIGN COMPONENTS */}
-            <SovereignCursor />
-            <GoldenParticles count={40} />
+            {/* Live Social Proof only */}
             <LiveSocialProof />
         </div>
     );

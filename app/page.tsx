@@ -82,10 +82,10 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {/* Sovereign Badge */}
-            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border border-yellow-500/40 mb-4 backdrop-blur-md shadow-lg shadow-yellow-500/20">
-              <Crown className="w-5 h-5 text-yellow-500" />
-              <span className="text-sm font-black text-yellow-400 uppercase tracking-widest">SYSTÈME SOUVERAIN</span>
+            {/* Trust Badge */}
+            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 mb-4 backdrop-blur-md">
+              <Zap className="w-5 h-5 text-blue-500" fill="currentColor" />
+              <span className="text-sm font-bold text-white">SYSTÈME AUTONOME</span>
             </div>
 
             {/* Urgency Timer */}
@@ -95,19 +95,19 @@ export default function Home() {
 
             <h1 className="text-6xl md:text-9xl font-black tracking-tighter mb-8 leading-[0.9] uppercase">
               <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">ÉCRASEZ LA</span>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500">CONCURRENCE.</span>
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">CONCURRENCE.</span>
             </h1>
 
             <p className="text-xl md:text-3xl text-gray-300 max-w-4xl mx-auto mb-6 leading-relaxed font-bold">
               9 ARMES ULTIMES. ZÉRO PITIÉ.
             </p>
             <p className="text-lg md:text-xl text-gray-500 max-w-3xl mx-auto mb-12">
-              Pendant qu'ils dorment, vous <span className="text-yellow-500 font-bold">DOMINEZ</span> le marché. 24/7. Sans limite.
+              Pendant qu'ils dorment, vous <span className="text-blue-500 font-bold">DOMINEZ</span> le marché. 24/7. Sans limite.
             </p>
 
             <div className="flex flex-col md:flex-row items-center justify-center gap-6">
               {/* Primary CTA - Most prominent */}
-              <Link href="/signup" className="group px-12 py-6 bg-gradient-to-r from-yellow-500 to-amber-600 rounded-xl font-black text-xl flex items-center gap-4 hover:shadow-[0_0_60px_rgba(234,179,8,0.6)] transition-all transform hover:-translate-y-2 hover:scale-110 relative overflow-hidden text-black">
+              <Link href="/signup" className="group px-12 py-6 bg-gradient-to-r from-blue-600 to-pink-600 rounded-xl font-black text-xl flex items-center gap-4 hover:shadow-[0_0_60px_rgba(236,72,153,0.6)] transition-all transform hover:-translate-y-2 hover:scale-110 relative overflow-hidden">
                 <div className="absolute inset-0 bg-white/30 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
                 <Target className="w-6 h-6 relative z-10" />
                 <span className="relative z-10 uppercase tracking-wider">PRENEZ LE POUVOIR</span>
@@ -115,8 +115,8 @@ export default function Home() {
               </Link>
 
               {/* Secondary CTA */}
-              <Link href="/agents" className="group px-8 py-4 bg-transparent border-2 border-yellow-500/30 rounded-xl font-bold flex items-center gap-3 hover:bg-yellow-500/10 transition-all hover:scale-105 hover:border-yellow-500 text-yellow-500">
-                <Crown className="w-5 h-5 group-hover:rotate-12 transition-transform duration-500" />
+              <Link href="/agents" className="group px-8 py-4 bg-transparent border-2 border-purple-500/30 rounded-xl font-bold flex items-center gap-3 hover:bg-purple-500/10 transition-all hover:scale-105 hover:border-purple-500 text-purple-400">
+                <Star className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" />
                 VOIR L'ARSENAL
               </Link>
             </div>
