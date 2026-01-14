@@ -158,9 +158,9 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { title: "Productivité x5", desc: "Un seul agent accomplit le travail de 5 employés qualifiés.", color: "from-blue-500 to-cyan-500", icon: LineIconZap, visual: "⚡", illustration: "/assets/productivity.png?v=4" },
-              { title: "Coûts /10", desc: "Réduisez vos charges opérationnelles de 90% immédiatement.", color: "from-purple-500 to-pink-500", icon: LineIconStar, visual: "💎", illustration: "/assets/feat_costs.png?v=4" },
-              { title: "Onboarding 2min", desc: "Connectez vos outils et lancez vos agents en quelques clics.", color: "from-emerald-500 to-lime-500", icon: LineIconCheck, visual: "🚀", illustration: "/assets/feat_onboarding.png?v=4" }
+              { title: "Productivité x5", desc: "Un seul agent accomplit le travail de 5 employés qualifiés.", color: "from-blue-500 to-cyan-500", icon: LineIconZap, visual: "⚡", illustration: "/images/productivity.png" },
+              { title: "Coûts /10", desc: "Réduisez vos charges opérationnelles de 90% immédiatement.", color: "from-purple-500 to-pink-500", icon: LineIconStar, visual: "💎", illustration: "/images/costs.png" },
+              { title: "Onboarding 2min", desc: "Connectez vos outils et lancez vos agents en quelques clics.", color: "from-emerald-500 to-lime-500", icon: LineIconCheck, visual: "🚀", illustration: "/images/onboarding.png" }
             ].map((item, i) => (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -178,7 +178,14 @@ export default function Home() {
                 <h3 className="text-2xl font-bold mb-4">{item.title}</h3>
                 <p className="text-gray-400 leading-relaxed mb-6">{item.desc}</p>
                 <div className="relative h-32 w-full rounded-xl overflow-hidden opacity-40 group-hover:opacity-100 transition-opacity duration-500 border border-white/10 bg-gradient-to-br from-white/5 to-transparent">
-                  <img src={item.illustration} alt={item.title} className="w-full h-full object-cover" loading="eager" />
+                  <Image
+                    src={item.illustration}
+                    alt={item.title}
+                    fill
+                    className="object-cover"
+                    priority={true}
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
                 </div>
                 <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/10 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
               </motion.div>
@@ -397,6 +404,10 @@ export default function Home() {
                 ${item.color === 'blue' ? 'bg-[#13131f] border-blue-500/20 hover:border-blue-500 hover:shadow-[0_0_50px_rgba(59,130,246,0.2)]' : ''}
                 ${item.color === 'purple' ? 'bg-[#13131f] border-purple-500/20 hover:border-purple-500 hover:shadow-[0_0_50px_rgba(168,85,247,0.2)]' : ''}
                 ${item.color === 'pink' ? 'bg-[#13131f] border-pink-500/20 hover:border-pink-500 hover:shadow-[0_0_50px_rgba(236,72,153,0.2)]' : ''}
+                
+                /* CASCADE DIAGONALE */
+                ${i === 1 ? "md:mt-12" : ""}
+                ${i === 2 ? "md:mt-24" : ""}
               `}>
                 {/* Visual Background Elements */}
                 {item.bgIcons}
