@@ -38,10 +38,10 @@ export default function ClientLayoutWrapper({
 }: {
     children: React.ReactNode;
 }) {
-    const pathname = usePathname();
-    // Landing page shouldn't have sidebar
-    const isLanding = pathname === "/";
-    const isAuthPage = pathname.includes("/signup") || pathname.includes("/login") || pathname.includes("/setup") || pathname.includes("/payment") || pathname.includes("/admin");
+    // LOGIQUE STRICTE (Alignée avec Navigation.tsx)
+    const isProtectedPage = pathname?.startsWith("/dashboard") ||
+        pathname?.startsWith("/admin") ||
+        pathname?.startsWith("/agent");
 
     // SYSTEM BOOT STATE
     const [isBooting, setIsBooting] = useState(true);
@@ -51,10 +51,11 @@ export default function ClientLayoutWrapper({
         const hasBooted = typeof window !== 'undefined' ? sessionStorage.getItem("genesis_boot_complete") : null;
 
         if (!hasBooted) {
+            // Only boot on landing or dashboard first entry
             const timer = setTimeout(() => {
                 setIsBooting(false);
                 sessionStorage.setItem("genesis_boot_complete", "true");
-            }, 2200); // 2.2s boot sequence
+            }, 2200);
             return () => clearTimeout(timer);
         } else {
             setIsBooting(false);
@@ -74,8 +75,9 @@ export default function ClientLayoutWrapper({
                 <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03]" />
             </div>
 
-            {/* Global Navigation - Excluded on Landing, Auth, and Setup */}
-            {!isLanding && !isAuthPage && <Navigation />}
+            {/* Global Navigation - Controlled internally by Navigation.tsx via Strict Check, 
+                but we keep it here in JSX. The component itself returns null if not protected. */}
+            <Navigation />
 
             {/* Main Content Area with Page Transitions */}
             <AnimatePresence mode="wait">
@@ -85,7 +87,7 @@ export default function ClientLayoutWrapper({
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
                     transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1.0] }}
-                    className={`relative z-10 ${!isLanding && !isAuthPage ? "ml-20 lg:ml-64 p-4 md:p-8" : ""
+                    className={`relative z-10 ${isProtectedPage ? "ml-20 lg:ml-64 p-4 md:p-8" : ""
                         }`}
                 >
                     {children}

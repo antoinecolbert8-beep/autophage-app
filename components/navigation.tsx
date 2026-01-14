@@ -14,6 +14,16 @@ import {
 export default function Navigation() {
   const pathname = usePathname();
 
+  // LOGIQUE STRICTE : S'affiche uniquement dans les zones sécurisées
+  // Note: on utilise startsWith pour couvrir les sous-routes
+  const isProtectedPage = pathname?.startsWith("/dashboard") ||
+    pathname?.startsWith("/admin") ||
+    pathname?.startsWith("/agent");
+
+  if (!isProtectedPage) {
+    return null;
+  }
+
   const isActive = (path: string) => {
     return pathname === path || pathname?.startsWith(path + "/");
   };
