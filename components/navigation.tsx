@@ -14,11 +14,12 @@ import {
 export default function Navigation() {
   const pathname = usePathname();
 
-  // LOGIQUE STRICTE : S'affiche uniquement dans les zones sécurisées
-  // Note: on utilise startsWith pour couvrir les sous-routes
-  const isProtectedPage = pathname?.startsWith("/dashboard") ||
-    pathname?.startsWith("/admin") ||
-    pathname?.startsWith("/agent");
+  // LOGIQUE STRICTE ET CORRIGÉE
+  // On affiche la Sidebar UNIQUEMENT si l'URL commence par ces chemins précis :
+  const isProtectedPage =
+    pathname?.startsWith("/dashboard") ||       // Tout le dashboard
+    pathname?.startsWith("/admin") ||           // L'admin
+    pathname?.startsWith("/agent-swarm");       // L'outil spécifique (et PAS "/agents" tout court)
 
   if (!isProtectedPage) {
     return null;
