@@ -19,6 +19,8 @@ COPY . .
 # Generate Prisma Client
 RUN npx prisma generate
 
+ENV DATABASE_URL="file:./autophage.db"
+
 # Build Next.js
 ENV NEXT_TELEMETRY_DISABLED 1
 RUN npm run build
