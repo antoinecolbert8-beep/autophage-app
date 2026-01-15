@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "standalone",
   // Performance optimizations
   swcMinify: true,
   reactStrictMode: true,
