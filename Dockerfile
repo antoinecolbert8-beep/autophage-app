@@ -28,6 +28,9 @@ ENV NEXT_PUBLIC_SUPABASE_ANON_KEY="placeholder-key-pour-le-build"
 ENV SUPABASE_SERVICE_ROLE_KEY="placeholder-key-pour-le-build"
 ENV OPENAI_API_KEY="sk-proj-placeholder-key-pour-le-build"
 
+# OpenAI et autres services
+ENV OPENAI_API_KEY="sk-proj-placeholder-key"
+
 # Build Next.js
 ENV NEXT_TELEMETRY_DISABLED 1
 RUN npm run build
