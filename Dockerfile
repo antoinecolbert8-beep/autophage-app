@@ -40,6 +40,11 @@ ENV NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY="placeholder-key"
 # 4. Autres Services (OpenAI, etc.)
 ENV OPENAI_API_KEY="sk-proj-placeholder-key"
 
+ENV TWILIO_ACCOUNT_SID="AC_placeholder_pour_le_build"
+ENV TWILIO_AUTH_TOKEN="placeholder_token"
+ENV TWILIO_PHONE_NUMBER="+33600000000"
+ENV NEXT_PUBLIC_TWILIO_PHONE_NUMBER="+33600000000"
+
 # Build Next.js
 ENV NEXT_TELEMETRY_DISABLED 1
 RUN npm run build
