@@ -43,7 +43,11 @@ function calculateThreatScore(req: NextRequest, currentStats: RequestLog): numbe
 }
 
 export async function fortressMiddleware(req: NextRequest) {
-    const ip = req.ip || 'unknown';
+    // FIX: Parse X-Forwarded-For headers for Railway/Proxies
+    const forwardedFor = req.headers.get('x-forwarded-for');
+    const realIp = req.headers.get('x-real-ip');
+
+    let ip = req.ip || (forwardedFor ? forwardedFor.split(',')[0].trim() : null) || realIp || 'unknown';
     const now = Date.now();
 
     // --- LAYER 1: AUTONOMOUS SCRUBBING ---
@@ -71,7 +75,8 @@ export async function fortressMiddleware(req: NextRequest) {
     }
 
     // Block if threat level critical
-    if (stats.score > THREAT_THRESHOLD || stats.count > MAX_REQUESTS) {
+    // SAFETY: Never block if IP is unknown (Railway internal routing issue) to avoid "death loop"
+    if ((stats.score > THREAT_THRESHOLD || stats.count > MAX_REQUESTS) && ip !== 'unknown') {
         console.warn(`🛡️ FORTRESS: Blocked IP ${ip} (Score: ${stats.score}, Reqs: ${stats.count})`);
 
         // Return a "Ghost" response (200 OK but empty/fake) to confuse attackers
