@@ -21,14 +21,21 @@ COPY . .
 # Generate Prisma Client
 RUN npx prisma generate
 
-ENV DATABASE_URL="file:./autophage.db"
-
+# 1. Variantes STANDARDS (Client)
 ENV NEXT_PUBLIC_SUPABASE_URL="https://placeholder.supabase.co"
-ENV NEXT_PUBLIC_SUPABASE_ANON_KEY="placeholder-key-pour-le-build"
-ENV SUPABASE_SERVICE_ROLE_KEY="placeholder-key-pour-le-build"
-ENV OPENAI_API_KEY="sk-proj-placeholder-key-pour-le-build"
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY="placeholder-key"
 
-# OpenAI et autres services
+# 2. Variantes SERVEUR (Admin/Service Role)
+ENV SUPABASE_URL="https://placeholder.supabase.co"
+ENV SUPABASE_KEY="placeholder-key"
+ENV SUPABASE_SERVICE_ROLE_KEY="placeholder-key"
+ENV SUPABASE_SERVICE_KEY="placeholder-key" 
+
+# 3. Variantes HYBRIDES (Parfois utilisées par erreur)
+ENV NEXT_PUBLIC_SUPABASE_KEY="placeholder-key"
+ENV NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY="placeholder-key"
+
+# 4. Autres Services (OpenAI, etc.)
 ENV OPENAI_API_KEY="sk-proj-placeholder-key"
 
 # Build Next.js
