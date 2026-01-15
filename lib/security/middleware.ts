@@ -82,10 +82,15 @@ export async function fortressMiddleware(req: NextRequest) {
         // Return a "Ghost" response (200 OK but empty/fake) to confuse attackers
         // or standard 403 if we want to be explicit.
         // "Moving Target" philosophy suggests confusing the attacker.
+
+        // KILL SWITCH: Temporarily disabled blocking to fix Railway production access
+        /*
         return new NextResponse(JSON.stringify({ error: 'Connection instability detected. Retrying...' }), {
             status: 429,
             headers: { 'Content-Type': 'application/json' },
         });
+        */
+        console.log("Would have blocked request from IP:", ip);
     }
 
     // --- LAYER 2: MOVING TARGET DEFENSE (API Obfuscation) ---
