@@ -26,6 +26,7 @@ ENV DATABASE_URL="file:./autophage.db"
 ENV NEXT_PUBLIC_SUPABASE_URL="https://placeholder.supabase.co"
 ENV NEXT_PUBLIC_SUPABASE_ANON_KEY="placeholder-key-pour-le-build"
 ENV SUPABASE_SERVICE_ROLE_KEY="placeholder-key-pour-le-build"
+ENV OPENAI_API_KEY="sk-proj-placeholder-key-pour-le-build"
 
 # Build Next.js
 ENV NEXT_TELEMETRY_DISABLED 1
