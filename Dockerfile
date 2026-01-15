@@ -21,6 +21,8 @@ COPY . .
 # Generate Prisma Client
 RUN npx prisma generate
 
+ENV DATABASE_URL="file:./autophage.db"
+
 # 1. Variantes STANDARDS (Client)
 ENV NEXT_PUBLIC_SUPABASE_URL="https://placeholder.supabase.co"
 ENV NEXT_PUBLIC_SUPABASE_ANON_KEY="placeholder-key"
