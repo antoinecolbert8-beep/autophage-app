@@ -1,0 +1,116 @@
+{
+    "name": "Conductor Pattern - Next.js Controller",
+    "flow": [
+        {
+            "id": 1,
+            "module": "webhook:CustomWebhook",
+            "version": 1,
+            "parameters": {
+                "hook": null
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 0,
+                    "name": "Inbound Order (Next.js)"
+                },
+                "restore": {
+                    "expect": {
+                        "hook": {
+                            "mode": "chose",
+                            "label": "Choose a hook"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "hook",
+                        "type": "hook:custom-webhook",
+                        "label": "Webhook",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "parameters": {},
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 0,
+                    "name": "Action Router"
+                }
+            }
+        },
+        {
+            "id": 3,
+            "module": "json:ParseJSON",
+            "version": 1,
+            "parameters": {
+                "type": ""
+            },
+            "mapper": {
+                "json": "{{1.payload}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 600,
+                    "y": -100,
+                    "name": "Parse Payload (Generate Post)"
+                }
+            },
+            "filter": {
+                "name": "Action: GENERATE_POST",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{1.action}}",
+                            "o": "text:equal",
+                            "b": "GENERATE_POST"
+                        }
+                    ]
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "module": "util:SetVariable",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "name": "logic_simulation",
+                "value": "Here you would add the OpenAI / LinkedIn modules using {{3.topic}} and {{3.tone}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 900,
+                    "y": -100,
+                    "name": "Placeholder for AI/LinkedIn Logic"
+                }
+            }
+        }
+    ],
+    "metadata": {
+        "instant": false,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        }
+    }
+}
