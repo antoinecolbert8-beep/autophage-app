@@ -9,7 +9,7 @@ async function main() {
     try {
         console.log("🔍 Listing Auth Users (SAFE MODE)...");
         // Cast raw result to array of any
-        const users: any[] = await prisma.$queryRawUnsafe`SELECT email FROM auth.users`;
+        const users: any[] = await prisma.$queryRawUnsafe('SELECT email FROM auth.users');
 
         console.log(`Found ${users.length} users.`);
 
