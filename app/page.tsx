@@ -157,9 +157,9 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { title: "Productivité x5", desc: "Un seul agent accomplit le travail de 5 employés qualifiés.", color: "from-amber-500 to-yellow-500", icon: LineIconZap, visual: "⚡", illustration: "/images/productivity.png" },
-              { title: "Coûts /10", desc: "Réduisez vos charges opérationnelles de 90% immédiatement.", color: "from-amber-400 to-orange-500", icon: LineIconStar, visual: "💎", illustration: "/images/costs.png" },
-              { title: "Onboarding 2min", desc: "Connectez vos outils et lancez vos agents en quelques clics.", color: "from-yellow-400 to-amber-600", icon: LineIconCheck, visual: "🚀", illustration: "/images/onboarding.png" }
+              { title: "+148k€ / an", desc: "De revenus additionnels générés en moyenne par nos clients Enterprise.", color: "from-amber-500 to-yellow-500", icon: LineIconTrendingUp, visual: "💰", illustration: "/images/productivity.png" },
+              { title: "+3.200h / an", desc: "D'heures de production économisées. Vos équipes se concentrent sur la stratégie.", color: "from-amber-400 to-orange-500", icon: LineIconZap, visual: "⚡", illustration: "/images/costs.png" },
+              { title: "R.O.I. x12", desc: "Retour sur investissement moyen constaté dès le premier trimestre d'utilisation.", color: "from-yellow-400 to-amber-600", icon: LineIconStar, visual: "🚀", illustration: "/images/onboarding.png" }
             ].map((item, i) => (
               <div
                 key={i}
