@@ -21,14 +21,14 @@ async function main() {
         } else {
             // Try to count auth users
             try {
-                const count: any = await prisma.$queryRawUnsafe`SELECT count(*) FROM auth.users`;
+                const count: any = await prisma.$queryRawUnsafe('SELECT count(*) FROM auth.users');
                 console.log(`Auth Users Count: ${count[0].count}`);
 
                 if (Number(count[0].count) === 0) {
                     console.log("❌ LA BASE EST VIDE (0 utilisateurs).");
                 } else {
                     console.log("✅ Il y a des utilisateurs.");
-                    const users: any[] = await prisma.$queryRawUnsafe`SELECT email FROM auth.users`;
+                    const users: any[] = await prisma.$queryRawUnsafe('SELECT email FROM auth.users');
                     console.log("Emails trouvés:", users.map(u => u.email).join(", "));
                 }
             } catch (e: any) {
