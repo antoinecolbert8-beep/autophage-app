@@ -1,11 +1,9 @@
 /**
  * 💬 WhatsApp Controller - Pilotage du SaaS via WhatsApp
- * Commandes vocales et texte pour contrôler toutes les fonctionnalités
+ * Logique déléguée à Make.com (Brain & Hands)
  */
 
-import OpenAI from "openai";
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+import { triggerAutomation } from "./automations";
 
 export type WhatsAppCommand = {
   type: "TEXT" | "AUDIO";
@@ -21,108 +19,48 @@ export type CommandResult = {
 };
 
 /**
- * Parse une commande WhatsApp (texte ou audio transcrit)
+ * Parse une commande WhatsApp (via Make pour l'IA et la transcription)
  */
 export async function parseWhatsAppCommand(
   command: WhatsAppCommand
 ): Promise<CommandResult> {
-  try {
-    // Transcription audio si nécessaire
-    let text = command.content;
-    if (command.type === "AUDIO") {
-      text = await transcribeAudio(command.content);
-    }
+  // On délègue tout le "Cerveau" à Make
+  // Make va: 1. Transcrire si audio 2. Analyser l'intent avec GPT 3. Retourner l'action et la réponse
 
-    // Analyse de l'intention
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "system",
-          content: `Tu es l'assistant WhatsApp du SaaS Autophage.
-Tu interprètes les commandes vocales/texte et retournes une action JSON :
-{
-  "action": "GENERATE_CONTENT" | "CHECK_STATS" | "MAKE_CALLS" | "QUALIFY_LEAD" | "GENERATE_DOC" | "UNKNOWN",
-  "params": {...},
-  "response": "Message de confirmation"
-}
+  const result = await triggerAutomation("PROCESS_WHATSAPP_MESSAGE", {
+    type: command.type,
+    content: command.content,
+    from: command.from
+  });
 
-Exemples:
-- "Crée-moi un post LinkedIn sur l'IA" → GENERATE_CONTENT
-- "Combien de leads cette semaine ?" → CHECK_STATS
-- "Appelle 100 prospects" → MAKE_CALLS
-- "Rédige un contrat" → GENERATE_DOC`,
-        },
-        { role: "user", content: text },
-      ],
-      response_format: { type: "json_object" },
-    });
-
-    const result = JSON.parse(completion.choices[0].message.content || "{}");
-
+  if (result.success && result.data) {
     return {
       success: true,
-      response: result.response || "Commande reçue",
-      action: result.action,
-      data: result.params,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      response: "Désolé, je n'ai pas compris ta commande. Peux-tu reformuler ?",
+      response: result.data.response || "Commande traitée",
+      action: result.data.action || "UNKNOWN",
+      data: result.data.params
     };
   }
+
+  return {
+    success: false,
+    response: "Erreur de traitement (Automation Make échouée)"
+  };
 }
 
 /**
- * Transcription audio (Whisper API)
- */
-async function transcribeAudio(audioUrl: string): Promise<string> {
-  try {
-    // En production : télécharge l'audio depuis WhatsApp, puis transcrit
-    // Pour l'instant, simulation
-    return "Transcription audio simulée";
-  } catch (error) {
-    throw new Error(`Erreur transcription: ${(error as Error).message}`);
-  }
-}
-
-/**
- * Envoie un message WhatsApp Business
+ * Envoie un message WhatsApp Business (via Make)
  */
 export async function sendWhatsAppMessage(
   to: string,
   message: string
 ): Promise<{ success: boolean }> {
-  const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
-  const accessToken = process.env.WHATSAPP_ACCESS_TOKEN;
+  const result = await triggerAutomation("SEND_WHATSAPP_MESSAGE", {
+    to,
+    message
+  });
 
-  if (!phoneNumberId || !accessToken) {
-    return { success: false };
-  }
-
-  try {
-    const url = `https://graph.facebook.com/v18.0/${phoneNumberId}/messages`;
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({
-        messaging_product: "whatsapp",
-        to,
-        type: "text",
-        text: { body: message },
-      }),
-    });
-
-    const data = await res.json();
-    return { success: !!data.messages };
-  } catch (error) {
-    console.error("Erreur WhatsApp:", error);
-    return { success: false };
-  }
+  return { success: result.success };
 }
 
 

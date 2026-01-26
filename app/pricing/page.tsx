@@ -19,12 +19,13 @@ export default function PricingPage() {
           </Link>
 
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="relative w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-pink-500 flex items-center justify-center overflow-hidden border border-white/20 shadow-[0_0_20px_rgba(59,130,246,0.5)]">
-              <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-30"></div>
-              <Zap className="w-4 h-4 text-white relative z-10" />
-            </div>
-            <span className="text-lg font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 group-hover:to-white transition-all">
-              GENESIS
+            <img
+              src="/logo-ela.png"
+              alt="ELA"
+              className="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(217,119,6,0.4)]"
+            />
+            <span className="text-lg font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 group-hover:to-amber-300 transition-all">
+              ELA
             </span>
           </Link>
 
@@ -70,7 +71,7 @@ export default function PricingPage() {
             <div className="p-8 rounded-[2rem] bg-[#13131f] border border-white/5 flex flex-col hover:border-[#667eea]/30 transition-all group">
               <h3 className="text-2xl font-bold mb-2 group-hover:text-white transition-colors">Starter</h3>
               <div className="flex items-baseline gap-1 mb-6">
-                <span className="text-5xl font-black">{activeTab === 'monthly' ? '99' : '79'}€</span>
+                <span className="text-5xl font-black">{activeTab === 'monthly' ? '37' : '30'}€</span>
                 <span className="text-gray-500">/mois</span>
               </div>
               <p className="text-sm text-gray-400 mb-8 min-h-[40px]">L'essentiel pour automatiser vos premières tâches.</p>
@@ -93,7 +94,7 @@ export default function PricingPage() {
               </div>
               <h3 className="text-2xl font-bold mb-2 text-[#667eea]">Pro</h3>
               <div className="flex items-baseline gap-1 mb-6">
-                <span className="text-5xl font-black">{activeTab === 'monthly' ? '299' : '239'}€</span>
+                <span className="text-5xl font-black">{activeTab === 'monthly' ? '197' : '157'}€</span>
                 <span className="text-gray-500">/mois</span>
               </div>
               <p className="text-sm text-gray-400 mb-8 min-h-[40px]">La suite complète pour scaler votre entreprise rapidement.</p>
@@ -129,7 +130,7 @@ export default function PricingPage() {
                     GOD MODE
                   </h3>
                   <div className="mb-8 flex items-baseline gap-1">
-                    <span className="text-6xl font-black text-white tracking-tighter">{activeTab === 'monthly' ? '999' : '799'}€</span>
+                    <span className="text-6xl font-black text-white tracking-tighter">{activeTab === 'monthly' ? '497' : '397'}€</span>
                     <span className="text-gray-400 font-mono">/mois</span>
                   </div>
 

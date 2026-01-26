@@ -1,7 +1,9 @@
 /**
  * 🎙️ ElevenLabs TTS Integration
- * Génération audio professionnelle pour les vidéos
+ * Génération audio professionnelle déléguée à Make.com
  */
+
+import { triggerAutomation } from "./automations";
 
 export type VoiceConfig = {
   voiceId?: string; // ID de la voix ElevenLabs
@@ -17,105 +19,50 @@ export type TTSRequest = {
   outputFormat?: "mp3_44100_128" | "mp3_22050_32" | "pcm_16000";
 };
 
-// Voix populaires ElevenLabs (à remplacer par les vraies IDs)
+// Voix populaires ElevenLabs (à envoyer à Make pour qu'il les utilise)
 export const VOICES = {
-  ADAM: "pNInz6obpgDQGcFmaJgB", // Voix masculine profonde
-  ANTONI: "ErXwobaYiN019PkySvjV", // Voix masculine calme
-  BELLA: "EXAVITQu4vr4xnSDxMaL", // Voix féminine douce
-  RACHEL: "21m00Tcm4TlvDq8ikWAM", // Voix féminine claire
-  DOMI: "AZnzlk1XvdvUeBnXmlld", // Voix féminine énergique
+  ADAM: "pNInz6obpgDQGcFmaJgB",
+  ANTONI: "ErXwobaYiN019PkySvjV",
+  BELLA: "EXAVITQu4vr4xnSDxMaL",
+  RACHEL: "21m00Tcm4TlvDq8ikWAM",
+  DOMI: "AZnzlk1XvdvUeBnXmlld",
 };
 
 /**
- * Génère un fichier audio depuis du texte via ElevenLabs
+ * Génère un fichier audio depuis du texte via Make
+ * Retourne l'URL de l'audio généré (stocké par Make sur S3/Drive/Cloudinary)
  */
 export async function generateSpeech(request: TTSRequest): Promise<{ url: string; duration: number }> {
-  const apiKey = process.env.ELEVENLABS_API_KEY;
-  
-  if (!apiKey) {
-    throw new Error("ELEVENLABS_API_KEY manquante dans .env");
-  }
+  // Make scénario:
+  // 1. Webhook (text, voiceId, settings)
+  // 2. ElevenLabs Generate
+  // 3. Upload to Storage (Google Drive / S3 / TMP)
+  // 4. Webhook Response (publicUrl, duration)
 
-  const voiceId = request.voice?.voiceId ?? VOICES.ANTONI;
-  const outputFormat = request.outputFormat ?? "mp3_44100_128";
-
-  const url = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`;
-
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Accept": "audio/mpeg",
-      "xi-api-key": apiKey,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      text: request.text,
-      model_id: "eleven_multilingual_v2",
-      voice_settings: {
-        stability: request.voice?.stability ?? 0.5,
-        similarity_boost: request.voice?.similarityBoost ?? 0.75,
-        style: request.voice?.style ?? 0,
-        use_speaker_boost: request.voice?.useSpeakerBoost ?? true,
-      },
-      output_format: outputFormat,
-    }),
+  const result = await triggerAutomation("GENERATE_SPEECH", {
+    text: request.text,
+    voiceId: request.voice?.voiceId ?? VOICES.ANTONI,
+    settings: request.voice,
+    outputFormat: request.outputFormat
   });
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`ElevenLabs API error: ${response.status} - ${error}`);
+  if (result.success && result.data?.url) {
+    return {
+      url: result.data.url,
+      duration: result.data.duration || 0
+    };
   }
 
-  // Récupère le buffer audio
-  const audioBuffer = await response.arrayBuffer();
-  
-  // Sauvegarde temporaire (en production, upload sur S3/R2)
-  const fs = await import("fs");
-  const path = await import("path");
-  const crypto = await import("crypto");
-  
-  const filename = `speech-${crypto.randomBytes(8).toString("hex")}.mp3`;
-  const outputDir = path.join(process.cwd(), "public", "audio");
-  
-  // Crée le dossier si nécessaire
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
-  }
-  
-  const outputPath = path.join(outputDir, filename);
-  fs.writeFileSync(outputPath, Buffer.from(audioBuffer));
-
-  // Estime la durée (approximation: 150 mots/min)
-  const wordCount = request.text.split(/\s+/).length;
-  const estimatedDuration = (wordCount / 150) * 60;
-
-  return {
-    url: `/audio/${filename}`,
-    duration: Math.ceil(estimatedDuration),
-  };
+  throw new Error(`Erreur génération TTS Make: ${result.message}`);
 }
 
 /**
- * Liste les voix disponibles
+ * Liste les voix disponibles (Via Make ou fallback statique)
  */
 export async function getAvailableVoices() {
-  const apiKey = process.env.ELEVENLABS_API_KEY;
-  
-  if (!apiKey) {
-    return Object.entries(VOICES).map(([name, id]) => ({ name, id }));
-  }
-
-  try {
-    const response = await fetch("https://api.elevenlabs.io/v1/voices", {
-      headers: { "xi-api-key": apiKey },
-    });
-
-    const data = await response.json();
-    return data.voices;
-  } catch (error) {
-    console.error("Erreur récupération voix:", error);
-    return Object.entries(VOICES).map(([name, id]) => ({ name, id }));
-  }
+  // Optionnel: Demander à Make de lister les voix
+  // Pour l'instant on retourne les constantes pour éviter la latence
+  return Object.entries(VOICES).map(([name, id]) => ({ name, id }));
 }
 
 

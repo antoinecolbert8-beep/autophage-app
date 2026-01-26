@@ -1,0 +1,1343 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "path": "mission-command",
+        "httpMethod": "POST",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "17f53b78-c0c4-4c0d-8540-08c7152ad04f",
+      "name": "Webhook - Mission Command",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "path": "mission-form",
+        "formFields": {
+          "values": [
+            {
+              "label": "Topic",
+              "name": "topic",
+              "type": "string",
+              "required": true
+            },
+            {
+              "label": "Priority",
+              "name": "priority",
+              "type": "dropdown",
+              "options": [
+                {
+                  "name": "1",
+                  "value": "1"
+                },
+                {
+                  "name": "2",
+                  "value": "2"
+                },
+                {
+                  "name": "3",
+                  "value": "3"
+                }
+              ]
+            },
+            {
+              "label": "Format",
+              "name": "format",
+              "type": "dropdown",
+              "options": [
+                {
+                  "name": "Short",
+                  "value": "short"
+                },
+                {
+                  "name": "Long",
+                  "value": "long"
+                },
+                {
+                  "name": "Thread",
+                  "value": "thread"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "id": "ed553dc0-5512-427e-b06c-870b01cf85b2",
+      "name": "Form Trigger",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      },
+      "id": "15f79d73-491f-4c2b-861c-81896dce8b2a",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute",
+              "value": 5
+            }
+          ]
+        },
+        "filters": {
+          "labelIds": [
+            "AI-INPUT"
+          ]
+        }
+      },
+      "id": "ea03b973-18c7-45ae-bb5d-d9e87689d51e",
+      "name": "Gmail Trigger",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        600
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "7bdfd81b-44a5-4854-8316-025a9faa8dbc",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "append"
+      },
+      "id": "5fdc2f46-a967-49f8-b007-b2bf580a8372",
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 1,
+      "position": [
+        400,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "\n// Normalize inputs\nconst topic = $json.subject || $json.Topic || $json.body;\nconst priority = parseInt($json.Priority) || 1;\nconst sourceIndex = $node[\"Merge\"] ? $node[\"Merge\"].input.index : 0; \n\nreturn {\n  json: {\n    topic: topic,\n    priority: priority,\n    source: sourceIndex\n  }\n};\n"
+      },
+      "id": "12b6ccab-4616-47b5-b638-957530ded164",
+      "name": "Code - Normalization",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        600,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "dataType": "number",
+        "value1": "={{ $json.priority }}",
+        "rules": {
+          "rules": [
+            {
+              "value2": 3,
+              "operation": "equal",
+              "output": 0
+            },
+            {
+              "value2": 3,
+              "operation": "smaller",
+              "output": 1
+            }
+          ]
+        }
+      },
+      "id": "ecda5200-9556-41bd-9c24-802642b428ac",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [
+        800,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.topic }}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "id": "1cf64b77-9e2b-4979-9839-b1ddc1869965",
+      "name": "Filter",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "timestamp",
+              "value": "={{ $now }}"
+            },
+            {
+              "name": "workflow_id",
+              "value": "={{ $workflow.id }}"
+            }
+          ]
+        }
+      },
+      "id": "5ecc80e2-6d93-40b3-bb2f-ea254cd664ed",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://oauth2.googleapis.com/token",
+        "method": "POST",
+        "bodyParameters": {
+          "parameter": [
+            {
+              "name": "client_id",
+              "value": "YOUR_CLIENT_ID"
+            },
+            {
+              "name": "client_secret",
+              "value": "YOUR_CLIENT_SECRET"
+            },
+            {
+              "name": "grant_type",
+              "value": "refresh_token"
+            },
+            {
+              "name": "refresh_token",
+              "value": "YOUR_REFRESH_TOKEN"
+            }
+          ]
+        }
+      },
+      "id": "35262d72-89ef-4a7c-9dfa-9ce471b13c67",
+      "name": "Token Refresher",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst keys = ['sk-1...', 'sk-2...', 'sk-3...'];\nconst executionId = $execution.id;\nconst index = Math.floor(Math.random() * keys.length); \nreturn { json: { selected_key: keys[index] } };\n"
+      },
+      "id": "fa0dd52a-6ef0-4d83-b4c3-c42e0ba36891",
+      "name": "API Key Rotator",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "amount": "={{ Math.random() * 3000 + 2000 }}",
+        "unit": "milliseconds"
+      },
+      "id": "34d38f1a-5a0d-4f73-b156-4405f864f635",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        1800,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "action": "encrypt",
+        "value": "={{ $json.topic }}"
+      },
+      "id": "c13136af-76a7-4aaf-9e0e-a7362df8f68e",
+      "name": "Crypto",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "data_mining_workflow_id",
+        "mode": "each"
+      },
+      "id": "cbc6c844-cf98-4d46-90fb-3828f1d952d7",
+      "name": "Execute Workflow - Cluster B",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        2200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://serpapi.com/search",
+        "queryParameters": {
+          "parameter": [
+            {
+              "name": "q",
+              "value": "={{ $json.topic }}"
+            },
+            {
+              "name": "answer_box",
+              "value": "true"
+            },
+            {
+              "name": "related_questions",
+              "value": "true"
+            }
+          ]
+        }
+      },
+      "id": "84b13a5e-7f92-4221-9361-c40fa9381e61",
+      "name": "SerpApi",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.link }}",
+        "followRedirects": true,
+        "ignoreResponseCode": true
+      },
+      "id": "e4609d78-945f-457e-80a1-afdc5166c9cf",
+      "name": "Unshorten URL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        2600,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return {json: {proxy: 'http://user:pass@proxy:port', userAgent: 'Chrome/...'}};"
+      },
+      "id": "fb654b23-77bd-4b4f-b195-f9d834a80ac4",
+      "name": "Proxy Manager",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        2800,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {
+          "proxy": "={{ $json.proxy }}"
+        }
+      },
+      "id": "8b575c53-e7d4-4881-8da6-141dc01bd39c",
+      "name": "Scraper",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        3000,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "dataPropertyName": "data",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "title",
+              "cssSelector": "h1"
+            },
+            {
+              "key": "content",
+              "cssSelector": "article, main p"
+            }
+          ]
+        }
+      },
+      "id": "bbe6192f-4361-4de8-9bb2-31d8d71b7973",
+      "name": "HTML Extract",
+      "type": "n8n-nodes-base.htmlExtract",
+      "typeVersion": 1,
+      "position": [
+        3200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.content.length }}",
+              "operation": "larger",
+              "value2": "500"
+            }
+          ]
+        }
+      },
+      "id": "5bc905d6-75a7-4774-86d9-38c8fb4f7933",
+      "name": "Validator",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        3400,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "encryption_required",
+              "value": "true"
+            }
+          ]
+        }
+      },
+      "id": "cb9e1d48-c4b4-4377-a8c4-8588d105b500",
+      "name": "Privacy Gatekeeper",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        3600,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "prompt": "Identify PII in this text..."
+      },
+      "id": "8b57eda3-bec6-4f72-8d65-c8a85fdfec47",
+      "name": "Entity Recognizer",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        3800,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Replace logic"
+      },
+      "id": "95a87b99-af4e-4f6c-bf1c-c24a885d3cc7",
+      "name": "Anonymizer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        4000,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "action": "hash",
+        "type": "sha256",
+        "value": "={{ $json.userId + $env.SALT }}"
+      },
+      "id": "6ccb0429-c4a0-44e3-a666-c84a794d7c60",
+      "name": "Salted Hasher",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        4200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Time chunking"
+      },
+      "id": "92c26aa2-5380-4e59-a495-65e3a336f254",
+      "name": "Context Formatter",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        4400,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "prompt": "Extract 5 keywords..."
+      },
+      "id": "d7fd7e6b-913b-4478-80a3-f6e9036931ea",
+      "name": "Keyword Extractor",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        4600,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "embeddings",
+        "operation": "create",
+        "text": "={{ $json.pageContent }}"
+      },
+      "id": "3853bf1c-42ef-4e71-a20f-9be24c7b3a82",
+      "name": "Embeddings - Ingest",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        4800,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "upsert"
+      },
+      "id": "551d09ac-1e62-4231-a086-4e872ddfa000",
+      "name": "Vector Store - Store",
+      "type": "n8n-nodes-base.pinecone",
+      "typeVersion": 1,
+      "position": [
+        5000,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "prompt": "Generate 3 hypothetical answers..."
+      },
+      "id": "f9ab82eb-c415-432e-9a38-49881d426538",
+      "name": "Query Expander",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        5200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "embeddings",
+        "text": "={{ $json.query }}"
+      },
+      "id": "16cf3d68-9a0a-4e23-8619-4deae6711cc6",
+      "name": "Query Embedder",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        5400,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return {json: {filter: {year: {$gte: 2024}}}};"
+      },
+      "id": "dad761a6-fb61-48be-bfb6-1bb4d2e1bde5",
+      "name": "Filter Builder",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        5600,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Merge sparse/dense vectors"
+      },
+      "id": "4a60efed-564a-40e1-9d01-5bc03c599d58",
+      "name": "Hybrid Search Merger",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        5800,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "query",
+        "limit": 5
+      },
+      "id": "78c1c6db-1a6f-4916-a5ae-6dbd0ed01639",
+      "name": "Similarity Search",
+      "type": "n8n-nodes-base.pinecone",
+      "typeVersion": 1,
+      "position": [
+        6000,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Filter out old data"
+      },
+      "id": "63c6e007-876d-463e-9736-ec4a42a387d1",
+      "name": "Data Aging",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        6200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return {json: {context: items.map(i=>i.json.text).join('\\n')}};"
+      },
+      "id": "3acb83a0-6af7-4d70-8bb2-19066304aab0",
+      "name": "Context Serializer",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        6400,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "prompt": "Be controversial..."
+      },
+      "id": "e685063e-b9e0-4f75-9343-56ab35ae9b48",
+      "name": "Router - Controversial",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        6600,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "prompt": "Tell a story..."
+      },
+      "id": "85f14be5-3569-48a4-8df9-24598c17ea8e",
+      "name": "Router - Storytelling",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        6600,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "prompt": "Teach..."
+      },
+      "id": "3e24fc25-babf-4903-8481-0ad8a4187068",
+      "name": "Router - Education",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        6600,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "prompt": "Be funny..."
+      },
+      "id": "c673b579-2cb5-4645-9f27-c72a10c6c82d",
+      "name": "Router - Humor",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        6600,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "prompt": "Breaking news..."
+      },
+      "id": "dd021f9d-7356-4b87-a4a2-57ca8780a83e",
+      "name": "Router - News",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        6600,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "prompt": "Create structure JSON..."
+      },
+      "id": "32a40d9d-0bb0-45a4-9c42-e978f4cb1e76",
+      "name": "Architect",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        6800,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "prompt": "Create image prompts..."
+      },
+      "id": "b6ebd4c7-fb42-4338-aba6-00589de49274",
+      "name": "Visual Prompter",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        7000,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "prompt": "Generate Metadata..."
+      },
+      "id": "72086dd4-2ae5-4813-a5dc-d9c66ad8956a",
+      "name": "SEO Architect",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        7200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Asset list"
+      },
+      "id": "e4a9a293-6bc3-406b-a2ec-f0ab56ef9460",
+      "name": "Metteur en Sc\u00e8ne",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        7400,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.shotstack.io/edit"
+      },
+      "id": "f821af46-f9a2-4ad6-ad93-970972aecc03",
+      "name": "Editor",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        7600,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/upload/youtube/v3/videos"
+      },
+      "id": "53c324d2-a17f-4e76-81d3-cf5ff8dd4cef",
+      "name": "Publisher",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        7800,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "prompt": "Generate simple script..."
+      },
+      "id": "be5e1653-fcff-45cf-8334-c5d5600b39c5",
+      "name": "AI Prompt Engineer",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        4000,
+        600
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook - Mission Command": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Form Trigger": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code - Normalization",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code - Normalization": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Token Refresher",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Token Refresher": {
+      "main": [
+        [
+          {
+            "node": "API Key Rotator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API Key Rotator": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Crypto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crypto": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow - Cluster B",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow - Cluster B": {
+      "main": [
+        [
+          {
+            "node": "SerpApi",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SerpApi": {
+      "main": [
+        [
+          {
+            "node": "Unshorten URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Unshorten URL": {
+      "main": [
+        [
+          {
+            "node": "Proxy Manager",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Proxy Manager": {
+      "main": [
+        [
+          {
+            "node": "Scraper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scraper": {
+      "main": [
+        [
+          {
+            "node": "HTML Extract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML Extract": {
+      "main": [
+        [
+          {
+            "node": "Validator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validator": {
+      "main": [
+        [
+          {
+            "node": "Privacy Gatekeeper",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Privacy Gatekeeper": {
+      "main": [
+        [
+          {
+            "node": "Entity Recognizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Entity Recognizer": {
+      "main": [
+        [
+          {
+            "node": "Anonymizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anonymizer": {
+      "main": [
+        [
+          {
+            "node": "Salted Hasher",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salted Hasher": {
+      "main": [
+        [
+          {
+            "node": "Context Formatter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Context Formatter": {
+      "main": [
+        [
+          {
+            "node": "Keyword Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keyword Extractor": {
+      "main": [
+        [
+          {
+            "node": "Embeddings - Ingest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings - Ingest": {
+      "main": [
+        [
+          {
+            "node": "Vector Store - Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vector Store - Store": {
+      "main": [
+        [
+          {
+            "node": "Query Expander",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query Expander": {
+      "main": [
+        [
+          {
+            "node": "Query Embedder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query Embedder": {
+      "main": [
+        [
+          {
+            "node": "Filter Builder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Builder": {
+      "main": [
+        [
+          {
+            "node": "Hybrid Search Merger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hybrid Search Merger": {
+      "main": [
+        [
+          {
+            "node": "Similarity Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Similarity Search": {
+      "main": [
+        [
+          {
+            "node": "Data Aging",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data Aging": {
+      "main": [
+        [
+          {
+            "node": "Context Serializer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Context Serializer": {
+      "main": [
+        [
+          {
+            "node": "Router - Controversial",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Router - Storytelling",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Router - Education",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Router - Humor",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Router - News",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Router - Controversial": {
+      "main": [
+        [
+          {
+            "node": "Architect",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Router - Storytelling": {
+      "main": [
+        [
+          {
+            "node": "Architect",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Router - Education": {
+      "main": [
+        [
+          {
+            "node": "Architect",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Router - Humor": {
+      "main": [
+        [
+          {
+            "node": "Architect",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Router - News": {
+      "main": [
+        [
+          {
+            "node": "Architect",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Architect": {
+      "main": [
+        [
+          {
+            "node": "Visual Prompter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Visual Prompter": {
+      "main": [
+        [
+          {
+            "node": "SEO Architect",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SEO Architect": {
+      "main": [
+        [
+          {
+            "node": "Metteur en Sc\u00e8ne",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Metteur en Sc\u00e8ne": {
+      "main": [
+        [
+          {
+            "node": "Editor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Editor": {
+      "main": [
+        [
+          {
+            "node": "Publisher",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

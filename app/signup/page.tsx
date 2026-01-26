@@ -111,8 +111,8 @@ function SignupContent() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="h-20 flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-white rounded"></div>
-              <span className="text-xl font-semibold">Genesis</span>
+              <img src="/logo-ela.png" alt="ELA" className="w-10 h-10 object-contain" />
+              <span className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-amber-200 to-amber-500">ELA</span>
             </Link>
             <div className="flex items-center space-x-6">
               <span className="text-sm text-[rgba(255,255,255,0.7)]">Déjà client ?</span>
@@ -135,7 +135,7 @@ function SignupContent() {
                   {plan === "god_mode" ? "Activation Protocol: GOD MODE" : "Créer votre compte"}
                 </h1>
                 <p className="text-[rgba(255,255,255,0.7)]">
-                  {plan === "god_mode" ? "Initialisation de la souveraineté numérique." : "Commencez votre essai gratuit de 7 jours"}
+                  {plan === "god_mode" ? "Initialisation de la souveraineté numérique." : "Activez votre compte et démarrez immédiatement"}
                 </p>
               </div>
 
@@ -232,12 +232,12 @@ function SignupContent() {
                   disabled={loading}
                   className="btn-limova letter-spaced w-full justify-center text-lg py-4 disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-80 transition-opacity"
                 >
-                  {loading ? "Création du compte..." : (plan === "god_mode" ? "ACTIVER MON EMPIRE" : "C o m m e n c e r  l ' e s s a i  g r a t u i t")}
+                  {loading ? "Création du compte..." : (plan === "god_mode" ? "ACTIVER MON EMPIRE" : "Créer mon compte")}
                 </button>
               </form>
 
               <p className="text-center text-sm text-[rgba(255,255,255,0.5)] mt-6">
-                Sans carte bancaire • Annulation en 1 clic
+                Paiement sécurisé • Annulation facile
               </p>
             </div>
 
@@ -256,7 +256,7 @@ function SignupContent() {
                     "Audit Stratégique Mensuel",
                     "Formation Équipe Incluse"
                   ] : [
-                    "7 jours d'essai gratuit sans engagement",
+                    "Accès immédiat à la plateforme",
                     "9 agents IA spécialisés inclus",
                     "Support client 24/7 en français",
                     "Sécurité maximale (ISO 27001)",

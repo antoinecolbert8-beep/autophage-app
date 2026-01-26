@@ -1,0 +1,8 @@
+import { triggerAutomation } from '@/lib/automations';
+
+// Lance ça une fois pour configurer Make
+await triggerAutomation('SEND_EMAIL', {
+  email: 'ton.email@gmail.com',
+  subject: 'Test Orchestrator',
+  text: 'Ceci est un test du chef d\'orchestre.'
+});

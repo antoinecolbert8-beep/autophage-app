@@ -1,0 +1,30 @@
+{
+    "parameters": {
+      "model": "gpt-4o-mini",
+      "resource": "chat",
+      "operation": "complete",
+      "messages": {
+        "message": [
+          {
+            "role": "system",
+            "content": "Tu es l'Oracle, un expert en contrôle qualité de scripts TikTok. Analyse le script fourni et attribue une note de 0 à 100 basée sur le potentiel viral. Si la note est > 85, le script est validé. Réponds au format JSON : {\"score\": 85, \"feedback\": \"...\"}"
+          },
+          {
+            "role": "user",
+            "content": "={{ $json.content }}"
+          }
+        ]
+      },
+      "options": {
+        "simplify": true
+      }
+    },
+    "id": "oracle-node-001",
+    "name": "L'Oracle (Boucle de Rétroaction)",
+    "type": "n8n-nodes-base.openAi",
+    "typeVersion": 1.1,
+    "position": [
+      600,
+      300
+    ]
+  }

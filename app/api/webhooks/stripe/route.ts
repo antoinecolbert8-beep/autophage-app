@@ -5,6 +5,7 @@ import {
   handleSubscriptionRenewed,
   handlePaymentFailed,
 } from '@/lib/billing/subscriptions';
+import { triggerAutomation } from '@/lib/automations';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2023-10-16',
@@ -28,38 +29,30 @@ export async function POST(request: NextRequest) {
   console.log(`📩 Stripe webhook: ${event.type}`);
 
   try {
-    switch (event.type) {
-      // SEPA mandate confirmed & subscription created
-      case 'customer.subscription.created':
-        await handleSubscriptionCreated(event.data.object as Stripe.Subscription);
-        break;
+    // Conductor Pattern: Délégué tous les événements Stripe pertinents à Make
+    // Make gérera : Provisioning, Emails, CRM, Slack Alert, etc.
 
-      // Monthly payment successful - add credits
-      case 'invoice.paid':
-        await handleSubscriptionRenewed(event.data.object as Stripe.Invoice);
-        break;
+    // On ne bloque pas le retour 200 à Stripe, on lance l'automation en "fire and forget" (await sans bloquer si on voulait, mais ici on attend pour logger l'erreur éventuelle)
 
-      // Payment failed
-      case 'invoice.payment_failed':
-        await handlePaymentFailed(event.data.object as Stripe.Invoice);
-        break;
+    // Mapping des événements intéressants
+    const RELEVANT_EVENTS = [
+      'customer.subscription.created',
+      'invoice.paid',
+      'invoice.payment_failed',
+      'customer.subscription.deleted',
+      'checkout.session.completed'
+    ];
 
-      // Subscription cancelled
-      case 'customer.subscription.deleted':
-        const subscription = event.data.object as Stripe.Subscription;
-        console.log(`Subscription cancelled: ${subscription.id}`);
-        break;
+    if (RELEVANT_EVENTS.includes(event.type)) {
+      console.log(`🎻 Conductor: Delegating Stripe event [${event.type}] to Make...`);
 
-      // SEPA mandate accepted
-      case 'payment_method.attached':
-        const paymentMethod = event.data.object as Stripe.PaymentMethod;
-        if (paymentMethod.type === 'sepa_debit') {
-          console.log(`✅ SEPA mandate accepted: ${paymentMethod.sepa_debit?.last4}`);
-        }
-        break;
-
-      default:
-        console.log(`Unhandled event: ${event.type}`);
+      await triggerAutomation("HANDLE_STRIPE_EVENT", {
+        eventType: event.type,
+        data: event.data.object,
+        stripeId: (event.data.object as any).id
+      });
+    } else {
+      console.log(`Ignored Stripe event: ${event.type}`);
     }
 
     return NextResponse.json({ received: true });

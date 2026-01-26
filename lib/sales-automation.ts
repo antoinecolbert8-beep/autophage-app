@@ -1,13 +1,12 @@
 /**
  * 💼 Sales Automation - Prospection et vente d'abonnements
- * Démarchage LinkedIn, qualification leads, pipeline de vente
+ * Délégué à Make.com via Conductor Pattern
  */
 
-import { PrismaClient } from "@prisma/client";
-import OpenAI from "openai";
+import { PrismaClient } from "@prisma/client"; // Gardé si utilisé ailleurs pour les types, mais logic déplacée
+import { triggerAutomation } from "./automations";
 
 const prisma = new PrismaClient();
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export type Lead = {
   id?: string;
@@ -73,133 +72,57 @@ export const SUBSCRIPTION_PLANS: Record<string, SubscriptionPlan> = {
 };
 
 /**
- * Qualifie un lead (score 0-100)
+ * Qualifie un lead (via Make AI)
  */
 export async function qualifyLead(lead: Partial<Lead>): Promise<number> {
-  try {
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "system",
-          content: `Tu es un système de qualification de leads B2B.
-Score 0-100 basé sur :
-- Position (CEO/Director = +30, Manager = +20, Employee = +10)
-- Entreprise (>50 employés = +20, <50 = +10)
-- Besoin identifié (+30 si clair)
-- Budget potentiel (+20 si >500€/mois)
+  // On envoie à Make pour scoring avancé (enrichissement Clearbit/Dropcontact + GPT)
+  const result = await triggerAutomation("QUALIFY_LEAD_AI", { lead });
 
-Réponds uniquement avec un nombre entre 0 et 100.`,
-        },
-        {
-          role: "user",
-          content: `Lead: ${lead.name}, ${lead.position || "N/A"}, ${lead.company || "N/A"}`,
-        },
-      ],
-    });
-
-    const scoreText = completion.choices[0].message.content || "50";
-    const score = parseInt(scoreText.match(/\d+/)?.[0] || "50", 10);
-
-    return Math.min(100, Math.max(0, score));
-  } catch (error) {
-    console.error("Erreur qualification lead:", error);
-    return 50; // Score par défaut
+  if (result.success && typeof result.data?.score === 'number') {
+    return result.data.score;
   }
+
+  // Fallback si échec
+  console.warn("⚠️ Qualification Make échouée, fallback local");
+  return 50;
 }
 
 /**
- * Génère un message de prospection personnalisé
+ * Génère un message de prospection personnalisé (via Make AI)
  */
 export async function generateProspectMessage(
   lead: Lead,
   template: "INTRODUCTION" | "FOLLOW_UP" | "PROPOSAL"
 ): Promise<string> {
-  const templates = {
-    INTRODUCTION: `Salut {name},
+  const result = await triggerAutomation("GENERATE_PROSPECT_MESSAGE", {
+    lead,
+    template
+  });
 
-J'ai vu ton profil et ton parcours chez {company} m'a interpellé.
-
-Je travaille sur une solution d'automatisation IA qui aide les {position} comme toi à scaler leur présence LinkedIn et gérer leur prospection automatiquement.
-
-Concrètement :
-- Bot LinkedIn intelligent (engagement 24/7)
-- Génération de contenu viral (Gemini AI)
-- Téléphonie IA pour qualifier tes leads
-
-Intéressé pour en discuter 15 min cette semaine ?
-
-{signature}`,
-
-    FOLLOW_UP: `Salut {name},
-
-Je reviens vers toi suite à mon message de la semaine dernière.
-
-J'ai vu que tu as posté sur {topic} - ça tombe bien, c'est exactement le type de défi que notre IA résout.
-
-Nos clients (CEO/Founders comme toi) gagnent en moyenne 15h/semaine grâce à l'automatisation.
-
-Dispo pour un call rapide ?
-
-{signature}`,
-
-    PROPOSAL: `Salut {name},
-
-Suite à notre échange, voici ce que je te propose :
-
-**Plan {plan}** - {price}€/mois
-{features}
-
-**Onboarding inclus** :
-- Setup personnalisé (2h)
-- Formation équipe
-- Support prioritaire 30 jours
-
-**Garantie** : Satisfait ou remboursé 14 jours.
-
-Je t'envoie le lien de démo ?
-
-{signature}`,
-  };
-
-  const template_text = templates[template];
-
-  // Remplace les variables
-  let message = template_text
-    .replace(/{name}/g, lead.name.split(" ")[0])
-    .replace(/{company}/g, lead.company || "ta boîte")
-    .replace(/{position}/g, lead.position || "professionnels")
-    .replace(/{signature}/g, "À bientôt,\n[Ton nom]");
-
-  // Pour PROPOSAL, ajoute détails plan
-  if (template === "PROPOSAL" && lead.score >= 70) {
-    const plan = SUBSCRIPTION_PLANS.PRO;
-    message = message
-      .replace(/{plan}/g, plan.name)
-      .replace(/{price}/g, plan.price.toString())
-      .replace(/{features}/g, plan.features.map((f) => `✓ ${f}`).join("\n"));
+  if (result.success && result.data?.message) {
+    return result.data.message;
   }
 
-  return message;
+  return "Erreur lors de la génération du message.";
 }
 
 /**
- * Crée ou met à jour un lead dans la DB
+ * Crée ou met à jour un lead (Sync CRM/DB via Make)
  */
 export async function upsertLead(lead: Lead): Promise<Lead> {
-  // Note: Nécessite ajout du model Lead dans Prisma
-  // Pour l'instant, simulation
+  const result = await triggerAutomation("UPSERT_LEAD_CRM", { lead });
 
-  console.log("💼 Lead enregistré:", lead);
+  if (result.success && result.data?.lead) {
+    console.log("💼 Lead upserted via Make:", result.data.lead.id);
+    return { ...lead, ...result.data.lead };
+  }
 
-  return {
-    ...lead,
-    id: lead.id || `LEAD-${Date.now()}`,
-  };
+  console.log("💼 Make upsert request sent, assuming success for async flow.");
+  return { ...lead, id: lead.id || "pending_make_id" };
 }
 
 /**
- * Relance automatique (basée sur statut)
+ * Relance automatique (Schedule via Make)
  */
 export async function scheduleFollowUp(
   leadId: string,
@@ -209,43 +132,69 @@ export async function scheduleFollowUp(
   const followUpDate = new Date();
   followUpDate.setDate(followUpDate.getDate() + days);
 
-  console.log(`📅 Relance programmée pour ${leadId} le ${followUpDate.toLocaleDateString()}`);
-
-  // TODO: Implémenter queue system (BullMQ/Redis)
-  // Pour l'instant, log uniquement
+  const result = await triggerAutomation("SCHEDULE_FOLLOW_UP", {
+    leadId,
+    date: followUpDate.toISOString()
+  });
 
   return {
-    scheduled: true,
+    scheduled: result.success,
     date: followUpDate,
   };
 }
 
 /**
- * Analyse du comportement prospect (scoring comportemental)
+ * Analyse du comportement prospect
  */
 export async function trackLeadBehavior(
   leadId: string,
   action: "PROFILE_VIEW" | "LINK_CLICK" | "EMAIL_OPEN" | "EMAIL_CLICK" | "DEMO_REQUEST"
 ): Promise<{ newScore: number }> {
-  const scoreDeltas: Record<string, number> = {
-    PROFILE_VIEW: +5,
-    LINK_CLICK: +10,
-    EMAIL_OPEN: +15,
-    EMAIL_CLICK: +20,
-    DEMO_REQUEST: +30,
-  };
 
-  const delta = scoreDeltas[action] || 0;
+  const result = await triggerAutomation("TRACK_LEAD_EVENT", {
+    leadId,
+    action,
+    timestamp: new Date().toISOString()
+  });
 
-  console.log(`📊 Lead ${leadId}: ${action} (+${delta} points)`);
+  if (result.success && result.data?.newScore) {
+    return { newScore: result.data.newScore };
+  }
 
-  // TODO: Update lead score in DB
-
-  return { newScore: 50 + delta };
+  return { newScore: 50 }; // Default/Unchanged
 }
 
 /**
- * Génère un pipeline de vente structuré
+ * Envoie une invitation LinkedIn (Démarchage Automatique)
+ * Nécessite un outil tiers connecté à Make (ex: Phantombuster, Unipile, Waalaxy)
+ */
+export async function sendLinkedInInvitation(leadId: string, linkedinUrl: string, message?: string): Promise<{ success: boolean }> {
+  const result = await triggerAutomation("SEND_LINKEDIN_INVITE", {
+    leadId,
+    linkedinUrl,
+    message,
+    note: message // Alias souvent utilisé
+  });
+
+  return { success: result.success };
+}
+
+/**
+ * Envoie un message privé LinkedIn (DM)
+ * Nécessite que le prospect soit déjà connexion de 1er degré
+ */
+export async function sendLinkedInMessage(leadId: string, linkedinUrl: string, message: string): Promise<{ success: boolean }> {
+  const result = await triggerAutomation("SEND_LINKEDIN_DM", {
+    leadId,
+    linkedinUrl,
+    message
+  });
+
+  return { success: result.success };
+}
+
+/**
+ * Génère un pipeline de vente structuré (Données statiques)
  */
 export function generateSalesPipeline(): {
   stages: Array<{ name: string; description: string; avgDuration: number }>;
@@ -290,8 +239,3 @@ export function generateSalesPipeline(): {
     ],
   };
 }
-
-
-
-
-

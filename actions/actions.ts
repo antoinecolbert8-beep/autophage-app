@@ -9,11 +9,18 @@ export async function refreshWithStyle(formData: FormData) {
 }
 
 export async function triggerManualCycle() {
-  console.log("🔄 Manual cycle triggered");
-  // TODO: Implement actual campaign logic restoration
-  // PREVIOUSLY: await CampaignCommander.runCycle();
+  console.log("🔄 Manual cycle triggered via Make");
 
-  return { success: true, message: "Cycle simulation executed (Logic pending restoration)", error: undefined };
+  const result = await triggerAutomation("RUN_CAMPAIGN_CYCLE_MANUAL", {
+    timestamp: new Date().toISOString(),
+    initiator: "admin_dashboard"
+  });
+
+  if (result.success) {
+    return { success: true, message: "Cycle campaign triggered successfully on Make", error: undefined };
+  }
+
+  return { success: false, message: "Failed to trigger cycle", error: result.message };
 }
 
 /**

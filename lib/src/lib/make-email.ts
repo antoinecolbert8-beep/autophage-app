@@ -33,3 +33,4 @@ export async function sendEmail(email: string, subject: string, message: string)
         return false;
     }
 }
+

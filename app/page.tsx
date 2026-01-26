@@ -34,15 +34,14 @@ export default function Home() {
           }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="relative w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-pink-500 flex items-center justify-center overflow-hidden border border-white/20 group-hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(59,130,246,0.5)]">
-              <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-30"></div>
-              <img src="/chip.svg" alt="chip" className="w-6 h-6 text-white relative z-10" />
-              {/* Fallback Icon if chip.svg invalid */}
-              <Zap className="w-6 h-6 text-white relative z-10" />
-            </div>
-            <span className="text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 group-hover:to-white transition-all">
-              GENESIS
+          <Link href="/" className="flex items-center gap-3 group">
+            <img
+              src="/logo-ela.png"
+              alt="ELA"
+              className="w-12 h-12 object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(217,119,6,0.5)]"
+            />
+            <span className="text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 group-hover:to-amber-300 transition-all">
+              ELA
             </span>
           </Link>
 
@@ -57,10 +56,10 @@ export default function Home() {
             <Link href="/login" className="text-sm font-bold hover:text-blue-400 transition-colors">SE CONNECTER</Link>
             <Link
               href="/signup"
-              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-pink-600 rounded-lg font-bold text-sm tracking-wide hover:shadow-[0_0_30px_rgba(236,72,153,0.5)] transition-all transform hover:-translate-y-1 relative overflow-hidden group"
+              className="px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 rounded-lg font-bold text-sm tracking-wide hover:shadow-[0_0_30px_rgba(217,119,6,0.5)] transition-all transform hover:-translate-y-1 relative overflow-hidden group"
             >
               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-              <span className="relative flex items-center gap-2"><Zap size={16} fill="currentColor" /> ESSAI GRATUIT</span>
+              <span className="relative flex items-center gap-2 text-black"><Zap size={16} fill="currentColor" /> COMMENCER</span>
             </Link>
           </div>
 
@@ -115,9 +114,9 @@ export default function Home() {
 
             {/* Trust indicators */}
             <div className="mt-8 flex items-center justify-center gap-6 text-sm text-gray-500">
-              <span className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Sans carte bancaire</span>
-              <span className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Annulation en 1 clic</span>
-              <span className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Support 24/7</span>
+              <span className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-500" /> Paiement sécurisé</span>
+              <span className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-500" /> Annulation facile</span>
+              <span className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-500" /> Support 24/7</span>
             </div>
           </BlurFade>
         </div>
@@ -158,33 +157,46 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { title: "Productivité x5", desc: "Un seul agent accomplit le travail de 5 employés qualifiés.", color: "from-blue-500 to-cyan-500", icon: LineIconZap, visual: "⚡", illustration: "/images/productivity.png" },
-              { title: "Coûts /10", desc: "Réduisez vos charges opérationnelles de 90% immédiatement.", color: "from-purple-500 to-pink-500", icon: LineIconStar, visual: "💎", illustration: "/images/costs.png" },
-              { title: "Onboarding 2min", desc: "Connectez vos outils et lancez vos agents en quelques clics.", color: "from-emerald-500 to-lime-500", icon: LineIconCheck, visual: "🚀", illustration: "/images/onboarding.png" }
+              { title: "Productivité x5", desc: "Un seul agent accomplit le travail de 5 employés qualifiés.", color: "from-amber-500 to-yellow-500", icon: LineIconZap, visual: "⚡", illustration: "/images/productivity.png" },
+              { title: "Coûts /10", desc: "Réduisez vos charges opérationnelles de 90% immédiatement.", color: "from-amber-400 to-orange-500", icon: LineIconStar, visual: "💎", illustration: "/images/costs.png" },
+              { title: "Onboarding 2min", desc: "Connectez vos outils et lancez vos agents en quelques clics.", color: "from-yellow-400 to-amber-600", icon: LineIconCheck, visual: "🚀", illustration: "/images/onboarding.png" }
             ].map((item, i) => (
               <div
                 key={i}
-                className="p-10 rounded-[2rem] bg-[#13131f] border border-white/5 hover:border-[#667eea]/30 transition-all relative overflow-hidden group hover:-translate-y-2 cursor-default"
+                className="group relative p-10 rounded-[2rem] bg-gradient-to-b from-[#1a1812] to-[#13131f] border border-amber-500/10 hover:border-amber-500/40 transition-all overflow-hidden hover:-translate-y-3 cursor-default shadow-lg hover:shadow-[0_0_40px_rgba(217,119,6,0.15)]"
               >
-                <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${item.color} opacity-10 blur-3xl group-hover:opacity-20 transition-opacity`}></div>
-                <div className="absolute top-4 right-4 text-4xl opacity-10 grayscale group-hover:grayscale-0 group-hover:opacity-50 transition-all duration-500">{item.visual}</div>
-                <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-8 text-white group-hover:scale-110 transition-transform duration-300 relative z-10 border border-white/10 group-hover:border-white/30">
-                  <item.icon size={28} />
+                {/* Ambient glow */}
+                <div className={`absolute top-0 right-0 w-40 h-40 bg-gradient-to-br ${item.color} opacity-5 blur-3xl group-hover:opacity-15 transition-opacity duration-500`}></div>
+                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5 group-hover:opacity-10 transition-opacity"></div>
+
+                {/* Visual accent */}
+                <div className="absolute top-4 right-4 text-5xl opacity-5 group-hover:opacity-20 transition-all duration-700 group-hover:scale-110">{item.visual}</div>
+
+                {/* Icon container with gold accent */}
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.color} p-[1px] mb-8 group-hover:scale-110 transition-transform duration-300 relative z-10 shadow-lg shadow-amber-500/20`}>
+                  <div className="w-full h-full rounded-2xl bg-[#13131f] flex items-center justify-center">
+                    <item.icon size={30} className="text-amber-400" />
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold mb-4">{item.title}</h3>
-                <p className="text-gray-400 leading-relaxed mb-6">{item.desc}</p>
-                <div className="relative h-32 w-full rounded-xl overflow-hidden opacity-100 transition-opacity duration-500 border border-white/10 bg-gradient-to-br from-white/5 to-transparent">
+
+                <h3 className="text-2xl font-black mb-4 text-white group-hover:text-amber-100 transition-colors">{item.title}</h3>
+                <p className="text-gray-400 leading-relaxed mb-6 group-hover:text-gray-300 transition-colors">{item.desc}</p>
+
+                {/* Image container with premium border */}
+                <div className="relative h-36 w-full rounded-xl overflow-hidden border border-amber-500/20 group-hover:border-amber-500/40 transition-colors bg-gradient-to-br from-amber-500/5 to-transparent">
                   <Image
                     src={item.illustration}
                     alt={item.title}
                     fill
-                    className="object-cover"
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
                     priority={true}
                     sizes="(max-width: 768px) 100vw, 33vw"
                     quality={90}
                   />
                 </div>
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/10 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
+
+                {/* Bottom accent line */}
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-500/50 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
               </div>
             ))}
           </div>
@@ -444,7 +456,7 @@ export default function Home() {
             <div className="p-8 rounded-[2rem] bg-[#13131f] border border-white/5 flex flex-col hover:border-[#667eea]/30 transition-all">
               <h3 className="text-2xl font-bold mb-2">Starter</h3>
               <div className="flex items-baseline gap-1 mb-6">
-                <span className="text-5xl font-black">99€</span>
+                <span className="text-5xl font-black">37€</span>
                 <span className="text-gray-500">/mois</span>
               </div>
               <p className="text-sm text-gray-400 mb-8 min-h-[40px]">L'essentiel pour automatiser vos premières tâches.</p>
@@ -468,7 +480,7 @@ export default function Home() {
               </div>
               <h3 className="text-2xl font-bold mb-2 text-[#667eea]">Pro</h3>
               <div className="flex items-baseline gap-1 mb-6">
-                <span className="text-5xl font-black">299€</span>
+                <span className="text-5xl font-black">197€</span>
                 <span className="text-gray-500">/mois</span>
               </div>
               <p className="text-sm text-gray-400 mb-8 min-h-[40px]">La suite complète pour scaler votre entreprise rapidement.</p>
@@ -505,7 +517,7 @@ export default function Home() {
                     GOD MODE
                   </h3>
                   <div className="mb-8 flex items-baseline gap-1">
-                    <span className="text-6xl font-black text-white tracking-tighter">999€</span>
+                    <span className="text-6xl font-black text-white tracking-tighter">497€</span>
                     <span className="text-gray-400 font-mono">/mois</span>
                   </div>
 

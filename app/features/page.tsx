@@ -30,12 +30,13 @@ export default function FeaturesPage() {
           </Link>
 
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="relative w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-pink-500 flex items-center justify-center overflow-hidden border border-white/20 shadow-[0_0_20px_rgba(59,130,246,0.5)]">
-              <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-30"></div>
-              <Zap className="w-4 h-4 text-white relative z-10" />
-            </div>
-            <span className="text-lg font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 group-hover:to-white transition-all">
-              GENESIS
+            <img
+              src="/logo-ela.png"
+              alt="ELA"
+              className="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(217,119,6,0.4)]"
+            />
+            <span className="text-lg font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 group-hover:to-amber-300 transition-all">
+              ELA
             </span>
           </Link>
 
@@ -161,14 +162,14 @@ export default function FeaturesPage() {
                   Prêt à <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-pink-500">Dominer</span> ?
                 </h2>
                 <p className="text-gray-400 mb-8 max-w-xl mx-auto">
-                  Essai gratuit 7 jours. Sans carte bancaire. Annulation en 1 clic.
+                  Paiement sécurisé. Annulation facile. Support 24/7.
                 </p>
                 <Link
                   href="/signup"
-                  className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-blue-600 to-pink-600 text-white font-bold text-lg rounded-xl hover:shadow-[0_0_40px_rgba(236,72,153,0.5)] transition-all transform hover:-translate-y-1"
+                  className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-amber-500 to-amber-600 text-black font-bold text-lg rounded-xl hover:shadow-[0_0_40px_rgba(217,119,6,0.5)] transition-all transform hover:-translate-y-1"
                 >
                   <Zap size={20} fill="currentColor" />
-                  ESSAI GRATUIT
+                  COMMENCER MAINTENANT
                 </Link>
               </div>
             </div>

@@ -17,10 +17,10 @@ export async function triggerAutomation(
     payload: Record<string, any>,
     userId?: string
 ): Promise<AutomationResponse> {
-    const webhookUrl = process.env.MAKE_WEBHOOK_URL;
+    const webhookUrl = process.env.N8N_WEBHOOK_URL || process.env.MAKE_ORCHESTRATOR_URL || process.env.MAKE_WEBHOOK_URL;
 
     if (!webhookUrl) {
-        console.error("❌ MAKE_WEBHOOK_URL is not defined in environment variables");
+        console.error("❌ NO AUTOMATION/ORCHESTRATOR WEBHOOK URL DEFINED");
         return {
             success: false,
             message: "Configuration error: Automation webhook not configured"

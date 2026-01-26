@@ -1,0 +1,1169 @@
+{
+    "name": "AUTOPHAGE V10 - OMNISCIENCE (STRICT JSON) 👁️",
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "hours",
+                            "hours": 9
+                        }
+                    ]
+                }
+            },
+            "name": "Morning Heartbeat 💓",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1,
+            "position": [
+                0,
+                -200
+            ]
+        },
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "autophage-webhook",
+                "options": {}
+            },
+            "name": "WEBHOOK IN ⚡",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                0,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://api.openai.com/v1/models",
+                "method": "GET"
+            },
+            "name": "Check OpenAI 🟢",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 3,
+            "position": [
+                200,
+                -200
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "boolean": [
+                        {
+                            "value1": "={{$json.status}}",
+                            "value2": "OK"
+                        }
+                    ]
+                }
+            },
+            "name": "System Healthy? 🏥",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 1,
+            "position": [
+                200,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const lead = $input.item.json.body.lead;\nconst emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$/;\nif (!emailRegex.test(lead.email)) throw new Error('Invalid Email');\nif (lead.name.length < 3) throw new Error('Invalid Name');\nconst lastContact = new Date(lead.lastContactDate);\nconst daysSince = (new Date() - lastContact) / (1000 * 3600 * 24);\nlet score = lead.score || 50;\nif (daysSince < 180) score -= 20;\nreturn { lead: { ...lead, qualityScore: score } };"
+            },
+            "name": "Data Cleaner & Scorer 🧼",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 1,
+            "position": [
+                450,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "number": [
+                        {
+                            "value1": "={{$json.lead.qualityScore}}",
+                            "value2": 50
+                        }
+                    ]
+                }
+            },
+            "name": "Low Score? 📉",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 1,
+            "position": [
+                650,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://api.apollo.io/v1/people/match",
+                "method": "POST"
+            },
+            "name": "Enrichment Cascade 🕵️",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 3,
+            "position": [
+                650,
+                -150
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "lookup",
+                "sheetId": "CAMPAIGN_STATS",
+                "range": "A:E",
+                "lookupColumn": "strategy",
+                "lookupValue": "LINKEDIN_DM"
+            },
+            "name": "Load Strategy Stats 📊",
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 2,
+            "position": [
+                900,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const stats = $input.item.json;\nif (stats.conversionRate < 0.02) return { killSwitch: true };\nreturn { killSwitch: false };"
+            },
+            "name": "Kill Switch Analysis 💀",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 1,
+            "position": [
+                1100,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const tz = $input.item.json.lead.timezone || 'UTC';\nconst hour = new Date().toLocaleString('en-US', { timeZone: tz, hour: 'numeric', hour12: false });\nif (hour < 9 || hour > 18) return { wait: true, delayHours: 8 };\nreturn { wait: false };"
+            },
+            "name": "Social Emulator 🎭",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 1,
+            "position": [
+                1300,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "return $input.all().sort((a,b) => b.json.lead.qualityScore - a.json.lead.qualityScore);"
+            },
+            "name": "Priority Queue 🔝",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 1,
+            "position": [
+                1500,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const ctx = { ...$input.item.json, globalTime: new Date() }; \nreturn { context: ctx, action: $input.item.json.body.action };"
+            },
+            "name": "THE ORACLE (Context Fusion) 👁️",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 1,
+            "position": [
+                1650,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "dataType": "string",
+                "value1": "={{$json.action}}",
+                "rules": {
+                    "rules": [
+                        {
+                            "value2": "SEND_LINKEDIN_INVITE",
+                            "output": 0
+                        },
+                        {
+                            "value2": "SEND_LINKEDIN_DM",
+                            "output": 0
+                        },
+                        {
+                            "value2": "SYNC_CRM",
+                            "output": 0
+                        },
+                        {
+                            "value2": "UPSERT_LEAD_CRM",
+                            "output": 0
+                        },
+                        {
+                            "value2": "QUALIFY_LEAD_AI",
+                            "output": 0
+                        },
+                        {
+                            "value2": "SCHEDULE_FOLLOW_UP",
+                            "output": 0
+                        },
+                        {
+                            "value2": "TRACK_LEAD_EVENT",
+                            "output": 0
+                        },
+                        {
+                            "value2": "PUBLISH_SOCIAL_POST",
+                            "output": 1
+                        },
+                        {
+                            "value2": "GENERATE_SHORT_SCRIPT",
+                            "output": 1
+                        },
+                        {
+                            "value2": "UPLOAD_YOUTUBE_VIDEO",
+                            "output": 1
+                        },
+                        {
+                            "value2": "GENERATE_VIDEO_VERTEX",
+                            "output": 1
+                        },
+                        {
+                            "value2": "MAKE_OUTBOUND_CALL",
+                            "output": 2
+                        },
+                        {
+                            "value2": "START_CALL_CAMPAIGN",
+                            "output": 2
+                        },
+                        {
+                            "value2": "SEND_EMAIL",
+                            "output": 2
+                        },
+                        {
+                            "value2": "PROCESS_WHATSAPP_MESSAGE",
+                            "output": 2
+                        },
+                        {
+                            "value2": "SEND_WHATSAPP_MESSAGE",
+                            "output": 2
+                        },
+                        {
+                            "value2": "SCHEDULE_APPOINTMENT",
+                            "output": 2
+                        },
+                        {
+                            "value2": "HANDLE_STRIPE_EVENT",
+                            "output": 3
+                        },
+                        {
+                            "value2": "GENERATE_SMART_RESPONSE",
+                            "output": 4
+                        },
+                        {
+                            "value2": "GENERATE_LANDING_COPY",
+                            "output": 4
+                        },
+                        {
+                            "value2": "GENERATE_SPEECH",
+                            "output": 4
+                        }
+                    ]
+                }
+            },
+            "name": "OMNISCIENT ROUTER 🔀",
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 1,
+            "position": [
+                1800,
+                300
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "Sales Matrix 💼",
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 1,
+            "position": [
+                2100,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "amount": 1,
+                "unit": "minutes"
+            },
+            "name": "Wait (Invite) 🛡️",
+            "type": "n8n-nodes-base.wait",
+            "typeVersion": 1,
+            "position": [
+                2300,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://api.phantombuster.com/invite",
+                "method": "POST"
+            },
+            "name": "Phantom: Invite 👻",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 3,
+            "position": [
+                2500,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://api.phantombuster.com/dm",
+                "method": "POST"
+            },
+            "name": "Phantom: DM 💬",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 3,
+            "position": [
+                2500,
+                250
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "HubSpot: Upsert 🟠",
+            "type": "n8n-nodes-base.hubspot",
+            "typeVersion": 1,
+            "position": [
+                2500,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "prompt": "Qualify with Context: {{$json.context}}"
+            },
+            "name": "AI Sales Agent 🧠",
+            "type": "n8n-nodes-base.openAi",
+            "typeVersion": 1,
+            "position": [
+                2500,
+                350
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "Schedule Follow-up 📅",
+            "type": "n8n-nodes-base.googleCalendar",
+            "typeVersion": 1,
+            "position": [
+                2500,
+                400
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "Track Event 🎯",
+            "type": "n8n-nodes-base.hubspot",
+            "typeVersion": 1,
+            "position": [
+                2500,
+                450
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "Content Matrix 📢",
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 1,
+            "position": [
+                2100,
+                600
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "Publish Social 🚀",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 3,
+            "position": [
+                2400,
+                550
+            ]
+        },
+        {
+            "parameters": {
+                "prompt": "Script with Trends: {{$json.context.stats}}"
+            },
+            "name": "AI Script Gen 🎬",
+            "type": "n8n-nodes-base.openAi",
+            "typeVersion": 1,
+            "position": [
+                2400,
+                600
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "Vertex VIDEO AI 🎥",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 3,
+            "position": [
+                2400,
+                650
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "YouTube Upload 📺",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 3,
+            "position": [
+                2400,
+                700
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "Comms Matrix 📞",
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 1,
+            "position": [
+                2100,
+                900
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "Twilio Auto-Call ☎️",
+            "type": "n8n-nodes-base.twilio",
+            "typeVersion": 1,
+            "position": [
+                2400,
+                800
+            ]
+        },
+        {
+            "parameters": {
+                "batchSize": 10
+            },
+            "name": "Campaign Batcher 🔁",
+            "type": "n8n-nodes-base.splitInBatches",
+            "typeVersion": 2,
+            "position": [
+                2300,
+                850
+            ]
+        },
+        {
+            "parameters": {
+                "prompt": "Reply with History: {{$json.context.lead.history}}"
+            },
+            "name": "AI Chat Bot 🤖",
+            "type": "n8n-nodes-base.openAi",
+            "typeVersion": 1,
+            "position": [
+                2400,
+                900
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "Send WhatsApp 💬",
+            "type": "n8n-nodes-base.twilio",
+            "typeVersion": 1,
+            "position": [
+                2400,
+                950
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "Send Email 📧",
+            "type": "n8n-nodes-base.gmail",
+            "typeVersion": 2,
+            "position": [
+                2400,
+                1000
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "Schedule Appointment 🗓️",
+            "type": "n8n-nodes-base.googleCalendar",
+            "typeVersion": 1,
+            "position": [
+                2400,
+                1050
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "Finance Matrix 💸",
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 1,
+            "position": [
+                2100,
+                1200
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "Stripe Sync 💳",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 3,
+            "position": [
+                2300,
+                1200
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "Ledger Record 📒",
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 2,
+            "position": [
+                2500,
+                1200
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "Tools Matrix 🛠️",
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 1,
+            "position": [
+                2100,
+                1400
+            ]
+        },
+        {
+            "parameters": {
+                "prompt": "Smart Response: {{$json.context}}"
+            },
+            "name": "AI Smart Rsp 🧠",
+            "type": "n8n-nodes-base.openAi",
+            "typeVersion": 1,
+            "position": [
+                2300,
+                1400
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "ElevenLabs TTS 🗣️",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 3,
+            "position": [
+                2300,
+                1450
+            ]
+        },
+        {
+            "parameters": {
+                "prompt": "Landing Copy: {{$json.context}}"
+            },
+            "name": "AI Copy Gen 📝",
+            "type": "n8n-nodes-base.openAi",
+            "typeVersion": 1,
+            "position": [
+                2300,
+                1500
+            ]
+        },
+        {
+            "parameters": {
+                "sheetId": "CAMPAIGN_STATS",
+                "range": "A:Z",
+                "options": {}
+            },
+            "name": "Log Result (Omniscient) 📉",
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 2,
+            "position": [
+                3200,
+                700
+            ]
+        }
+    ],
+    "connections": {
+        "WEBHOOK IN ⚡": {
+            "main": [
+                [
+                    {
+                        "node": "System Healthy? 🏥",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Morning Heartbeat 💓": {
+            "main": [
+                [
+                    {
+                        "node": "Check OpenAI 🟢",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Check OpenAI 🟢": {
+            "main": [
+                [
+                    {
+                        "node": "System Healthy? 🏥",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "System Healthy? 🏥": {
+            "main": [
+                [
+                    {
+                        "node": "Data Cleaner & Scorer 🧼",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Data Cleaner & Scorer 🧼": {
+            "main": [
+                [
+                    {
+                        "node": "Low Score? 📉",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Low Score? 📉": {
+            "main": [
+                [
+                    {
+                        "node": "Enrichment Cascade 🕵️",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Load Strategy Stats 📊",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Enrichment Cascade 🕵️": {
+            "main": [
+                [
+                    {
+                        "node": "Load Strategy Stats 📊",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Load Strategy Stats 📊": {
+            "main": [
+                [
+                    {
+                        "node": "Kill Switch Analysis 💀",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Kill Switch Analysis 💀": {
+            "main": [
+                [
+                    {
+                        "node": "Social Emulator 🎭",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Social Emulator 🎭": {
+            "main": [
+                [
+                    {
+                        "node": "Priority Queue 🔝",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Priority Queue 🔝": {
+            "main": [
+                [
+                    {
+                        "node": "THE ORACLE (Context Fusion) 👁️",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "THE ORACLE (Context Fusion) 👁️": {
+            "main": [
+                [
+                    {
+                        "node": "OMNISCIENT ROUTER 🔀",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "OMNISCIENT ROUTER 🔀": {
+            "main": [
+                [
+                    {
+                        "node": "Sales Matrix 💼",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Content Matrix 📢",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Comms Matrix 📞",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Finance Matrix 💸",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Tools Matrix 🛠️",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Sales Matrix 💼": {
+            "main": [
+                [
+                    {
+                        "node": "Wait (Invite) 🛡️",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Phantom: DM 💬",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "HubSpot: Upsert 🟠",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "HubSpot: Upsert 🟠",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "AI Sales Agent 🧠",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Schedule Follow-up 📅",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Track Event 🎯",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Wait (Invite) 🛡️": {
+            "main": [
+                [
+                    {
+                        "node": "Phantom: Invite 👻",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Phantom: Invite 👻": {
+            "main": [
+                [
+                    {
+                        "node": "Log Result (Omniscient) 📉",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Phantom: DM 💬": {
+            "main": [
+                [
+                    {
+                        "node": "Log Result (Omniscient) 📉",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HubSpot: Upsert 🟠": {
+            "main": [
+                [
+                    {
+                        "node": "Log Result (Omniscient) 📉",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Sales Agent 🧠": {
+            "main": [
+                [
+                    {
+                        "node": "Log Result (Omniscient) 📉",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Schedule Follow-up 📅": {
+            "main": [
+                [
+                    {
+                        "node": "Log Result (Omniscient) 📉",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Track Event 🎯": {
+            "main": [
+                [
+                    {
+                        "node": "Log Result (Omniscient) 📉",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Content Matrix 📢": {
+            "main": [
+                [
+                    {
+                        "node": "Publish Social 🚀",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "AI Script Gen 🎬",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Vertex VIDEO AI 🎥",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "YouTube Upload 📺",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Publish Social 🚀": {
+            "main": [
+                [
+                    {
+                        "node": "Log Result (Omniscient) 📉",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Script Gen 🎬": {
+            "main": [
+                [
+                    {
+                        "node": "Vertex VIDEO AI 🎥",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Vertex VIDEO AI 🎥": {
+            "main": [
+                [
+                    {
+                        "node": "YouTube Upload 📺",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "YouTube Upload 📺": {
+            "main": [
+                [
+                    {
+                        "node": "Log Result (Omniscient) 📉",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Comms Matrix 📞": {
+            "main": [
+                [
+                    {
+                        "node": "Twilio Auto-Call ☎️",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Campaign Batcher 🔁",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Send WhatsApp 💬",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Send Email 📧",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "AI Chat Bot 🤖",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Send WhatsApp 💬",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Schedule Appointment 🗓️",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Campaign Batcher 🔁": {
+            "main": [
+                [
+                    {
+                        "node": "Twilio Auto-Call ☎️",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Twilio Auto-Call ☎️": {
+            "main": [
+                [
+                    {
+                        "node": "Log Result (Omniscient) 📉",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Chat Bot 🤖": {
+            "main": [
+                [
+                    {
+                        "node": "Send WhatsApp 💬",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Send WhatsApp 💬": {
+            "main": [
+                [
+                    {
+                        "node": "Log Result (Omniscient) 📉",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Send Email 📧": {
+            "main": [
+                [
+                    {
+                        "node": "Log Result (Omniscient) 📉",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Schedule Appointment 🗓️": {
+            "main": [
+                [
+                    {
+                        "node": "Log Result (Omniscient) 📉",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Finance Matrix 💸": {
+            "main": [
+                [
+                    {
+                        "node": "Stripe Sync 💳",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Stripe Sync 💳": {
+            "main": [
+                [
+                    {
+                        "node": "Log Result (Omniscient) 📉",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Tools Matrix 🛠️": {
+            "main": [
+                [
+                    {
+                        "node": "AI Smart Rsp 🧠",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "AI Copy Gen 📝",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "ElevenLabs TTS 🗣️",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Smart Rsp 🧠": {
+            "main": [
+                [
+                    {
+                        "node": "Log Result (Omniscient) 📉",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Copy Gen 📝": {
+            "main": [
+                [
+                    {
+                        "node": "Log Result (Omniscient) 📉",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "ElevenLabs TTS 🗣️": {
+            "main": [
+                [
+                    {
+                        "node": "Log Result (Omniscient) 📉",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}
