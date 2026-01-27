@@ -34,13 +34,13 @@ export default function Home() {
           }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 group">
+          <Link href="/" className="flex items-center gap-4 group">
             <img
               src="/logo-ela.png"
               alt="ELA"
-              className="w-12 h-12 object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(217,119,6,0.5)]"
+              className="w-20 h-20 object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(217,119,6,0.5)]"
             />
-            <span className="text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 group-hover:to-amber-300 transition-all">
+            <span className="text-2xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 group-hover:to-amber-300 transition-all">
               ELA
             </span>
           </Link>
@@ -157,33 +157,31 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { title: "+148k€ / an", desc: "De revenus additionnels générés en moyenne par nos clients Enterprise.", color: "from-amber-500 to-yellow-500", icon: LineIconTrendingUp, visual: "💰", illustration: "/images/productivity.png" },
-              { title: "+3.200h / an", desc: "D'heures de production économisées. Vos équipes se concentrent sur la stratégie.", color: "from-amber-400 to-orange-500", icon: LineIconZap, visual: "⚡", illustration: "/images/costs.png" },
-              { title: "R.O.I. x12", desc: "Retour sur investissement moyen constaté dès le premier trimestre d'utilisation.", color: "from-yellow-400 to-amber-600", icon: LineIconStar, visual: "🚀", illustration: "/images/onboarding.png" }
+              { title: "+148k€ / an", desc: "De revenus additionnels générés en moyenne par nos clients Enterprise.", color: "from-amber-500 to-yellow-500", icon: LineIconTrendingUp, illustration: "/images/productivity.png" },
+              { title: "+3.200h / an", desc: "D'heures de production économisées. Vos équipes se concentrent sur la stratégie.", color: "from-amber-400 to-orange-500", icon: LineIconZap, illustration: "/images/costs.png" },
+              { title: "R.O.I. x12", desc: "Retour sur investissement moyen constaté dès le premier trimestre d'utilisation.", color: "from-yellow-400 to-amber-600", icon: LineIconStar, illustration: "/images/onboarding.png" }
             ].map((item, i) => (
               <div
                 key={i}
-                className="group relative p-10 rounded-[2rem] bg-gradient-to-b from-[#1a1812] to-[#13131f] border border-amber-500/10 hover:border-amber-500/40 transition-all overflow-hidden hover:-translate-y-3 cursor-default shadow-lg hover:shadow-[0_0_40px_rgba(217,119,6,0.15)]"
+                className="group relative p-8 rounded-[2rem] bg-[#0c0a09]/80 backdrop-blur-md border border-white/5 hover:border-amber-500/20 transition-all duration-500 overflow-hidden hover:-translate-y-2 cursor-default"
               >
-                {/* Ambient glow */}
-                <div className={`absolute top-0 right-0 w-40 h-40 bg-gradient-to-br ${item.color} opacity-5 blur-3xl group-hover:opacity-15 transition-opacity duration-500`}></div>
-                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5 group-hover:opacity-10 transition-opacity"></div>
+                {/* Subtle gradient blob */}
+                <div className={`absolute -top-20 -right-20 w-60 h-60 bg-gradient-to-br ${item.color} opacity-5 blur-[80px] group-hover:opacity-10 transition-opacity duration-700`}></div>
 
-                {/* Visual accent */}
-                <div className="absolute top-4 right-4 text-5xl opacity-5 group-hover:opacity-20 transition-all duration-700 group-hover:scale-110">{item.visual}</div>
-
-                {/* Icon container with gold accent */}
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.color} p-[1px] mb-8 group-hover:scale-110 transition-transform duration-300 relative z-10 shadow-lg shadow-amber-500/20`}>
-                  <div className="w-full h-full rounded-2xl bg-[#13131f] flex items-center justify-center">
-                    <item.icon size={30} className="text-amber-400" />
+                {/* Icon container */}
+                <div className="mb-8 relative z-10 w-fit">
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.color} p-[1px] shadow-lg shadow-amber-500/10`}>
+                    <div className="w-full h-full rounded-2xl bg-[#0c0a09] flex items-center justify-center">
+                      <item.icon size={26} className="text-amber-400" />
+                    </div>
                   </div>
                 </div>
 
-                <h3 className="text-2xl font-black mb-4 text-white group-hover:text-amber-100 transition-colors">{item.title}</h3>
-                <p className="text-gray-400 leading-relaxed mb-6 group-hover:text-gray-300 transition-colors">{item.desc}</p>
+                <h3 className="text-3xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 group-hover:to-white transition-all tracking-tight">{item.title}</h3>
+                <p className="text-gray-400 leading-relaxed mb-8 text-sm group-hover:text-gray-300 transition-colors font-medium border-l-2 border-white/5 pl-4">{item.desc}</p>
 
-                {/* Image container with premium border */}
-                <div className="relative h-36 w-full rounded-xl overflow-hidden border border-amber-500/20 group-hover:border-amber-500/40 transition-colors bg-gradient-to-br from-amber-500/5 to-transparent">
+                {/* Image container */}
+                <div className="relative h-32 w-full rounded-xl overflow-hidden opacity-80 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 border border-white/5 group-hover:border-amber-500/20">
                   <Image
                     src={item.illustration}
                     alt={item.title}
@@ -200,11 +198,11 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </div >
+      </section >
 
       {/* --- AGENTS GRID --- */}
-      <section className="py-32 px-6 relative" id="agents">
+      < section className="py-32 px-6 relative" id="agents" >
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-6">
             <div>
@@ -260,10 +258,10 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section >
 
       {/* --- WHATSAPP SECTION --- */}
-      <section className="py-32 px-6 bg-gradient-to-b from-[#0f0f16] to-[#0a0a0f] border-y border-white/5">
+      < section className="py-32 px-6 bg-gradient-to-b from-[#0f0f16] to-[#0a0a0f] border-y border-white/5" >
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-20">
           <div className="flex-1">
             <div className="w-20 h-20 rounded-3xl bg-[#25D366]/20 flex items-center justify-center mb-10 text-[#25D366]">
@@ -353,12 +351,12 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </section >
 
       {/* --- 3 STEPS --- */}
-      <section className="py-32 px-6 bg-[#0f0f16] relative overflow-hidden">
+      < section className="py-32 px-6 bg-[#0f0f16] relative overflow-hidden" >
         {/* Ambient Background Elements */}
-        <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none -translate-x-1/2"></div>
+        < div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none -translate-x-1/2" ></div >
         <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-600/10 blur-[120px] rounded-full pointer-events-none translate-x-1/2"></div>
 
         <div className="max-w-7xl mx-auto relative z-10">
@@ -441,10 +439,10 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section >
 
       {/* --- PRICING --- */}
-      <section className="py-32 px-6 bg-[#0a0a0f]" id="pricing">
+      < section className="py-32 px-6 bg-[#0a0a0f]" id="pricing" >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-black mb-6">Investissez dans votre domination.</h2>
@@ -555,13 +553,13 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </section >
 
       <footer className="py-12 border-t border-white/5 bg-[#0a0a0f]">
         <div className="max-w-7xl mx-auto px-6 text-center text-gray-500">
           &copy; 2026 GENESIS Corp. All rights reserved.
         </div>
       </footer>
-    </div>
+    </div >
   );
 }

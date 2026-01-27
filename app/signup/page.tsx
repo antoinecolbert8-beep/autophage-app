@@ -110,9 +110,9 @@ function SignupContent() {
       <div className="border-b border-[rgba(255,255,255,0.1)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="h-20 flex items-center justify-between">
-            <Link href="/" className="flex items-center space-x-3">
-              <img src="/logo-ela.png" alt="ELA" className="w-10 h-10 object-contain" />
-              <span className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-amber-200 to-amber-500">ELA</span>
+            <Link href="/" className="flex items-center space-x-4">
+              <img src="/logo-ela.png" alt="ELA" className="w-16 h-16 object-contain" />
+              <span className="text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-amber-200 to-amber-500">ELA</span>
             </Link>
             <div className="flex items-center space-x-6">
               <span className="text-sm text-[rgba(255,255,255,0.7)]">Déjà client ?</span>

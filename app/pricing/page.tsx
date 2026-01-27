@@ -18,13 +18,13 @@ export default function PricingPage() {
             <span className="font-bold">Retour</span>
           </Link>
 
-          <Link href="/" className="flex items-center gap-2 group">
+          <Link href="/" className="flex items-center gap-3 group">
             <img
               src="/logo-ela.png"
               alt="ELA"
-              className="w-10 h-10 object-contain drop-shadow-[0_0_10px_rgba(217,119,6,0.4)]"
+              className="w-16 h-16 object-contain drop-shadow-[0_0_10px_rgba(217,119,6,0.4)]"
             />
-            <span className="text-lg font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 group-hover:to-amber-300 transition-all">
+            <span className="text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 group-hover:to-amber-300 transition-all">
               ELA
             </span>
           </Link>
