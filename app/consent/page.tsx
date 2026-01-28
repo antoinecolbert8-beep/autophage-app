@@ -15,7 +15,7 @@ export default function ConsentPage() {
                     <label className="flex items-start gap-4 cursor-pointer p-4 bg-[#0a0a0f] rounded-xl border border-white/5 hover:border-white/10 transition-colors">
                         <input type="checkbox" className="mt-1 w-5 h-5 rounded bg-white/10 border-white/20 checked:bg-[#667eea]" />
                         <span className="text-sm text-gray-300">
-                            J'accepte que mes données soient traitées par les algorithmes de Genesis AI à des fins d'amélioration de service.
+                            J'accepte que mes données soient traitées par les algorithmes de ELA AI à des fins d'amélioration de service.
                         </span>
                     </label>
                     <label className="flex items-start gap-4 cursor-pointer p-4 bg-[#0a0a0f] rounded-xl border border-white/5 hover:border-white/10 transition-colors">

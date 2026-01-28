@@ -25,10 +25,10 @@ export default function PaymentPage() {
         // Simulate Stripe Processing
         setTimeout(() => {
             if (typeof window !== 'undefined') {
-                localStorage.setItem('genesis_paid', 'true');
+                localStorage.setItem('ela_paid', 'true');
                 // Ensure tier is set if they skipped signup flow (unlikely but safe)
-                if (!localStorage.getItem('genesis_tier')) {
-                    localStorage.setItem('genesis_tier', plan === 'god_mode' ? 'grand_horloger' : 'standard');
+                if (!localStorage.getItem('ela_tier')) {
+                    localStorage.setItem('ela_tier', plan === 'god_mode' ? 'grand_horloger' : 'standard');
                 }
             }
             router.push("/dashboard");

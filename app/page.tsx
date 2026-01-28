@@ -147,7 +147,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-20">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/30 mb-6">
-              <span className="text-blue-400 font-bold text-sm">💡 POURQUOI GENESIS</span>
+              <span className="text-amber-400 font-bold text-sm">💡 POURQUOI ELA</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-black mb-6">Votre Concurrent Dort.<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">Vous Dominez.</span></h2>
             <p className="text-lg text-gray-400">
@@ -316,7 +316,7 @@ export default function Home() {
                     <img src="/agents/hive_v2.png?v=3" alt="Hive" className="w-full h-full rounded-full object-cover" />
                   </div>
                   <div>
-                    <p className="font-bold text-white text-lg">HIVE (Genesis)</p>
+                    <p className="font-bold text-white text-lg">HIVE (ELA)</p>
                     <p className="text-xs text-[#25D366] font-mono">En ligne</p>
                   </div>
                 </div>
@@ -557,7 +557,7 @@ export default function Home() {
 
       <footer className="py-12 border-t border-white/5 bg-[#0a0a0f]">
         <div className="max-w-7xl mx-auto px-6 text-center text-gray-500">
-          &copy; 2026 GENESIS Corp. All rights reserved.
+          &copy; 2026 ELA Corp. All rights reserved.
         </div>
       </footer>
     </div >

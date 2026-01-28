@@ -33,9 +33,9 @@ export default function LoginPage() {
       <div className="border-b border-[rgba(255,255,255,0.1)]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="h-20 flex items-center justify-between">
-            <Link href="/" className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-white rounded"></div>
-              <span className="text-xl font-semibold">Genesis</span>
+            <Link href="/" className="flex items-center space-x-3 group">
+              <img src="/logo-ela.png" alt="ELA" className="w-10 h-10 object-contain" />
+              <span className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-amber-200 to-amber-500">ELA</span>
             </Link>
             <Link href="/" className="text-sm font-medium hover:opacity-80">
               ← Retour à l'accueil

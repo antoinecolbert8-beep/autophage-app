@@ -84,7 +84,7 @@ export default function SetupPage() {
                     </div>
                     <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tight">Configuration Système</h1>
                     <p className="text-xl text-gray-500 max-w-2xl mx-auto">
-                        Initialisez les variables d'environnement critiques pour activer la pleine puissance de Genesis.
+                        Initialisez les variables d'environnement critiques pour activer la pleine puissance de ELA.
                     </p>
                 </div>
 

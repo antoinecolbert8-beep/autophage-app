@@ -30,7 +30,7 @@ export default function Loading() {
                 {/* Text */}
                 <div className="text-center space-y-2">
                     <h2 className="text-2xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-pink-500 animate-pulse">
-                        GENESIS
+                        ELA
                     </h2>
                     <p className="text-xs text-blue-500/50 font-mono tracking-widest uppercase">
                         Initialisation...

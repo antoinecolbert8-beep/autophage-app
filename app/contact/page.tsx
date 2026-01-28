@@ -12,7 +12,7 @@ type Message = {
 
 export default function ContactPage() {
     const [messages, setMessages] = useState<Message[]>([
-        { role: "assistant", content: "Salutations. Je suis GENESIS. Comment puis-je vous assister dans votre domination du marché aujourd'hui ?" }
+        { role: "assistant", content: "Salutations. Je suis l'IA ELA. Comment puis-je vous assister dans votre domination du marché aujourd'hui ?" }
     ]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -70,7 +70,7 @@ export default function ContactPage() {
                             <Zap className="w-4 h-4 text-white relative z-10" />
                         </div>
                         <span className="text-lg font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 group-hover:to-white transition-all">
-                            GENESIS
+                            ELA AI
                         </span>
                     </Link>
 
@@ -102,8 +102,8 @@ export default function ContactPage() {
                                     )}
 
                                     <div className={`max-w-[80%] p-4 rounded-2xl text-sm md:text-base leading-relaxed ${msg.role === 'user'
-                                            ? 'bg-white text-black font-medium rounded-tr-none'
-                                            : 'bg-[#0a0a0f] border border-white/10 text-gray-300 rounded-tl-none'
+                                        ? 'bg-white text-black font-medium rounded-tr-none'
+                                        : 'bg-[#0a0a0f] border border-white/10 text-gray-300 rounded-tl-none'
                                         }`}>
                                         {msg.content}
                                     </div>
@@ -150,7 +150,7 @@ export default function ContactPage() {
                             </button>
                         </form>
                         <div className="text-center mt-2">
-                            <p className="text-[10px] text-gray-600 uppercase tracking-widest">Powered by Genesis AI v2.4</p>
+                            <p className="text-[10px] text-gray-600 uppercase tracking-widest">Powered by ELA AI v2.4</p>
                         </div>
                     </div>
                 </div>

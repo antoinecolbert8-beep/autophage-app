@@ -61,14 +61,14 @@ export default function ClientLayoutWrapper({
     const [isBooting, setIsBooting] = useState(true);
 
     useEffect(() => {
-        // "System Boot" simulation - runs once per session to reinforce the "Genesis OS" feel
-        const hasBooted = typeof window !== 'undefined' ? sessionStorage.getItem("genesis_boot_complete") : null;
+        // "System Boot" simulation - runs once per session to reinforce the "ELA OS" feel
+        const hasBooted = typeof window !== 'undefined' ? sessionStorage.getItem("ela_boot_complete") : null;
 
         if (!hasBooted) {
             // Only boot on landing or dashboard first entry
             const timer = setTimeout(() => {
                 setIsBooting(false);
-                sessionStorage.setItem("genesis_boot_complete", "true");
+                sessionStorage.setItem("ela_boot_complete", "true");
             }, 2200);
             return () => clearTimeout(timer);
         } else {
@@ -82,7 +82,7 @@ export default function ClientLayoutWrapper({
 
     return (
         <div className="min-h-screen bg-[#0a0a0f] text-white font-sans selection:bg-cyan-500/30">
-            {/* Background Gradients for Genesis Theme */}
+            {/* Background Gradients for ELA Theme */}
             <div className="fixed inset-0 z-0 pointer-events-none">
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[128px] opacity-20" />
                 <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-pink-600/10 rounded-full blur-[128px] opacity-20" />

@@ -23,7 +23,7 @@ export default function WhatsAppCommandPage() {
                     <div>
                         <h2 className="text-3xl font-black mb-6">Contrôlez votre empire depuis votre poche.</h2>
                         <p className="text-gray-400 text-lg mb-8 leading-relaxed">
-                            HIVE est votre interface de commande WhatsApp. Envoyez des instructions vocales ou textuelles pour piloter l'&ensemble de votre infrastructure Genesis.
+                            HIVE est votre interface de commande WhatsApp. Envoyez des instructions vocales ou textuelles pour piloter l'&ensemble de votre infrastructure ELA.
                         </p>
 
                         <div className="bg-[#13131f] border border-white/5 rounded-2xl p-6 mb-8">
@@ -47,7 +47,7 @@ export default function WhatsAppCommandPage() {
                                 {/* Simulated WA Interface */}
                                 <div className="bg-[#075e54] absolute top-8 left-0 right-0 h-16 flex items-center px-4 z-10">
                                     <div className="w-8 h-8 rounded-full bg-white/20 mr-3"></div>
-                                    <span className="font-bold text-white">Genesis Hive</span>
+                                    <span className="font-bold text-white">ELA Hive</span>
                                 </div>
 
                                 <div className="space-y-2 mb-16 relative z-0 mt-20 overflow-hidden">

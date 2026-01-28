@@ -70,9 +70,9 @@ function SignupContent() {
 
         // Mock User Session Data
         if (typeof window !== 'undefined') {
-          localStorage.setItem('genesis_tier', plan === "god_mode" ? "grand_horloger" : "standard");
-          localStorage.setItem('genesis_user_name', name || "Utilisateur");
-          localStorage.setItem('genesis_paid', 'false'); // Not paid yet, must go to payment
+          localStorage.setItem('ela_tier', plan === "god_mode" ? "grand_horloger" : "standard");
+          localStorage.setItem('ela_user_name', name || "Utilisateur");
+          localStorage.setItem('ela_paid', 'false'); // Not paid yet, must go to payment
         }
 
         setSuccess(true);
@@ -245,7 +245,7 @@ function SignupContent() {
             <div className="space-y-8">
               <div>
                 <h2 className="text-2xl font-semibold mb-6">
-                  {plan === "god_mode" ? "Inclus dans le God Mode" : "Pourquoi choisir Genesis ?"}
+                  {plan === "god_mode" ? "Inclus dans le God Mode" : "Pourquoi choisir ELA ?"}
                 </h2>
                 <ul className="space-y-4">
                   {(plan === "god_mode" ? [
@@ -286,7 +286,7 @@ function SignupContent() {
 
               <div className="bg-[rgba(255,255,255,0.03)] rounded-[15px] p-6">
                 <p className="text-sm text-[rgba(255,255,255,0.7)] italic">
-                  "Genesis a transformé notre manière de travailler. Nous avons automatisé 80% de nos tâches répétitives et économisé 20h par semaine."
+                  "ELA a transformé notre manière de travailler. Nous avons automatisé 80% de nos tâches répétitives et économisé 20h par semaine."
                 </p>
                 <p className="text-sm font-semibold mt-3">
                   — Marie Dupont, CEO @ TechCorp

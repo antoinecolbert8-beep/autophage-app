@@ -65,7 +65,7 @@ export default function FeaturesPage() {
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">Illimitée.</span>
               </h1>
               <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-                Genesis regroupe tous les outils pour automatiser et dominer votre marché.
+                ELA regroupe tous les outils pour automatiser et dominer votre marché.
               </p>
             </motion.div>
           </div>

@@ -1,0 +1,94 @@
+{
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "minutes",
+                            "minutesInterval": 30
+                        }
+                    ]
+                }
+            },
+            "id": "e44da312-32b0-4f51-87a4-845686007e01",
+            "name": "Check Notion every 30m",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1,
+            "position": [
+                100,
+                100
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "database",
+                "operation": "executeQuery",
+                "databaseId": "={{$env[\"NOTION_DATABASE_ID\"]}}",
+                "options": {}
+            },
+            "id": "f55da312-32b0-4f51-87a4-845686007e02",
+            "name": "Fetch Notion Data",
+            "type": "n8n-nodes-base.notion",
+            "typeVersion": 2,
+            "position": [
+                300,
+                100
+            ],
+            "credentials": {
+                "notionApi": {
+                    "id": "YOUR_NOTION_CREDENTIAL_ID"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "upsert",
+                "table": "notion_sync_logs",
+                "columns": "notion_id,last_sync,raw_data",
+                "options": {}
+            },
+            "id": "g66da312-32b0-4f51-87a4-845686007e03",
+            "name": "Sync to ELA Database",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 2,
+            "position": [
+                500,
+                100
+            ],
+            "credentials": {
+                "postgres": {
+                    "id": "YOUR_POSTGRES_CREDENTIAL_ID"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Check Notion every 30m": {
+            "main": [
+                [
+                    {
+                        "node": "Fetch Notion Data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Fetch Notion Data": {
+            "main": [
+                [
+                    {
+                        "node": "Sync to ELA Database",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "saveExecutionProgress": true,
+        "saveManualExecutions": true
+    }
+}

@@ -17,7 +17,7 @@ export default function DashboardLayout({
         // SECURITY CHECK: Has the user paid?
         // In a real app, this would check a JWT claim or server-side session.
         // For this demonstration/prototype, we use the local flag set by the Payment Page.
-        const hasPaid = localStorage.getItem('genesis_paid') === 'true';
+        const hasPaid = localStorage.getItem('ela_paid') === 'true';
 
         if (!hasPaid) {
             // BYPASS: Allow Localhost / Dev to proceed without payment

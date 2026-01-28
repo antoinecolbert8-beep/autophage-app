@@ -137,7 +137,7 @@ export default function AdminLoginPage() {
 
         {/* Footer */}
         <p className="text-center text-xs text-gray-600 mt-6">
-          © 2024 Genesis • Sovereign Infrastructure
+          © 2026 ELA • Sovereign Infrastructure
         </p>
       </div>
     </div>

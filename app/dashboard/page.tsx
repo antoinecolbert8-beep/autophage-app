@@ -55,8 +55,8 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const checkUser = async () => {
-      const storedTier = typeof window !== 'undefined' ? localStorage.getItem('genesis_tier') : null;
-      const storedName = typeof window !== 'undefined' ? localStorage.getItem('genesis_user_name') : "Alexandre";
+      const storedTier = typeof window !== 'undefined' ? localStorage.getItem('ela_tier') : null;
+      const storedName = typeof window !== 'undefined' ? localStorage.getItem('ela_user_name') : "Alexandre";
       setUserName(storedName || "Alexandre");
       setUserTier(storedTier || "standard");
     };

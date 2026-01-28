@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import ClientLayoutWrapper from "@/components/client-layout-wrapper";
+import Script from "next/script";
 
 // Configure Fonts (Binary Rhythm)
 const inter = Inter({
@@ -24,8 +25,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "ELA - API d'Intelligence Artificielle pour Entreprises | Powered by Genesis",
-  description: "ELA est votre API de transmission IA. Propulsée par Genesis, notre IA propriétaire entraînée en interne. +12 000 entreprises nous font confiance.",
+  metadataBase: new URL("https://ela-revolution.com"),
+  title: "ELA - API d'Intelligence Artificielle pour Entreprises",
+  description: "ELA est votre API de transmission IA. Une infrastructure souveraine entraînée pour la performance. +12 000 entreprises nous font confiance.",
   keywords: [
     "agents IA",
     "automatisation marketing",
@@ -55,9 +57,9 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "fr_FR",
-    url: "https://genesis-ai.com",
-    title: "ELA - API Transmission Layer powered by Genesis AI",
-    description: "ELA est votre API de transmission IA, propulsée par Genesis (notre IA propriétaire entraînée en interne).",
+    url: "https://ela-revolution.com",
+    title: "ELA - API Transmission Layer",
+    description: "ELA est votre API de transmission IA, une infrastructure propriétaire entraînée en interne.",
     siteName: "ELA",
     images: [
       {
@@ -71,9 +73,9 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "ELA - API d'Intelligence Artificielle",
-    description: "ELA est votre API de transmission IA, propulsée par Genesis (notre IA propriétaire).",
+    description: "ELA est votre API de transmission IA, une infrastructure propriétaire souveraine.",
     images: ["/twitter-image.png"],
-    creator: "@genesis_ai",
+    creator: "@ela_revolution",
   },
   manifest: "/manifest.json",
   icons: {
@@ -86,10 +88,10 @@ export const metadata: Metadata = {
     ],
   },
   alternates: {
-    canonical: "https://genesis-ai.com",
+    canonical: "https://ela-revolution.com",
     languages: {
-      'fr-FR': 'https://genesis-ai.com/fr',
-      'en-US': 'https://genesis-ai.com/en',
+      'fr-FR': 'https://ela-revolution.com/fr',
+      'en-US': 'https://ela-revolution.com/en',
     },
   },
 };
@@ -105,6 +107,19 @@ export default function RootLayout({
   return (
     <html lang="fr" className={`${inter.variable} ${outfit.variable}`}>
       <body className="font-sans antialiased">
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-QJSJ2KCMEC"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-QJSJ2KCMEC');
+          `}
+        </Script>
         <GlobalErrorBoundary>
           <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
         </GlobalErrorBoundary>

@@ -1,4 +1,4 @@
-# 🤖 SaaS Bot LinkedIn - Autophage
+# 🤖 ELA - API d'Intelligence Artificielle pour Entreprises
 
 **Le premier bot LinkedIn/TikTok qui s'améliore tout seul.**
 
@@ -406,7 +406,7 @@ Propriétaire - Tous droits réservés
 
 Pour toute question : ouvre une issue sur GitHub ou contacte-moi directement.
 
-**Fait avec ❤️ et beaucoup de GPT-4**
+**Fait avec ❤️ pour ELA**
 
 
 

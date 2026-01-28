@@ -1,8 +1,8 @@
-# ⚡ DÉMARRAGE RAPIDE - GENESIS
+# ⚡ DÉMARRAGE RAPIDE - ELA
 
 ## 🎯 **TOUT EST PRÊT !**
 
-Le site Genesis est maintenant **100% opérationnel** et **pulvérise Limova** sur tous les fronts.
+Le site ELA est maintenant **100% opérationnel** et **pulvérise la concurrence** sur tous les fronts.
 
 ---
 
@@ -136,7 +136,7 @@ Sur la landing page:
 ## 🔍 **NAVIGATION**
 
 ### **Header (toutes pages):**
-- Logo Genesis (retour home)
+- Logo ELA (retour home)
 - Agents IA (scroll #agents)
 - Fonctionnalités → **/features**
 - Tarifs → **/pricing**
@@ -196,17 +196,4 @@ Vous pouvez:
 
 ## 🏆 **RÉSULTAT**
 
-Genesis **DOMINE** Limova sur:
-- ✅ Design (plus sobre et mature)
-- ✅ Features (démos interactives uniques)
-- ✅ Outils (ROI calculator)
-- ✅ Dashboard (graphiques pros)
-- ✅ SEO (100% optimisé)
-- ✅ Performance (next.config optimisé)
-- ✅ Crédibilité (logos + badges)
-
-**Niveau:** 🔥 **ENTREPRISE CAC 40** 🔥
-
----
-
-**Prêt à dominer le marché ! 🚀**
+**ELA : Prêt à dominer le marché ! 🚀**
