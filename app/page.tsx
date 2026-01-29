@@ -30,17 +30,17 @@ export default function Home() {
     <div className="min-h-screen bg-[#0a0a0f] text-white font-sans selection:bg-pink-500/30 overflow-x-hidden">
       {/* --- HEADER --- */}
       <header
-        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? "bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-white/5 py-4" : "bg-transparent py-6"
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled || mobileMenuOpen ? "bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-white/5 py-4" : "bg-transparent py-6"
           }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-4 group">
+          <Link href="/" className="flex items-center gap-4 group z-50">
             <img
               src="/logo-ela.png"
               alt="ELA"
-              className="w-20 h-20 object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(217,119,6,0.5)]"
+              className="w-12 h-12 md:w-20 md:h-20 object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(217,119,6,0.5)]"
             />
-            <span className="text-2xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 group-hover:to-amber-300 transition-all">
+            <span className="text-xl md:text-2xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 group-hover:to-amber-300 transition-all">
               ELA
             </span>
           </Link>
@@ -63,67 +63,92 @@ export default function Home() {
             </Link>
           </div>
 
-          <button className="md:hidden text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <X /> : <Menu />}
+          <button className="md:hidden text-white z-50 relative" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
+
+        {/* MOBILE MENU OVERLAY */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="absolute top-0 left-0 w-full h-screen bg-[#0a0a0f] flex flex-col pt-32 px-6 z-40"
+            >
+              <nav className="flex flex-col gap-8 text-center">
+                <Link href="/agents" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-bold text-white hover:text-amber-400 transition-colors">AGENTS</Link>
+                <Link href="/features" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-bold text-white hover:text-amber-400 transition-colors">FONCTIONNALITÉS</Link>
+                <Link href="/pricing" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-bold text-white hover:text-amber-400 transition-colors">TARIFS</Link>
+                <Link href="/contact" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-bold text-white hover:text-amber-400 transition-colors">CONTACT</Link>
+                <hr className="border-white/10 my-4" />
+                <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="text-xl font-bold text-gray-400 hover:text-white">SE CONNECTER</Link>
+                <Link href="/signup" onClick={() => setMobileMenuOpen(false)} className="py-4 bg-gradient-to-r from-amber-500 to-amber-600 rounded-xl font-bold text-black text-xl">
+                  COMMENCER MAINTENANT
+                </Link>
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       {/* --- HERO SECTION --- */}
-      <section className="relative pt-40 pb-20 px-6 overflow-hidden min-h-[90vh] flex items-center justify-center">
-        {/* Animated Background Grid */}
+      <section className="relative pt-32 pb-20 px-6 overflow-hidden min-h-[90vh] flex items-center justify-center">
+        {/* Animated Background Grid - Optimized for Mobile */}
         <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-20"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none animate-pulse-slow"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-pink-600/10 blur-[100px] rounded-full pointer-events-none mix-blend-screen"></div>
+        {/* Hide heavy blobs on mobile */}
+        <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none animate-pulse-slow"></div>
+        <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-pink-600/10 blur-[100px] rounded-full pointer-events-none mix-blend-screen"></div>
 
         <div className="relative max-w-7xl mx-auto text-center z-10">
           <BlurFade delay={0.2} duration={0.8} yOffset={20} blur="12px">
             {/* Trust Badge */}
-            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 mb-8 backdrop-blur-md">
-              <Zap className="w-5 h-5 text-blue-500" fill="currentColor" />
-              <span className="text-sm font-bold text-white">SYSTÈME AUTONOME</span>
+            <div className="inline-flex items-center gap-3 px-4 py-2 md:px-6 md:py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 mb-8 backdrop-blur-md">
+              <Zap className="w-4 h-4 md:w-5 md:h-5 text-blue-500" fill="currentColor" />
+              <span className="text-xs md:text-sm font-bold text-white">SYSTÈME AUTONOME</span>
             </div>
 
-            <h1 className="text-6xl md:text-9xl font-black tracking-tighter mb-8 leading-[0.9] uppercase">
+            <h1 className="text-4xl md:text-9xl font-black tracking-tighter mb-8 leading-[1.1] md:leading-[0.9] uppercase break-words">
               <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">ÉCRASEZ LA</span>
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">CONCURRENCE.</span>
             </h1>
 
-            <p className="text-xl md:text-3xl text-gray-300 max-w-4xl mx-auto mb-6 leading-relaxed font-bold">
+            <p className="text-lg md:text-3xl text-gray-300 max-w-4xl mx-auto mb-6 leading-relaxed font-bold px-2">
               9 ARMES ULTIMES. ZÉRO PITIÉ.
             </p>
-            <p className="text-lg md:text-xl text-gray-500 max-w-3xl mx-auto mb-12">
+            <p className="text-base md:text-xl text-gray-500 max-w-3xl mx-auto mb-10 md:mb-12 px-2">
               Pendant qu'ils dorment, vous <span className="text-blue-500 font-bold">DOMINEZ</span> le marché. 24/7. Sans limite.
             </p>
 
-            <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 w-full px-4">
               {/* Primary CTA - Most prominent */}
-              <Link href="/signup" className="group px-12 py-6 bg-gradient-to-r from-blue-600 to-pink-600 rounded-xl font-black text-xl flex items-center gap-4 hover:shadow-[0_0_60px_rgba(236,72,153,0.6)] transition-all transform hover:-translate-y-2 hover:scale-110 relative overflow-hidden">
+              <Link href="/signup" className="w-full md:w-auto group px-8 md:px-12 py-5 md:py-6 bg-gradient-to-r from-blue-600 to-pink-600 rounded-xl font-black text-lg md:text-xl flex items-center justify-center gap-4 hover:shadow-[0_0_60px_rgba(236,72,153,0.6)] transition-all transform hover:-translate-y-2 hover:scale-110 relative overflow-hidden">
                 <div className="absolute inset-0 bg-white/30 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
-                <Target className="w-6 h-6 relative z-10" />
+                <Target className="w-5 h-5 md:w-6 md:h-6 relative z-10" />
                 <span className="relative z-10 uppercase tracking-wider">PRENEZ LE POUVOIR</span>
-                <Rocket className="w-6 h-6 relative z-10 group-hover:translate-x-2 group-hover:-translate-y-1 transition-transform" />
+                <Rocket className="w-5 h-5 md:w-6 md:h-6 relative z-10 group-hover:translate-x-2 group-hover:-translate-y-1 transition-transform" />
               </Link>
 
               {/* Secondary CTA */}
-              <Link href="/agents" className="group px-8 py-4 bg-transparent border-2 border-purple-500/30 rounded-xl font-bold flex items-center gap-3 hover:bg-purple-500/10 transition-all hover:scale-105 hover:border-purple-500 text-purple-400">
+              <Link href="/agents" className="w-full md:w-auto group px-8 py-4 bg-transparent border-2 border-purple-500/30 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-purple-500/10 transition-all hover:scale-105 hover:border-purple-500 text-purple-400">
                 <Star className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" />
                 VOIR L'ARSENAL
               </Link>
             </div>
 
             {/* Trust indicators */}
-            <div className="mt-8 flex items-center justify-center gap-6 text-sm text-gray-500">
-              <span className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-500" /> Paiement sécurisé</span>
-              <span className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-500" /> Annulation facile</span>
-              <span className="flex items-center gap-2"><Check className="w-4 h-4 text-amber-500" /> Support 24/7</span>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs md:text-sm text-gray-500">
+              <span className="flex items-center gap-2"><Check className="w-3 h-3 md:w-4 md:h-4 text-amber-500" /> Paiement sécurisé</span>
+              <span className="flex items-center gap-2"><Check className="w-3 h-3 md:w-4 md:h-4 text-amber-500" /> Annulation facile</span>
+              <span className="flex items-center gap-2"><Check className="w-3 h-3 md:w-4 md:h-4 text-amber-500" /> Support 24/7</span>
             </div>
           </BlurFade>
         </div>
       </section>
 
       {/* --- SOCIAL PROOF (Marquee) --- */}
-      <section className="py-10 border-y border-white/5 bg-white/5 backdrop-blur-sm overflow-hidden relative">
+      <section className="py-6 md:py-10 border-y border-white/5 bg-white/5 backdrop-blur-sm overflow-hidden relative">
         <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0f] via-transparent to-[#0a0a0f] z-10 pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-6 relative">
           <div className="flex items-center gap-12 justify-center opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
