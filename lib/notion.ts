@@ -11,7 +11,7 @@ const notion = new Client({
  */
 export async function getNotionDatabase(databaseId: string) {
     try {
-        const response = await notion.databases.query({
+        const response = await (notion as any).databases.query({
             database_id: databaseId,
         });
         return response.results;
@@ -29,7 +29,7 @@ export async function getNotionDatabase(databaseId: string) {
  */
 export async function addToNotionDatabase(databaseId: string, properties: any) {
     try {
-        const response = await notion.pages.create({
+        const response = await (notion as any).pages.create({
             parent: { database_id: databaseId },
             properties: properties,
         });
