@@ -9,12 +9,12 @@ import { Lock, User, AlertTriangle } from "lucide-react";
  * ADMIN AUTHENTICATION
  * 
  * Credentials:
- * Username: admin@genesis.io
+ * Username: admin@ela-revolution.com
  * Password: GodMode2024!
  */
 
 const ADMIN_CREDENTIALS = {
-  username: "admin@genesis.io",
+  username: "admin@ela-revolution.com",
   password: "GodMode2024!"
 };
 
@@ -35,8 +35,8 @@ export default function AdminLoginPage() {
       if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
         // Store admin session
         if (typeof window !== 'undefined') {
-          localStorage.setItem('genesis_admin_auth', 'true');
-          localStorage.setItem('genesis_admin_session', Date.now().toString());
+          localStorage.setItem('ela_admin_auth', 'true');
+          localStorage.setItem('ela_admin_session', Date.now().toString());
         }
         router.push("/admin-master");
       } else {
@@ -85,7 +85,7 @@ export default function AdminLoginPage() {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="w-full bg-[#0a0a0f] border border-white/10 rounded-xl px-4 py-4 pl-12 focus:outline-none focus:border-red-500 transition-colors font-mono"
-                  placeholder="admin@genesis.io"
+                  placeholder="admin@ela-revolution.com"
                   required
                 />
                 <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
@@ -130,7 +130,7 @@ export default function AdminLoginPage() {
           <div className="mt-8 p-4 bg-white/5 border border-white/10 rounded-xl">
             <p className="text-xs text-gray-500 font-mono text-center">
               <span className="text-gray-400">Credentials:</span><br />
-              <span className="text-white">admin@genesis.io</span> / <span className="text-white">GodMode2024!</span>
+              <span className="text-white">admin@ela-revolution.com</span> / <span className="text-white">GodMode2024!</span>
             </p>
           </div>
         </div>

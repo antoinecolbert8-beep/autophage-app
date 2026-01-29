@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * 🌌 PATTERN DE FOND SIGNATURE GENESIS
+ * 🌌 PATTERN DE FOND SIGNATURE ELA
  * Identité visuelle unique - Grid néon avec effet perspective
  */
 
@@ -63,10 +63,10 @@ export const BackgroundPattern = () => {
       <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <filter id="glow">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
             <feMerge>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
         </defs>
@@ -74,7 +74,7 @@ export const BackgroundPattern = () => {
           const x = (i % 6) * 20 + 10;
           const y = Math.floor(i / 6) * 20 + 10;
           const delay = i * 0.1;
-          
+
           return (
             <motion.circle
               key={i}

@@ -19,7 +19,7 @@ export default function AdminMasterPage() {
 
   useEffect(() => {
     // Check admin authentication
-    const authStatus = typeof window !== 'undefined' ? localStorage.getItem('genesis_admin_auth') : null;
+    const authStatus = typeof window !== 'undefined' ? localStorage.getItem('ela_admin_auth') : null;
 
     if (authStatus !== 'true') {
       router.push('/admin');
@@ -31,8 +31,8 @@ export default function AdminMasterPage() {
 
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('genesis_admin_auth');
-      localStorage.removeItem('genesis_admin_session');
+      localStorage.removeItem('ela_admin_auth');
+      localStorage.removeItem('ela_admin_session');
     }
     router.push('/admin');
   };
@@ -63,7 +63,7 @@ export default function AdminMasterPage() {
               <LineIconShield size={20} />
             </div>
             <div>
-              <h1 className="text-xl font-black text-red-500">ADMIN SOVEREIGN</h1>
+              <h1 className="text-xl font-black text-red-500">ELA MASTER COMMAND</h1>
               <p className="text-xs text-gray-500 font-mono">Session active • Niveau 4</p>
             </div>
           </div>
@@ -184,7 +184,7 @@ export default function AdminMasterPage() {
                     <td className="p-4">{user.email}</td>
                     <td className="p-4">
                       <span className={`px-2 py-1 rounded text-xs font-bold ${user.plan === 'God Mode' ? 'bg-gradient-to-r from-red-500/20 to-pink-500/20 text-red-400 border border-red-500/30' :
-                          user.plan === 'Growth' ? 'bg-purple-500/20 text-purple-400' : 'bg-gray-500/20 text-gray-400'
+                        user.plan === 'Growth' ? 'bg-purple-500/20 text-purple-400' : 'bg-gray-500/20 text-gray-400'
                         }`}>
                         {user.plan}
                       </span>

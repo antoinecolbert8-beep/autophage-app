@@ -138,7 +138,7 @@ export default function ContactPage() {
                                 type="text"
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
-                                placeholder="Posez votre question à Genesis..."
+                                placeholder="Posez votre question à l'IA ELA..."
                                 className="flex-1 bg-[#13131f] border border-white/10 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-blue-500 transition-colors placeholder:text-gray-500"
                             />
                             <button

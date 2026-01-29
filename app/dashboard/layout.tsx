@@ -22,13 +22,13 @@ export default function DashboardLayout({
         if (!hasPaid) {
             // BYPASS: Allow Localhost / Dev to proceed without payment
             // UNLESS: Simulation Mode is active (to test client flow)
-            const isSimulation = localStorage.getItem('genesis_simulate_external') === 'true';
+            const isSimulation = localStorage.getItem('ela_simulate_external') === 'true';
 
             if (!isSimulation && typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
                 setAuthorized(true);
                 // Auto-inject God Mode for dev experience
-                localStorage.setItem('genesis_paid', 'true');
-                localStorage.setItem('genesis_tier', 'grand_horloger');
+                localStorage.setItem('ela_paid', 'true');
+                localStorage.setItem('ela_tier', 'grand_horloger');
                 return;
             }
 

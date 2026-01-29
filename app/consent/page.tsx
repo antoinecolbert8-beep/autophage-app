@@ -8,7 +8,7 @@ export default function ConsentPage() {
             <div className="max-w-xl w-full bg-[#13131f] border border-white/5 rounded-2xl p-8 shadow-2xl">
                 <h1 className="text-2xl font-bold mb-4">Politique de Consentement</h1>
                 <p className="text-gray-400 mb-6 leading-relaxed">
-                    Chez Genesis, nous prenons votre vie privée au sérieux. Avant de continuer, veuillez confirmer votre accord avec nos conditions d'utilisation et notre politique de traitement des données par intelligence artificielle.
+                    Chez ELA, nous prenons votre vie privée au sérieux. Avant de continuer, veuillez confirmer votre accord avec nos conditions d'utilisation et notre politique de traitement des données par intelligence artificielle.
                 </p>
 
                 <div className="space-y-4 mb-8">

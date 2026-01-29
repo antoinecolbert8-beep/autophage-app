@@ -48,8 +48,8 @@ function SignupContent() {
       if (user) {
         // Persist tier locally for immediate UI feedback (simulating DB role fetch)
         if (typeof window !== 'undefined') {
-          localStorage.setItem('genesis_tier', plan === "god_mode" ? "grand_horloger" : "standard");
-          localStorage.setItem('genesis_user_name', name || "Utilisateur");
+          localStorage.setItem('ela_tier', plan === "god_mode" ? "grand_horloger" : "standard");
+          localStorage.setItem('ela_user_name', name || "Utilisateur");
         }
 
         setSuccess(true);

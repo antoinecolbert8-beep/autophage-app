@@ -196,7 +196,7 @@ export default function AgentsPage() {
                                         }}
                                         className="flex gap-2"
                                     >
-                                        <span className="text-green-500 font-bold">{activeAgent ? `${activeAgent.toUpperCase()}@GENESIS:~$` : "GUEST@GENESIS:~$"}</span>
+                                        <span className="text-green-500 font-bold">{activeAgent ? `${activeAgent.toUpperCase()}@ELA:~$` : "GUEST@ELA:~$"}</span>
                                         <input
                                             name="cmd"
                                             autoComplete="off"
@@ -212,7 +212,7 @@ export default function AgentsPage() {
                                 <div className="mb-6">
                                     <h3 className="text-blue-400 font-bold text-lg mb-2">Endpoint Public</h3>
                                     <div className="bg-[#1a1a23] p-4 rounded-lg border border-white/10 flex items-center justify-between">
-                                        <code className="text-pink-500">POST https://api.genesis.ai/v1/agent</code>
+                                        <code className="text-pink-500">POST https://api.ela-revolution.com/v1/agent</code>
                                         <div className="flex gap-2">
                                             <span className="px-2 py-1 bg-green-500/10 text-green-500 text-xs rounded border border-green-500/20">ACTIVE</span>
                                             <span className="px-2 py-1 bg-blue-500/10 text-blue-500 text-xs rounded border border-blue-500/20">HTTPS</span>
@@ -225,7 +225,7 @@ export default function AgentsPage() {
                                     <p className="text-gray-500 mb-2 text-xs">Copiez ce code pour intégrer {activeAgent || "l'agent"} dans votre application externe.</p>
                                     <div className="bg-[#13131f] p-4 rounded-lg border border-white/10 overflow-x-auto relative group">
                                         <pre className="text-gray-300">
-                                            {`curl -X POST https://api.genesis.ai/v1/chat \\
+                                            {`curl -X POST https://api.ela-revolution.com/v1/chat \\
   -H "Authorization: Bearer sk_gen_${Math.random().toString(36).substring(7)}" \\
   -H "Content-Type: application/json" \\
   -d '{

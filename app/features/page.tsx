@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * 💎 PAGE FEATURES - VERSION GENESIS PREMIUM
+ * 💎 PAGE FEATURES - VERSION ELA MASTER PREMIUM
  * Consistent styling with landing page
  */
 

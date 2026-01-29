@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { GenesisSelfPromoter } from '@/lib/god-mode/self-promotion';
+import { ELASelfPromoter } from '@/lib/god-mode/self-promotion';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,11 +21,11 @@ export async function GET(req: Request) {
         console.log("/// CRON: WAKING UP GENESIS SELF-PROMOTION ///");
 
         // 2. Execute the Sovereign Logic
-        const result = await GenesisSelfPromoter.generateDailyHype();
+        const result = await ELASelfPromoter.generateDailyHype();
 
         return NextResponse.json({
             status: "SUCCESS",
-            message: "Genesis has spoken.",
+            message: "ELA has spoken.",
             data: result
         });
     } catch (error: any) {

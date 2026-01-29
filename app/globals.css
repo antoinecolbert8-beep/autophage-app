@@ -2,12 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CACHE BUSTER: FORCE REBUILD 2026-01-13 V4 */
+/* CACHE BUSTER: FORCE REBUILD 2026-01-29 V5 - ELA MASTER */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
 
 :root {
-  /* Genesis / Cyberpunk Theme Variables */
+  /* ELA / Sovereign Theme Variables */
   --bg-primary: #0a0a0f;
   --bg-secondary: #13131f;
   --text-primary: #ffffff;
