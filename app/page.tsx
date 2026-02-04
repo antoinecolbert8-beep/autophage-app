@@ -226,6 +226,205 @@ export default function Home() {
         </div >
       </section >
 
+      {/* --- COMPREHENSIVE FEATURES GRID --- */}
+      <section className="py-32 px-6 bg-gradient-to-b from-[#0f0f16] to-[#0a0a0f]">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-3xl mx-auto mb-20">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/30 mb-6">
+              <span className="text-purple-400 font-bold text-sm">🚀 ARSENAL COMPLET</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black mb-6">
+              20 Armes de Destruction <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">Concurrentielle</span>
+            </h2>
+            <p className="text-lg text-gray-400">
+              Technologies de pointe pour dominer chaque aspect de votre croissance digitale.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                icon: "📊",
+                title: "Métriques Temps Réel",
+                desc: "LinkedIn, Twitter, Meta Analytics APIs intégrées pour vraies performances.",
+                color: "from-blue-500 to-cyan-500",
+                tag: "Phase 1"
+              },
+              {
+                icon: "🖼️",
+                title: "Upload Média Natif",
+                desc: "Images sur LinkedIn, carrousels Instagram, vidéos Twitter automatiques.",
+                color: "from-purple-500 to-indigo-500",
+                tag: "Phase 1"
+              },
+              {
+                icon: "🧪",
+                title: "A/B Testing Auto",
+                desc: "Split test hooks et styles, sélection automatique du winner en 24h.",
+                color: "from-pink-500 to-rose-500",
+                tag: "Phase 1"
+              },
+              {
+                icon: "🤖",
+                title: "Auto-Engagement Bot",
+                desc: "Réponses IA aux commentaires, likes intelligents, follow-ups automatiques.",
+                color: "from-green-500 to-emerald-500",
+                tag: "Phase 2"
+              },
+              {
+                icon: "📈",
+                title: "Trending Topics",
+                desc: "Scraping Reddit, Google Trends, Twitter pour alignement parfait.",
+                color: "from-orange-500 to-red-500",
+                tag: "Phase 2"
+              },
+              {
+                icon: "⚡",
+                title: "Frequency Optimizer",
+                desc: "2-5 posts/jour adaptatif selon performance, timing optimal par plateforme.",
+                color: "from-yellow-500 to-amber-500",
+                tag: "Phase 2"
+              },
+              {
+                icon: "♻️",
+                title: "Content Recycling",
+                desc: "Repurpose automatique des top 10%, compilations Best-of, evergreen.",
+                color: "from-teal-500 to-cyan-500",
+                tag: "Phase 2"
+              },
+              {
+                icon: "🎯",
+                title: "Retargeting Pixels",
+                desc: "Meta Pixel + LinkedIn Insight Tag, audiences custom des engagés.",
+                color: "from-indigo-500 to-purple-500",
+                tag: "Phase 3"
+              },
+              {
+                icon: "👥",
+                title: "Influencer Detection",
+                desc: "Identification micro-influencers, outreach auto, tracking collaborations.",
+                color: "from-rose-500 to-pink-500",
+                tag: "Phase 3"
+              },
+              {
+                icon: "🎬",
+                title: "Video Generator",
+                desc: "Scripts Reels/Shorts/TikTok auto, voiceover ElevenLabs, B-roll suggestions.",
+                color: "from-violet-500 to-purple-500",
+                tag: "Phase 3"
+              },
+              {
+                icon: "💰",
+                title: "Revenue Autopilot",
+                desc: "Gestion autonome des flux monétaires, splits automatiques, facturation récurrente, analytics financiers temps réel.",
+                color: "from-emerald-500 to-green-500",
+                tag: "Phase 3"
+              },
+              {
+                icon: "🌍",
+                title: "Multi-Language",
+                desc: "5 langues (FR/EN/ES/DE/IT), traduction virale, geo-targeting intelligent.",
+                color: "from-sky-500 to-blue-500",
+                tag: "Phase 3"
+              },
+              {
+                icon: "🎯",
+                title: "Lead Scoring AI",
+                desc: "Score 0-100 prédictif, intent signals, timing optimal, auto-routing intelligent.",
+                color: "from-cyan-500 to-blue-500",
+                tag: "Growth"
+              },
+              {
+                icon: "💡",
+                title: "ROI Calculator",
+                desc: "Widget public, calcul instantané, lead capture automatique, conversion +85%.",
+                color: "from-green-500 to-teal-500",
+                tag: "Growth"
+              },
+              {
+                icon: "📝",
+                title: "Meeting Assistant AI",
+                desc: "Transcription calls, action items auto, CRM sync, emails follow-up générés.",
+                color: "from-purple-500 to-pink-500",
+                tag: "Growth"
+              },
+              {
+                icon: "📄",
+                title: "Proposal Generator",
+                desc: "Devis en 30s, templates industrie, ROI intégré, e-signature, upsells auto.",
+                color: "from-orange-500 to-red-500",
+                tag: "Growth"
+              },
+              {
+                icon: "🔍",
+                title: "Competitive Intelligence",
+                desc: "Surveillance 24/7, prix concurrence, gap analysis, alertes stratégiques.",
+                color: "from-indigo-500 to-violet-500",
+                tag: "Growth"
+              },
+              {
+                icon: "📱",
+                title: "SMS Automation",
+                desc: "Reminders RDV, confirmations, follow-ups, broadcast campaigns via Twilio.",
+                color: "from-blue-500 to-cyan-500",
+                tag: "Growth"
+              },
+              {
+                icon: "🏷️",
+                title: "White-Label Program",
+                desc: "Branding custom, sous-domaines, revenue share 30-50%, tiers revendeurs.",
+                color: "from-pink-500 to-rose-500",
+                tag: "Scale"
+              },
+              {
+                icon: "📧",
+                title: "Email Warmup",
+                desc: "DNS health, deliverability 100/100, spam test auto, reputation tracking.",
+                color: "from-emerald-500 to-green-500",
+                tag: "Scale"
+              }
+            ].map((feature, i) => (
+              <div
+                key={i}
+                className="group relative p-6 rounded-2xl bg-[#13131f] border border-white/5 hover:border-white/20 transition-all duration-500 overflow-hidden hover:-translate-y-2"
+              >
+                {/* Gradient blob */}
+                <div className={`absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br ${feature.color} opacity-0 blur-[60px] group-hover:opacity-10 transition-opacity duration-700`}></div>
+
+                {/* Tag */}
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-3xl">{feature.icon}</span>
+                  <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">{feature.tag}</span>
+                </div>
+
+                <h3 className="text-xl font-black mb-3 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r" style={{ backgroundImage: `linear-gradient(to right, ${feature.color.split(' ')[1]}, ${feature.color.split(' ')[3]})` }}>
+                  {feature.title}
+                </h3>
+
+                <p className="text-sm text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors">
+                  {feature.desc}
+                </p>
+
+                {/* Bottom accent */}
+                <div className={`absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r ${feature.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500`}></div>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div className="text-center mt-16">
+            <Link
+              href="/features"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-bold text-lg hover:shadow-[0_0_40px_rgba(168,85,247,0.4)] transition-all transform hover:-translate-y-1"
+            >
+              Explorer Toutes Les Fonctionnalités
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+
       {/* --- AGENTS GRID --- */}
       < section className="py-32 px-6 relative" id="agents" >
         <div className="max-w-7xl mx-auto">

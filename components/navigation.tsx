@@ -11,6 +11,7 @@ import {
   LineIconBarChart,
   LineIconShield,
 } from "@/components/AppIcons";
+import { LiveUsersCounter } from "./LiveUsersCounter";
 
 export default function Navigation() {
   const pathname = usePathname();
@@ -35,9 +36,12 @@ export default function Navigation() {
 
   return (
     <aside className="fixed left-0 top-0 bottom-0 w-64 border-r border-white/5 bg-[#0f0f16] flex flex-col z-40 transition-all duration-300">
-      <div className="h-20 flex items-center gap-3 px-6 border-b border-white/5">
-        <div className="w-8 h-8 rounded bg-gradient-to-br from-[#667eea] to-[#764ba2] flex items-center justify-center font-black text-xs text-white">G</div>
-        <span className="font-bold text-xl tracking-tight text-white">ELA</span>
+      <div className="h-20 flex items-center justify-between px-6 border-b border-white/5">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded bg-gradient-to-br from-[#667eea] to-[#764ba2] flex items-center justify-center font-black text-xs text-white">G</div>
+          <span className="font-bold text-xl tracking-tight text-white">ELA</span>
+        </div>
+        <LiveUsersCounter />
       </div>
 
       <nav className="flex-1 p-4 overflow-y-auto">

@@ -33,10 +33,12 @@ export default function AdminLoginPage() {
     // Simulate authentication delay
     setTimeout(() => {
       if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-        // Store admin session
+        // Store admin session in localStorage and Cookie for middleware
         if (typeof window !== 'undefined') {
           localStorage.setItem('ela_admin_auth', 'true');
           localStorage.setItem('ela_admin_session', Date.now().toString());
+          // Set cookie for middleware
+          document.cookie = "admin-session=true; path=/; max-age=86400"; // 24h
         }
         router.push("/admin-master");
       } else {

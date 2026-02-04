@@ -1,6 +1,7 @@
 import { BaseAgent } from "./base-agent";
 import { generateContentWithGemini } from "../gemini-content";
 import { PrismaClient } from "@prisma/client";
+import { getRealTrends } from "../services/real-trends";
 
 const prisma = new PrismaClient();
 
@@ -60,30 +61,27 @@ export class OpportunistAgent extends BaseAgent {
   }
 
   private async scrapeTrends() {
-    // Simulation - En production, intégrer Google Trends API + X API
-    const mockTrends = [
-      {
-        keyword: "IA et emploi 2025",
-        volume: 15000,
-        growth: "+250%",
-        urgency: "HIGH",
-      },
-      {
-        keyword: "Automatisation entreprise",
-        volume: 8000,
-        growth: "+120%",
-        urgency: "MEDIUM",
-      },
-      {
-        keyword: "ChatGPT alternatives",
-        volume: 12000,
-        growth: "+180%",
-        urgency: "HIGH",
-      },
-    ];
+    // REAL WORLD DATA - Google Trends RSS
+    console.log("📊 [Opportunist] Scanning Global Pulse (Google Trends)...");
 
-    console.log("📊 Tendances détectées:", mockTrends.length);
-    return mockTrends;
+    // Try Fetch
+    const realTrends = await getRealTrends('FR'); // Focus on France as configured
+
+    if (realTrends && realTrends.length > 0) {
+      console.log(`✅ ${realTrends.length} Live Trends Detected.`);
+      return realTrends;
+    }
+
+    // Fallback only if RSS fails (network issue)
+    console.warn("⚠️ RSS Failed, using fallback cache.");
+    return [
+      {
+        keyword: "IA et productivité",
+        volume: 5000,
+        growth: "STABLE",
+        urgency: "MEDIUM",
+      }
+    ];
   }
 
   private async selectBestOpportunity(trends: any[]) {

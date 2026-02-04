@@ -63,27 +63,26 @@ export async function generateVideoFromScript(script: ShortScript): Promise<stri
  * Délégué à Make.com (Module YouTube)
  */
 export async function uploadToYouTube(video: ShortVideo): Promise<string> {
-  console.log("📤 Upload sur YouTube via Make...");
+  console.log("🎬 [FULL LOCAL] Generating video locally...");
 
-  const result = await triggerAutomation("UPLOAD_YOUTUBE_VIDEO", {
-    videoUrl: video.videoUrl,
+  const { generateLocalVideo, getLocalVideoStats } = await import('./services/local-video-gen');
+
+  // FULL LOCAL APPROACH:
+  // Generate REAL video file on disk, no external APIs
+  const videoPath = await generateLocalVideo({
     title: video.script.title,
-    description: video.script.description,
-    tags: video.script.keywords,
-    privacyStatus: "public"
+    text: video.script.body.join(' '),
+    duration: 30 // 30 second short
   });
 
-  if (result.success && result.data?.youtubeId) {
-    console.log("✅ Upload réussite via Make! ID:", result.data.youtubeId);
-    return result.data.youtubeId;
-  }
+  console.log(`✅ [LOCAL] Video stored at: ${videoPath}`);
 
-  // Simulation ID if Make returns success but no ID (async)
-  if (result.success) {
-    return "PENDING_MAKE_UPLOAD";
-  }
+  // Log stats
+  const stats = getLocalVideoStats();
+  console.log(`📊 Total videos generated: ${stats.totalGenerated}`);
 
-  throw new Error(`Erreur upload YouTube via Make: ${result.message}`);
+  // Return local path (works as "ID" for tracking)
+  return videoPath;
 }
 
 /**

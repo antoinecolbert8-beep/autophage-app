@@ -1,0 +1,10 @@
+{
+  "totalDeploys": 0,
+  "deploys": [
+    {
+      "timestamp": "2026-02-04T10:05:23.655Z",
+      "trigger": "continuous-flux",
+      "status": "failed"
+    }
+  ]
+}

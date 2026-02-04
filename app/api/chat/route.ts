@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { SwarmOrchestrator } from '@/lib/agents/swarm-orchestrator';
+import { generateText } from '@/lib/ai/vertex';
 
 // Initialize OpenAI client
 const openai = new OpenAI({
@@ -99,15 +100,25 @@ export async function POST(req: Request) {
         const selectedSystemPrompt = `${basePrompt}\n\n${architectInstructions}`;
 
         // 1. First Call to LLM
-        const completion = await openai.chat.completions.create({
-            model: "gpt-4-turbo-preview",
-            messages: [
-                { role: "system", content: selectedSystemPrompt },
-                ...messages
-            ],
-            tools: tools as any,
-            tool_choice: "auto",
-        });
+        // We use a custom call here because we need tool_calls, but we should handle failure
+        let completion;
+        try {
+            completion = await openai.chat.completions.create({
+                model: "gpt-4-turbo-preview",
+                messages: [
+                    { role: "system", content: selectedSystemPrompt },
+                    ...messages
+                ],
+                tools: tools as any,
+                tool_choice: "auto",
+            });
+        } catch (e: any) {
+            console.warn("⚠️ OpenAI failed in chat route, falling back to basic content generation via Vertex...");
+            // Fallback: If OpenAI fails (401 etc), we use our unified generateText helper
+            // Note: tool_calls won't work with basic generateText yet, but we provide a response
+            const fallbackContent = await generateText(`System: ${selectedSystemPrompt}\n\nUser: ${lastUserMessage}`);
+            return NextResponse.json({ role: 'assistant', content: fallbackContent });
+        }
 
         const responseMessage = completion.choices[0].message;
 

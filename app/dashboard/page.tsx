@@ -11,9 +11,14 @@ import {
   LineIconUsers
 } from "@/components/AppIcons";
 import { OmniscienceTerminal } from "@/components/omniscience-terminal";
+import { RealTimeActivityFeed } from "@/components/RealTimeActivityFeed";
 import dynamic from 'next/dynamic';
 import BlurFade from "@/components/ui/blur-fade";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { SovereigntyGauge } from "@/components/SovereigntyGauge";
+import { ImperialPulse } from "@/components/ImperialPulse";
+import { getSovereigntyStats } from "@/actions/sovereignty-actions";
+import { MeshGradient, Particles3D, MagneticCursor } from "@/components/AdvancedVisuals";
 
 // Dynamic import to avoid SSR issues with Three.js Canvas
 const NeuroSchema = dynamic(() => import("@/components/NeuroSchema"), {
@@ -44,13 +49,13 @@ export default function DashboardPage() {
   const [userName, setUserName] = useState("Utilisateur");
   const [userTier, setUserTier] = useState("standard");
   const [loadingTime, setLoadingTime] = useState(0.8); // Friction (s)
+  const [sovereignty, setSovereignty] = useState<{ score: number, title: string, nextMilestone: number } | null>(null);
 
   // Computed Metrics
   const conversionRate = 3.4; // %
   const impactScore = 8.5; // Arbitrary impact factor
   const retentionRate = 92; // %
 
-  const sScore = useMemo(() => calculateSovereigntyScore(conversionRate, impactScore, retentionRate, loadingTime), [loadingTime]);
   const isHealthy = retentionRate >= 85;
 
   useEffect(() => {
@@ -59,6 +64,9 @@ export default function DashboardPage() {
       const storedName = typeof window !== 'undefined' ? localStorage.getItem('ela_user_name') : "Alexandre";
       setUserName(storedName || "Alexandre");
       setUserTier(storedTier || "standard");
+
+      const stats = await getSovereigntyStats();
+      if (stats) setSovereignty(stats);
     };
     checkUser();
 
@@ -70,15 +78,16 @@ export default function DashboardPage() {
   }, []);
 
   const stats = [
-    { title: "Souveraineté (S-Score)", value: sScore.toFixed(1), change: "+4.2%", icon: LineIconBarChart, color: "text-blue-400" },
-    { title: "Rétention Client", value: `${retentionRate}%`, change: "+2.1%", icon: LineIconUsers, color: "text-purple-400" },
     { title: "Indice Friction", value: `${loadingTime.toFixed(2)}s`, change: "-0.3s", icon: LineIconZap, color: "text-green-400" },
+    { title: "Rétention Client", value: `${retentionRate}%`, change: "+2.1%", icon: LineIconUsers, color: "text-purple-400" },
     { title: "Sécurité", value: "100%", change: "Optimale", icon: LineIconShield, color: "text-emerald-400" },
   ];
 
   return (
     <div className="min-h-screen bg-[#0a0a0f] text-white overflow-hidden relative font-sans">
-
+      <MeshGradient />
+      <Particles3D />
+      <MagneticCursor />
       {/* 2. CORTEX VISUEL: NEUROSCHEMA BACKGROUND */}
       <NeuroSchema />
 
@@ -123,6 +132,17 @@ export default function DashboardPage() {
 
         {/* 1. PIXEL PERFECT: ALIGNMENT & FADE-IN */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {/* Sovereignty Gauge Card */}
+          <BlurFade delay={0.1} className="lg:col-span-1 md:col-span-1">
+            <div className="bg-[#13131f]/90 backdrop-blur-xl rounded-2xl p-6 h-full border border-white/5 flex flex-col items-center justify-center">
+              <SovereigntyGauge
+                score={sovereignty?.score || 0}
+                title={sovereignty?.title || "Evaluating..."}
+                nextMilestone={sovereignty?.nextMilestone || 100}
+              />
+            </div>
+          </BlurFade>
+
           {stats.map((stat, i) => (
             <BlurFade key={i} delay={0.1 + (i * 0.1)} duration={0.8} className="group relative p-[1px] rounded-2xl bg-gradient-to-br from-white/10 via-transparent to-white/5 hover:from-blue-500/30 hover:to-purple-500/30 transition-all duration-500">
               <div className="bg-[#13131f]/90 backdrop-blur-xl rounded-2xl p-6 h-full border border-white/5">
@@ -236,9 +256,14 @@ export default function DashboardPage() {
                 </div>
               </button>
             </div>
+
+            <div className="mt-8 border-t border-white/5 pt-8">
+              <RealTimeActivityFeed />
+            </div>
           </BlurFade>
         </div>
       </div>
+      <ImperialPulse />
     </div>
   );
 }

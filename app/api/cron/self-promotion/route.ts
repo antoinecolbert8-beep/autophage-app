@@ -21,7 +21,8 @@ export async function GET(req: Request) {
         console.log("/// CRON: WAKING UP GENESIS SELF-PROMOTION ///");
 
         // 2. Execute the Sovereign Logic
-        const result = await ELASelfPromoter.generateDailyHype();
+        // 2. Execute the Sovereign Logic (Smart Scheduled)
+        const result = await ELASelfPromoter.orchestrateHourlyCheck();
 
         return NextResponse.json({
             status: "SUCCESS",

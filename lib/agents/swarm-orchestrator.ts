@@ -8,6 +8,15 @@ import { OpportunistAgent } from "./opportunist-agent";
 import { ManagerAgent } from "./manager-agent";
 import { CreatorAgent } from "./creator-agent";
 import { SalesAgent } from "./sales-agent";
+import { PulseEngine } from "../realtime-pulse";
+import { executeMarketDominationWorkflow } from '../workflows/market-domination';
+// Using require to avoid TS path issues with scripts/lib duality if needed, 
+// or relative import if tsconfig allows. Let's try relative import first assuming standard structure.
+// Actually, scripts are outside lib, so we might need relative path ../../scripts/seo-flood
+// BUT usually importing script logic is bad practice. Proper way is to move logic to lib.
+// For speed, let's use dynamic import or replicate logic. 
+// Re-implementing logic lightly here to keep it clean in Lib.
+import { getRealTrends } from "../services/real-trends";
 
 export class SwarmOrchestrator {
   private agents: {
@@ -58,7 +67,9 @@ export class SwarmOrchestrator {
    */
   async runAgent(agentName: keyof typeof this.agents) {
     console.log(`🐝 [Swarm] Exécution de ${agentName}...`);
-    return await this.agents[agentName].execute();
+    const result = await this.agents[agentName].execute();
+    PulseEngine.notifyAgent(agentName.charAt(0).toUpperCase() + agentName.slice(1));
+    return result;
   }
 
   /**
@@ -86,6 +97,114 @@ export class SwarmOrchestrator {
       },
       intervalHours * 60 * 60 * 1000
     );
+  }
+
+  /**
+   * FLUX CONTINU (High Velocity)
+   * Exécute les agents en boucle quasi-infinie
+   */
+  async startContinuousFlux(intervalMinutes: number = 2) {
+    console.log(`🌊 [Swarm] Mode Flux Continu activé (toutes les ${intervalMinutes} min)`);
+
+    const runLoop = async () => {
+      console.log("\n⚡ [Flux] Cycle Haute Vélocité...");
+
+      // Import autonomy monitoring
+      const { autonomyMonitor } = await import('../services/autonomy-monitor');
+      autonomyMonitor.recordCycleStart();
+
+      let cycleSuccess = true;
+
+      // 1. Run Agents
+      try {
+        await this.runAll();
+      } catch (e) {
+        console.error("⚠️ Agent execution failed:", e);
+        cycleSuccess = false;
+      }
+
+      // 2. Run Auto-SEO (Embedded Logic for speed)
+      try {
+        // Dynamic import of the script function we just exported
+        const seoFlood = require('../../scripts/seo-flood');
+        if (seoFlood && seoFlood.runHighVolumeSEO) {
+          await seoFlood.runHighVolumeSEO();
+        }
+      } catch (e) {
+        console.error("⚠️ SEO Flood trigger failed:", e);
+        autonomyMonitor.recordFailure('seo');
+      }
+
+      // 3. Run Video Flood (Omni-Channel)
+      try {
+        const videoFlood = require('../../scripts/video-flood');
+        if (videoFlood && videoFlood.runVideoFlood) {
+          await videoFlood.runVideoFlood();
+        }
+      } catch (e) {
+        console.error("⚠️ Video Flood trigger failed:", e);
+        autonomyMonitor.recordFailure('video');
+      }
+
+      // 4. AUTO-DEPLOY TO VERCEL (Production)
+      try {
+        const { autoDeployToVercel, shouldAutoDeploy, getDeployStats } = await import('../services/auto-deploy');
+
+        if (shouldAutoDeploy()) {
+          console.log("\n🚀 [AUTO-DEPLOY] Triggering production deployment...");
+          const deployed = await autoDeployToVercel('continuous-flux');
+
+          if (deployed) {
+            const stats = getDeployStats();
+            console.log(`✅ Deploy #${stats.total} SUCCESS`);
+            console.log(`   URL: ${stats.lastDeploy?.url || 'pending'}`);
+          }
+        } else {
+          console.log("🕒 Skipping deploy (rate limit)");
+        }
+      } catch (e: any) {
+        console.error("⚠️ Auto-deploy failed:", e.message);
+        autonomyMonitor.recordFailure('deploy');
+      }
+
+      // 5. AUTO-GIT COMMIT (Version Control)
+      try {
+        const { autoCommitAndPush } = await import('../services/auto-git');
+        await autoCommitAndPush(`Flux cycle #${autonomyMonitor.getMetrics().cyclesCompleted}`);
+      } catch (e: any) {
+        console.error("⚠️ Auto-git failed:", e.message);
+        autonomyMonitor.recordFailure('git');
+      }
+
+      // Record cycle completion
+      autonomyMonitor.recordCycleComplete(cycleSuccess);
+      autonomyMonitor.displayStatus();
+
+      // 6. MARKET DOMINATION WORKFLOW (Every 10 cycles)
+      const cycleCount = autonomyMonitor.getMetrics().cyclesCompleted;
+      if (cycleCount % 10 === 0) {
+        try {
+          console.log("\n🎯 [MARKET DOMINATION] Executing full workflow...");
+          const firstOrg = await (await import('@prisma/client')).PrismaClient.prototype.organization.findFirst();
+          const firstProject = await (await import('@prisma/client')).PrismaClient.prototype.project.findFirst();
+
+          if (firstProject) {
+            const result = await executeMarketDominationWorkflow(
+              'AI Marketing Automation',
+              firstProject.id
+            );
+            console.log(`✅ Market Domination: ${result.success ? 'SUCCESS' : 'FAILED'}`);
+          }
+        } catch (e: any) {
+          console.error("⚠️ Market Domination failed:", e.message);
+        }
+      }
+
+      console.log(`⏳ Attente ${intervalMinutes}m avant prochain flux...`);
+      setTimeout(runLoop, intervalMinutes * 60 * 1000);
+    };
+
+    await runLoop();
   }
 }
 

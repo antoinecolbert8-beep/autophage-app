@@ -194,7 +194,7 @@ export async function handleSubscriptionCreated(subscription: Stripe.Subscriptio
         where: { id: organizationId },
         data: {
             tier: metadata.tierId || 'pro',
-            mrr: subscription.items.data[0]?.price.unit_amount || 0 / 100,
+            mrr: (subscription.items.data[0]?.price.unit_amount || 0) / 100,
             creditBalance: { increment: monthlyCredits },
             status: 'active',
         },

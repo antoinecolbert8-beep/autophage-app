@@ -6,6 +6,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { LineIconCheck, LineIconShield, LineIconZap } from "@/components/AppIcons";
 import { CheckCircle2, CreditCard, Lock } from "lucide-react";
 
+import { PLANS } from "@/lib/stripe-pricing";
+
 export default function PaymentPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -13,26 +15,37 @@ export default function PaymentPage() {
     const [loading, setLoading] = useState(false);
 
     const prices = {
-        starter: "99.00",
-        growth: "299.00",
-        god_mode: "999.00"
+        starter: "37.00",
+        growth: "197.00",
+        god_mode: "497.00"
     };
 
     const currentPrice = prices[plan as keyof typeof prices] || "99.00";
 
+
+
     const handlePayment = () => {
         setLoading(true);
-        // Simulate Stripe Processing
-        setTimeout(() => {
+
+        // Find the correct plan configuration
+        const planConfig = Object.values(PLANS).find(p => p.id === plan) || PLANS.STARTER;
+
+        // Redirect to Stripe Payment Link
+        if (planConfig.paymentLink) {
+            // Persist intent before redirecting
             if (typeof window !== 'undefined') {
-                localStorage.setItem('ela_paid', 'true');
-                // Ensure tier is set if they skipped signup flow (unlikely but safe)
-                if (!localStorage.getItem('ela_tier')) {
-                    localStorage.setItem('ela_tier', plan === 'god_mode' ? 'grand_horloger' : 'standard');
-                }
+                localStorage.setItem('ela_pending_plan', plan);
             }
-            router.push("/dashboard");
-        }, 2000);
+            window.location.href = planConfig.paymentLink;
+        } else {
+            console.error("No payment link found for plan:", plan);
+            // Fallback for God Mode if link missing (or contact sales)
+            if (plan === 'god_mode') {
+                // Temporary fallback until user provides link
+                alert("Lien de paiement God Mode en cours de configuration. Veuillez contacter le support.");
+                setLoading(false);
+            }
+        }
     };
 
     return (

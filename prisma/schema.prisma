@@ -33,12 +33,14 @@ model Organization {
   usageLogs       UsageLog[]
   creditPurchases CreditPurchase[]
   paymentDisputes PaymentDispute[]
+  auditLogs       AuditLog[]
   
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   
   @@index([domain])
 }
+
 
 
 model User {
@@ -70,6 +72,7 @@ model User {
   posts           Post[]
   brandProfile    BrandProfile?
   userPreference  UserPreference?
+  auditLogs       AuditLog[]
   
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -183,6 +186,7 @@ model Lead {
   @@unique([email, organizationId])
   @@index([organizationId, stage])
   @@index([score])
+  @@index([createdAt])
 }
 
 model Campaign {
@@ -519,6 +523,7 @@ model ActionHistory {
 model ContentStat {
   id          String   @id @default(cuid())
   postId      String
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   platform    String   // linkedin, instagram, twitter, etc.
   views       Int      @default(0)
   likes       Int      @default(0)
@@ -550,9 +555,13 @@ model Post {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
+  // Relations
+  stats       ContentStat[]
+  
   @@index([userId])
   @@index([platform])
   @@index([status])
+  @@index([publishedAt])
 }
 
 // ==========================================
@@ -574,6 +583,9 @@ model Subscription {
   
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([createdAt])
 }
 
 model Video {
@@ -678,3 +690,25 @@ model SaveAttempt {
   
   @@index([userId])
 }
+
+model AuditLog {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id])
+  
+  action          String   // e.g., "USER_LOGIN", "POST_CREATED", "BILLING_UPDATE"
+  entityType      String   // e.g., "USER", "POST", "SUBSCRIPTION"
+  entityId        String?
+  details         String?  // JSON stringified details
+  ipAddress       String?
+  userAgent       String?
+  
+  createdAt       DateTime @default(now())
+
+  @@index([organizationId])
+  @@index([userId])
+  @@index([action])
+}
+

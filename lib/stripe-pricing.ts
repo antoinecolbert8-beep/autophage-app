@@ -17,11 +17,12 @@ export const PLANS = {
   STARTER: {
     id: "starter",
     name: "Starter",
-    price: 29,
+    price: 37,
     currency: "eur",
     interval: "month" as const,
     quota: 10, // vidéos/mois incluses
     stripePriceId: process.env.STRIPE_PRICE_STARTER || "price_starter_eur_monthly",
+    paymentLink: "https://buy.stripe.com/7sY00j6gZ1tt2mp9A18EM04",
     features: [
       "10 vidéos/mois incluses",
       "YouTube + TikTok + Instagram",
@@ -33,13 +34,14 @@ export const PLANS = {
     overage: 0.50, // €0.50 par vidéo supplémentaire
   },
   PRO: {
-    id: "pro",
+    id: "growth",
     name: "Pro",
-    price: 99,
+    price: 197,
     currency: "eur",
     interval: "month" as const,
     quota: 50,
     stripePriceId: process.env.STRIPE_PRICE_PRO || "price_pro_eur_monthly",
+    paymentLink: "https://buy.stripe.com/4gM14n20J4FFe579A18EM05",
     features: [
       "50 vidéos/mois incluses",
       "Toutes les plateformes",
@@ -72,13 +74,14 @@ export const PLANS = {
     overage: 0.20, // €0.20 par vidéo supplémentaire
   },
   ENTERPRISE: {
-    id: "enterprise",
-    name: "Enterprise",
-    price: null, // Custom pricing
+    id: "god_mode",
+    name: "God Mode",
+    price: 497,
     currency: "eur",
     interval: "month" as const,
     quota: -1, // Illimité
     stripePriceId: null,
+    paymentLink: "https://buy.stripe.com/4gMfZhcFn9ZZ7GJeUl8EM06",
     features: [
       "Vidéos illimitées",
       "Infrastructure dédiée",

@@ -1,40 +1,77 @@
-/**
- * VERTEX AI / GEMINI INTEGRATION
- * Uses Google Generative AI SDK (already installed)
- * For production, configure VERTEX_AI_API_KEY in environment
- */
-
+import 'dotenv/config';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import OpenAI from 'openai';
 
-const apiKey = process.env.VERTEX_AI_API_KEY || '';
-const genAI = new GoogleGenerativeAI(apiKey);
+let genAI: GoogleGenerativeAI | null = null;
+let vertexModel: any = null;
+let openaiClient: OpenAI | null = null;
 
-// Gemini Pro model
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
+function getClients() {
+    // 1. Try Initialize Vertex/Gemini
+    if (!vertexModel) {
+        const apiKey = process.env.VERTEX_AI_API_KEY || process.env.GOOGLE_API_KEY;
+        if (apiKey) {
+            genAI = new GoogleGenerativeAI(apiKey);
+            vertexModel = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+        }
+    }
+
+    // 2. Try Initialize OpenAI
+    if (!openaiClient && process.env.OPENAI_API_KEY) {
+        openaiClient = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    }
+
+    return { vertexModel, openaiClient };
+}
 
 export async function generateText(prompt: string, options?: {
     temperature?: number;
     maxOutputTokens?: number;
 }): Promise<string> {
-    if (!apiKey) {
-        console.warn('[AI] No API key configured, returning empty response');
-        return '';
-    }
+    const { vertexModel, openaiClient } = getClients();
 
-    try {
-        const result = await model.generateContent({
-            contents: [{ role: 'user', parts: [{ text: prompt }] }],
-            generationConfig: {
+    // Strategy: Try OpenAI first if available (faster/more reliable for user context), 
+    // or fallback to Vertex if OpenAI missing (or vice versa).
+    // Given the user said "contourne le problème", we prioritize the one that works (OpenAI seems to have key).
+
+    // Priority 1: OpenAI
+    if (openaiClient) {
+        try {
+            console.log("brain: Using OpenAI (Bypass Mode)...");
+            const completion = await openaiClient.chat.completions.create({
+                messages: [{ role: "user", content: prompt }],
+                model: "gpt-4o-mini", // Faster and cheaper for high-frequency agents
                 temperature: options?.temperature ?? 0.7,
-                maxOutputTokens: options?.maxOutputTokens ?? 2048,
-            },
-        });
-
-        return result.response.text() ?? '';
-    } catch (error) {
-        console.error('[AI] Generation error:', error);
-        return '';
+                max_tokens: options?.maxOutputTokens ?? 2048,
+            });
+            return completion.choices[0].message.content || '';
+        } catch (openaiError: any) {
+            console.warn("⚠️ OpenAI Failed:", openaiError.message || openaiError);
+            // Fallthrough to Vertex
+        }
     }
+
+    // Priority 2: Vertex AI
+    if (vertexModel) {
+        try {
+            console.log("brain: Using Vertex AI...");
+            const result = await vertexModel.generateContent({
+                contents: [{ role: 'user', parts: [{ text: prompt }] }],
+                generationConfig: {
+                    temperature: options?.temperature ?? 0.7,
+                    maxOutputTokens: options?.maxOutputTokens ?? 2048,
+                },
+            });
+            return result.response.text() ?? '';
+        } catch (vertexError: any) {
+            console.error('❌ Vertex AI Failed Details:', vertexError);
+            if (vertexError.response) console.error('Vertex Response:', vertexError.response);
+            // Fallthrough to return empty
+        }
+    }
+
+    console.error("❌ CRITICAL: No functioning AI brain available. OpenAI Key:", process.env.OPENAI_API_KEY?.substring(0, 10) + "...", "Vertex Key:", process.env.VERTEX_AI_API_KEY?.substring(0, 10) + "...");
+    return '';
 }
 
 export async function analyzeKeywords(domain: string, industry: string) {
@@ -110,6 +147,7 @@ Format as valid JSON only.
     const response = await generateText(prompt, { temperature: 0.2 });
 
     try {
+        // Try to extract JSON from response extract enclosing brackets too
         const jsonMatch = response.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
             return JSON.parse(jsonMatch[0]);
@@ -156,4 +194,4 @@ Return only the personalized message, no explanations.
 }
 
 // Export the model for direct use if needed
-export { model as vertexAI };
+export { vertexModel as vertexAI };

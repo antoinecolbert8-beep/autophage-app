@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import Navigation from "@/components/navigation";
+import { RealTimeProvider } from '@/components/RealTimeProvider';
+import { Toaster } from 'sonner';
 
 export default function DashboardLayout({
     children,
@@ -48,11 +50,14 @@ export default function DashboardLayout({
     }
 
     return (
-        <div className="flex min-h-screen bg-[#0a0a0f]">
-            <Navigation />
-            <main className="flex-1 ml-64 p-8 overflow-y-auto h-screen">
-                {children}
-            </main>
-        </div>
+        <RealTimeProvider>
+            <div className="flex min-h-screen bg-[#0a0a0f]">
+                <Navigation />
+                <main className="flex-1 ml-64 p-8 overflow-y-auto h-screen">
+                    {children}
+                </main>
+            </div>
+            <Toaster position="top-right" richColors theme="dark" />
+        </RealTimeProvider>
     );
 }
