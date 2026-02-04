@@ -254,7 +254,7 @@ export async function createContentAsset(
         keywords: [keyword].join(','),
         semanticScore: calculateSemanticScore(content, keyword),
         wordCount: content.split(/\s+/).length,
-        publishedAt: null, // draft by default
+        publishedAt: new Date(), // AUTO-PUBLISH for real traffic
     };
 }
 
