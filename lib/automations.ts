@@ -1,5 +1,7 @@
 import { generateContentWithGemini } from './gemini-content';
 import { sendRealEmail } from './services/send-grid';
+import { consumeCredits, CREDIT_COSTS } from './billing/index';
+import { prisma } from './prisma';
 
 /**
  * 🔥 LOCAL AUTOMATION ENGINE
@@ -22,8 +24,37 @@ export async function executeLocalAutomation(
 ): Promise<AutomationResponse> {
     console.log(`🔧 [LOCAL] Executing: ${action}`);
 
+    // Fetch default organization for credit deduction (autonomous mode)
+    const org = await prisma.organization.findFirst();
+    const organizationId = payload.organizationId || org?.id;
+
+    if (!organizationId) {
+        console.warn(`⚠️ No Organization ID found for ${action}. Proceeding without billing.`);
+    }
+
     try {
         let result: any;
+        let creditAction: keyof typeof CREDIT_COSTS | null = null;
+
+        // Map actions to credit costs
+        switch (action) {
+            case 'GENERATE_SHORT_SCRIPT': creditAction = 'APEX_GENERATION'; break;
+            case 'GENERATE_SMART_RESPONSE': creditAction = 'AI_ANALYSIS'; break;
+            case 'SEND_EMAIL': creditAction = 'PULSE_OUTREACH'; break;
+            case 'PUBLISH_SOCIAL_POST': creditAction = 'SNAP_DISTRIBUTION'; break;
+            case 'QUALIFY_LEAD_AI': creditAction = 'AI_ANALYSIS'; break;
+            case 'GENERATE_PROSPECT_MESSAGE': creditAction = 'AI_ANALYSIS'; break;
+        }
+
+        // Deduct credits if applicable
+        if (organizationId && creditAction) {
+            const consumption = await consumeCredits(organizationId, creditAction);
+            if (!consumption.success) {
+                console.warn(`🛑 Insufficient credits for ${action}. Balance: ${consumption.remaining}`);
+                return { success: false, message: 'CRÉDITS INSUFFISANTS - Veuillez recharger votre compte.' };
+            }
+            console.log(`🪙 Credits deducted: -${consumption.consumed} for ${action}. Remaining: ${consumption.remaining}`);
+        }
 
         switch (action) {
             // ========== AI/CONTENT GENERATION ==========
