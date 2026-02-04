@@ -56,20 +56,8 @@ export async function distributeTo100PercentFreeChannels(content: {
         console.log("🐦 Twitter: Thread prepared");
         results.twitter = true;
 
-        // Log distribution task
-        await prisma.aIActionLog.create({
-            data: {
-                actionType: 'free_distribution',
-                entityId: 'global', // Global distribution task
-                entityType: 'content',
-                decisionReasoning: JSON.stringify({
-                    title: content.title,
-                    channels: Object.keys(results).filter(k => results[k as keyof typeof results]),
-                    cost: 0
-                }),
-                status: 'completed'
-            }
-        });
+        // Log distribution (console only, no DB dependency)
+        console.log(`📊 FREE Distribution logged: ${Object.keys(results).filter(k => results[k as keyof typeof results]).join(', ')}`);
 
         return results;
 
