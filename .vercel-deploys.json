@@ -25,6 +25,11 @@
       "timestamp": "2026-02-04T10:13:48.108Z",
       "trigger": "continuous-flux",
       "status": "failed"
+    },
+    {
+      "timestamp": "2026-02-04T10:15:53.615Z",
+      "trigger": "continuous-flux",
+      "status": "failed"
     }
   ]
 }
