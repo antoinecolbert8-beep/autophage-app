@@ -1,9 +1,5 @@
-/**
- * 🎨 Creator Agent - Créateur de Micro-SaaS autonome
- * Identifie des niches, génère le code et commence à vendre
- */
-
 import { BaseAgent } from "./base-agent";
+import { triggerAutomation } from "../automations";
 
 export class CreatorAgent extends BaseAgent {
   constructor() {
@@ -47,31 +43,12 @@ export class CreatorAgent extends BaseAgent {
   }
 
   private async identifyNiche() {
-    const prompt = `Tu es un expert en identification de niches SaaS.
+    const prompt = `Tu es un expert en identification de niches SaaS. Identifie UNE niche hyper-spécifique. Return JSON: { "name": "...", "problem": "...", "solution": "...", "marketSize": "...", "pricing": "..." }`;
 
-Analyse les besoins non satisfaits dans ces domaines :
-- Freelances (comptabilité, facturation)
-- E-commerce (gestion stock, shipping)
-- Créateurs (analytics, monétisation)
-- PME (RH, gestion administrative)
+    const result = await triggerAutomation('GENERATE_SMART_RESPONSE', { context: prompt });
+    if (!result.success) return null;
 
-Identifie UNE niche hyper-spécifique avec :
-- Problème clairement défini
-- Marché de niche (1000-10000 clients potentiels)
-- Solution simple à coder (MVP en <500 lignes)
-
-Format JSON :
-{
-  "name": "Nom de la niche",
-  "problem": "Problème spécifique",
-  "solution": "Solution en 1 phrase",
-  "marketSize": "Nombre",
-  "pricing": "Prix suggéré €/mois"
-}`;
-
-    const result = await this.model.generateContent(prompt);
-    const text = result.response.text();
-
+    const text = result.data.text;
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
       const niche = JSON.parse(jsonMatch[0]);
@@ -83,24 +60,12 @@ Format JSON :
   }
 
   private async generateConcept(niche: any) {
-    const prompt = `Crée le concept détaillé d'un micro-SaaS pour cette niche :
+    const prompt = `Crée le concept détaillé d'un micro-SaaS pour cette niche: ${niche.name}. Return JSON: { "name": "...", "pitch": "...", "features": [], "stack": "...", "gtm": "..." }`;
 
-**Niche** : ${niche.name}
-**Problème** : ${niche.problem}
-**Solution** : ${niche.solution}
+    const result = await triggerAutomation('GENERATE_SMART_RESPONSE', { context: prompt });
+    if (!result.success) return { name: niche.name, features: [] };
 
-Génère :
-1. **Nom du produit** (punchy, mémorable)
-2. **Pitch de vente** (1 phrase)
-3. **3 features clés**
-4. **Stack technique** (simple)
-5. **Stratégie go-to-market**
-
-Format JSON.`;
-
-    const result = await this.model.generateContent(prompt);
-    const text = result.response.text();
-
+    const text = result.data.text;
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
       return JSON.parse(jsonMatch[0]);
@@ -112,46 +77,19 @@ Format JSON.`;
   private async generateMVP(concept: any) {
     console.log(`🎨 [Creator] Génération MVP: ${concept.name}`);
 
-    const prompt = `Génère le code d'un MVP fonctionnel pour : ${concept.name}
+    const prompt = `Génère le code d'un MVP fonctionnel (one-page app/page.tsx Tailwind) pour: ${concept.name}. Features: ${concept.features?.join(", ")}`;
 
-Features :
-${concept.features?.join("\n") || ""}
-
-Stack : Next.js + TypeScript
-Réponds avec le code complet de app/page.tsx (MVP one-page).`;
-
-    const result = await this.model.generateContent(prompt);
-    const code = result.response.text();
-
-    // TODO: Sauvegarder le code dans un nouveau dossier
-    console.log(`✅ [Creator] MVP généré (${code.length} caractères)`);
-
-    return code;
+    const result = await triggerAutomation('GENERATE_LANDING_COPY', { context: prompt });
+    return result.success ? result.data.text : "// Error generating code";
   }
 
   private async generateLandingPage(concept: any) {
     console.log(`🎨 [Creator] Génération landing page: ${concept.name}`);
 
-    const prompt = `Crée une landing page ultra-convertissante pour : ${concept.name}
+    const prompt = `Crée une landing page HTML Tailwind ultra-convertissante pour: ${concept.name}. Pitch: ${concept.pitch}`;
 
-Pitch : ${concept.pitch || ""}
-
-Inclus :
-- Hero avec CTA fort
-- 3 bénéfices clés
-- Pricing simple
-- FAQ (3 questions)
-- Section témoignages
-
-Réponds avec le HTML complet (Tailwind CSS).`;
-
-    const result = await this.model.generateContent(prompt);
-    const html = result.response.text();
-
-    // TODO: Déployer sur Vercel auto
-    console.log(`✅ [Creator] Landing page générée`);
-
-    return html;
+    const result = await triggerAutomation('GENERATE_LANDING_COPY', { context: prompt });
+    return result.success ? result.data.text : "<html>Error</html>";
   }
 
   private async launchSales(concept: any, landingPage: string) {
@@ -167,8 +105,6 @@ Réponds avec le HTML complet (Tailwind CSS).`;
       "Treasurer",
       `Nouveau flux de revenus potentiel: ${concept.name} à ${concept.pricing || "29€"}/mois`
     );
-
-    // TODO: Créer compte Stripe, webhooks, etc.
 
     return true;
   }

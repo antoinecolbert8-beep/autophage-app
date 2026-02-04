@@ -1,7 +1,6 @@
 import { BaseAgent } from "./base-agent";
 import { PrismaClient } from "@prisma/client";
-import { generateContentWithGemini } from "../gemini-content";
-import { sendRealEmail } from "../services/send-grid";
+import { triggerAutomation } from "../automations";
 
 const prisma = new PrismaClient();
 
@@ -77,27 +76,18 @@ export class SalesAgent extends BaseAgent {
     }
 
     /**
-     * Qualifie les leads via Gemini (Reel)
+     * Qualifie les leads via Automation Engine (Deduct credits)
      */
     async qualifyLeads(leads: any[]) {
         console.log("🧠 [Sales] Qualification réelle via IA...");
         const qualified = [];
         for (const lead of leads) {
-            const prompt = `Lead: ${lead.name}, ${lead.role} chez ${lead.company}. Score this lead from 0-100 for a SaaS B2B offer. Return ONLY the number.`;
-            const scoreText = await generateContentWithGemini({
-                topic: "Lead Scoring",
-                platform: "LINKEDIN", // Context reuse
-                contentType: "TEXT",
-                tone: "analytical",
-                keywords: [prompt]
+            const result = await triggerAutomation('QUALIFY_LEAD_AI', {
+                lead: { name: lead.name, role: lead.role, company: lead.company }
             });
 
-            // Extract number from AI response
-            const score = parseInt(scoreText.text.match(/\d+/)?.[0] || "50");
-            console.log(`   -> ${lead.name}: Score IA = ${score}`);
-
-            if (score > 70) {
-                lead.score = score;
+            if (result.success && result.data?.score > 70) {
+                lead.score = result.data.score;
                 qualified.push(lead);
             }
         }
@@ -105,26 +95,27 @@ export class SalesAgent extends BaseAgent {
     }
 
     async generatePersonalizedEmail(lead: any) {
-        return await generateContentWithGemini({
-            topic: `Cold Email for ${lead.role}`,
-            platform: "LINKEDIN", // reusing generation logic
-            contentType: "TEXT",
-            tone: "professional",
-            keywords: [`Write a short cold email to ${lead.name} from ${lead.company}. Value prop: Automation.`]
+        const result = await triggerAutomation('GENERATE_SMART_RESPONSE', {
+            context: `Write a short cold email to ${lead.name} from ${lead.company}. Value prop: Automation.`
         });
+        return result.success ? result.data.text : "Fallback email";
     }
 
     /**
-     * Envoie un email réel
+     * Envoie un email réel via Automation Engine (Deduct credits)
      */
-    async sendColdEmail(lead: any, content: any) {
+    async sendColdEmail(lead: any, content: string) {
         const email = `mock.${lead.name.replace(' ', '.')}@example.com`; // In prod, use real lead.email
         console.log(`📧 [Sales] Envoi email réel à ${lead.name} (${email})...`);
 
-        // Use SendGrid
-        const sent = await sendRealEmail(email, "Collaboration Opportunité", content.text);
+        // Use Automation Engine
+        const result = await triggerAutomation('SEND_EMAIL', {
+            to: email,
+            subject: "Collaboration Opportunité",
+            message: content
+        });
 
-        if (sent) {
+        if (result.success) {
             // Log to DB
             const admin = await prisma.user.findFirst({ where: { role: 'admin' } });
             if (admin) {
@@ -133,14 +124,13 @@ export class SalesAgent extends BaseAgent {
                         type: 'COLD_EMAIL',
                         channel: 'EMAIL',
                         leadId: 'temp_lead_id', // Simplify for valid execution
-                        message: content.text.substring(0, 100) + "...",
+                        message: content.substring(0, 100) + "...",
                         delivered: true,
-                        campaignId: undefined // Optional
                     }
                 });
             }
         }
 
-        return sent;
+        return result.success;
     }
 }
