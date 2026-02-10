@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db as prisma } from "@/core/db";
 
 /**
  * PIXEL DE TRACKING POUR CONVERSIONS
@@ -33,7 +31,8 @@ export async function GET(request: NextRequest) {
                         data: {
                             email,
                             organizationId: org.id,
-                            stage: 'hot'
+                            stage: 'hot',
+                            scoreBreakdown: JSON.stringify({ demographic: 0, behavioral: 0, engagement: 0, intent: 0 })
                         }
                     });
                 }

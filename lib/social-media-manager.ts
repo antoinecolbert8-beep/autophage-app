@@ -5,9 +5,8 @@
 
 import axios from 'axios';
 import { FacebookAdsApi } from 'facebook-nodejs-business-sdk';
-import { PrismaClient } from '@prisma/client';
+import { db as prisma } from "@/core/db";
 
-const prisma = new PrismaClient();
 const BYPASS_MODE = true; // FORCE SUCCESS IF CREDENTIALS MISSING
 
 // ============================================================================== 

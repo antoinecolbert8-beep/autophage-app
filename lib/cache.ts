@@ -7,27 +7,38 @@ import { createClient } from 'redis';
 
 // Redis client singleton
 let redisClient: ReturnType<typeof createClient> | null = null;
+const memoryCache = new Map<string, { value: any; expires: number }>();
 
 export async function getRedisClient() {
+    if (!process.env.REDIS_URL) {
+        console.warn('[Redis] REDIS_URL not set, bypassing Redis...');
+        return null;
+    }
+
     if (!redisClient) {
-        redisClient = createClient({
-            url: process.env.REDIS_URL || 'redis://localhost:6379',
-            socket: {
-                reconnectStrategy: (retries) => {
-                    if (retries > 10) {
-                        console.error('[Redis] Max reconnection attempts reached');
-                        return new Error('Max reconnection attempts');
+        try {
+            redisClient = createClient({
+                url: process.env.REDIS_URL,
+                socket: {
+                    reconnectStrategy: (retries) => {
+                        if (retries > 5) {
+                            console.error('[Redis] Max reconnection attempts reached');
+                            return new Error('Max reconnection attempts');
+                        }
+                        return Math.min(retries * 100, 3000);
                     }
-                    return Math.min(retries * 100, 3000);
                 }
-            }
-        });
+            });
 
-        redisClient.on('error', (err) => console.error('[Redis] Error:', err));
-        redisClient.on('connect', () => console.log('[Redis] Connected'));
-        redisClient.on('reconnecting', () => console.log('[Redis] Reconnecting...'));
+            redisClient.on('error', (err) => console.error('[Redis] Error:', err));
+            redisClient.on('connect', () => console.log('[Redis] Connected'));
 
-        await redisClient.connect();
+            await redisClient.connect();
+        } catch (error) {
+            console.error('[Redis] Connection failed:', error);
+            redisClient = null;
+            return null;
+        }
     }
 
     return redisClient;
@@ -44,13 +55,22 @@ export class Cache {
     static async get<T>(key: string): Promise<T | null> {
         try {
             const client = await getRedisClient();
-            const value = await client.get(key);
-
-            if (!value) return null;
-
-            const parsed = JSON.parse(value);
-            console.log(`[Cache] HIT: ${key}`);
-            return parsed as T;
+            if (client) {
+                const value = await client.get(key);
+                if (value) {
+                    console.log(`[Cache:Redis] HIT: ${key}`);
+                    return JSON.parse(value) as T;
+                }
+            } else {
+                // Memory Fallback
+                const cached = memoryCache.get(key);
+                if (cached && cached.expires > Date.now()) {
+                    console.log(`[Cache:Memory] HIT: ${key}`);
+                    return cached.value as T;
+                }
+                if (cached) memoryCache.delete(key); // Cleanup expired
+            }
+            return null;
         } catch (error) {
             console.error(`[Cache] GET error for ${key}:`, error);
             return null;
@@ -63,10 +83,18 @@ export class Cache {
     static async set(key: string, value: any, ttlSeconds: number = 300): Promise<void> {
         try {
             const client = await getRedisClient();
-            const serialized = JSON.stringify(value);
-
-            await client.setEx(key, ttlSeconds, serialized);
-            console.log(`[Cache] SET: ${key} (TTL: ${ttlSeconds}s)`);
+            if (client) {
+                const serialized = JSON.stringify(value);
+                await client.setEx(key, ttlSeconds, serialized);
+                console.log(`[Cache:Redis] SET: ${key} (TTL: ${ttlSeconds}s)`);
+            } else {
+                // Memory Fallback
+                memoryCache.set(key, {
+                    value,
+                    expires: Date.now() + (ttlSeconds * 1000)
+                });
+                console.log(`[Cache:Memory] SET: ${key} (TTL: ${ttlSeconds}s)`);
+            }
         } catch (error) {
             console.error(`[Cache] SET error for ${key}:`, error);
         }
@@ -78,7 +106,10 @@ export class Cache {
     static async delete(key: string): Promise<void> {
         try {
             const client = await getRedisClient();
-            await client.del(key);
+            if (client) {
+                await client.del(key);
+            }
+            memoryCache.delete(key);
             console.log(`[Cache] DELETE: ${key}`);
         } catch (error) {
             console.error(`[Cache] DELETE error for ${key}:`, error);

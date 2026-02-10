@@ -12,6 +12,7 @@ import {
 } from "@/components/AppIcons";
 import { OmniscienceTerminal } from "@/components/omniscience-terminal";
 import { RealTimeActivityFeed } from "@/components/RealTimeActivityFeed";
+import { useSession } from "next-auth/react";
 import dynamic from 'next/dynamic';
 import BlurFade from "@/components/ui/blur-fade";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
@@ -46,41 +47,47 @@ const mockChartData = [
 ];
 
 export default function DashboardPage() {
+  const { data: session } = useSession();
   const [userName, setUserName] = useState("Utilisateur");
   const [userTier, setUserTier] = useState("standard");
   const [loadingTime, setLoadingTime] = useState(0.8); // Friction (s)
   const [sovereignty, setSovereignty] = useState<{ score: number, title: string, nextMilestone: number } | null>(null);
+  const [billingData, setBillingData] = useState<any>(null);
 
   // Computed Metrics
-  const conversionRate = 3.4; // %
-  const impactScore = 8.5; // Arbitrary impact factor
   const retentionRate = 92; // %
 
   const isHealthy = retentionRate >= 85;
 
   useEffect(() => {
-    const checkUser = async () => {
-      const storedTier = typeof window !== 'undefined' ? localStorage.getItem('ela_tier') : null;
-      const storedName = typeof window !== 'undefined' ? localStorage.getItem('ela_user_name') : "Alexandre";
-      setUserName(storedName || "Alexandre");
-      setUserTier(storedTier || "standard");
+    if (session?.user) {
+      setUserName(session.user.name || "Abonné");
+      setUserTier((session.user as any).role === 'admin' ? 'grand_horloger' : 'standard');
+    }
 
-      const stats = await getSovereigntyStats();
+    const fetchData = async () => {
+      const [stats, billing] = await Promise.all([
+        getSovereigntyStats(),
+        fetch('/api/billing').then(res => res.json())
+      ]);
+
       if (stats) setSovereignty(stats);
+      if (billing && !billing.error) setBillingData(billing);
     };
-    checkUser();
 
-    // Self-Healing Simulation (Friction fluctuation)
+    fetchData();
+
+    // Self-Healing Simulation
     const interval = setInterval(() => {
-      setLoadingTime(prev => Math.max(0.2, prev + (Math.random() - 0.5) * 0.1));
-    }, 2000);
+      setLoadingTime(prev => Math.max(0.05, prev - 0.02)); // Visual feedback of optimization
+    }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [session]);
 
   const stats = [
-    { title: "Indice Friction", value: `${loadingTime.toFixed(2)}s`, change: "-0.3s", icon: LineIconZap, color: "text-green-400" },
-    { title: "Rétention Client", value: `${retentionRate}%`, change: "+2.1%", icon: LineIconUsers, color: "text-purple-400" },
-    { title: "Sécurité", value: "100%", change: "Optimale", icon: LineIconShield, color: "text-emerald-400" },
+    { title: "Indice Friction", value: `${loadingTime?.toFixed(2) || '0.00'}s`, change: "-0.7s", icon: LineIconZap, color: "text-green-400" },
+    { title: "Crédits Souverains", value: billingData?.credits?.balance?.toLocaleString() || "0", change: "LIVE", icon: LineIconUsers, color: "text-purple-400" },
+    { title: "Sécurité Flux", value: "100%", change: "MAX", icon: LineIconShield, color: "text-emerald-400" },
   ];
 
   return (
@@ -97,7 +104,7 @@ export default function DashboardPage() {
           <LineIconSearch size={18} />
           <input
             type="text"
-            placeholder="Interroger le système..." // Updated copy
+            placeholder="Interroger l'Omniscience..."
             className="bg-transparent border-none outline-none text-white w-full placeholder-gray-500 font-light focus:ring-0"
           />
         </div>
@@ -105,14 +112,14 @@ export default function DashboardPage() {
         <div className="flex items-center gap-6">
           <button className="relative text-gray-400 hover:text-white transition-colors">
             <LineIconBell size={20} />
-            <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+            <span className="absolute top-0 right-0 w-2 h-2 bg-pink-500 rounded-full animate-pulse"></span>
           </button>
           <div className="flex items-center gap-3 border-l border-white/10 pl-6">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 ring-2 ring-white/10"></div>
+            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 ring-2 ring-white/10"></div>
             <div className="text-sm">
               <p className="font-semibold text-white">{userName}</p>
-              <p className={`text-xs ${userTier === 'grand_horloger' ? 'text-pink-500 font-bold animate-pulse' : 'text-gray-500'}`}>
-                {userTier === 'grand_horloger' ? 'GOD MODE /// ARCHITECT' : 'Admin'}
+              <p className={`text-[10px] uppercase tracking-widest ${userTier === 'grand_horloger' ? 'text-pink-500 font-black animate-pulse' : 'text-gray-500'}`}>
+                {userTier === 'grand_horloger' ? 'GOD MODE /// ARCHITECT' : 'Member'}
               </p>
             </div>
             <LineIconChevronDown size={14} className="text-gray-500" />
@@ -122,11 +129,11 @@ export default function DashboardPage() {
 
       <div className="p-8 max-w-7xl mx-auto relative z-10">
         <BlurFade delay={0.1} className="mb-8">
-          <h1 className="text-3xl font-bold mb-2 tracking-tight">Tableau de bord</h1>
-          <p className="text-gray-400">
+          <h1 className="text-3xl font-black mb-2 tracking-tighter uppercase italic">Hyper-Flux Command</h1>
+          <p className="text-gray-500 text-sm">
             {userTier === 'grand_horloger'
-              ? `Bienvenue, Architecte ${userName}. Le réseau neuronal est synchronisé.`
-              : `Bienvenue sur votre centre de commandement, ${userName}.`}
+              ? `Status: OMNISCIENCE ACTIVE. Réseau neuronal synchronisé à 100%.`
+              : `Système sécurisé. Prêt pour le déploiement de masse.`}
           </p>
         </BlurFade>
 
@@ -134,7 +141,7 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {/* Sovereignty Gauge Card */}
           <BlurFade delay={0.1} className="lg:col-span-1 md:col-span-1">
-            <div className="bg-[#13131f]/90 backdrop-blur-xl rounded-2xl p-6 h-full border border-white/5 flex flex-col items-center justify-center">
+            <div className="bg-[#13131f]/90 backdrop-blur-xl rounded-2xl p-6 h-full border border-white/5 flex flex-col items-center justify-center group hover:border-pink-500/30 transition-all duration-500">
               <SovereigntyGauge
                 score={sovereignty?.score || 0}
                 title={sovereignty?.title || "Evaluating..."}
@@ -143,16 +150,16 @@ export default function DashboardPage() {
             </div>
           </BlurFade>
 
-          {stats.map((stat, i) => (
+          {stats && stats.map((stat, i) => (
             <BlurFade key={i} delay={0.1 + (i * 0.1)} duration={0.8} className="group relative p-[1px] rounded-2xl bg-gradient-to-br from-white/10 via-transparent to-white/5 hover:from-blue-500/30 hover:to-purple-500/30 transition-all duration-500">
               <div className="bg-[#13131f]/90 backdrop-blur-xl rounded-2xl p-6 h-full border border-white/5">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <p className="text-gray-500 text-sm font-medium mb-1 uppercase tracking-wider text-[10px]">{stat.title}</p>
-                    <h3 className="text-3xl font-black text-white tracking-tight">{stat.value}</h3>
+                    <p className="text-gray-500 text-sm font-medium mb-1 uppercase tracking-wider text-[10px]">{stat?.title || 'Metric'}</p>
+                    <h3 className="text-3xl font-black text-white tracking-tight">{stat?.value || '0'}</h3>
                   </div>
                   <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.color === 'text-blue-400' ? 'from-blue-500/20 to-blue-600/10' : stat.color === 'text-purple-400' ? 'from-purple-500/20 to-purple-600/10' : stat.color === 'text-green-400' ? 'from-green-500/20 to-green-600/10' : 'from-emerald-500/20 to-emerald-600/10'} ${stat.color} group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                    <stat.icon size={22} />
+                    {stat.icon && <stat.icon size={22} />}
                   </div>
                 </div>
                 <div className="flex items-center gap-2 text-sm">

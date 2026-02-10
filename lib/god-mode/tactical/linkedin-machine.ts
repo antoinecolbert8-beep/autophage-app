@@ -4,9 +4,7 @@
  * "Pas de slang, pas de hype. De la compétence pure."
  */
 
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { db as prisma } from "@/core/db";
 
 export class LinkedInWarMachine {
 

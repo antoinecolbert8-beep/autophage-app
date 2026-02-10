@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db as prisma } from "@/core/db";
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -25,7 +23,7 @@ export async function GET(request: Request) {
             body: new URLSearchParams({
                 grant_type: 'authorization_code',
                 code: code,
-                redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/callback/linkedin`,
+                redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL} /api/auth / callback / linkedin`,
                 client_id: process.env.LINKEDIN_CLIENT_ID!,
                 client_secret: process.env.LINKEDIN_CLIENT_SECRET!
             })
@@ -39,7 +37,7 @@ export async function GET(request: Request) {
 
         // 2. Get User Profile (to name the integration)
         const profileResponse = await fetch('https://api.linkedin.com/v2/userinfo', {
-            headers: { 'Authorization': `Bearer ${tokenData.access_token}` }
+            headers: { 'Authorization': `Bearer ${tokenData.access_token} ` }
         });
         const profileData = await profileResponse.json();
 
@@ -65,10 +63,10 @@ export async function GET(request: Request) {
         });
 
         // 4. Redirect to Dashboard with success
-        return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}/dashboard/consent?success=linkedin`);
+        return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL} /dashboard/consent ? success = linkedin`);
 
     } catch (error: any) {
         console.error("LinkedIn Auth Error:", error);
-        return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}/dashboard/consent?error=linkedin_failed`);
+        return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL} /dashboard/consent ? error = linkedin_failed`);
     }
 }

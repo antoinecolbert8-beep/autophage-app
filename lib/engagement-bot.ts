@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
 import { generateText } from '@/lib/ai/vertex';
-
-const prisma = new PrismaClient();
+import { db as prisma } from "@/core/db";
 
 /**
  * AUTO-ENGAGEMENT BOT

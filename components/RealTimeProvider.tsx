@@ -23,7 +23,7 @@ export const RealTimeProvider = ({ children }: { children: React.ReactNode }) =>
     const [isConnected, setIsConnected] = useState(false);
 
     useEffect(() => {
-        if (!session?.user?.id) return;
+        if (!(session?.user as any)?.id) return;
 
         // Initialize socket
         const socketInstance = io(process.env.NEXT_PUBLIC_APP_URL || '', {
@@ -37,11 +37,14 @@ export const RealTimeProvider = ({ children }: { children: React.ReactNode }) =>
 
             // Subscribe to organization and user rooms
             // In a real app, orgId should be in the session
-            const orgId = (session.user as any).organizationId;
+            const user = session?.user as any;
+            const orgId = user?.organizationId;
             if (orgId) {
                 socketInstance.emit('subscribe', orgId);
             }
-            socketInstance.emit('subscribe_user', session.user.id);
+            if (user?.id) {
+                socketInstance.emit('subscribe_user', user.id);
+            }
         });
 
         socketInstance.on('disconnect', () => {

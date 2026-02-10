@@ -49,6 +49,7 @@ model User {
   name            String?
   role            String   @default("member") // admin, member, viewer
   avatar          String?
+  password        String?  // Hashed password for admin/credentials login
   
   // Subscription & Quota fields
   currentPlan     String   @default("free") // free, pro, enterprise
@@ -693,10 +694,10 @@ model SaveAttempt {
 
 model AuditLog {
   id              String   @id @default(cuid())
-  userId          String
-  user            User     @relation(fields: [userId], references: [id])
-  organizationId  String
-  organization    Organization @relation(fields: [organizationId], references: [id])
+  userId          String?
+  user            User?    @relation(fields: [userId], references: [id])
+  organizationId  String?
+  organization    Organization? @relation(fields: [organizationId], references: [id])
   
   action          String   // e.g., "USER_LOGIN", "POST_CREATED", "BILLING_UPDATE"
   entityType      String   // e.g., "USER", "POST", "SUBSCRIPTION"

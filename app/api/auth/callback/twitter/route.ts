@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db as prisma } from "@/core/db";
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
@@ -19,19 +17,19 @@ export async function GET(request: Request) {
 
     try {
         // 1. Exchange Code for Token
-        const basicAuth = Buffer.from(`${process.env.TWITTER_CLIENT_ID}:${process.env.TWITTER_CLIENT_SECRET}`).toString('base64');
+        const basicAuth = Buffer.from(`${process.env.TWITTER_CLIENT_ID}:${process.env.TWITTER_CLIENT_SECRET} `).toString('base64');
 
         const tokenResponse = await fetch('https://api.twitter.com/2/oauth2/token', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': `Basic ${basicAuth}`
+                'Authorization': `Basic ${basicAuth} `
             },
             body: new URLSearchParams({
                 code: code,
                 grant_type: 'authorization_code',
                 client_id: process.env.TWITTER_CLIENT_ID!,
-                redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/callback/twitter`,
+                redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL} /api/auth / callback / twitter`,
                 code_verifier: 'challenge' // Matching the 'plain' challenge from the auth url
             })
         });
@@ -45,7 +43,7 @@ export async function GET(request: Request) {
 
         // 2. Get User Profile
         const profileResponse = await fetch('https://api.twitter.com/2/users/me', {
-            headers: { 'Authorization': `Bearer ${tokenData.access_token}` }
+            headers: { 'Authorization': `Bearer ${tokenData.access_token} ` }
         });
         const profileData = await profileResponse.json();
 
@@ -70,10 +68,10 @@ export async function GET(request: Request) {
         });
 
         // 4. Redirect to Dashboard
-        return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}/dashboard/consent?success=twitter`);
+        return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL} /dashboard/consent ? success = twitter`);
 
     } catch (error: any) {
         console.error("Twitter Auth Error:", error);
-        return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}/dashboard/consent?error=twitter_failed`);
+        return NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL} /dashboard/consent ? error = twitter_failed`);
     }
 }

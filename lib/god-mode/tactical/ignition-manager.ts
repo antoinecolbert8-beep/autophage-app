@@ -4,10 +4,9 @@
  * "Court-circuiter la phase d'apprentissage algorithmique."
  */
 
-import { GhostProfile, PrismaClient } from "@prisma/client";
+import { GhostProfile } from "@prisma/client";
 import { GhostActionType, GhostInjectionParams } from "../types";
-
-const prisma = new PrismaClient();
+import { db as prisma } from "@/core/db";
 
 export class IgnitionManager {
     /**

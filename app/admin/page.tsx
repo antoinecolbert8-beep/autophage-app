@@ -2,21 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { LineIconShield, LineIconZap } from "@/components/AppIcons";
 import { Lock, User, AlertTriangle } from "lucide-react";
-
-/**
- * ADMIN AUTHENTICATION
- * 
- * Credentials:
- * Username: admin@ela-revolution.com
- * Password: GodMode2024!
- */
-
-const ADMIN_CREDENTIALS = {
-  username: "admin@ela-revolution.com",
-  password: "GodMode2024!"
-};
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -25,27 +13,35 @@ export default function AdminLoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    // Simulate authentication delay
-    setTimeout(() => {
-      if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-        // Store admin session in localStorage and Cookie for middleware
+    try {
+      const result = await signIn("credentials", {
+        email: username,
+        password: password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError("Identifiants incorrects. Accès refusé.");
+        setLoading(false);
+      } else {
+        // Success
         if (typeof window !== 'undefined') {
           localStorage.setItem('ela_admin_auth', 'true');
           localStorage.setItem('ela_admin_session', Date.now().toString());
-          // Set cookie for middleware
+          // Cookie is handled by NextAuth session, but we keep this for legacy middleware if needed
           document.cookie = "admin-session=true; path=/; max-age=86400"; // 24h
         }
         router.push("/admin-master");
-      } else {
-        setError("Identifiants incorrects. Accès refusé.");
-        setLoading(false);
       }
-    }, 1500);
+    } catch (err) {
+      setError("Une erreur est survenue lors de la connexion.");
+      setLoading(false);
+    }
   };
 
   return (

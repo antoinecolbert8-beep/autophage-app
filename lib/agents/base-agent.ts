@@ -3,10 +3,9 @@
  */
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { PrismaClient } from "@prisma/client";
+import { db as prisma } from "@/core/db";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY!);
-const prisma = new PrismaClient();
 
 export abstract class BaseAgent {
   protected name: string;

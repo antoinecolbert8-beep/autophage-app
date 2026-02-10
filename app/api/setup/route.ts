@@ -1,8 +1,15 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { RBAC } from '@/lib/rbac';
 
 export async function POST(req: Request) {
+    // 🛡️ SECURE: Only Admin can update system configuration
+    const isAuthorized = await RBAC.authorize(req, '*');
+    if (!isAuthorized) {
+        return NextResponse.json({ error: "Unauthorized. Admin privileges required." }, { status: 403 });
+    }
+
     try {
         const body = await req.json();
         const {

@@ -115,89 +115,54 @@ export class SwarmOrchestrator {
 
       let cycleSuccess = true;
 
-      // 1. Run Agents
+      // ⚡ HYPER-FLUX: Parallel Background Execution
       try {
-        await this.runAll();
+        await Promise.allSettled([
+          // 1. Run Agents
+          this.runAll(),
+
+          // 2. Run Auto-SEO
+          (async () => {
+            try {
+              const seoFlood = require('../../scripts/seo-flood');
+              if (seoFlood?.runHighVolumeSEO) await seoFlood.runHighVolumeSEO();
+            } catch (e) {
+              console.error("⚠️ SEO Flood failed:", e);
+              const { autonomyMonitor } = await import('../services/autonomy-monitor');
+              autonomyMonitor.recordFailure('seo');
+            }
+          })(),
+
+          // 3. Run Video Flood
+          (async () => {
+            try {
+              const videoFlood = require('../../scripts/video-flood');
+              if (videoFlood?.runVideoFlood) await videoFlood.runVideoFlood();
+            } catch (e) {
+              console.error("⚠️ Video Flood failed:", e);
+              const { autonomyMonitor } = await import('../services/autonomy-monitor');
+              autonomyMonitor.recordFailure('video');
+            }
+          })(),
+
+          // 4. AUTO-DEPLOY & GIT (Batched together as they depend on each other)
+          (async () => {
+            try {
+              const { autoDeployToVercel, shouldAutoDeploy, getDeployStats } = await import('../services/auto-deploy');
+              if (shouldAutoDeploy()) {
+                await autoDeployToVercel('continuous-flux');
+              }
+              const { autoCommitAndPush } = await import('../services/auto-git');
+              const { autonomyMonitor } = await import('../services/autonomy-monitor');
+              await autoCommitAndPush(`Flux cycle #${autonomyMonitor.getMetrics().cyclesCompleted}`);
+            } catch (e) {
+              console.error("⚠️ Deploy/Git failed:", e);
+            }
+          })()
+        ]);
       } catch (e) {
-        console.error("⚠️ Agent execution failed:", e);
+        console.error("⚠️ Global Flux loop failure:", e);
         cycleSuccess = false;
-      }
-
-      // 2. Run Auto-SEO (Embedded Logic for speed)
-      try {
-        // Dynamic import of the script function we just exported
-        const seoFlood = require('../../scripts/seo-flood');
-        if (seoFlood && seoFlood.runHighVolumeSEO) {
-          await seoFlood.runHighVolumeSEO();
-        }
-      } catch (e) {
-        console.error("⚠️ SEO Flood trigger failed:", e);
-        autonomyMonitor.recordFailure('seo');
-      }
-
-      // 3. Run Video Flood (Omni-Channel)
-      try {
-        const videoFlood = require('../../scripts/video-flood');
-        if (videoFlood && videoFlood.runVideoFlood) {
-          await videoFlood.runVideoFlood();
-        }
-      } catch (e) {
-        console.error("⚠️ Video Flood trigger failed:", e);
-        autonomyMonitor.recordFailure('video');
-      }
-
-      // 4. AUTO-DEPLOY TO VERCEL (Production)
-      try {
-        const { autoDeployToVercel, shouldAutoDeploy, getDeployStats } = await import('../services/auto-deploy');
-
-        if (shouldAutoDeploy()) {
-          console.log("\n🚀 [AUTO-DEPLOY] Triggering production deployment...");
-          const deployed = await autoDeployToVercel('continuous-flux');
-
-          if (deployed) {
-            const stats = getDeployStats();
-            console.log(`✅ Deploy #${stats.total} SUCCESS`);
-            console.log(`   URL: ${stats.lastDeploy?.url || 'pending'}`);
-          }
-        } else {
-          console.log("🕒 Skipping deploy (rate limit)");
-        }
-      } catch (e: any) {
-        console.error("⚠️ Auto-deploy failed:", e.message);
-        autonomyMonitor.recordFailure('deploy');
-      }
-
-      // 5. AUTO-GIT COMMIT (Version Control)
-      try {
-        const { autoCommitAndPush } = await import('../services/auto-git');
-        await autoCommitAndPush(`Flux cycle #${autonomyMonitor.getMetrics().cyclesCompleted}`);
-      } catch (e: any) {
-        console.error("⚠️ Auto-git failed:", e.message);
-        autonomyMonitor.recordFailure('git');
-      }
-
-      // Record cycle completion
-      autonomyMonitor.recordCycleComplete(cycleSuccess);
-      autonomyMonitor.displayStatus();
-
-      // 6. MARKET DOMINATION WORKFLOW (Every 10 cycles)
-      const cycleCount = autonomyMonitor.getMetrics().cyclesCompleted;
-      if (cycleCount % 10 === 0) {
-        try {
-          console.log("\n🎯 [MARKET DOMINATION] Executing full workflow...");
-          const firstOrg = await (await import('@prisma/client')).PrismaClient.prototype.organization.findFirst();
-          const firstProject = await (await import('@prisma/client')).PrismaClient.prototype.project.findFirst();
-
-          if (firstProject) {
-            const result = await executeMarketDominationWorkflow(
-              'AI Marketing Automation',
-              firstProject.id
-            );
-            console.log(`✅ Market Domination: ${result.success ? 'SUCCESS' : 'FAILED'}`);
-          }
-        } catch (e: any) {
-          console.error("⚠️ Market Domination failed:", e.message);
-        }
       }
 
       console.log(`⏳ Attente ${intervalMinutes}m avant prochain flux...`);

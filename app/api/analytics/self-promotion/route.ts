@@ -1,11 +1,9 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db as prisma } from "@/core/db";
 
 export async function GET() {
     try {
-        // 1. Fetch Recent Posts
+        // Fetch Recent Posts
         const posts = await prisma.post.findMany({
             where: {
                 createdAt: {
@@ -167,7 +165,7 @@ async function generateRecommendations(posts: any[], stats: any[]): Promise<stri
     const longAvg = longPosts.reduce((sum, p) => sum + p.performance_score, 0) / (longPosts.length || 1);
 
     if (longAvg > shortAvg * 1.3) {
-        recommendations.push(`📝 Les posts longs (>500 chars) performent mieux (+${Math.round((longAvg / shortAvg - 1) * 100)}%)`);
+        recommendations.push(`📝 Les posts longs (> 500 chars) performent mieux (+${Math.round((longAvg / shortAvg - 1) * 100)}%)`);
     }
 
     return recommendations;

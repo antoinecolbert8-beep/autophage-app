@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
 import Stripe from 'stripe';
-
-const prisma = new PrismaClient();
+import { db as prisma } from "@/core/db";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', { apiVersion: '2023-10-16' });
 
 /**
@@ -129,6 +127,8 @@ export class RevenueAutopilot {
 
         for (const subscription of activeSubscriptions) {
             try {
+                if (!subscription.currentPeriodEnd) continue;
+
                 const now = new Date();
                 const daysUntilEnd = Math.ceil(
                     (subscription.currentPeriodEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)

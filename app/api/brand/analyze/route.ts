@@ -5,9 +5,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { scrapeBrand } from "@/lib/brand-scraper";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { db as prisma } from "@/core/db";
 
 export async function POST(req: NextRequest) {
   try {

@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import { db as prisma } from "@/core/db";
 import { CachedAnalytics } from '../cached-analytics';
-
-const prisma = new PrismaClient();
 
 export type SovereigntyTitle = 'Digital Serf' | 'Digital Architect' | 'Sovereign Entity' | 'Master Orchestrator' | 'God Mode';
 
@@ -22,53 +20,66 @@ export class SovereigntyManager {
      * Calculate absolute sovereignty score for an organization
      */
     static async calculateScore(orgId: string): Promise<SovereigntyMetrics> {
-        // 1. Get Base Data
-        const org = await prisma.organization.findUnique({
-            where: { id: orgId },
-            include: {
-                users: { select: { id: true } }
-            }
-        });
+        const cacheKey = `sovereignty:${orgId}`;
+        const { Cache } = await import('../cache');
 
-        if (!org) throw new Error('Organization not found');
+        // ⚡ HYPER-FLUX: Redis Cache HIT
+        const cached = await Cache.get<SovereigntyMetrics>(cacheKey);
+        if (cached) return cached;
+
+        // 1. Get Base Data (Parallelized)
+        const [org, leadsCount] = await Promise.all([
+            prisma.organization.findUnique({
+                where: { id: orgId },
+                include: { users: { select: { id: true } } }
+            }),
+            prisma.lead.count({ where: { organizationId: orgId } })
+        ]);
+
+        if (!org) return {
+            score: 0,
+            title: 'Digital Serf',
+            rank: 0,
+            multipliers: { consistency: 1, domination: 1 },
+            nextMilestone: 100
+        };
 
         const userIds = org.users.map(u => u.id);
 
-        // Fetch metrics (7 days)
-        const postsCount = await prisma.post.count({
-            where: { userId: { in: userIds }, status: 'published' }
-        });
-
-        const leadsCount = await prisma.lead.count({
-            where: { organizationId: orgId }
-        });
+        // Fetch metrics in parallel
+        const [postsCount, posts] = await Promise.all([
+            prisma.post.count({
+                where: { userId: { in: userIds }, status: 'published' }
+            }),
+            prisma.post.findMany({
+                where: { userId: { in: userIds }, status: 'published' },
+                select: { id: true }
+            })
+        ]);
 
         // Revenue in cents
         const revenueCents = (org.mrr || 0) * 100;
 
-        // Engagement aggregation
-        const posts = await prisma.post.findMany({
-            where: { userId: { in: userIds }, status: 'published' },
-            select: { id: true }
-        });
-
-        let totalEngagement = 0;
-        for (const post of posts) {
-            const stats = await prisma.contentStat.findFirst({
+        // Parallel engagement fetching
+        const engagementResults = await Promise.all(posts.map(post =>
+            prisma.contentStat.findFirst({
                 where: { postId: post.id },
                 orderBy: { collectedAt: 'desc' }
-            });
+            })
+        ));
+
+        let totalEngagement = 0;
+        for (const stats of engagementResults) {
             if (stats) {
                 totalEngagement += (stats.views || 0) + (stats.likes || 0) + (stats.comments || 0);
             }
         }
 
         // 2. Algorithm
-        // Weighting: Revenue (50%), Leads (30%), Posting (10%), Engagement (10%)
-        const revScore = (revenueCents / 1000) * 5; // 10€ = 50 pts
-        const leadScore = leadsCount * 25; // 1 lead = 25 pts
-        const postScore = postsCount * 15; // 1 post = 15 pts
-        const engScore = (totalEngagement / 100) * 10; // 100 views/likes = 10 pts
+        const revScore = (revenueCents / 1000) * 5;
+        const leadScore = leadsCount * 25;
+        const postScore = postsCount * 15;
+        const engScore = (totalEngagement / 100) * 10;
 
         let rawScore = revScore + leadScore + postScore + engScore;
 
@@ -87,16 +98,20 @@ export class SovereigntyManager {
         else if (finalScore > 300) title = 'Sovereign Entity';
         else if (finalScore > 100) title = 'Digital Architect';
 
-        // 5. Calculate Milestones
         const thresholds = [100, 300, 600, 900, 1000];
         const nextMilestone = thresholds.find(t => t > finalScore) || 1000;
 
-        return {
+        const result = {
             score: finalScore,
             title,
-            rank: rawScore > 0 ? 1 : 0, // In prod, compare with other orgs
+            rank: rawScore > 0 ? 1 : 0,
             multipliers,
             nextMilestone
         };
+
+        // ⚡ HYPER-FLUX: Redis Cache SET (5 min TTL)
+        await Cache.set(cacheKey, result, 300);
+
+        return result;
     }
 }

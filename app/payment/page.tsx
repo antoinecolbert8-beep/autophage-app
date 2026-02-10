@@ -11,18 +11,17 @@ import { PLANS } from "@/lib/stripe-pricing";
 export default function PaymentPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const plan = searchParams.get("plan") || "starter";
+    const plan = searchParams?.get("plan") || "starter";
     const [loading, setLoading] = useState(false);
 
     const prices = {
         starter: "37.00",
         growth: "197.00",
+        enterprise: "999.00",
         god_mode: "497.00"
     };
 
     const currentPrice = prices[plan as keyof typeof prices] || "99.00";
-
-
 
     const handlePayment = () => {
         setLoading(true);
@@ -31,7 +30,7 @@ export default function PaymentPage() {
         const planConfig = Object.values(PLANS).find(p => p.id === plan) || PLANS.STARTER;
 
         // Redirect to Stripe Payment Link
-        if (planConfig.paymentLink) {
+        if ('paymentLink' in planConfig && planConfig.paymentLink) {
             // Persist intent before redirecting
             if (typeof window !== 'undefined') {
                 localStorage.setItem('ela_pending_plan', plan);
@@ -40,9 +39,9 @@ export default function PaymentPage() {
         } else {
             console.error("No payment link found for plan:", plan);
             // Fallback for God Mode if link missing (or contact sales)
-            if (plan === 'god_mode') {
+            if (plan === 'god_mode' || plan === 'enterprise') {
                 // Temporary fallback until user provides link
-                alert("Lien de paiement God Mode en cours de configuration. Veuillez contacter le support.");
+                alert("Lien de paiement en cours de configuration. Veuillez contacter le support.");
                 setLoading(false);
             }
         }

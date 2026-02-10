@@ -1,9 +1,7 @@
 "use server";
 
 import { SovereigntyManager } from "@/lib/analytics/sovereignty";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { db as prisma } from "@/core/db";
 
 export async function getSovereigntyStats() {
     // In a real app, we'd get the orgId from the session/user

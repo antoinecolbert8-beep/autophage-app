@@ -1,7 +1,5 @@
 import { Cache, CacheKeys, CacheTTL } from './cache';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db as prisma } from "@/core/db";
 
 /**
  * CACHED ANALYTICS

@@ -1,7 +1,5 @@
 import { generateText } from '@/lib/ai/vertex';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db as prisma } from "@/core/db";
 
 /**
  * VIDEO CONTENT GENERATOR

@@ -33,10 +33,13 @@ export class RBAC {
     /**
      * Middleware for API routes to enforce roles
      */
-    static async authorize(req: Request, requiredPermission: string) {
-        // This is a helper to be used inside API routes
-        // In a real middleware, we'd use getSession(req)
-        return true; // Simplified for now
+    static async authorize(req: Request, requiredPermission: string): Promise<boolean> {
+        const { authOptions } = await import('@/app/api/auth/[...nextauth]/route');
+        const session = await getServerSession(authOptions);
+        if (!session?.user) return false;
+
+        const role = (session.user as any).role || UserRole.MEMBER;
+        return this.hasPermission(role, requiredPermission);
     }
 }
 

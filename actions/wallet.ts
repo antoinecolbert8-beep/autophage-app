@@ -1,9 +1,8 @@
 'use server'
 
-import { PrismaClient } from "@prisma/client"
+import { db as prisma } from "@/core/db";
 
 // On crée une connexion temporaire pour récupérer l'argent
-const prisma = new PrismaClient()
 
 export async function getRealBalance() {
   try {
@@ -17,7 +16,7 @@ export async function getRealBalance() {
 
     // 3. Sinon, on convertit les centimes en Euros (ex: 100000 -> 1000)
     const amount = warChest.available_budget_cents / 100;
-    
+
     // 4. On formate joliement (ex: "1 000,00 €")
     return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(amount);
   } catch (error) {

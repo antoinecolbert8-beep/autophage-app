@@ -1,9 +1,8 @@
 import { BaseAgent } from "./base-agent";
 import { generateContentWithGemini } from "../gemini-content";
-import { PrismaClient } from "@prisma/client";
+import { db as prisma } from "@/core/db";
 import { getRealTrends } from "../services/real-trends";
 
-const prisma = new PrismaClient();
 
 export class OpportunistAgent extends BaseAgent {
   constructor() {
@@ -12,7 +11,7 @@ export class OpportunistAgent extends BaseAgent {
 
   // Permet de lancer une campagne ciblée sur demande (Tool Calling)
   async createTargetedCampaign(topic: string) {
-    console.log(`🎯 [Opportunist] Commande reçue: Campagne ciblée sur "${topic}"`);
+    console.log(`🎯[Opportunist] Commande reçue: Campagne ciblée sur "${topic}"`);
 
     // Simule une "opportunité" forcée
     const opportunity = {
@@ -93,7 +92,7 @@ export class OpportunistAgent extends BaseAgent {
     if (urgent.length === 0) return trends[0];
 
     // Décide avec Gemini
-    const context = `Tendances urgentes détectées: ${urgent.map((t) => t.keyword).join(", ")}`;
+    const context = `Tendances urgentes détectées: ${urgent.map((t) => t.keyword).join(", ")} `;
     const options = urgent.map(
       (t) => `${t.keyword} (${t.volume} recherches, ${t.growth})`
     );
@@ -102,13 +101,13 @@ export class OpportunistAgent extends BaseAgent {
 
     const selected = urgent.find((t) => decision.includes(t.keyword)) || urgent[0];
 
-    console.log(`🎯 [Opportunist] Opportunité sélectionnée: ${selected.keyword}`);
+    console.log(`🎯[Opportunist] Opportunité sélectionnée: ${selected.keyword} `);
 
     return selected;
   }
 
   private async generateCampaign(opportunity: any) {
-    console.log(`🚀 [Opportunist] Génération campagne: ${opportunity.keyword}`);
+    console.log(`🚀[Opportunist] Génération campagne: ${opportunity.keyword} `);
 
     // Génère contenu avec Gemini
     const content = await generateContentWithGemini({
@@ -129,7 +128,7 @@ export class OpportunistAgent extends BaseAgent {
   }
 
   private async triggerPublication(campaign: any) {
-    console.log(`📱 [Opportunist] Sauvegarde et envoi en validation sur ${campaign.platforms.length} plateformes`);
+    console.log(`📱[Opportunist] Sauvegarde et envoi en validation sur ${campaign.platforms.length} plateformes`);
 
     try {
       // Enregistrement réel en BDD
@@ -140,7 +139,7 @@ export class OpportunistAgent extends BaseAgent {
       if (admin) {
         await prisma.campaign.create({
           data: {
-            name: `Campagne Auto: ${campaign.topic}`,
+            name: `Campagne Auto: ${campaign.topic} `,
             type: "social",
             organizationId: admin.organizationId,
             messageTemplate: campaign.content,
@@ -159,7 +158,7 @@ export class OpportunistAgent extends BaseAgent {
     }
 
     // Notifie le Manager Agent
-    await this.sendMessage("Manager", `Campagne urgente créée: ${campaign.topic}`);
+    await this.sendMessage("Manager", `Campagne urgente créée: ${campaign.topic} `);
 
     return true;
   }

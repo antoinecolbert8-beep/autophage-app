@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { CachedAnalytics } from '@/lib/cached-analytics';
 import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 /**
  * GET /api/analytics/dashboard
@@ -8,9 +9,10 @@ import { getServerSession } from 'next-auth';
  */
 export async function GET(req: NextRequest) {
     try {
-        const session = await getServerSession();
+        const session = await getServerSession(authOptions);
+        const user = session?.user as any;
 
-        if (!session?.user?.id) {
+        if (!user?.id) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
@@ -18,7 +20,7 @@ export async function GET(req: NextRequest) {
         const timeframe = (searchParams.get('timeframe') || '7d') as '7d' | '30d' | '90d';
 
         // Get cached analytics
-        const analytics = await CachedAnalytics.getUserAnalytics(session.user.id, timeframe);
+        const analytics = await CachedAnalytics.getUserAnalytics(user.id, timeframe);
 
         return NextResponse.json({
             success: true,
@@ -41,13 +43,14 @@ export async function GET(req: NextRequest) {
  */
 export async function DELETE(req: NextRequest) {
     try {
-        const session = await getServerSession();
+        const session = await getServerSession(authOptions);
 
-        if (!session?.user?.id) {
+        const user = session?.user as any;
+        if (!user?.id) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        await CachedAnalytics.invalidateUserCache(session.user.id);
+        await CachedAnalytics.invalidateUserCache(user.id);
 
         return NextResponse.json({
             success: true,

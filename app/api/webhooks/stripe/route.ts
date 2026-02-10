@@ -46,6 +46,16 @@ export async function POST(request: NextRequest) {
     if (RELEVANT_EVENTS.includes(event.type)) {
       console.log(`🎻 Conductor: Delegating Stripe event [${event.type}] to Make...`);
 
+      // ⚡ HYPER-FLUX: Instant Credit Provisioning
+      if (event.type === 'checkout.session.completed' || event.type === 'invoice.paid') {
+        const session = event.data.object as any;
+        const { handlePaymentSuccess } = await import('@/lib/billing/index');
+        // Retrieve and process in background to respond fast to Stripe
+        handlePaymentSuccess(session.id || session.checkout_session_id || session.id).catch(e =>
+          console.error('❌ Hyper-Flux: Instant Provisioning Failed:', e)
+        );
+      }
+
       await triggerAutomation("HANDLE_STRIPE_EVENT", {
         eventType: event.type,
         data: event.data.object,

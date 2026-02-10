@@ -58,6 +58,7 @@ export const PLANS = {
     interval: "month" as const,
     quota: 15000,
     stripePriceId: process.env.STRIPE_PRICE_BUSINESS || "price_business_eur_monthly",
+    paymentLink: "https://buy.stripe.com/4gM14n20J4FFe579A18EM05_BUSINESS", // Added fallback/missing link
     features: [
       "15000 crédits/mois",
       "Accès API Dédié",

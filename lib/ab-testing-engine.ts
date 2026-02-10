@@ -1,7 +1,5 @@
 import { generateText } from '@/lib/ai/vertex';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db as prisma } from "@/core/db";
 
 /**
  * A/B TESTING ENGINE
@@ -66,7 +64,7 @@ export class ABTestingEngine {
         });
 
         const test: ABTest = {
-            id: `abtest_${Date.now()}`,
+            id: `abtest_${Date.now()} `,
             platform,
             variantA: {
                 hook: hookA,
@@ -83,9 +81,9 @@ export class ABTestingEngine {
             status: 'running'
         };
 
-        console.log(`[A/B TEST] Created test ${test.id} for ${platform}`);
-        console.log(`  Variant A (Educational): ${hookA.substring(0, 50)}...`);
-        console.log(`  Variant B (Controversial): ${hookB.substring(0, 50)}...`);
+        console.log(`[A / B TEST] Created test ${test.id} for ${platform}`);
+        console.log(`  Variant A(Educational): ${hookA.substring(0, 50)}...`);
+        console.log(`  Variant B(Controversial): ${hookB.substring(0, 50)}...`);
 
         return test;
     }
@@ -98,7 +96,7 @@ export class ABTestingEngine {
         const postIdA = await this.postVariant(test.variantA, test.platform, userId, test.id, 'A');
 
         // Wait 2 hours before posting variant B (to avoid flooding)
-        console.log(`[A/B TEST] Variant A posted. Variant B will be posted in 2 hours.`);
+        console.log(`[A / B TEST] Variant A posted.Variant B will be posted in 2 hours.`);
 
         // For MVP, we post immediately. In production, schedule variant B for +2h
         const postIdB = await this.postVariant(test.variantB, test.platform, userId, test.id, 'B');
@@ -117,8 +115,8 @@ export class ABTestingEngine {
 
         const PRODUCTION_DOMAIN = process.env.NEXT_PUBLIC_APP_URL || 'https://ela-revolution.com';
         const ASSETS = [
-            `${PRODUCTION_DOMAIN}/assets/feat_productivity.png`,
-            `${PRODUCTION_DOMAIN}/assets/feat_costs.png`
+            `${PRODUCTION_DOMAIN} /assets/feat_productivity.png`,
+            `${PRODUCTION_DOMAIN} /assets/feat_costs.png`
         ];
         const randomAsset = ASSETS[Math.floor(Math.random() * ASSETS.length)];
 
@@ -138,7 +136,7 @@ export class ABTestingEngine {
             data: {
                 userId: userId,
                 platform: platform,
-                content: `[AB_TEST:${testId}:${variantId}] ${variant.content}`,
+                content: `[AB_TEST:${testId}:${variantId}] ${variant.content} `,
                 mediaUrl: randomAsset,
                 status: 'published',
                 publishedAt: new Date(),
@@ -146,7 +144,7 @@ export class ABTestingEngine {
             }
         });
 
-        console.log(`[A/B TEST] Posted Variant ${variantId}: ${post.id}`);
+        console.log(`[A / B TEST] Posted Variant ${variantId}: ${post.id} `);
         return post.id;
     }
 
@@ -158,7 +156,7 @@ export class ABTestingEngine {
         const posts = await prisma.post.findMany({
             where: {
                 content: {
-                    contains: `AB_TEST:${testId}`
+                    contains: `AB_TEST:${testId} `
                 }
             },
             include: {
@@ -167,7 +165,7 @@ export class ABTestingEngine {
         });
 
         if (posts.length !== 2) {
-            throw new Error(`Expected 2 posts for test ${testId}, found ${posts.length}`);
+            throw new Error(`Expected 2 posts for test ${testId}, found ${posts.length} `);
         }
 
         // Get metrics for both
@@ -201,10 +199,10 @@ export class ABTestingEngine {
         if (scoreA > scoreB * 1.1) winner = 'A'; // 10% threshold
         else if (scoreB > scoreA * 1.1) winner = 'B';
 
-        console.log(`[A/B TEST] Results for ${testId}:`);
+        console.log(`[A / B TEST] Results for ${testId}: `);
         console.log(`  Variant A: ${results.A.engagement} engagement, ${results.A.views} views`);
         console.log(`  Variant B: ${results.B.engagement} engagement, ${results.B.views} views`);
-        console.log(`  Winner: ${winner.toUpperCase()}`);
+        console.log(`  Winner: ${winner.toUpperCase()} `);
 
         return { winner, results };
     }
@@ -240,9 +238,9 @@ export class ABTestingEngine {
             bestStyle,
             bestHookPattern: 'FOMO', // Simplified - would analyze actual hooks
             recommendations: [
-                `Utiliser plus de posts ${bestStyle}`,
-                `Top 10 posts ont score moyen de ${(topPosts.reduce((sum, p) => sum + p.performance_score, 0) / topPosts.length).toFixed(1)}`,
-                `${topPosts.length} tests A/B complétés`
+                `Utiliser plus de posts ${bestStyle} `,
+                `Top 10 posts ont score moyen de ${(topPosts.reduce((sum, p) => sum + p.performance_score, 0) / topPosts.length).toFixed(1)} `,
+                `${topPosts.length} tests A / B complétés`
             ]
         };
     }

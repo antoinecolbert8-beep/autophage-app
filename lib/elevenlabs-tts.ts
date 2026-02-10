@@ -57,6 +57,20 @@ export async function generateSpeech(request: TTSRequest): Promise<{ url: string
 }
 
 /**
+ * Alias for generateSpeech to maintain compatibility with video-generator
+ * Note: Returns the URL as a Buffer for now to match the expected signature
+ */
+export async function generateVoice(text: string, voiceName: string = 'ANTONI'): Promise<Buffer> {
+  const voiceId = (VOICES as any)[voiceName.toUpperCase()] || VOICES.ANTONI;
+  const result = await generateSpeech({
+    text,
+    voice: { voiceId }
+  });
+  // Next.js/Node.js Buffer from string (URL)
+  return Buffer.from(result.url);
+}
+
+/**
  * Liste les voix disponibles (Via Make ou fallback statique)
  */
 export async function getAvailableVoices() {

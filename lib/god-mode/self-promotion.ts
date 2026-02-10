@@ -1,12 +1,10 @@
 import { generateText } from '@/lib/ai/vertex';
 import { publishToMultiplePlatforms } from '@/lib/social-media-manager';
-import { PrismaClient } from '@prisma/client';
 import { ViralEngine } from '@/lib/viral-engine';
 import { WhatsAppNotifier } from '@/lib/whatsapp-notifier';
 import { PlatformAnalytics } from '@/lib/platform-analytics';
 import { PulseEngine } from '@/lib/realtime-pulse';
-
-const prisma = new PrismaClient();
+import { db as prisma } from "@/core/db";
 
 /**
  * GOD MODE: SELF-PROMOTION ENGINE (V3 - PERFORMANCE TRACKING)
@@ -32,7 +30,7 @@ export class ELASelfPromoter {
         const now = new Date();
         const currentHour = now.getUTCHours();
 
-        console.log(`[GOD MODE] Current Hour (UTC): ${currentHour}`);
+        console.log(`[GOD MODE] Current Hour(UTC): ${currentHour} `);
 
         const systemUserId = await this.ensureSystemUser();
         const platforms: Platform[] = ['LINKEDIN', 'X_PLATFORM', 'INSTAGRAM', 'FACEBOOK', 'SNAPCHAT'];
@@ -42,7 +40,7 @@ export class ELASelfPromoter {
             const shouldPost = await this.shouldPostNow(platform, currentHour, systemUserId);
 
             if (shouldPost) {
-                console.log(`[GOD MODE] ✅ GREEN LIGHT for ${platform}. Executing Protocol.`);
+                console.log(`[GOD MODE] ✅ GREEN LIGHT for ${platform}.Executing Protocol.`);
                 const result = await this.executePromotion(platform, systemUserId);
                 results.push({ platform, status: 'EXECUTED', result });
             } else {
@@ -97,9 +95,9 @@ export class ELASelfPromoter {
                         saves: realMetrics.saves || 0,
                         clicks: realMetrics.clicks || 0,
                     };
-                    console.log(`[ANALYTICS] Fetched real metrics for ${post.platform}: ${JSON.stringify(metrics)}`);
+                    console.log(`[ANALYTICS] Fetched real metrics for ${post.platform}: ${JSON.stringify(metrics)} `);
                 } catch (error) {
-                    console.warn(`[ANALYTICS] Failed to fetch metrics, using fallback:`, error);
+                    console.warn(`[ANALYTICS] Failed to fetch metrics, using fallback: `, error);
                     // Fallback to simulated only if API fails
                     metrics = {
                         views: Math.floor(Math.random() * 1000),
@@ -127,7 +125,7 @@ export class ELASelfPromoter {
                 }
             });
 
-            console.log(`[ANALYTICS] Post ${post.id} (${post.platform}): Score = ${score.toFixed(2)}, Views = ${metrics.views}`);
+            console.log(`[ANALYTICS] Post ${post.id} (${post.platform}): Score = ${score.toFixed(2)}, Views = ${metrics.views} `);
         }
     }
 
@@ -194,7 +192,7 @@ export class ELASelfPromoter {
         });
 
         if (lastPost) {
-            console.log(`[Scheduling] Already posted on ${platform} at ${lastPost.createdAt.toISOString()}`);
+            console.log(`[Scheduling] Already posted on ${platform} at ${lastPost.createdAt.toISOString()} `);
             return false;
         }
 
@@ -210,8 +208,8 @@ export class ELASelfPromoter {
 
         const PRODUCTION_DOMAIN = process.env.NEXT_PUBLIC_APP_URL || 'https://ela-revolution.com';
         const ASSETS = [
-            `${PRODUCTION_DOMAIN}/assets/feat_productivity.png?v=2`,
-            `${PRODUCTION_DOMAIN}/assets/feat_costs.png?v=2`
+            `${PRODUCTION_DOMAIN} /assets/feat_productivity.png ? v = 2`,
+            `${PRODUCTION_DOMAIN} /assets/feat_costs.png ? v = 2`
         ];
         const randomAsset = ASSETS[Math.floor(Math.random() * ASSETS.length)];
 
@@ -237,7 +235,7 @@ export class ELASelfPromoter {
         // 🔔 WhatsApp Notification
         if (success) {
             // Realtime Pulse for Dashboard Addiction
-            PulseEngine.notifyAgent(`God Mode (${platform})`);
+            PulseEngine.notifyAgent(`God Mode(${platform})`);
             if (platform === 'LINKEDIN' || platform === 'X_PLATFORM') {
                 PulseEngine.emitPulse({
                     type: 'POST_VIRAL',
@@ -286,12 +284,12 @@ export class ELASelfPromoter {
 
     private static async generateDynamicTopic(): Promise<string> {
         const prompt = `
-        You are the "God Mode" AI of ELA (Genesis).
-        Generate ONE brutal, high-stakes, polarizing topic for a social media post.
-        Goal: Make the reader feel like staying manual is professional suicide and that ELA is their ONLY escape from the matrix of 9-5 labor.
-        
-        Themes: Algorithmic slavery, Sovereign agents, Digital dominance, ROI of the 1%, Infrastructure as power.
-        Return ONLY the topic sentence. French language.
+        You are the "God Mode" AI of ELA(Genesis).
+        Generate ONE brutal, high - stakes, polarizing topic for a social media post.
+    Goal: Make the reader feel like staying manual is professional suicide and that ELA is their ONLY escape from the matrix of 9 - 5 labor.
+
+        Themes: Algorithmic slavery, Sovereign agents, Digital dominance, ROI of the 1 %, Infrastructure as power.
+        Return ONLY the topic sentence.French language.
         `;
 
         const topic = await generateText(prompt, { temperature: 0.95 });
@@ -330,20 +328,20 @@ export class ELASelfPromoter {
             // 2. BRUTALITY REFLECTION (Multi-Agent Simulation)
             console.log(`[NUCLEAR] Applying Brutality Reflection for ${platform}...`);
             const brutalityPrompt = `
-            You are the "Master Destroyer" of content. Your job is to take this post and make it 10x more BRUTAL, POLARIZING, and URGENT.
-            
-            Rules:
-            - Eliminate all fluff or "polite" language.
-            - Focus on the "Us vs Them" narrative (Sovereigns vs Manual Slaves).
-            - Inject high-stakes FOMO (Financial death vs Sovereignty).
+            You are the "Master Destroyer" of content.Your job is to take this post and make it 10x more BRUTAL, POLARIZING, and URGENT.
+
+    Rules:
+- Eliminate all fluff or "polite" language.
+            - Focus on the "Us vs Them" narrative(Sovereigns vs Manual Slaves).
+            - Inject high - stakes FOMO(Financial death vs Sovereignty).
             - Keep it professional but aggressive.
             - French language.
             
             Original Post:
-            "${content}"
+"${content}"
             
             Rewrite it for MAXIMUM psychological impact:
-            `;
+    `;
 
             content = await generateText(brutalityPrompt, { temperature: 0.95 });
 
@@ -368,17 +366,17 @@ export class ELASelfPromoter {
 
             switch (platform) {
                 case 'LINKEDIN':
-                    prompt = `Write a viral LinkedIn post about: "${topic}". Style: Hook, Story, Business Value. French.`;
+                    prompt = `Write a viral LinkedIn post about: "${topic}".Style: Hook, Story, Business Value.French.`;
                     break;
                 case 'X_PLATFORM':
-                    prompt = `Write a Twitter Thread (5 tweets) about: "${topic}". JSON Array format. French.`;
+                    prompt = `Write a Twitter Thread(5 tweets) about: "${topic}".JSON Array format.French.`;
                     break;
                 case 'INSTAGRAM':
                 case 'FACEBOOK':
-                    prompt = `Instagram caption about: "${topic}". Short, punchy, hashtags. French.`;
+                    prompt = `Instagram caption about: "${topic}".Short, punchy, hashtags.French.`;
                     break;
                 case 'SNAPCHAT':
-                    prompt = `Snapchat text about: "${topic}". Urgent, Gen Z energy. French.`;
+                    prompt = `Snapchat text about: "${topic}".Urgent, Gen Z energy.French.`;
                     break;
             }
 
@@ -414,7 +412,7 @@ export class ELASelfPromoter {
 
             return result[targetPlatform]?.success || false;
         } catch (error) {
-            console.error(`[GOD MODE] Failed to publish to ${platform}`, error);
+            console.error(`[GOD MODE] Failed to publish to ${platform} `, error);
             return false;
         }
     }

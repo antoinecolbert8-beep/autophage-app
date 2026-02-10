@@ -1,6 +1,6 @@
-import { PrismaClient } from '@prisma/client';
 import dotenv from 'dotenv';
 import readline from 'readline';
+import { hashPassword } from '../lib/auth-utils';
 
 dotenv.config();
 
@@ -53,11 +53,20 @@ async function main() {
                 }
             });
 
+
+            const password = await question("Enter the password for this ADMIN: ");
+            if (!password) {
+                console.error("❌ Password is required for new users.");
+                process.exit(1);
+            }
+            const hashedPassword = hashPassword(password);
+
             const newUser = await prisma.user.create({
                 data: {
                     email,
                     name: "Genesis Admin",
                     role: "admin",
+                    password: hashedPassword,
                     currentPlan: "enterprise",
                     organizationId: org.id
                 }
@@ -69,9 +78,19 @@ async function main() {
 
     } else {
         // Elevate
+        const updatePassword = await question("Do you want to update/set the password for this user? (y/n): ");
+        let data: any = { role: 'admin', currentPlan: 'enterprise' };
+
+        if (updatePassword.toLowerCase() === 'y') {
+            const password = await question("Enter new password: ");
+            if (password) {
+                data.password = hashPassword(password);
+            }
+        }
+
         await prisma.user.update({
             where: { id: user.id },
-            data: { role: 'admin', currentPlan: 'enterprise' },
+            data,
         });
         console.log(`\n✅ SUCCESS: User ${email} is now an ADMIN (God Mode).`);
     }

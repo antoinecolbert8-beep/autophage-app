@@ -4,10 +4,9 @@
  * "L'argent ne doit jamais rester dans la société qui vend."
  */
 
-import { PrismaClient } from "@prisma/client";
 import { WarState } from "./types";
+import { db as prisma } from "@/core/db";
 
-const prisma = new PrismaClient();
 const SAFETY_RESERVE = 50000; // 50k€ Fond de roulement
 const HOLDCO_IBAN = "FR76..."; // Placeholder
 

@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { db as prisma } from "@/core/db";
 import { publishToMultiplePlatforms, SocialPost } from "../social-media-manager";
-
-const prisma = new PrismaClient();
 
 export class PublisherWorker {
     /**
@@ -38,7 +36,7 @@ export class PublisherWorker {
             return;
         }
 
-        console.log(`📨 [Publisher] Found ${pendingPosts.length} posts to publish.`);
+        console.log(`📨[Publisher] Found ${pendingPosts.length} posts to publish.`);
 
         for (const post of pendingPosts) {
             await this.publishPost(post);
@@ -46,7 +44,7 @@ export class PublisherWorker {
     }
 
     private async publishPost(post: any) {
-        console.log(`🚀 [Publisher] Publishing post ${post.id} to ${post.platform}`);
+        console.log(`🚀[Publisher] Publishing post ${post.id} to ${post.platform} `);
 
         // Check credentials via Organization Integrations
         const integrations = post.user.organization.integrations;
@@ -77,7 +75,7 @@ export class PublisherWorker {
             const result = results[socialPost.platform];
 
             if (result && result.success) {
-                console.log(`✅ [Publisher] Success: ${result.url}`);
+                console.log(`✅[Publisher] Success: ${result.url} `);
                 await prisma.post.update({
                     where: { id: post.id },
                     data: {
@@ -87,7 +85,7 @@ export class PublisherWorker {
                     }
                 });
             } else {
-                console.error(`❌ [Publisher] Failed: ${result?.error}`);
+                console.error(`❌[Publisher] Failed: ${result?.error} `);
                 await prisma.post.update({
                     where: { id: post.id },
                     data: {
@@ -97,7 +95,7 @@ export class PublisherWorker {
             }
 
         } catch (error) {
-            console.error(`❌ [Publisher] Critical Error on ${post.id}:`, error);
+            console.error(`❌[Publisher] Critical Error on ${post.id}: `, error);
             await prisma.post.update({
                 where: { id: post.id },
                 data: { status: "FAILED" }

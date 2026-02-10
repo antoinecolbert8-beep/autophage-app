@@ -4,11 +4,9 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { db as prisma } from "@/core/db";
 
 export const dynamic = 'force-dynamic';
-
-const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
   try {
@@ -66,6 +64,34 @@ export async function GET(req: NextRequest) {
       0, // TODO: intégrer Stripe
     ]);
 
+    const orgId = searchParams.get('orgId') || 'system-default';
+
+    // Safety check for organization
+    const org = await prisma.organization.findUnique({
+      where: { id: orgId },
+      include: {
+        leads: { take: 10, orderBy: { createdAt: 'desc' } },
+        campaigns: { where: { active: true } }
+      }
+    });
+
+    if (!org) {
+      return NextResponse.json({
+        stats: [
+          { title: "LEADS", value: "0", icon: "Users", color: "text-blue-400" },
+          { title: "REVENU", value: "0€", icon: "Euro", color: "text-green-400" },
+          { title: "CAMPAGNES", value: "0", icon: "Zap", color: "text-purple-400" },
+          { title: "TEMPS DE CHARGE", value: "0ms", icon: "Clock", color: "text-emerald-400" }
+        ],
+        recentActivity: []
+      });
+    }
+
+    // Calculer les stats réelles
+    const totalLeads = org.leads.length;
+    const activeCampaigns = org.campaigns.length;
+    const totalRevenue = org.mrr || 0;
+
     // Top contenus
     const topContent = await prisma.contentStat.groupBy({
       by: ["postId"],
@@ -97,10 +123,11 @@ export async function GET(req: NextRequest) {
       stats: {
         totalActions,
         contentGenerated,
-        leadsQualified,
+        leadsQualified: totalLeads, // Using the newly calculated totalLeads
         callsHandled,
         postsPublished,
-        revenue: `${revenue}€`,
+        revenue: `${totalRevenue}€`, // Using the newly calculated totalRevenue
+        activeCampaigns, // Adding activeCampaigns
       },
       topContent: topContent.map((c) => ({
         postId: c.postId,

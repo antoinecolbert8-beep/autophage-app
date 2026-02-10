@@ -4,11 +4,7 @@
  * "Le succès ne doit pas tuer le système."
  */
 
-import { PrismaClient } from "@prisma/client";
-// import { prisma } from "@/lib/prisma"; // Assumed singleton
-
-// Mock prisma for file structure demonstration
-const prisma = new PrismaClient();
+import { db as prisma } from "@/core/db";
 
 const DISPUTE_THRESHOLD = 0.0075; // 0.75%
 const HOURLY_TRANSACTION_LIMIT = 50;

@@ -1,8 +1,6 @@
 import { BaseAgent } from "./base-agent";
-import { PrismaClient } from "@prisma/client";
+import { db as prisma } from "@/core/db";
 import { triggerAutomation } from "../automations";
-
-const prisma = new PrismaClient();
 
 export class SalesAgent extends BaseAgent {
     constructor() {
@@ -50,7 +48,7 @@ export class SalesAgent extends BaseAgent {
      * Simule une recherche LinkedIn Sales Navigator
      */
     async searchLeads(criteria: any) {
-        console.log(`🔎 [Sales] Recherche ciblée: ${JSON.stringify(criteria)}`);
+        console.log(`🔎[Sales] Recherche ciblée: ${JSON.stringify(criteria)} `);
 
         // Simulation - En prod, utiliser API LinkedIn ou PhantomBuster
         // Génération procédurale de leads pour simuler du volume "High Flux"
@@ -64,10 +62,10 @@ export class SalesAgent extends BaseAgent {
         // Add 20 more generated leads to feed the beast
         for (let i = 0; i < 20; i++) {
             baseLeads.push({
-                name: `Prospect Generated ${i}`,
+                name: `Prospect Generated ${i} `,
                 role: "Director of Operations",
-                company: `Startup Alpha ${i}`,
-                url: `linkedin.com/in/prospect${i}`,
+                company: `Startup Alpha ${i} `,
+                url: `linkedin.com /in/prospect${i}`,
                 score: 75 + Math.floor(Math.random() * 20)
             });
         }
@@ -116,14 +114,42 @@ export class SalesAgent extends BaseAgent {
         });
 
         if (result.success) {
-            // Log to DB
-            const admin = await prisma.user.findFirst({ where: { role: 'admin' } });
+            // 🛡️ PRODUCTION HARDENING: Ensure lead exists in DB before logging touchpoint
+            const admin = await prisma.user.findFirst({
+                where: { role: 'admin' },
+                include: { organization: true }
+            });
+
             if (admin) {
+                // Find or Create Lead
+                const leadInDb = await prisma.lead.upsert({
+                    where: {
+                        email_organizationId: {
+                            email: email,
+                            organizationId: admin.organizationId
+                        }
+                    },
+                    update: {
+                        name: lead.name,
+                        company: lead.company,
+                        stage: 'warm'
+                    },
+                    create: {
+                        email: email,
+                        name: lead.name,
+                        company: lead.company,
+                        organizationId: admin.organizationId,
+                        stage: 'warm',
+                        score: lead.score || 0,
+                        scoreBreakdown: JSON.stringify({ ai_qualified: true })
+                    }
+                });
+
                 await prisma.touchpoint.create({
                     data: {
                         type: 'COLD_EMAIL',
                         channel: 'EMAIL',
-                        leadId: 'temp_lead_id', // Simplify for valid execution
+                        leadId: leadInDb.id,
                         message: content.substring(0, 100) + "...",
                         delivered: true,
                     }

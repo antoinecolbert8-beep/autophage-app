@@ -4,10 +4,9 @@
  */
 
 import OpenAI from "openai";
-import { PrismaClient } from "@prisma/client";
+import { db as prisma } from "@/core/db";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const prisma = new PrismaClient();
 
 export type ComplianceCheck = {
   action: string;

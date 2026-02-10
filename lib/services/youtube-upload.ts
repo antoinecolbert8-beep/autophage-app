@@ -67,7 +67,7 @@ Run: npm run youtube:auth to get your refresh token
         response.data.pipe(writer);
 
         await new Promise((resolve, reject) => {
-            writer.on('finish', resolve);
+            writer.on('finish', () => resolve(undefined));
             writer.on('error', reject);
         });
 

@@ -1,4 +1,4 @@
-import { google } from '@google-cloud/storage';
+import { Storage } from '@google-cloud/storage';
 import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
@@ -8,7 +8,7 @@ import path from 'path';
  * Logical bypass: Generate REAL videos, store them, queue for YouTube
  */
 
-const storage = new google.Storage({
+const storage = new Storage({
     projectId: process.env.GCP_PROJECT_ID,
     keyFilename: process.env.GCP_KEY_FILE
 });
@@ -39,7 +39,7 @@ export async function storeVideoInCloud(videoUrl: string, filename: string): Pro
         response.data.pipe(writer);
 
         await new Promise((resolve, reject) => {
-            writer.on('finish', resolve);
+            writer.on('finish', () => resolve(undefined));
             writer.on('error', reject);
         });
 

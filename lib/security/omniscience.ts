@@ -42,9 +42,30 @@ export class Omniscience {
         const icon = this.getIcon(level);
         console.log(`${icon} [${entry.timestamp}] [${type}] ${message}`, metadata ? JSON.stringify(metadata) : '');
 
-        // 2. TODO: Persistence Layer (Supabase/Postgres)
-        // In a real production env, we would perform an async insert here:
-        // await db.audit_logs.insert(entry);
+        // 2. Persistence Layer (SQLite AuditLog)
+        // Fire and forget, or handle errors gracefully to avoid blocking the request
+        this.saveToDb(entry).catch(err => console.error('[Omniscience] DB Persistence Error:', err));
+    }
+
+    private static async saveToDb(entry: LogEntry) {
+        try {
+            // HYPER-FLUX: Efficient DB import
+            const { prisma } = await import('@/lib/prisma');
+            await prisma.auditLog.create({
+                data: {
+                    action: entry.type,
+                    details: entry.message,
+                    entityType: entry.metadata?.entityType || 'SYSTEM',
+                    entityId: entry.metadata?.entityId,
+                    ipAddress: entry.ip,
+                    userAgent: entry.metadata?.ua,
+                    createdAt: new Date(entry.timestamp)
+                }
+            });
+        } catch (error) {
+            // Avoid recursion and just use console
+            console.error('[Omniscience] Failed to persist log:', error);
+        }
     }
 
     /**

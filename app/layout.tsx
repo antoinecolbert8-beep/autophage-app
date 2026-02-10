@@ -98,6 +98,7 @@ export const metadata: Metadata = {
 
 
 import GlobalErrorBoundary from "@/components/GlobalErrorBoundary";
+import { Providers } from "@/components/providers";
 
 export default function RootLayout({
   children,
@@ -121,7 +122,9 @@ export default function RootLayout({
           `}
         </Script>
         <GlobalErrorBoundary>
-          <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
+          <Providers>
+            <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
+          </Providers>
         </GlobalErrorBoundary>
       </body>
     </html>

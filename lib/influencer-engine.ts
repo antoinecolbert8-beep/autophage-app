@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import { db as prisma } from "@/core/db";
 import { generateText } from '@/lib/ai/vertex';
-
-const prisma = new PrismaClient();
 
 /**
  * INFLUENCER ENGINE

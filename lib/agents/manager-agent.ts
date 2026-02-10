@@ -4,9 +4,7 @@
  */
 
 import { BaseAgent } from "./base-agent";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { db as prisma } from "@/core/db";
 
 export class ManagerAgent extends BaseAgent {
   constructor() {

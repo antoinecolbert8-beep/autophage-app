@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import { db as prisma } from "@/core/db";
 import { generateText } from '@/lib/ai/vertex';
-
-const prisma = new PrismaClient();
 
 /**
  * LEAD SCORING AI
@@ -229,7 +227,7 @@ export class LeadScoringAI {
     static async scoreAllLeads(): Promise<LeadScore[]> {
         const leads = await prisma.lead.findMany({
             where: {
-                status: { not: 'converted' }
+                stage: { not: 'customer' }
             }
         });
 
