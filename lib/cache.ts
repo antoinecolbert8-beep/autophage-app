@@ -122,11 +122,12 @@ export class Cache {
     static async deletePattern(pattern: string): Promise<void> {
         try {
             const client = await getRedisClient();
-            const keys = await client.keys(pattern);
-
-            if (keys.length > 0) {
-                await client.del(keys);
-                console.log(`[Cache] DELETE PATTERN: ${pattern} (${keys.length} keys)`);
+            if (client) {
+                const keys = await client.keys(pattern);
+                if (keys.length > 0) {
+                    await client.del(keys);
+                    console.log(`[Cache] DELETE PATTERN: ${pattern} (${keys.length} keys)`);
+                }
             }
         } catch (error) {
             console.error(`[Cache] DELETE PATTERN error for ${pattern}:`, error);
@@ -163,7 +164,10 @@ export class Cache {
     static async increment(key: string, by: number = 1): Promise<number> {
         try {
             const client = await getRedisClient();
-            return await client.incrBy(key, by);
+            if (client) {
+                return await client.incrBy(key, by);
+            }
+            return 0;
         } catch (error) {
             console.error(`[Cache] INCREMENT error for ${key}:`, error);
             return 0;
@@ -176,8 +180,11 @@ export class Cache {
     static async exists(key: string): Promise<boolean> {
         try {
             const client = await getRedisClient();
-            const result = await client.exists(key);
-            return result === 1;
+            if (client) {
+                const result = await client.exists(key);
+                return result === 1;
+            }
+            return false;
         } catch (error) {
             console.error(`[Cache] EXISTS error for ${key}:`, error);
             return false;
@@ -190,7 +197,10 @@ export class Cache {
     static async ttl(key: string): Promise<number> {
         try {
             const client = await getRedisClient();
-            return await client.ttl(key);
+            if (client) {
+                return await client.ttl(key);
+            }
+            return -1;
         } catch (error) {
             console.error(`[Cache] TTL error for ${key}:`, error);
             return -1;
@@ -203,8 +213,10 @@ export class Cache {
     static async flushAll(): Promise<void> {
         try {
             const client = await getRedisClient();
-            await client.flushAll();
-            console.log('[Cache] FLUSHED ALL');
+            if (client) {
+                await client.flushAll();
+                console.log('[Cache] FLUSHED ALL');
+            }
         } catch (error) {
             console.error('[Cache] FLUSH ALL error:', error);
         }
