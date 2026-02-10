@@ -34,7 +34,7 @@ export class RBAC {
      * Middleware for API routes to enforce roles
      */
     static async authorize(req: Request, requiredPermission: string): Promise<boolean> {
-        const { authOptions } = await import('@/app/api/auth/[...nextauth]/route');
+        const { authOptions } = await import('@/lib/auth-config');
         const session = await getServerSession(authOptions);
         if (!session?.user) return false;
 
