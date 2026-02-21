@@ -103,41 +103,22 @@ export default function Home() {
 
         <div className="relative max-w-7xl mx-auto text-center z-10">
           {/* Trust Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-3 px-4 py-2 md:px-6 md:py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 mb-8 backdrop-blur-md"
-          >
+          <div className="inline-flex items-center gap-3 px-4 py-2 md:px-6 md:py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 mb-8 backdrop-blur-md">
             <Zap className="w-4 h-4 md:w-5 md:h-5 text-blue-500" fill="currentColor" />
             <span className="text-xs md:text-sm font-bold text-white">SYSTÈME AUTONOME</span>
-          </motion.div>
+          </div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-9xl font-black tracking-tighter mb-8 leading-[1.1] md:leading-[0.9] uppercase break-words"
-          >
+          <h1 className="text-4xl md:text-9xl font-black tracking-tighter mb-8 leading-[1.1] md:leading-[0.9] uppercase break-words">
             <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">ÉCRASEZ LA</span>
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">CONCURRENCE.</span>
-          </motion.h1>
+          </h1>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="text-lg md:text-3xl text-gray-300 max-w-4xl mx-auto mb-6 leading-relaxed font-bold px-2"
-          >
+          <p className="text-lg md:text-3xl text-gray-300 max-w-4xl mx-auto mb-6 leading-relaxed font-bold px-2">
             9 ARMES ULTIMES. ZÉRO PITIÉ.
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="text-base md:text-xl text-gray-500 max-w-3xl mx-auto mb-10 md:mb-12 px-2"
-          >
+          </p>
+          <p className="text-base md:text-xl text-gray-500 max-w-3xl mx-auto mb-10 md:mb-12 px-2">
             Pendant qu'ils dorment, vous <span className="text-blue-500 font-bold">DOMINEZ</span> le marché. 24/7. Sans limite.
-          </motion.p>
+          </p>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 w-full px-4">
             {/* Primary CTA - Most prominent */}
