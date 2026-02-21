@@ -1,14 +1,33 @@
 import { createClient } from '@supabase/supabase-js';
 import { prisma } from '@/lib/prisma';
 
-if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    throw new Error('Supabase credentials missing');
+import { SupabaseClient } from '@supabase/supabase-js';
+
+let _supabase: SupabaseClient | null = null;
+
+export function getSupabaseClient(): SupabaseClient {
+    if (_supabase) return _supabase;
+
+    const url = process.env.SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!url || !key) {
+        if (process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE !== 'phase-production-build') {
+            throw new Error('Supabase credentials missing');
+        }
+        // Return a dummy client during build to prevent crashes
+        return createClient(
+            url || 'https://dummy.supabase.co',
+            key || 'dummy_key'
+        );
+    }
+
+    _supabase = createClient(url, key);
+    return _supabase;
 }
 
-export const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+// For backward compatibility or internal use if needed
+const supabase = getSupabaseClient();
 
 // Real-time sync from Prisma to Supabase
 export async function syncToSupabase<T>(
