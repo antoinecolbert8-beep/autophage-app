@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const AGENTS = [
+const MAIN_AGENTS = [
     { id: "APEX", role: "Content" },
     { id: "VISION", role: "Video" },
     { id: "NEXUS", role: "Outreach" },
@@ -17,6 +17,14 @@ const AGENTS = [
     { id: "ORACLE", role: "Intelligence" },
     { id: "GHOST", role: "Scraping" },
     { id: "SYNC", role: "Lifecycle" }
+];
+
+const TICKER_AGENTS = [
+    "Métriques Temps Réel", "Upload Média Natif", "A/B Testing Auto", "Auto-Engagement Bot",
+    "Trending Topics", "Frequency Optimizer", "Content Recycling", "Retargeting Pixels",
+    "Influencer Detection", "Video Generator", "Revenue Autopilot", "Multi-Language",
+    "Lead Scoring AI", "ROI Calculator", "Meeting Assistant AI", "Proposal Generator",
+    "Competitive Intelligence", "SMS Automation", "White-Label Program", "Email Warmup"
 ];
 
 const MESSAGES = [
@@ -34,18 +42,16 @@ export default function Loading() {
     const [msgIndex, setMsgIndex] = useState(0);
 
     useEffect(() => {
-        // Incrementaly "activate" agents
         const agentInterval = setInterval(() => {
             setActiveAgents(prev => {
-                if (prev.length >= AGENTS.length) {
+                if (prev.length >= MAIN_AGENTS.length) {
                     clearInterval(agentInterval);
                     return prev;
                 }
-                return [...prev, AGENTS[prev.length].id];
+                return [...prev, MAIN_AGENTS[prev.length].id];
             });
-        }, 300);
+        }, 200);
 
-        // Cycle messages
         const msgInterval = setInterval(() => {
             setMsgIndex((prev) => (prev + 1) % MESSAGES.length);
         }, 1500);
@@ -65,12 +71,28 @@ export default function Loading() {
             </div>
 
             {/* Matrix / Digital Dust Overlay */}
-            <div className="absolute inset-0 opacity-[0.02] pointer-events-none mix-blend-overlay">
+            <div className="absolute inset-0 opacity-[0.02] pointer-events-none mix-blend-overlay border-none">
                 <div className="w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat"></div>
             </div>
 
+            {/* Ticker Top */}
+            <div className="absolute top-0 left-0 w-full py-4 border-b border-white/5 bg-black/40 backdrop-blur-sm overflow-hidden">
+                <motion.div
+                    className="flex whitespace-nowrap gap-12 items-center"
+                    animate={{ x: [0, -1000] }}
+                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                >
+                    {[...TICKER_AGENTS, ...TICKER_AGENTS].map((name, i) => (
+                        <div key={i} className="flex items-center gap-3">
+                            <div className="w-1 h-1 bg-blue-500 rounded-full"></div>
+                            <span className="text-[10px] font-mono font-bold text-gray-400 tracking-widest uppercase">{name}</span>
+                        </div>
+                    ))}
+                </motion.div>
+            </div>
+
             {/* Main Content */}
-            <div className="relative z-10 flex flex-col items-center gap-12 w-full max-w-lg px-6">
+            <div className="relative z-10 flex flex-col items-center gap-12 w-full max-w-lg px-6 mt-10">
 
                 {/* ELA CORE SINGULARITY */}
                 <div className="relative mb-4">
@@ -99,7 +121,7 @@ export default function Loading() {
 
                 {/* AGENT GRID STATUS */}
                 <div className="grid grid-cols-4 md:grid-cols-7 gap-3 w-full">
-                    {AGENTS.map((agent) => {
+                    {MAIN_AGENTS.map((agent) => {
                         const isActive = activeAgents.includes(agent.id);
                         return (
                             <div key={agent.id} className="flex flex-col items-center gap-1.5">
@@ -147,10 +169,26 @@ export default function Loading() {
                     </div>
 
                     <div className="flex justify-between items-center text-[8px] font-mono text-gray-700 tracking-widest uppercase px-1">
-                        <span>Agents: {activeAgents.length}/{AGENTS.length}</span>
+                        <span>Agents: {activeAgents.length}/{MAIN_AGENTS.length}</span>
                         <span>Protocol: Empire Alpha</span>
                     </div>
                 </div>
+            </div>
+
+            {/* Ticker Bottom */}
+            <div className="absolute bottom-0 left-0 w-full py-4 border-t border-white/5 bg-black/40 backdrop-blur-sm overflow-hidden">
+                <motion.div
+                    className="flex whitespace-nowrap gap-12 items-center"
+                    animate={{ x: [-1000, 0] }}
+                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                >
+                    {[...TICKER_AGENTS, ...TICKER_AGENTS].reverse().map((name, i) => (
+                        <div key={i} className="flex items-center gap-3">
+                            <div className="w-1 h-1 bg-pink-500 rounded-full"></div>
+                            <span className="text-[10px] font-mono font-bold text-gray-400 tracking-widest uppercase">{name}</span>
+                        </div>
+                    ))}
+                </motion.div>
             </div>
         </div>
     );
