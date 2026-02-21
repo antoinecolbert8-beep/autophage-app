@@ -3,9 +3,7 @@
  * Génération de documents légaux, conseil juridique
  */
 
-import OpenAI from "openai";
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+import { getOpenAIClient } from "./ai/openai-client";
 
 export type LegalDocumentType =
   | "CONTRACT"
@@ -59,6 +57,7 @@ Salaire: ${params.salary}€`,
   const prompt = prompts[type];
 
   try {
+    const openai = getOpenAIClient();
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
@@ -94,6 +93,7 @@ IMPORTANT: Précise toujours qu'une relecture par un avocat est recommandée.`,
  */
 export async function legalAdvice(question: string): Promise<string> {
   try {
+    const openai = getOpenAIClient();
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
@@ -119,6 +119,7 @@ Précise toujours les limites de ton conseil et recommande de consulter un avoca
  */
 export async function simplifyLegalText(legalText: string): Promise<string> {
   try {
+    const openai = getOpenAIClient();
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [

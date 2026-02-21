@@ -1,8 +1,6 @@
 "use server";
 
-import OpenAI from "openai";
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+import { getOpenAIClient } from "@/lib/ai/openai-client";
 
 export type ScriptRequest = {
   topic: string;
@@ -32,7 +30,7 @@ Structure JSON attendu: { "hook": "...", "body": "...", "cta": "...", "hashtags"
     },
     { role: "user" as const, content: `Topic: ${topic}\nPersona: ${persona ?? "default"}` },
   ];
-
+  const openai = getOpenAIClient();
   const completion = await openai.chat.completions.create({
     model: "gpt-4o",
     messages,

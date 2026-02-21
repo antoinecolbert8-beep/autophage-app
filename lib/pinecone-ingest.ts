@@ -3,13 +3,13 @@ import fs from "fs";
 import path from "path";
 import pdfParse from "pdf-parse";
 import { Pinecone } from "@pinecone-database/pinecone";
-import OpenAI from "openai";
+import { getOpenAIClient } from "./ai/openai-client";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 
 // Initialisation lazy pour éviter les erreurs au build
 function getOpenAI() {
-  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY || "sk-dummy" });
+  return getOpenAIClient();
 }
 
 function getPinecone() {

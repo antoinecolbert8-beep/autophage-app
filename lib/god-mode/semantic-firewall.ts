@@ -4,9 +4,7 @@
  * "Si l'Agent B détecte un risque > 0.1%, le contenu est détruit."
  */
 
-import OpenAI from "openai";
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+import { getOpenAIClient } from "../ai/openai-client";
 
 interface SafetyReport {
     isSafe: boolean;
@@ -46,6 +44,7 @@ export class SemanticFirewall {
         }
 
         // 2. L'Agent Censeur (LLM Judge)
+        const openai = getOpenAIClient();
         const response = await openai.chat.completions.create({
             model: "gpt-4-turbo", // Modèle le plus intelligent pour le jugement
             messages: [

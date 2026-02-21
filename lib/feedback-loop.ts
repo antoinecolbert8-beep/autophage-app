@@ -5,9 +5,7 @@
 
 import { getTopPerformingContent } from "./stats-tracker";
 import { db as prisma } from "@/core/db";
-import OpenAI from "openai";
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+import { getOpenAIClient } from "./ai/openai-client";
 
 export type FeedbackAnalysis = {
   topPatterns: string[];
@@ -78,6 +76,7 @@ Les patterns doivent couvrir :
 `;
 
   try {
+    const openai = getOpenAIClient();
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [

@@ -3,10 +3,8 @@
  * Scanne chaque action pour garantir la conformité légale
  */
 
-import OpenAI from "openai";
 import { db as prisma } from "@/core/db";
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+import { getOpenAIClient } from "./ai/openai-client";
 
 export type ComplianceCheck = {
   action: string;
@@ -116,6 +114,7 @@ async function analyzeContent(content: string): Promise<{
   isTooPromo: boolean;
 }> {
   try {
+    const openai = getOpenAIClient();
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini", // Plus rapide et moins cher pour cette tâche
       messages: [

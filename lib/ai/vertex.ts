@@ -1,9 +1,10 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import OpenAI from 'openai';
+import { getOpenAIClient } from '@/lib/ai/openai-client';
 
 let genAI: GoogleGenerativeAI | null = null;
 let vertexModel: any = null;
-let openaiClient: OpenAI | null = null;
+let _openaiClient: OpenAI | null = null;
 
 function getClients() {
     // 1. Try Initialize Vertex/Gemini
@@ -16,11 +17,11 @@ function getClients() {
     }
 
     // 2. Try Initialize OpenAI
-    if (!openaiClient && process.env.OPENAI_API_KEY) {
-        openaiClient = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    if (!_openaiClient) {
+        _openaiClient = getOpenAIClient();
     }
 
-    return { vertexModel, openaiClient };
+    return { vertexModel, openaiClient: _openaiClient };
 }
 
 export async function generateText(prompt: string, options?: {

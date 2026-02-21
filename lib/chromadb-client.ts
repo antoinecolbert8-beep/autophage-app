@@ -4,18 +4,22 @@
  */
 
 import { ChromaClient, OpenAIEmbeddingFunction } from "chromadb";
-import OpenAI from "openai";
+import { getOpenAIClient } from "./ai/openai-client";
 
 const CHROMA_URL = process.env.CHROMA_URL || "http://localhost:8000";
 const COLLECTION_NAME = "autophage-brain";
 
 const chromaClient = new ChromaClient({ path: CHROMA_URL });
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 // Helper to get embedding function
 const getEmbeddingFunction = () => {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey && process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE !== 'phase-production-build') {
+    throw new Error('OPENAI_API_KEY is missing for OpenAIEmbeddingFunction.');
+  }
+
   return new OpenAIEmbeddingFunction({
-    openai_api_key: process.env.OPENAI_API_KEY!,
+    openai_api_key: apiKey || 'dummy_key_for_build',
     openai_model: "text-embedding-3-small",
   });
 };
@@ -130,6 +134,7 @@ export async function generateWithChromaRAG(userPrompt: string, topK: number = 4
       .join("\n\n");
 
     // Génère la réponse avec GPT-4
+    const openai = getOpenAIClient();
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [

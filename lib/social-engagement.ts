@@ -2,10 +2,8 @@
  * 💬 Social Engagement - Gestion DM, commentaires, interactions multi-plateforme
  */
 
-import OpenAI from "openai";
+import { getOpenAIClient } from "./ai/openai-client";
 import { generateSmartResponse } from "./ai-brain";
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export type SocialMessage = {
   id: string;
