@@ -10,6 +10,7 @@ import {
   LineIconZap,
   LineIconBarChart,
   LineIconShield,
+  LineIconMail,
 } from "@/components/AppIcons";
 import { LiveUsersCounter } from "./LiveUsersCounter";
 
@@ -107,6 +108,17 @@ export default function Navigation() {
               >
                 <LineIconZap size={18} />
                 <span>Générateur</span>
+              </Link>
+
+              <Link
+                href="/dashboard/newsletter"
+                className={`flex items-center gap-3 px-4 py-2.5 rounded-lg font-medium transition-colors ${isActive("/dashboard/newsletter")
+                  ? "bg-white/10 text-white border border-white/5"
+                  : "text-gray-400 hover:text-white hover:bg-white/5"
+                  }`}
+              >
+                <LineIconMail size={18} />
+                <span>Newsletter</span>
               </Link>
             </div>
 

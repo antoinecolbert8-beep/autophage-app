@@ -4,17 +4,21 @@
  */
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import OpenAI from "openai";
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY!);
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || process.env.VERTEX_AI_API_KEY || "");
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || "" });
 
 export type ContentRequest = {
   topic: string;
-  platform: "LINKEDIN" | "INSTAGRAM" | "FACEBOOK" | "TIKTOK" | "YOUTUBE_SHORT";
-  contentType: "TEXT" | "IMAGE_PROMPT" | "VIDEO_SCRIPT" | "CAROUSEL";
+  platform: "LINKEDIN" | "INSTAGRAM" | "FACEBOOK" | "TIKTOK" | "YOUTUBE_SHORT" | "NEWSLETTER";
+  contentType: "TEXT" | "IMAGE_PROMPT" | "VIDEO_SCRIPT" | "CAROUSEL" | "HTML_NEWSLETTER";
   tone?: "professional" | "casual" | "inspirational" | "educational" | "viral";
   targetAudience?: string;
   keywords?: string[];
   length?: "short" | "medium" | "long";
+  isEnterprise?: boolean;
+  shopContext?: boolean;
 };
 
 export type ContentOutput = {
@@ -23,6 +27,12 @@ export type ContentOutput = {
   imagePrompts?: string[];
   callToAction?: string;
   engagement_hooks?: string[];
+  seo?: {
+    title: string;
+    description: string;
+    keywords: string[];
+    slug: string;
+  };
   metadata?: Record<string, any>;
 };
 
@@ -32,7 +42,8 @@ export type ContentOutput = {
 export async function generateContentWithGemini(
   request: ContentRequest
 ): Promise<ContentOutput> {
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+  const modelName = "gemini-1.5-flash";
+  const model = genAI.getGenerativeModel({ model: modelName });
 
   const platformSpecs = getPlatformSpecs(request.platform);
   const toneGuide = getToneGuide(request.tone ?? "professional");
@@ -63,7 +74,13 @@ ${request.keywords?.length ? `**Mots-clés à intégrer** : ${request.keywords.j
   "callToAction": "CTA clair",
   "hashtags": ["#tag1", "#tag2", ...],
   "imagePrompts": ["Description image 1", "Description image 2", ...],
-  "engagement_hooks": ["Question 1", "Question 2"]
+  "engagement_hooks": ["Question 1", "Question 2"],
+  "seo": {
+    "title": "Titre optimisé SEO",
+    "description": "Meta description (155 caractères)",
+    "keywords": ["mot-clé1", "mot-clé2", ...],
+    "slug": "url-optimisee"
+  }
 }
 
 **IMPORTANT** : Évite le ton "ChatGPT". Sois direct, authentique, actionnable.`;
@@ -73,9 +90,38 @@ ${request.keywords?.length ? `**Mots-clés à intégrer** : ${request.keywords.j
     const response = result.response;
     const text = response.text();
 
-    // Parse JSON depuis la réponse
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
+    return parseAIResponse(text, request.platform);
+  } catch (error) {
+    console.warn("⚠️ Gemini failed, falling back to OpenAI...", (error as Error).message);
+
+    try {
+      if (!process.env.OPENAI_API_KEY) throw new Error("OPENAI_API_KEY non configurée");
+
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [
+          { role: "system", content: "Tu es un expert en marketing digital et SEO." },
+          { role: "user", content: prompt }
+        ],
+        response_format: { type: "json_object" }
+      });
+
+      const text = completion.choices[0].message.content || "{}";
+      return parseAIResponse(text, request.platform);
+    } catch (openaiError) {
+      console.error("❌ OpenAI fallback also failed:", openaiError);
+      throw new Error(`AI generation failed: ${(error as Error).message}`);
+    }
+  }
+}
+
+/**
+ * Парсинг JSON depuis la réponse de l'IA (Gemini ou OpenAI)
+ */
+function parseAIResponse(text: string, platform: string): ContentOutput {
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    try {
       const parsed = JSON.parse(jsonMatch[0]);
       return {
         text: parsed.text || parsed.hook || text,
@@ -83,28 +129,28 @@ ${request.keywords?.length ? `**Mots-clés à intégrer** : ${request.keywords.j
         imagePrompts: parsed.imagePrompts || [],
         callToAction: parsed.callToAction,
         engagement_hooks: parsed.engagement_hooks || [],
+        seo: parsed.seo,
         metadata: {
-          platform: request.platform,
+          platform,
           generatedAt: new Date().toISOString(),
-          model: "gemini-2.0-flash-exp",
+          model: text.includes("gpt") ? "gpt-4o" : "gemini-1.5-flash",
         },
       };
+    } catch (e) {
+      console.error("Error parsing AI JSON:", e);
     }
-
-    // Fallback si pas de JSON
-    return {
-      text,
-      hashtags: extractHashtags(text),
-      callToAction: "Qu'en penses-tu ?",
-      metadata: {
-        platform: request.platform,
-        generatedAt: new Date().toISOString(),
-      },
-    };
-  } catch (error) {
-    console.error("Erreur Gemini:", error);
-    throw new Error(`Gemini API error: ${(error as Error).message}`);
   }
+
+  // Fallback si pas de JSON
+  return {
+    text,
+    hashtags: extractHashtags(text),
+    callToAction: "Qu'en penses-tu ?",
+    metadata: {
+      platform,
+      generatedAt: new Date().toISOString(),
+    },
+  };
 }
 
 /**
@@ -114,7 +160,8 @@ export async function generateImagePrompt(
   topic: string,
   style: "realistic" | "illustration" | "minimalist" | "3d" = "realistic"
 ): Promise<string> {
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+  const modelName = "gemini-1.5-flash";
+  const model = genAI.getGenerativeModel({ model: modelName });
 
   const prompt = `Génère un prompt détaillé pour créer une image ${style} sur le thème : "${topic}".
 
@@ -140,7 +187,8 @@ export async function analyzeCompetitorContent(
   competitorContent: string[],
   niche: string
 ): Promise<{ insights: string[]; recommendations: string[] }> {
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+  const modelName = "gemini-1.5-flash";
+  const model = genAI.getGenerativeModel({ model: modelName });
 
   const prompt = `Analyse ces contenus performants dans la niche "${niche}" :
 
@@ -177,6 +225,7 @@ function getPlatformSpecs(platform: string): string {
     FACEBOOK: "- Texte : 100-250 caractères\n- Conversationnel et engageant\n- Questions pour booster interactions\n- Hashtags : 2-3 max",
     TIKTOK: "- Caption : 80-150 caractères\n- Ton décalé et viral\n- Appel à l'action direct\n- Hashtags tendances : 3-5",
     YOUTUBE_SHORT: "- Titre : 60 caractères max\n- Description : 100-200 caractères\n- Hook immédiat (3 premières secondes)\n- Hashtags : 3-5",
+    NEWSLETTER: "- Format : HTML sémantique (h1, h2, strong)\n- Style : Infolettre hebdomadaire premium\n- Structure : Édito + 3-5 points clés + Conclusion\n- SEO : Titre captivant, meta-description riche",
   };
 
   return specs[platform] || specs.LINKEDIN;

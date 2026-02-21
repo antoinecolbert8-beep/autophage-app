@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { generateContentWithGemini, generateImagePrompt } from "@/lib/gemini-content";
+import { LegalSentinel } from "@/lib/security/legal-sentinel";
 
 export async function POST(req: NextRequest) {
   try {
@@ -30,6 +31,14 @@ export async function POST(req: NextRequest) {
       keywords,
     });
 
+    // --- NEW: LEGAL COMPLIANCE CHECK ---
+    const compliance = await LegalSentinel.checkContent(
+      content.text,
+      platform,
+      !!body.shopContext,
+      body.userType === 'enterprise' ? 'enterprise' : 'individual'
+    );
+
     // Génère les prompts d'images si demandé
     let imagePrompts = content.imagePrompts || [];
     if (generateImages && imagePrompts.length === 0) {
@@ -42,11 +51,12 @@ export async function POST(req: NextRequest) {
       content: {
         ...content,
         imagePrompts,
+        compliance,
       },
       metadata: {
         platform,
         generatedAt: new Date().toISOString(),
-        model: "gemini-2.0-flash-exp",
+        model: content.metadata?.model || "gemini-1.5-flash",
       },
     });
   } catch (error) {
