@@ -23,7 +23,7 @@ export default function BlurFade({
     inView = true,
 }: BlurFadeProps) {
     const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: "-50px" });
+    const isInView = useInView(ref, { once: true, margin: "0px" });
     const shouldAnimate = inView ? isInView : true;
 
     const variants: Variants = {
@@ -49,6 +49,8 @@ export default function BlurFade({
             ref={ref}
             initial="hidden"
             animate={shouldAnimate ? "visible" : "hidden"}
+            whileInView="visible"
+            viewport={{ once: true }}
             variants={variants}
             className={className}
         >
