@@ -16,23 +16,15 @@ if (!nodeOptions.includes('max-old-space-size')) {
 
 try {
     // 1. Generate Prisma Client
-    console.log('📦 Generating Prisma Client (using local binary)...');
-    const prisma = spawnSync('node', ['./node_modules/prisma/build/index.js', 'generate'], {
+    console.log('📦 Generating Prisma Client (v5.22.0)...');
+    const prisma = spawnSync('npx', ['--yes', 'prisma@5.22.0', 'generate'], {
         stdio: 'inherit',
         shell: true,
         env: { ...process.env, NODE_OPTIONS: nodeOptions }
     });
 
-    if (prisma.error) {
-        console.log('Falling back to npx prisma...');
-        const prismaFallback = spawnSync('npx', ['prisma@5.22.0', 'generate'], {
-            stdio: 'inherit',
-            shell: true,
-            env: { ...process.env, NODE_OPTIONS: nodeOptions }
-        });
-        if (prismaFallback.status !== 0) throw new Error(`Prisma fallback failed`);
-    } else if (prisma.status !== 0) {
-        throw new Error(`Prisma exited with code ${prisma.status}`);
+    if (prisma.status !== 0) {
+        throw new Error(`Prisma generation failed with code ${prisma.status}`);
     }
 
     // 2. Run Next.js Build
