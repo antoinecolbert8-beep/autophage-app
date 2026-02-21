@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { generateAuthorityContent } from '@/lib/content/authority-engine';
-import { supabase } from '@/lib/supabase/sync';
+import { getSupabaseClient } from '@/lib/supabase/sync';
 import { generateText } from '@/lib/ai/vertex';
 
 /**
@@ -298,6 +298,7 @@ export async function executeMarketDominationWorkflow(keyword: string, projectId
         console.log(`✅ ${outreachMessages.length} outreach messages prepared`);
 
         // Sync to Supabase
+        const supabase = getSupabaseClient();
         await supabase.from('ContentAsset').insert({
             id: contentAsset.id,
             title: contentAsset.title,
