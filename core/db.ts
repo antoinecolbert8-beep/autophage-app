@@ -12,10 +12,15 @@ export const prisma = db;
 
 // 🛡️ SECURITY AUDIT: Fail-fast if critical secrets are missing
 if (process.env.NODE_ENV === 'production') {
+    const isBuildPhase = process.env.NEXT_PHASE === 'phase-production-build';
     if (!process.env.FORTRESS_SECRET || process.env.FORTRESS_SECRET.length < 32) {
-        console.error('❌ CRITICAL SECURITY ERROR: FORTRESS_SECRET is missing or too short (min 32 chars).');
-        console.error('The application will now terminate to prevent unencrypted data exposure.');
-        process.exit(1);
+        if (isBuildPhase) {
+            console.warn('⚠️ SECURITY WARNING: FORTRESS_SECRET is missing or too short. Build will proceed, but production runtime REQUIRES this variable.');
+        } else {
+            console.error('❌ CRITICAL SECURITY ERROR: FORTRESS_SECRET is missing or too short (min 32 chars).');
+            console.error('The application will now terminate to prevent unencrypted data exposure.');
+            process.exit(1);
+        }
     }
 }
 
