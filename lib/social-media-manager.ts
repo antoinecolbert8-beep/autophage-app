@@ -7,7 +7,7 @@ import axios from 'axios';
 import { FacebookAdsApi } from 'facebook-nodejs-business-sdk';
 import { db as prisma } from "@/core/db";
 
-const BYPASS_MODE = true; // FORCE SUCCESS IF CREDENTIALS MISSING
+const BYPASS_MODE = false; // REAL MODE: configure credentials at /dashboard/integrations
 
 // ============================================================================== 
 // CONFIGURATION & CREDENTIALS

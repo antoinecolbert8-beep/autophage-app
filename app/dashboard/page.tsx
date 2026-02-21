@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import Link from "next/link";
 import {
   LineIconZap,
   LineIconShield,
@@ -262,9 +263,19 @@ export default function DashboardPage() {
                   <p className="text-xs text-gray-500">PDF & Excel</p>
                 </div>
               </button>
-            </div>
+              <Link
+                href="/dashboard/integrations"
+                className="w-full p-4 rounded-xl bg-gradient-to-r from-blue-600/10 to-purple-600/10 border border-blue-500/20 hover:border-blue-500/50 transition-all text-left flex items-center gap-4 group"
+              >
+                <div className="w-10 h-10 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <LineIconZap size={20} />
+                </div>
+                <div>
+                  <p className="font-bold text-sm text-blue-300">Centre d'Intégrations</p>
+                  <p className="text-xs text-gray-500">LinkedIn · X · Shopify · WhatsApp</p>
+                </div>
+              </Link>
 
-            <div className="mt-8 border-t border-white/5 pt-8">
               <RealTimeActivityFeed />
             </div>
           </BlurFade>

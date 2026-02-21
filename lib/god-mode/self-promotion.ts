@@ -12,7 +12,7 @@ import { ShopifyAutomation } from '@/lib/integrations/shopify';
  * GOD MODE: SELF-PROMOTION ENGINE (V3 - PERFORMANCE TRACKING)
  */
 
-type Platform = 'LINKEDIN' | 'X_PLATFORM' | 'INSTAGRAM' | 'FACEBOOK' | 'SNAPCHAT' | 'PRESS' | 'SHOPIFY_ECOM';
+type Platform = 'LINKEDIN' | 'X_PLATFORM' | 'INSTAGRAM' | 'FACEBOOK' | 'SNAPCHAT' | 'PRESS' | 'SHOPIFY_ECOM' | 'YOUTUBE_SEO' | 'EMAIL_NEWSLETTER' | 'ADS_SCALE' | 'AFFILIATE_LEVERAGE';
 
 export class ELASelfPromoter {
 
@@ -23,7 +23,11 @@ export class ELASelfPromoter {
         'FACEBOOK': [12, 18],
         'SNAPCHAT': [20, 21],
         'PRESS': [9, 14], // Morning and afternoon press releases
-        'SHOPIFY_ECOM': [10, 17, 19] // Sales periods
+        'SHOPIFY_ECOM': [10, 17, 19], // Sales periods
+        'YOUTUBE_SEO': [15, 20],      // High traffic video times
+        'EMAIL_NEWSLETTER': [8, 11],  // Morning inbox check
+        'ADS_SCALE': [0, 6, 12, 18],  // 24/7 Scalability
+        'AFFILIATE_LEVERAGE': [14, 19] // Post-purchase engagement
     };
 
     /**
@@ -37,7 +41,7 @@ export class ELASelfPromoter {
         console.log(`[GOD MODE] Current Hour(UTC): ${currentHour} `);
 
         const systemUserId = await this.ensureSystemUser();
-        const platforms: any[] = ['LINKEDIN', 'X_PLATFORM', 'INSTAGRAM', 'FACEBOOK', 'SNAPCHAT', 'PRESS', 'SHOPIFY_ECOM'];
+        const platforms: any[] = ['LINKEDIN', 'X_PLATFORM', 'INSTAGRAM', 'FACEBOOK', 'SNAPCHAT', 'PRESS', 'SHOPIFY_ECOM', 'YOUTUBE_SEO', 'EMAIL_NEWSLETTER', 'ADS_SCALE', 'AFFILIATE_LEVERAGE'];
         const results = [];
 
         for (const platform of platforms) {
@@ -67,16 +71,22 @@ export class ELASelfPromoter {
      * Detects new orders and broadcasts them to stir "Social Proof" viral effects
      */
     private static async broadcastRecentSales(userId: string) {
-        console.log("[SHOPIFY] Checking for recent sales to broadcast...");
-        // In production, we'd pull from Shopify Webhooks or API
-        const dice = Math.random();
-        if (dice > 0.7) {
-            const product = await ShopifyAutomation.getBestseller('org_global');
-            if (product) {
-                const message = `🔥 NOUVELLE COMMANDE : Un utilisateur souverain vient de s'équiper de ${product.title}. Le mouvement s'accélère.`;
-                await this.schedulePost(message, 'SHOPIFY_ECOM', product.imageUrl);
-                console.log("[SHOPIFY] Broadcasted sales alert.");
+        console.log("[SHOPIFY] Checking real Shopify orders to broadcast...");
+        try {
+            // Pull real orders from the last 2 hours
+            const orders = await ShopifyAutomation.getRecentOrders('org_global', 120);
+            if (orders.length === 0) {
+                console.log("[SHOPIFY] No recent orders to broadcast. Configure Shopify at /dashboard/integrations");
+                return;
             }
+            for (const order of orders.slice(0, 2)) { // Limit to 2 posts max per cycle
+                const mainItem = order.lineItems[0]?.title || 'produit ELA';
+                const message = `🔥 NOUVELLE COMMANDE : Un souverain vient de s'équiper avec "${mainItem}" — €${order.totalPrice}. Le mouvement s'accélère. Rejoignez-nous.`;
+                await this.schedulePost(message, 'SHOPIFY_ECOM', '');
+                console.log(`[SHOPIFY] Broadcasted real sale: Order ${order.id}`);
+            }
+        } catch (err) {
+            console.error("[SHOPIFY] Error broadcasting sales:", err);
         }
     }
 

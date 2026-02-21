@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { authService } from "@/lib/supabase/auth";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -18,23 +18,24 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      // MASTER ADMIN BYPASS (Emergency only)
-      if ((email === "admin@ela-revolution.com" || email === "godmode@ela.ai") && password === "GodMode2024!") {
-        // Set cookie for middleware bypass
-        document.cookie = "admin-session=true; path=/; max-age=86400";
-        // Store session for client components
-        localStorage.setItem('ela_admin_auth', 'true');
-        localStorage.setItem('ela_tier', 'grand_horloger');
-        localStorage.setItem('ela_user_name', email === "godmode@ela.ai" ? 'God Mode System' : 'System Admin');
-        router.push("/dashboard");
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError("Email ou mot de passe incorrect. Vérifiez vos identifiants.");
+        setLoading(false);
         return;
       }
 
-      // Real Supabase authentication
-      await authService.signIn(email, password);
-      router.push("/dashboard");
+      if (result?.ok) {
+        router.push("/dashboard");
+        router.refresh();
+      }
     } catch (err: any) {
-      setError(err.message || "Erreur de connexion. Vérifiez vos identifiants.");
+      setError(err.message || "Erreur de connexion. Réessayez.");
       setLoading(false);
     }
   };
@@ -77,9 +78,7 @@ export default function LoginPage() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium mb-2">
-                  Email
-                </label>
+                <label className="block text-sm font-medium mb-2">Email</label>
                 <input
                   type="email"
                   value={email}
@@ -92,9 +91,7 @@ export default function LoginPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">
-                  Mot de passe
-                </label>
+                <label className="block text-sm font-medium mb-2">Mot de passe</label>
                 <input
                   type="password"
                   value={password}
@@ -125,7 +122,12 @@ export default function LoginPage() {
               </button>
             </form>
 
-            <div className="mt-8 pt-8 border-t border-[rgba(255,255,255,0.1)] text-center">
+            {/* Admin hint */}
+            <div className="mt-4 p-3 bg-blue-500/5 border border-blue-500/10 rounded-lg text-xs text-blue-400 text-center">
+              Admin : connectez-vous avec vos identifiants administrateur configurés en base de données.
+            </div>
+
+            <div className="mt-6 pt-6 border-t border-[rgba(255,255,255,0.1)] text-center">
               <p className="text-[rgba(255,255,255,0.7)]">
                 Pas encore de compte ?{" "}
                 <Link href="/signup" className="font-semibold hover:opacity-80">
@@ -137,13 +139,9 @@ export default function LoginPage() {
 
           <p className="text-center text-sm text-[rgba(255,255,255,0.5)] mt-6">
             En vous connectant, vous acceptez nos{" "}
-            <Link href="/legal/terms" className="hover:opacity-80 underline">
-              CGV
-            </Link>
+            <Link href="/legal/terms" className="hover:opacity-80 underline">CGV</Link>
             {" "}et notre{" "}
-            <Link href="/legal/privacy" className="hover:opacity-80 underline">
-              Politique de confidentialité
-            </Link>
+            <Link href="/legal/privacy" className="hover:opacity-80 underline">Politique de confidentialité</Link>
           </p>
         </div>
       </div>

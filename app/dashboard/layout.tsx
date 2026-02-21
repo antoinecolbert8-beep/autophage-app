@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 import Navigation from "@/components/navigation";
 import { RealTimeProvider } from '@/components/RealTimeProvider';
@@ -13,38 +14,29 @@ export default function DashboardLayout({
     children: React.ReactNode;
 }) {
     const router = useRouter();
+    const { data: session, status } = useSession();
     const [authorized, setAuthorized] = useState(false);
 
     useEffect(() => {
-        // SECURITY CHECK: Has the user paid?
-        // In a real app, this would check a JWT claim or server-side session.
-        // For this demonstration/prototype, we use the local flag set by the Payment Page.
-        const hasPaid = localStorage.getItem('ela_paid') === 'true';
+        if (status === 'loading') return; // Wait for session to resolve
 
-        if (!hasPaid) {
-            // BYPASS: Allow Localhost / Dev to proceed without payment
-            // UNLESS: Simulation Mode is active (to test client flow)
-            const isSimulation = localStorage.getItem('ela_simulate_external') === 'true';
-
-            if (!isSimulation && typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
-                setAuthorized(true);
-                // Auto-inject God Mode for dev experience
-                localStorage.setItem('ela_paid', 'true');
-                localStorage.setItem('ela_tier', 'grand_horloger');
-                return;
-            }
-
-            // Redirect to payment if trying to access dashboard without paying
-            router.push('/signup?plan=starter'); // Force them through the funnel
-        } else {
+        if (status === 'authenticated' && session?.user) {
             setAuthorized(true);
+            return;
         }
-    }, [router]);
 
-    if (!authorized) {
+        // Not authenticated — redirect to login
+        if (status === 'unauthenticated') {
+            router.push('/login');
+        }
+    }, [session, status, router]);
+
+    // Show spinner while loading
+    if (status === 'loading' || !authorized) {
         return (
-            <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
+            <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center flex-col gap-4">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                <p className="text-gray-500 text-sm font-mono">Vérification des accès...</p>
             </div>
         );
     }
