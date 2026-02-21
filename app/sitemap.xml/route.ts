@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { db as prisma } from "@/core/db";
 
+export const dynamic = 'force-dynamic';
+
 /**
  * Sitemap for SEO
  */

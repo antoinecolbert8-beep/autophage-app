@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { db as prisma } from "@/core/db";
 
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/blog/articles/[slug]
  * Returns individual article by slug

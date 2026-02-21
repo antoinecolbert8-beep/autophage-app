@@ -1,16 +1,25 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const getSupabaseUrl = () => process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://dummy.supabase.co';
+const getSupabaseAnonKey = () => process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'dummy_key';
+const getSupabaseServiceKey = () => process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-// Client-side Supabase client (limited permissions)
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+let _supabase: any = null;
+let _supabaseAdmin: any = null;
 
-// Server-side Supabase client (full permissions - only use in API routes)
-export const supabaseAdmin = supabaseServiceKey
-    ? createClient(supabaseUrl, supabaseServiceKey)
-    : null;
+function getSupabase() {
+    if (_supabase) return _supabase;
+    _supabase = createClient(getSupabaseUrl(), getSupabaseAnonKey());
+    return _supabase;
+}
+
+function getSupabaseAdmin() {
+    if (_supabaseAdmin) return _supabaseAdmin;
+    const serviceKey = getSupabaseServiceKey();
+    if (!serviceKey) return null;
+    _supabaseAdmin = createClient(getSupabaseUrl(), serviceKey);
+    return _supabaseAdmin;
+}
 
 /**
  * AUTH SERVICE
@@ -21,6 +30,7 @@ export const authService = {
      * Sign in with email and password
      */
     async signIn(email: string, password: string) {
+        const supabase = getSupabase();
         const { data, error } = await supabase.auth.signInWithPassword({
             email,
             password,
@@ -37,6 +47,7 @@ export const authService = {
      * Sign up with email and password
      */
     async signUp(email: string, password: string, metadata?: Record<string, any>) {
+        const supabase = getSupabase();
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
@@ -56,6 +67,7 @@ export const authService = {
      * Sign out current user
      */
     async signOut() {
+        const supabase = getSupabase();
         const { error } = await supabase.auth.signOut();
         if (error) {
             throw new Error(error.message);
@@ -66,6 +78,7 @@ export const authService = {
      * Get current session
      */
     async getSession() {
+        const supabase = getSupabase();
         const { data, error } = await supabase.auth.getSession();
         if (error) {
             throw new Error(error.message);
@@ -77,6 +90,7 @@ export const authService = {
      * Get current user
      */
     async getCurrentUser() {
+        const supabase = getSupabase();
         const { data, error } = await supabase.auth.getUser();
         if (error) {
             return null;
@@ -88,8 +102,9 @@ export const authService = {
      * Reset password
      */
     async resetPassword(email: string) {
+        const supabase = getSupabase();
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset-password`,
+            redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/auth/reset-password`,
         });
 
         if (error) {
@@ -101,6 +116,7 @@ export const authService = {
      * Update password
      */
     async updatePassword(newPassword: string) {
+        const supabase = getSupabase();
         const { error } = await supabase.auth.updateUser({
             password: newPassword,
         });
@@ -114,6 +130,7 @@ export const authService = {
      * Listen to auth state changes (for client components)
      */
     onAuthStateChange(callback: (event: string, session: any) => void) {
+        const supabase = getSupabase();
         return supabase.auth.onAuthStateChange(callback);
     },
 };
