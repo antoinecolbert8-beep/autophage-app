@@ -69,20 +69,14 @@ export default function ClientLayoutWrapper({
             {/* Global Navigation - Controlled by Matrix Logic */}
             {showSidebar && <Navigation />}
 
-            {/* Main Content Area with Page Transitions */}
-            <AnimatePresence mode="wait">
-                <motion.main
-                    key={pathname}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1.0] }}
-                    className={`relative z-10 ${showSidebar ? "ml-20 lg:ml-64 p-4 md:p-8" : ""
-                        }`}
-                >
-                    {children}
-                </motion.main>
-            </AnimatePresence>
+            {/* Main Content Area */}
+            <main
+                key={pathname}
+                className={`relative z-10 ${showSidebar ? "ml-20 lg:ml-64 p-4 md:p-8" : ""
+                    }`}
+            >
+                {children}
+            </main>
         </div>
     );
 }
