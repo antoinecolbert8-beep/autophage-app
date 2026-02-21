@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // ==========================================
@@ -15,14 +16,14 @@ datasource db {
 // ==========================================
 
 model Organization {
-  id              String   @id @default(cuid())
-  name            String
-  domain          String   @unique
-  tier            String   @default("starter") // starter, pro, enterprise
-  mrr             Float    @default(0) // Monthly Recurring Revenue
-  creditBalance   Int      @default(0) // Available credits for usage
-  status          String   @default("active") // active, suspended, cancelled
-  
+  id            String @id @default(cuid())
+  name          String
+  domain        String @unique
+  tier          String @default("starter") // starter, pro, enterprise
+  mrr           Float  @default(0) // Monthly Recurring Revenue
+  creditBalance Int    @default(0) // Available credits for usage
+  status        String @default("active") // active, suspended, cancelled
+
   // Relations
   users           User[]
   projects        Project[]
@@ -34,70 +35,68 @@ model Organization {
   creditPurchases CreditPurchase[]
   paymentDisputes PaymentDispute[]
   auditLogs       AuditLog[]
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([domain])
 }
 
-
-
 model User {
-  id              String   @id @default(cuid())
-  email           String   @unique
-  name            String?
-  role            String   @default("member") // admin, member, viewer
-  avatar          String?
-  password        String?  // Hashed password for admin/credentials login
-  
+  id       String  @id @default(cuid())
+  email    String  @unique
+  name     String?
+  role     String  @default("member") // admin, member, viewer
+  avatar   String?
+  password String? // Hashed password for admin/credentials login
+
   // Subscription & Quota fields
-  currentPlan     String   @default("free") // free, pro, enterprise
+  currentPlan      String   @default("free") // free, pro, enterprise
   stripeCustomerId String?
-  usedQuota       Int      @default(0)
-  monthlyQuota    Int      @default(10)
-  quotaResetDate  DateTime @default(now())
+  usedQuota        Int      @default(0)
+  monthlyQuota     Int      @default(10)
+  quotaResetDate   DateTime @default(now())
 
   // Spore Protocol (Referral)
-  referralCode    String?  @unique
-  referredBy      String?
-  
-  organizationId  String
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  saveAttempts    SaveAttempt[]
-  
+  referralCode String? @unique
+  referredBy   String?
+
+  organizationId String
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  saveAttempts   SaveAttempt[]
+
   // Relations
-  subscription    Subscription?
-  videos          Video[]
-  usageRecords    UsageRecord[]
-  posts           Post[]
-  brandProfile    BrandProfile?
-  userPreference  UserPreference?
-  auditLogs       AuditLog[]
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
+  subscription   Subscription?
+  videos         Video[]
+  usageRecords   UsageRecord[]
+  posts          Post[]
+  brandProfile   BrandProfile?
+  userPreference UserPreference?
+  auditLogs      AuditLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([organizationId])
 }
 
 model Project {
-  id              String   @id @default(cuid())
-  name            String
-  domain          String
-  description     String?
-  status          String   @default("active")
-  
+  id          String  @id @default(cuid())
+  name        String
+  domain      String
+  description String?
+  status      String  @default("active")
+
   // SEO Data
-  keywords        KeywordOpportunity[]
-  content         ContentAsset[]
-  
-organizationId  String
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
+  keywords KeywordOpportunity[]
+  content  ContentAsset[]
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([organizationId])
 }
 
@@ -106,52 +105,52 @@ organizationId  String
 // ==========================================
 
 model KeywordOpportunity {
-  id             String   @id @default(cuid())
-  keyword        String
-  volume         Int      // search volume per month
-  difficulty     Float    // 0-100
-  intent         String   // commercial, informational, navigational, transactional
-  cluster        String   // topic cluster name
-  priority       Float    @default(0) // calculated priority score
-  status         String   @default("pending") // pending, in-progress, published
-  
+  id         String @id @default(cuid())
+  keyword    String
+  volume     Int // search volume per month
+  difficulty Float // 0-100
+  intent     String // commercial, informational, navigational, transactional
+  cluster    String // topic cluster name
+  priority   Float  @default(0) // calculated priority score
+  status     String @default("pending") // pending, in-progress, published
+
   suggestedContent String?
   rankingPosition  Int?
-  
-  projectId      String
-  project        Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([projectId, status])
   @@index([priority])
 }
 
 model ContentAsset {
-  id            String   @id @default(cuid())
-  title         String
-  content       String  
-  slug          String
-  metaTitle     String?
+  id              String  @id @default(cuid())
+  title           String
+  content         String
+  slug            String
+  metaTitle       String?
   metaDescription String?
-  
+
   // SEO Metrics
   keywords      String // targeted keywords (CSV)
-  semanticScore Float    @default(0) // semantic density score
-  wordCount     Int      @default(0)
-  
+  semanticScore Float  @default(0) // semantic density score
+  wordCount     Int    @default(0)
+
   // Performance Data
-  rankingData   String? // String // Json    // {keyword: position, impressions, clicks}
-  publishedAt   DateTime?
-  lastUpdated   DateTime?
-  
-  projectId     String
-  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  
+  rankingData String? // String // Json    // {keyword: position, impressions, clicks}
+  publishedAt DateTime?
+  lastUpdated DateTime?
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([projectId])
   @@index([publishedAt])
 }
@@ -161,29 +160,29 @@ model ContentAsset {
 // ==========================================
 
 model Lead {
-  id              String   @id @default(cuid())
-  email           String
-  name            String?
-  company         String?
-  phone           String?
-  
+  id      String  @id @default(cuid())
+  email   String
+  name    String?
+  company String?
+  phone   String?
+
   // Scoring
-  score           Float    @default(0)
-  scoreBreakdown  String // Json     // {demographic: X, behavioral: Y, engagement: Z, intent: W}
-  metadata        String? // String // Json    // Additional info (Sales Nav URL, etc)
-  persona         String?  // matched persona type
-  stage           String   @default("cold") // cold, warm, hot, customer
-  
+  score          Float   @default(0)
+  scoreBreakdown String // Json     // {demographic: X, behavioral: Y, engagement: Z, intent: W}
+  metadata       String? // String // Json    // Additional info (Sales Nav URL, etc)
+  persona        String? // matched persona type
+  stage          String  @default("cold") // cold, warm, hot, customer
+
   // Engagement
-  touchpoints     Touchpoint[]
-  conversions     Conversion[]
-  
-  organizationId  String
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
+  touchpoints Touchpoint[]
+  conversions Conversion[]
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@unique([email, organizationId])
   @@index([organizationId, stage])
   @@index([score])
@@ -191,68 +190,68 @@ model Lead {
 }
 
 model Campaign {
-  id              String   @id @default(cuid())
-  name            String
-  type            String   // email, sms, social, push
-  targetPersona   String?
-  
+  id            String  @id @default(cuid())
+  name          String
+  type          String // email, sms, social, push
+  targetPersona String?
+
   // Configuration
   messageTemplate String // Json     // template with variables
   triggers        String // Json     // automation triggers
   schedule        String? // String // Json    // scheduling config
-  
+
   // Performance
-  kpis            String // Json     // {sent: X, opened: Y, clicked: Z, converted: W}
-  active          Boolean  @default(true)
-  
-  touchpoints     Touchpoint[]
-  
-  organizationId  String
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
+  kpis   String // Json     // {sent: X, opened: Y, clicked: Z, converted: W}
+  active Boolean @default(true)
+
+  touchpoints Touchpoint[]
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([organizationId, active])
 }
 
 model Touchpoint {
-  id              String   @id @default(cuid())
-  type            String   // email, sms, call, meeting
-  channel         String
-  message         String? 
-  response        String? 
-  
+  id       String  @id @default(cuid())
+  type     String // email, sms, call, meeting
+  channel  String
+  message  String?
+  response String?
+
   // Engagement metrics
-  delivered       Boolean  @default(false)
-  opened          Boolean  @default(false)
-  clicked         Boolean  @default(false)
-  converted       Boolean  @default(false)
-  
-  leadId          String
-  lead            Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
-  
-  campaignId      String?
-  campaign        Campaign? @relation(fields: [campaignId], references: [id])
-  
-  createdAt       DateTime @default(now())
-  
+  delivered Boolean @default(false)
+  opened    Boolean @default(false)
+  clicked   Boolean @default(false)
+  converted Boolean @default(false)
+
+  leadId String
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  campaignId String?
+  campaign   Campaign? @relation(fields: [campaignId], references: [id])
+
+  createdAt DateTime @default(now())
+
   @@index([leadId])
   @@index([campaignId])
 }
 
 model Conversion {
-  id              String   @id @default(cuid())
-  type            String   // signup, purchase, upgrade, referral
-  value           Float    // monetary value
-  source          String   // campaign, organic, referral
-  metadata        String? // String // Json
-  
-  leadId          String
-  lead            Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
-  
-  createdAt       DateTime @default(now())
-  
+  id       String  @id @default(cuid())
+  type     String // signup, purchase, upgrade, referral
+  value    Float // monetary value
+  source   String // campaign, organic, referral
+  metadata String? // String // Json
+
+  leadId String
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
   @@index([leadId])
   @@index([type])
 }
@@ -262,48 +261,48 @@ model Conversion {
 // ==========================================
 
 model Integration {
-  id              String   @id @default(cuid())
-  provider        String   // google-analytics, stripe, instagram, sendgrid
-  credentials     String   // encrypted JSON
-  config          String // Json     // provider-specific config
-  status          String   @default("active") // active, inactive, error
-  
-  lastSync        DateTime?
-  syncFrequency   Int      @default(60) // minutes
-  
-  dataPoints      DataPoint[]
-  
-  organizationId  String
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
+  id          String @id @default(cuid())
+  provider    String // google-analytics, stripe, instagram, sendgrid
+  credentials String // encrypted JSON
+  config      String // Json     // provider-specific config
+  status      String @default("active") // active, inactive, error
+
+  lastSync      DateTime?
+  syncFrequency Int       @default(60) // minutes
+
+  dataPoints DataPoint[]
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([organizationId, provider])
 }
 
 model DataPoint {
-  id              String   @id @default(cuid())
-  metric          String   // pageviews, conversions, revenue, etc.
-  value           Float
-  dimensions      String // Json     // additional context
-  timestamp       DateTime
-  
-  integrationId   String
-  integration     Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
-  
+  id         String   @id @default(cuid())
+  metric     String // pageviews, conversions, revenue, etc.
+  value      Float
+  dimensions String // Json     // additional context
+  timestamp  DateTime
+
+  integrationId String
+  integration   Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+
   @@index([integrationId, metric, timestamp])
 }
 
 model AnalyticsSnapshot {
-  id              String   @id @default(cuid())
-  period          String   // daily, weekly, monthly
-  metrics         String // Json     // aggregated metrics
-  timestamp       DateTime
-  
-  organizationId  String
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  
+  id        String   @id @default(cuid())
+  period    String // daily, weekly, monthly
+  metrics   String // Json     // aggregated metrics
+  timestamp DateTime
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
   @@index([organizationId, period, timestamp])
 }
 
@@ -312,35 +311,35 @@ model AnalyticsSnapshot {
 // ==========================================
 
 model PredictiveModel {
-  id              String   @id @default(cuid())
-  modelType       String   // revenue_forecast, churn_risk, lead_scoring
-  version         String
-  accuracy        Float
-  trainingData    String // Json     // metadata about training
-  modelPath       String   // path to model file or Vertex AI endpoint
-  
-  predictions     Prediction[]
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
+  id           String @id @default(cuid())
+  modelType    String // revenue_forecast, churn_risk, lead_scoring
+  version      String
+  accuracy     Float
+  trainingData String // Json     // metadata about training
+  modelPath    String // path to model file or Vertex AI endpoint
+
+  predictions Prediction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([modelType, version])
 }
 
 model Prediction {
-  id              String   @id @default(cuid())
-  entityType      String   // lead, organization, campaign
-  entityId        String
-  predictionType  String   // score, forecast, classification
-  value           Float
-  confidence      Float
-  metadata        String? // String // Json
-  
-  modelId         String
-  model           PredictiveModel @relation(fields: [modelId], references: [id])
-  
-  createdAt       DateTime @default(now())
-  
+  id             String  @id @default(cuid())
+  entityType     String // lead, organization, campaign
+  entityId       String
+  predictionType String // score, forecast, classification
+  value          Float
+  confidence     Float
+  metadata       String? // String // Json
+
+  modelId String
+  model   PredictiveModel @relation(fields: [modelId], references: [id])
+
+  createdAt DateTime @default(now())
+
   @@index([entityType, entityId])
   @@index([modelId])
 }
@@ -350,15 +349,15 @@ model Prediction {
 // ==========================================
 
 model UsageLog {
-  id              String   @id @default(cuid())
-  actionType      String   // APEX_GENERATION, SNAP_DISTRIBUTION, etc.
-  creditsUsed     Int
-  metadata        String? // String // Json
-  timestamp       DateTime @default(now())
-  
-  organizationId  String
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  
+  id          String   @id @default(cuid())
+  actionType  String // APEX_GENERATION, SNAP_DISTRIBUTION, etc.
+  creditsUsed Int
+  metadata    String? // String // Json
+  timestamp   DateTime @default(now())
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
   @@index([organizationId, timestamp])
   @@index([actionType])
 }
@@ -367,26 +366,27 @@ model CreditPurchase {
   id              String   @id @default(cuid())
   credits         Int
   amountPaid      Float?
-  paymentIntentId String?
+  paymentIntentId String?  @unique  // Unique for idempotency — prevents double credit grants
   timestamp       DateTime @default(now())
-  
-  organizationId  String
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
   @@index([organizationId])
+  @@index([paymentIntentId])
 }
 
 model AIActionLog {
-  id                String   @id @default(cuid())
-  actionType        String   // content_generation, lead_scoring, social_distribution, etc.
-  entityType        String   // keyword, lead, content
+  id                String    @id @default(cuid())
+  actionType        String // content_generation, lead_scoring, social_distribution, etc.
+  entityType        String // keyword, lead, content
   entityId          String
-  status            String   @default("pending") // pending, completed, failed
+  status            String    @default("pending") // pending, completed, failed
   decisionReasoning String? // String // Json
   executedAt        DateTime?
-  
-  createdAt         DateTime @default(now())
-  
+
+  createdAt DateTime @default(now())
+
   @@index([actionType, status])
   @@index([entityId])
 }
@@ -396,36 +396,36 @@ model AIActionLog {
 // ==========================================
 
 model BrandProfile {
-  id              String   @id @default(cuid())
-  userId          String   @unique
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  sourceUrl       String
-  logoUrl         String?
-  primaryColor    String?
-  secondaryColor  String?
-  fontFamily      String?
-  keywords        String // Comma separated
-  rawMeta         String? // String // Json
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
+  id             String  @id @default(cuid())
+  userId         String  @unique
+  user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceUrl      String
+  logoUrl        String?
+  primaryColor   String?
+  secondaryColor String?
+  fontFamily     String?
+  keywords       String // Comma separated
+  rawMeta        String? // String // Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([userId])
 }
 
 model UserPreference {
-  id              String   @id @default(cuid())
-  userId          String   @unique
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  logoUrl         String?
-  primaryColor    String?
-  secondaryColor  String?
-  fontFamily      String?
-  theme           String   @default("dark")
-  language        String   @default("fr")
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id             String  @id @default(cuid())
+  userId         String  @unique
+  user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  logoUrl        String?
+  primaryColor   String?
+  secondaryColor String?
+  fontFamily     String?
+  theme          String  @default("dark")
+  language       String  @default("fr")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // ==========================================
@@ -433,132 +433,132 @@ model UserPreference {
 // ==========================================
 
 model WarChest {
-  id                     String   @id @default(cuid())
-  available_budget_cents Int      @default(0)  // Budget in cents
-  total_spent_cents      Int      @default(0)  // Total spent in cents
-  reserved_cents         Int      @default(0)  // Reserved for pending ops
-  currency               String   @default("EUR")
-  
-  organizationId         String?  @unique
-  
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
-  
+  id                     String @id @default(cuid())
+  available_budget_cents Int    @default(0) // Budget in cents
+  total_spent_cents      Int    @default(0) // Total spent in cents
+  reserved_cents         Int    @default(0) // Reserved for pending ops
+  currency               String @default("EUR")
+
+  organizationId String? @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   // God Mode Extensions
-  holdco_balance_cents   Int      @default(0) // Le Sanctuaire
-  opco_status            String   @default("active") // active, draining, frozen
-  reinvestment_rate_basis_points Int? @default(4000)
+  holdco_balance_cents           Int    @default(0) // Le Sanctuaire
+  opco_status                    String @default("active") // active, draining, frozen
+  reinvestment_rate_basis_points Int?   @default(4000)
 }
 
 model GhostProfile {
-  id              String   @id @default(cuid())
-  username        String
-  password        String   // Encrypted
-  platform        String   // LINKEDIN, INSTAGRAM, TWITTER, REDDIT
-  proxy           String?  // ip:port:user:pass
-  cookies         String? 
-  userAgent       String?
-  fingerprint     String? // String // Json    // JA3/Canvas hashes
-  
+  id          String  @id @default(cuid())
+  username    String
+  password    String // Encrypted
+  platform    String // LINKEDIN, INSTAGRAM, TWITTER, REDDIT
+  proxy       String? // ip:port:user:pass
+  cookies     String?
+  userAgent   String?
+  fingerprint String? // String // Json    // JA3/Canvas hashes
+
   status          String   @default("active") // active, burned, warming
   reputationScore Float    @default(0.5)
   lastActive      DateTime @default(now())
-  
-  interactions    GhostInteraction[]
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
+
+  interactions GhostInteraction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([platform, status])
 }
 
 model GhostInteraction {
-  id              String   @id @default(cuid())
-  ghostId         String
-  ghost           GhostProfile @relation(fields: [ghostId], references: [id], onDelete: Cascade)
-  
-  targetId        String   // Post ID, User ID, Comment ID
-  actionType      String   // LIKE, COMMENT, SHARE, VOTE_UP, SAVE
-  content         String? 
-  
-  performedAt     DateTime @default(now())
-  status          String   @default("completed")
-  
+  id      String       @id @default(cuid())
+  ghostId String
+  ghost   GhostProfile @relation(fields: [ghostId], references: [id], onDelete: Cascade)
+
+  targetId   String // Post ID, User ID, Comment ID
+  actionType String // LIKE, COMMENT, SHARE, VOTE_UP, SAVE
+  content    String?
+
+  performedAt DateTime @default(now())
+  status      String   @default("completed")
+
   @@index([targetId])
   @@index([performedAt])
 }
 
 model PaymentDispute {
-  id              String   @id @default(cuid())
-  stripeDisputeId String   @unique
+  id              String @id @default(cuid())
+  stripeDisputeId String @unique
   amount          Float
-  currency        String   @default("EUR")
+  currency        String @default("EUR")
   reason          String
-  status          String   // warning_needs_response, won, lost, under_review
-  
-  organizationId  String
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  
-  createdAt       DateTime @default(now())
-  resolvedAt      DateTime?
-  
+  status          String // warning_needs_response, won, lost, under_review
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime  @default(now())
+  resolvedAt DateTime?
+
   @@index([organizationId, status])
 }
 
 model ActionHistory {
-  id          String   @id @default(cuid())
-  userId      String
-  platform    String   // linkedin, instagram, email, etc.
-  action      String   // post, comment, like, send, etc.
-  targetId    String?  // ID of target entity
-  context     String? // String // Json    // Additional context data
-  status      String   @default("completed")
-  
-  createdAt   DateTime @default(now())
-  
+  id       String  @id @default(cuid())
+  userId   String
+  platform String // linkedin, instagram, email, etc.
+  action   String // post, comment, like, send, etc.
+  targetId String? // ID of target entity
+  context  String? // String // Json    // Additional context data
+  status   String  @default("completed")
+
+  createdAt DateTime @default(now())
+
   @@index([userId])
   @@index([platform])
   @@index([createdAt])
 }
 
 model ContentStat {
-  id          String   @id @default(cuid())
-  postId      String
-  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  platform    String   // linkedin, instagram, twitter, etc.
-  views       Int      @default(0)
-  likes       Int      @default(0)
-  comments    Int      @default(0)
-  shares      Int      @default(0)
-  saves       Int      @default(0)
-  clicks      Int      @default(0)
-  
+  id       String @id @default(cuid())
+  postId   String
+  post     Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  platform String // linkedin, instagram, twitter, etc.
+  views    Int    @default(0)
+  likes    Int    @default(0)
+  comments Int    @default(0)
+  shares   Int    @default(0)
+  saves    Int    @default(0)
+  clicks   Int    @default(0)
+
   collectedAt DateTime @default(now())
-  
+
   @@index([postId])
   @@index([platform])
   @@index([collectedAt])
 }
 
 model Post {
-  id          String   @id @default(cuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  platform    String   // linkedin, instagram, twitter, tiktok, youtube, etc.
-  content     String  
-  mediaUrl    String?
-  externalId  String?  // ID from the platform
-  status      String   @default("draft") // draft, scheduled, published, failed
-  performance_score Float @default(0)
-  scheduledAt DateTime?
-  publishedAt DateTime?
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
+  id                String    @id @default(cuid())
+  userId            String
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  platform          String // linkedin, instagram, twitter, tiktok, youtube, etc.
+  content           String
+  mediaUrl          String?
+  externalId        String? // ID from the platform
+  status            String    @default("draft") // draft, scheduled, published, failed
+  performance_score Float     @default(0)
+  scheduledAt       DateTime?
+  publishedAt       DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   // Relations
-  stats       ContentStat[]
-  
+  stats ContentStat[]
+
   @@index([userId])
   @@index([platform])
   @@index([status])
@@ -570,71 +570,71 @@ model Post {
 // ==========================================
 
 model Subscription {
-  id              String   @id @default(cuid())
-  userId          String   @unique
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   stripeSubscriptionId String?
-  status          String   @default("active") // active, canceled, past_due, paused
-  plan            String   @default("free") // free, pro, enterprise
-  periodStart     DateTime?
-  periodEnd       DateTime?
-  currentPeriodEnd DateTime?
-  cancelAtPeriodEnd Boolean @default(false)
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  status               String    @default("active") // active, canceled, past_due, paused
+  plan                 String    @default("free") // free, pro, enterprise
+  periodStart          DateTime?
+  periodEnd            DateTime?
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean   @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId])
   @@index([createdAt])
 }
 
 model Video {
-  id              String   @id @default(cuid())
-  userId          String
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  platform        String   // YOUTUBE, TIKTOK, INSTAGRAM
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  platform        String // YOUTUBE, TIKTOK, INSTAGRAM
   title           String
-  description     String? 
+  description     String?
   script          String? // String // Json
   hashtags        String // Comma separated
   keywords        String // Comma separated
   videoUrl        String?
   thumbnailUrl    String?
   platformVideoId String?
-  uploadStatus    String   @default("PENDING") // PENDING, PUBLISHED, FAILED
-  
-  aiCost          Float    @default(0)
-  serviceFee      Float    @default(0)
-  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
-  usageRecords    UsageRecord[]
-  
+  uploadStatus    String  @default("PENDING") // PENDING, PUBLISHED, FAILED
+
+  aiCost     Float @default(0)
+  serviceFee Float @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  usageRecords UsageRecord[]
+
   @@index([userId])
   @@index([platform])
   @@index([uploadStatus])
 }
 
 model UsageRecord {
-  id              String   @id @default(cuid())
-  userId          String
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  type            String   // SHORT, POST, CALL, AI_QUERY
-  platform        String?
-  aiCost          Float    @default(0)
-  serviceFee      Float    @default(0)
-  totalCharge     Float    @default(0)
-  withinQuota     Boolean  @default(true)
-  
-  videoId         String?
-  video           Video?   @relation(fields: [videoId], references: [id])
-  
-  createdAt       DateTime @default(now())
-  
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type        String // SHORT, POST, CALL, AI_QUERY
+  platform    String?
+  aiCost      Float   @default(0)
+  serviceFee  Float   @default(0)
+  totalCharge Float   @default(0)
+  withinQuota Boolean @default(true)
+
+  videoId String?
+  video   Video?  @relation(fields: [videoId], references: [id])
+
+  createdAt DateTime @default(now())
+
   @@index([userId])
   @@index([type])
   @@index([createdAt])
@@ -648,68 +648,67 @@ model UsageRecord {
 // REVENUE_IN, TAX_RESERVE, AD_SPEND_OUT
 
 model TreasuryLedger {
-  id                String      @id @default(cuid())
+  id                String  @id @default(cuid())
   amount_cents      Int
   type              String // LedgerType
   referenceId       String
   resulting_balance Int
   stripeCustomerId  String?
-  
-  description       String?
-  
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
-  
+
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([type])
   @@index([createdAt])
 }
 
 model PerformanceMetric {
-  id          String   @id @default(cuid())
+  id          String @id @default(cuid())
   postId      String
   spend       Int
   impressions Int
   clicks      Int
   ctr         Float
   roas        Float
-  
-  createdAt   DateTime @default(now())
-  
+
+  createdAt DateTime @default(now())
+
   @@index([postId])
 }
 
 model SaveAttempt {
-  id        String   @id @default(cuid())
+  id        String @id @default(cuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   trigger   String
   offerSent String
-  status    String   @default("PENDING")
-  
+  status    String @default("PENDING")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   @@index([userId])
 }
 
 model AuditLog {
-  id              String   @id @default(cuid())
-  userId          String?
-  user            User?    @relation(fields: [userId], references: [id])
-  organizationId  String?
-  organization    Organization? @relation(fields: [organizationId], references: [id])
-  
-  action          String   // e.g., "USER_LOGIN", "POST_CREATED", "BILLING_UPDATE"
-  entityType      String   // e.g., "USER", "POST", "SUBSCRIPTION"
-  entityId        String?
-  details         String?  // JSON stringified details
-  ipAddress       String?
-  userAgent       String?
-  
-  createdAt       DateTime @default(now())
+  id             String        @id @default(cuid())
+  userId         String?
+  user           User?         @relation(fields: [userId], references: [id])
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+
+  action     String // e.g., "USER_LOGIN", "POST_CREATED", "BILLING_UPDATE"
+  entityType String // e.g., "USER", "POST", "SUBSCRIPTION"
+  entityId   String?
+  details    String? // JSON stringified details
+  ipAddress  String?
+  userAgent  String?
+
+  createdAt DateTime @default(now())
 
   @@index([organizationId])
   @@index([userId])
   @@index([action])
 }
-

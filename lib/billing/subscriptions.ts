@@ -43,20 +43,27 @@ export async function getOrCreateStripeCustomer(
     email: string,
     name: string
 ): Promise<string> {
+    // First check if the user already has a stripeCustomerId
+    const existingUser = await prisma.user.findFirst({
+        where: { organizationId, stripeCustomerId: { not: null } },
+        select: { stripeCustomerId: true },
+    });
+
+    if (existingUser?.stripeCustomerId) {
+        return existingUser.stripeCustomerId;
+    }
+
     const org = await prisma.organization.findUnique({
         where: { id: organizationId },
     });
 
-    // Check if customer already exists (stored in integration)
+    // Check integration table as fallback
     const existingIntegration = await prisma.integration.findFirst({
-        where: {
-            organizationId,
-            provider: 'stripe',
-        },
+        where: { organizationId, provider: 'stripe' },
     });
 
     if (existingIntegration) {
-        const config = existingIntegration.config as { customerId?: string };
+        const config = existingIntegration.config as unknown as { customerId?: string };
         if (config.customerId) return config.customerId;
     }
 
@@ -70,11 +77,14 @@ export async function getOrCreateStripeCustomer(
         },
     });
 
-    // Store customer ID
+    // Store customer ID on User record AND Integration table
+    await prisma.user.updateMany({
+        where: { organizationId, email },
+        data: { stripeCustomerId: customer.id },
+    });
+
     await prisma.integration.upsert({
-        where: {
-            id: existingIntegration?.id || 'new',
-        },
+        where: { id: existingIntegration?.id || 'new-stripe-integration' },
         create: {
             organizationId,
             provider: 'stripe',
@@ -185,9 +195,15 @@ export async function handleSubscriptionCreated(subscription: Stripe.Subscriptio
     const monthlyCredits = parseInt(metadata.monthlyCredits || '0');
 
     if (!organizationId) {
-        console.error('Subscription missing organizationId');
+        console.error('Subscription missing organizationId in metadata');
         return;
     }
+
+    // Find the user in this org to link the subscription
+    const orgUser = await prisma.user.findFirst({
+        where: { organizationId },
+        select: { id: true },
+    });
 
     // Update organization with subscription info
     await prisma.organization.update({
@@ -200,12 +216,41 @@ export async function handleSubscriptionCreated(subscription: Stripe.Subscriptio
         },
     });
 
-    // Store subscription ID
+    // Create or update Subscription record in DB
+    if (orgUser) {
+        await prisma.subscription.upsert({
+            where: { userId: orgUser.id },
+            create: {
+                userId: orgUser.id,
+                stripeSubscriptionId: subscription.id,
+                status: 'active',
+                plan: metadata.tierId || 'pro',
+                periodStart: new Date(subscription.current_period_start * 1000),
+                periodEnd: new Date(subscription.current_period_end * 1000),
+                currentPeriodEnd: new Date(subscription.current_period_end * 1000),
+                cancelAtPeriodEnd: false,
+            },
+            update: {
+                stripeSubscriptionId: subscription.id,
+                status: 'active',
+                plan: metadata.tierId || 'pro',
+                periodStart: new Date(subscription.current_period_start * 1000),
+                periodEnd: new Date(subscription.current_period_end * 1000),
+                currentPeriodEnd: new Date(subscription.current_period_end * 1000),
+                cancelAtPeriodEnd: false,
+            },
+        });
+
+        // Also update user's plan
+        await prisma.user.update({
+            where: { id: orgUser.id },
+            data: { currentPlan: metadata.tierId || 'pro' },
+        });
+    }
+
+    // Store subscription ID in integration
     await prisma.integration.updateMany({
-        where: {
-            organizationId,
-            provider: 'stripe',
-        },
+        where: { organizationId, provider: 'stripe' },
         data: {
             config: JSON.stringify({
                 subscriptionId: subscription.id,

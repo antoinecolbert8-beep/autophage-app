@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev -p 3000",
     "dev:https": "node server.js",
-    "build": "npx prisma generate && next build",
+    "build": "node scripts/netlify-build.js",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "prisma generate",

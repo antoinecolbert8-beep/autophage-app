@@ -150,11 +150,12 @@ export function calculateUsageCost(type: "SHORT" | "REEL" | "CARROUSEL", plan: P
 export async function createCheckoutSession(params: {
   userId: string;
   userEmail: string;
+  organizationId: string;
   planId: PlanId;
   successUrl: string;
   cancelUrl: string;
 }) {
-  const { userId, userEmail, planId, successUrl, cancelUrl } = params;
+  const { userId, userEmail, organizationId, planId, successUrl, cancelUrl } = params;
 
   const plan = PLANS[planId];
 
@@ -176,7 +177,10 @@ export async function createCheckoutSession(params: {
     subscription_data: {
       metadata: {
         userId,
+        organizationId,
         plan: planId,
+        tierId: planId, // Added for compatibility with other handlers
+        monthlyCredits: plan.quota.toString(),
       },
     },
     success_url: successUrl,

@@ -160,18 +160,30 @@ export async function createCheckoutSession(
 
 /**
  * Handle Stripe webhook for successful payment
+ * Idempotent: safe to call multiple times for the same sessionId
  */
 export async function handlePaymentSuccess(sessionId: string): Promise<void> {
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
     if (session.payment_status === 'paid' && session.metadata) {
         const { organizationId, credits, packageId } = session.metadata;
+        const paymentIntentId = session.payment_intent as string;
 
-        if (organizationId && credits) {
+        if (organizationId && credits && paymentIntentId) {
+            // IDEMPOTENCY CHECK: verify this paymentIntent wasn't already processed
+            const existing = await prisma.creditPurchase.findFirst({
+                where: { paymentIntentId },
+            });
+
+            if (existing) {
+                console.log(`⚡ Idempotency: Payment ${paymentIntentId} already processed. Skipping.`);
+                return;
+            }
+
             await addCredits(
                 organizationId,
                 parseInt(credits),
-                session.payment_intent as string
+                paymentIntentId
             );
 
             console.log(`✅ Added ${credits} credits to org ${organizationId}`);
@@ -215,15 +227,31 @@ export async function getUsageStats(organizationId: string, days: number = 30) {
  * This is opt-in and transparent
  */
 export async function calculatePerformanceMetrics(organizationId: string) {
+    // Get the organization's projects first
+    const projects = await prisma.project.findMany({
+        where: { organizationId },
+        select: { id: true },
+    });
+    const projectIds = projects.map(p => p.id);
+
     const [keywords, leads, content] = await Promise.all([
         prisma.keywordOpportunity.count({
-            where: { projectId: organizationId, status: 'in-progress' },
+            where: {
+                projectId: { in: projectIds },
+                status: 'in-progress',
+            },
         }),
         prisma.lead.count({
-            where: { stage: { in: ['hot', 'customer'] } },
+            where: {
+                organizationId,
+                stage: { in: ['hot', 'customer'] },
+            },
         }),
         prisma.contentAsset.count({
-            where: { projectId: organizationId, publishedAt: { not: null } },
+            where: {
+                projectId: { in: projectIds },
+                publishedAt: { not: null },
+            },
         }),
     ]);
 

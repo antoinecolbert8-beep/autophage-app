@@ -46,13 +46,31 @@ function SignupContent() {
       });
 
       if (user) {
-        // Persist tier locally for immediate UI feedback (simulating DB role fetch)
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('ela_tier', plan === "god_mode" ? "grand_horloger" : "standard");
-          localStorage.setItem('ela_user_name', name || "Utilisateur");
+        // Sync user to database (Prisma)
+        const { syncUserToDatabase } = await import('@/actions/auth');
+        const dbResult = await syncUserToDatabase({
+          email,
+          name,
+          company,
+          plan: plan || "starter",
+          tier: plan === "god_mode" ? "grand_horloger" : "standard"
+        });
+
+        if (dbResult?.success) {
+          console.log("✅ Database sync successful:", dbResult);
+          // Persist IDs locally for payment flow
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('ela_user_id', dbResult.userId);
+            localStorage.setItem('ela_org_id', dbResult.organizationId);
+            localStorage.setItem('ela_tier', plan === "god_mode" ? "grand_horloger" : "standard");
+            localStorage.setItem('ela_user_name', name || "Utilisateur");
+            localStorage.setItem('ela_user_email', email);
+          }
+        } else {
+          console.error("❌ Database sync failed:", dbResult?.error);
+          // Optional: Show error to user or retry? For now proceeding but logging error.
         }
 
-        setSuccess(true);
         setSuccess(true);
         // Redirect to payment immediately
         setTimeout(() => {
@@ -72,6 +90,7 @@ function SignupContent() {
         if (typeof window !== 'undefined') {
           localStorage.setItem('ela_tier', plan === "god_mode" ? "grand_horloger" : "standard");
           localStorage.setItem('ela_user_name', name || "Utilisateur");
+          localStorage.setItem('ela_user_email', email);
           localStorage.setItem('ela_paid', 'false'); // Not paid yet, must go to payment
         }
 

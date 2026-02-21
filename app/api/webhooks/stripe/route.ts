@@ -6,6 +6,7 @@ import {
   handlePaymentFailed,
 } from '@/lib/billing/subscriptions';
 import { triggerAutomation } from '@/lib/automations';
+import { prisma } from '@/core/db';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2023-10-16',
@@ -29,13 +30,72 @@ export async function POST(request: NextRequest) {
   console.log(`📩 Stripe webhook: ${event.type}`);
 
   try {
-    // Conductor Pattern: Délégué tous les événements Stripe pertinents à Make
-    // Make gérera : Provisioning, Emails, CRM, Slack Alert, etc.
+    switch (event.type) {
 
-    // On ne bloque pas le retour 200 à Stripe, on lance l'automation en "fire and forget" (await sans bloquer si on voulait, mais ici on attend pour logger l'erreur éventuelle)
+      // New subscription (from checkout or direct API)
+      case 'customer.subscription.created': {
+        const subscription = event.data.object as Stripe.Subscription;
+        await handleSubscriptionCreated(subscription);
+        break;
+      }
 
-    // Mapping des événements intéressants
-    const RELEVANT_EVENTS = [
+      // One-time credit purchase completed (mode === 'payment')
+      // Subscription checkouts are handled by customer.subscription.created
+      case 'checkout.session.completed': {
+        const session = event.data.object as Stripe.CheckoutSession;
+        if (session.mode === 'payment') {
+          const { handlePaymentSuccess } = await import('@/lib/billing/index');
+          handlePaymentSuccess(session.id).catch(e =>
+            console.error('❌ Credit provisioning failed:', e)
+          );
+        }
+        break;
+      }
+
+      // Monthly renewal — add monthly credits
+      case 'invoice.paid': {
+        const invoice = event.data.object as Stripe.Invoice;
+        if (invoice.subscription) {
+          await handleSubscriptionRenewed(invoice);
+        }
+        break;
+      }
+
+      // Payment failed — notify user/suspend
+      case 'invoice.payment_failed': {
+        const invoice = event.data.object as Stripe.Invoice;
+        await handlePaymentFailed(invoice);
+        break;
+      }
+
+      // Subscription cancelled — suspend org
+      case 'customer.subscription.deleted': {
+        const subscription = event.data.object as Stripe.Subscription;
+        const organizationId = subscription.metadata?.organizationId;
+        if (organizationId) {
+          await prisma.organization.update({
+            where: { id: organizationId },
+            data: { status: 'suspended', tier: 'free', mrr: 0 },
+          });
+
+          const orgUser = await prisma.user.findFirst({ where: { organizationId } });
+          if (orgUser) {
+            await prisma.subscription.updateMany({
+              where: { userId: orgUser.id, stripeSubscriptionId: subscription.id },
+              data: { status: 'canceled', cancelAtPeriodEnd: false },
+            });
+          }
+          console.log(`🔴 Subscription cancelled for org ${organizationId}`);
+        }
+        break;
+      }
+
+      default:
+        console.log(`Ignored Stripe event: ${event.type}`);
+    }
+
+    // Delegate to Make.com automation for CRM/email/Slack flows
+    const MAKE_DELEGATED_EVENTS = [
       'customer.subscription.created',
       'invoice.paid',
       'invoice.payment_failed',
@@ -43,29 +103,16 @@ export async function POST(request: NextRequest) {
       'checkout.session.completed'
     ];
 
-    if (RELEVANT_EVENTS.includes(event.type)) {
-      console.log(`🎻 Conductor: Delegating Stripe event [${event.type}] to Make...`);
-
-      // ⚡ HYPER-FLUX: Instant Credit Provisioning
-      if (event.type === 'checkout.session.completed' || event.type === 'invoice.paid') {
-        const session = event.data.object as any;
-        const { handlePaymentSuccess } = await import('@/lib/billing/index');
-        // Retrieve and process in background to respond fast to Stripe
-        handlePaymentSuccess(session.id || session.checkout_session_id || session.id).catch(e =>
-          console.error('❌ Hyper-Flux: Instant Provisioning Failed:', e)
-        );
-      }
-
+    if (MAKE_DELEGATED_EVENTS.includes(event.type)) {
       await triggerAutomation("HANDLE_STRIPE_EVENT", {
         eventType: event.type,
         data: event.data.object,
-        stripeId: (event.data.object as any).id
-      });
-    } else {
-      console.log(`Ignored Stripe event: ${event.type}`);
+        stripeId: (event.data.object as any).id,
+      }).catch(e => console.error('Make.com delegation failed (non-blocking):', e));
     }
 
     return NextResponse.json({ received: true });
+
   } catch (error) {
     console.error('Webhook handler error:', error);
     return NextResponse.json({ error: 'Webhook handler failed' }, { status: 500 });

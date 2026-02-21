@@ -18,6 +18,7 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
+
         const orgId = session.user.organizationId || 'demo-org';
 
         const [balance, usage, performance] = await Promise.all([
@@ -43,7 +44,7 @@ export async function GET(request: NextRequest) {
 // POST: Create checkout session for credit purchase
 export async function POST(request: NextRequest) {
     try {
-        const session = await getServerSession() as any;
+        const session = await getServerSession(authOptions) as any;
         if (!session?.user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
