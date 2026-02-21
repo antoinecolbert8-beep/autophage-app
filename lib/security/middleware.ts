@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 interface RequestLog {
     count: number;
+    startTime: number;
     lastRequest: number;
     score: number;
 }
@@ -44,16 +45,22 @@ export async function fortressMiddleware(req: NextRequest) {
         host.includes('localhost') || host.includes('127.0.0.1') ||
         req.nextUrl.hostname === 'localhost'
     ) {
+        console.log(`🛡️ FORTRESS: Whitelisted dev request: ${req.nextUrl.pathname} (IP: ${ip})`);
         const response = NextResponse.next();
         applySecurityHeaders(response);
         return response;
     }
 
+    console.log(`🛡️ FORTRESS: Checking request: ${req.nextUrl.pathname} (IP: ${ip})`);
+
     // --- RATE LIMITING (ACTIVE) ---
-    let stats = trafficMap.get(ip) || { count: 0, lastRequest: 0, score: 0 };
-    if (now - stats.lastRequest > RATE_LIMIT_WINDOW) {
-        stats = { count: 0, lastRequest: now, score: 0 };
+    let stats = trafficMap.get(ip) || { count: 0, startTime: now, lastRequest: 0, score: 0 };
+
+    // Reset if window expired (Fixed Window)
+    if (now - stats.startTime > RATE_LIMIT_WINDOW) {
+        stats = { count: 0, startTime: now, lastRequest: now, score: 0 };
     }
+
     stats.count++;
     stats.score += calculateThreatScore(req, stats);
     stats.lastRequest = now;

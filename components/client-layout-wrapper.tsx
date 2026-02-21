@@ -57,29 +57,6 @@ export default function ClientLayoutWrapper({
     // 3. Verdict final : On affiche la Sidebar seulement si on est en zone protégée ET pas dans une exception
     const showSidebar = isProtectedZone && !isPublicException;
 
-    // SYSTEM BOOT STATE
-    const [isBooting, setIsBooting] = useState(true);
-
-    useEffect(() => {
-        // "System Boot" simulation - runs once per session to reinforce the "ELA OS" feel
-        const hasBooted = typeof window !== 'undefined' ? sessionStorage.getItem("ela_boot_complete") : null;
-
-        if (!hasBooted) {
-            // Only boot on landing or dashboard first entry
-            const timer = setTimeout(() => {
-                setIsBooting(false);
-                sessionStorage.setItem("ela_boot_complete", "true");
-            }, 2200);
-            return () => clearTimeout(timer);
-        } else {
-            setIsBooting(false);
-        }
-    }, []);
-
-    if (isBooting) {
-        return <Loading />;
-    }
-
     return (
         <div className="min-h-screen bg-[#0a0a0f] text-white font-sans selection:bg-cyan-500/30">
             {/* Background Gradients for ELA Theme */}
