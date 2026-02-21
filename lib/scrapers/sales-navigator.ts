@@ -4,9 +4,7 @@
  */
 
 import { LinkedInWarMachine } from "../god-mode/tactical/linkedin-machine";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "../prisma";
 const warMachine = new LinkedInWarMachine();
 
 export class SalesNavigatorScraper {

@@ -3,10 +3,8 @@
  * Délégué à Make.com via Conductor Pattern
  */
 
-import { PrismaClient } from "@prisma/client"; // Gardé si utilisé ailleurs pour les types, mais logic déplacée
+import { prisma } from "./prisma";
 import { triggerAutomation } from "./automations";
-
-const prisma = new PrismaClient();
 
 export type Lead = {
   id?: string;
