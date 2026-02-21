@@ -102,67 +102,66 @@ export default function Home() {
         <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-pink-600/10 blur-[100px] rounded-full pointer-events-none mix-blend-screen"></div>
 
         <div className="relative max-w-7xl mx-auto text-center z-10">
-          <BlurFade delay={0.2} duration={0.8} yOffset={20} blur="12px">
-            {/* Trust Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-3 px-4 py-2 md:px-6 md:py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 mb-8 backdrop-blur-md"
-            >
-              <Zap className="w-4 h-4 md:w-5 md:h-5 text-blue-500" fill="currentColor" />
-              <span className="text-xs md:text-sm font-bold text-white">SYSTÈME AUTONOME</span>
-            </motion.div>
+          {/* Trust Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-3 px-4 py-2 md:px-6 md:py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 mb-8 backdrop-blur-md"
+          >
+            <Zap className="w-4 h-4 md:w-5 md:h-5 text-blue-500" fill="currentColor" />
+            <span className="text-xs md:text-sm font-bold text-white">SYSTÈME AUTONOME</span>
+          </motion.div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-4xl md:text-9xl font-black tracking-tighter mb-8 leading-[1.1] md:leading-[0.9] uppercase break-words"
-            >
-              <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">ÉCRASEZ LA</span>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">CONCURRENCE.</span>
-            </motion.h1>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-9xl font-black tracking-tighter mb-8 leading-[1.1] md:leading-[0.9] uppercase break-words"
+          >
+            <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">ÉCRASEZ LA</span>
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">CONCURRENCE.</span>
+          </motion.h1>
 
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="text-lg md:text-3xl text-gray-300 max-w-4xl mx-auto mb-6 leading-relaxed font-bold px-2"
-            >
-              9 ARMES ULTIMES. ZÉRO PITIÉ.
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              className="text-base md:text-xl text-gray-500 max-w-3xl mx-auto mb-10 md:mb-12 px-2"
-            >
-              Pendant qu'ils dorment, vous <span className="text-blue-500 font-bold">DOMINEZ</span> le marché. 24/7. Sans limite.
-            </motion.p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-lg md:text-3xl text-gray-300 max-w-4xl mx-auto mb-6 leading-relaxed font-bold px-2"
+          >
+            9 ARMES ULTIMES. ZÉRO PITIÉ.
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="text-base md:text-xl text-gray-500 max-w-3xl mx-auto mb-10 md:mb-12 px-2"
+          >
+            Pendant qu'ils dorment, vous <span className="text-blue-500 font-bold">DOMINEZ</span> le marché. 24/7. Sans limite.
+          </motion.p>
 
-            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 w-full px-4">
-              {/* Primary CTA - Most prominent */}
-              <Link href="/signup" className="w-full md:w-auto group px-8 md:px-12 py-5 md:py-6 bg-gradient-to-r from-blue-600 to-pink-600 rounded-xl font-black text-lg md:text-xl flex items-center justify-center gap-4 hover:shadow-[0_0_60px_rgba(236,72,153,0.6)] transition-all transform hover:-translate-y-2 hover:scale-110 relative overflow-hidden">
-                <div className="absolute inset-0 bg-white/30 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
-                <Target className="w-5 h-5 md:w-6 md:h-6 relative z-10" />
-                <span className="relative z-10 uppercase tracking-wider">PRENEZ LE POUVOIR</span>
-                <Rocket className="w-5 h-5 md:w-6 md:h-6 relative z-10 group-hover:translate-x-2 group-hover:-translate-y-1 transition-transform" />
-              </Link>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 w-full px-4">
+            {/* Primary CTA - Most prominent */}
+            <Link href="/signup" className="w-full md:w-auto group px-8 md:px-12 py-5 md:py-6 bg-gradient-to-r from-blue-600 to-pink-600 rounded-xl font-black text-lg md:text-xl flex items-center justify-center gap-4 hover:shadow-[0_0_60px_rgba(236,72,153,0.6)] transition-all transform hover:-translate-y-2 hover:scale-110 relative overflow-hidden">
+              <div className="absolute inset-0 bg-white/30 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+              <Target className="w-5 h-5 md:w-6 md:h-6 relative z-10" />
+              <span className="relative z-10 uppercase tracking-wider">PRENEZ LE POUVOIR</span>
+              <Rocket className="w-5 h-5 md:w-6 md:h-6 relative z-10 group-hover:translate-x-2 group-hover:-translate-y-1 transition-transform" />
+            </Link>
 
-              {/* Secondary CTA */}
-              <Link href="/agents" className="w-full md:w-auto group px-8 py-4 bg-transparent border-2 border-purple-500/30 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-purple-500/10 transition-all hover:scale-105 hover:border-purple-500 text-purple-400">
-                <Star className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" />
-                VOIR L'ARSENAL
-              </Link>
-            </div>
+            {/* Secondary CTA */}
+            <Link href="/agents" className="w-full md:w-auto group px-8 py-4 bg-transparent border-2 border-purple-500/30 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-purple-500/10 transition-all hover:scale-105 hover:border-purple-500 text-purple-400">
+              <Star className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" />
+              VOIR L'ARSENAL
+            </Link>
+          </div>
 
-            {/* Trust indicators */}
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs md:text-sm text-gray-500">
-              <span className="flex items-center gap-2"><Check className="w-3 h-3 md:w-4 md:h-4 text-amber-500" /> Paiement sécurisé</span>
-              <span className="flex items-center gap-2"><Check className="w-3 h-3 md:w-4 md:h-4 text-amber-500" /> Annulation facile</span>
-              <span className="flex items-center gap-2"><Check className="w-3 h-3 md:w-4 md:h-4 text-amber-500" /> Support 24/7</span>
-            </div>
-          </BlurFade>
+          {/* Trust indicators */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs md:text-sm text-gray-500">
+            <span className="flex items-center gap-2"><Check className="w-3 h-3 md:w-4 md:h-4 text-amber-500" /> Paiement sécurisé</span>
+            <span className="flex items-center gap-2"><Check className="w-3 h-3 md:w-4 md:h-4 text-amber-500" /> Annulation facile</span>
+            <span className="flex items-center gap-2"><Check className="w-3 h-3 md:w-4 md:h-4 text-amber-500" /> Support 24/7</span>
+          </div>
+
         </div>
       </section>
 
