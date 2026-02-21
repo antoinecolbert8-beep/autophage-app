@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { scoreLeadQuality } from '@/lib/ai/vertex'
 import { prisma } from '@/lib/prisma'
+import { PrivacyShield } from '@/lib/security/privacy'
 
 export async function POST(request: NextRequest) {
     try {
-        const { organizationId, email, name, company, industry } = await request.json()
+        const { organizationId, email, name, company, industry, phone } = await request.json()
 
         if (!organizationId || !email) {
             return NextResponse.json(
@@ -13,7 +14,12 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        // Score the lead using AI
+        // 🛡️ [GDPR] Protect PII
+        const protectedEmail = await PrivacyShield.protect(email);
+        const protectedName = name ? await PrivacyShield.protect(name) : null;
+        const protectedPhone = phone ? await PrivacyShield.protect(phone) : null;
+
+        // Score the lead using AI (we use the RAW data for AI)
         const scoreData = await scoreLeadQuality({
             email,
             company,
@@ -24,18 +30,24 @@ export async function POST(request: NextRequest) {
         const lead = await prisma.lead.create({
             data: {
                 organizationId,
-                email,
-                name,
+                email: protectedEmail,
+                name: protectedName,
+                phone: protectedPhone,
                 company,
                 score: scoreData.totalScore,
                 scoreBreakdown: JSON.stringify(scoreData),
                 stage: scoreData.totalScore > 70 ? 'hot' : scoreData.totalScore > 40 ? 'warm' : 'cold',
+                isEncrypted: true
             },
         })
 
         return NextResponse.json({
             success: true,
-            lead,
+            lead: {
+                ...lead,
+                email, // Return raw for immediate UI update
+                name
+            },
             scoreData
         })
     } catch (error) {
@@ -69,7 +81,15 @@ export async function GET(request: NextRequest) {
             take: 100,
         })
 
-        return NextResponse.json({ leads })
+        // 🛡️ [GDPR] Reveal PII for authorized UI
+        const revealedLeads = await Promise.all(leads.map(async (l) => ({
+            ...l,
+            email: await PrivacyShield.reveal(l.email),
+            name: l.name ? await PrivacyShield.reveal(l.name) : l.name,
+            phone: l.phone ? await PrivacyShield.reveal(l.phone) : l.phone,
+        })));
+
+        return NextResponse.json({ leads: revealedLeads })
     } catch (error) {
         console.error('Error fetching leads:', error)
         return NextResponse.json(

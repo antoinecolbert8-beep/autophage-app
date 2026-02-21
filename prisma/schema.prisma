@@ -39,6 +39,9 @@ model Organization {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // 🛡️ SECURITY: One-to-one relation with WarChest
+  warChest WarChest?
+
   @@index([domain])
 }
 
@@ -73,6 +76,9 @@ model User {
   brandProfile   BrandProfile?
   userPreference UserPreference?
   auditLogs      AuditLog[]
+
+  // 🛡️ SECURITY: Explicit relation for action history
+  actionHistory ActionHistory[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -182,6 +188,9 @@ model Lead {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // 🛡️ SECURITY: Flag to indicate if PII is encrypted (GDPR/Shield Mode)
+  isEncrypted Boolean @default(false)
 
   @@unique([email, organizationId])
   @@index([organizationId, stage])
@@ -424,6 +433,11 @@ model UserPreference {
   theme          String  @default("dark")
   language       String  @default("fr")
 
+  // 🛡️ GDPR: Privacy Choices
+  gdpr_consent     Boolean @default(false)
+  ai_data_usage    Boolean @default(true)
+  marketing_emails Boolean @default(false)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -440,6 +454,7 @@ model WarChest {
   currency               String @default("EUR")
 
   organizationId String? @unique
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -508,11 +523,12 @@ model PaymentDispute {
 model ActionHistory {
   id       String  @id @default(cuid())
   userId   String
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   platform String // linkedin, instagram, email, etc.
   action   String // post, comment, like, send, etc.
   targetId String? // ID of target entity
   context  String? // String // Json    // Additional context data
-  status   String  @default("completed")
+  status   String  @default( "completed")
 
   createdAt DateTime @default(now())
 

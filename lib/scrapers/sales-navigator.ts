@@ -27,15 +27,22 @@ export class SalesNavigatorScraper {
         for (const profile of foundProfiles) {
             console.log(`[SALES NAV] 🎯 Cible identifiée: ${profile.name}`);
 
+            // 🛡️ [GDPR] Protect PII
+            const { PrivacyShield } = await import("../security/privacy");
+            const protectedName = await PrivacyShield.protect(profile.name);
+            const rawEmail = `scraping_${Date.now()}@placeholder.com`;
+            const protectedEmail = await PrivacyShield.protect(rawEmail);
+
             // Enregistrement en base
             const lead = await prisma.lead.create({
                 data: {
-                    email: `scraping_${Date.now()}@placeholder.com`,
-                    name: profile.name,
+                    email: protectedEmail,
+                    name: protectedName,
                     organizationId: "org_default_placeholder", // À remplacer par logique réelle
                     metadata: JSON.stringify({ profileUrl: profile.url, source: "SALES_NAV" }),
                     stage: "cold",
-                    scoreBreakdown: JSON.stringify({})
+                    scoreBreakdown: JSON.stringify({}),
+                    isEncrypted: true
                 }
             });
 
