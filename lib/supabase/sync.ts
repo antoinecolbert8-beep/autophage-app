@@ -27,7 +27,7 @@ export function getSupabaseClient(): SupabaseClient {
 }
 
 // For backward compatibility or internal use if needed
-const supabase = getSupabaseClient();
+// const supabase = getSupabaseClient(); // Removed top-level for build safety
 
 // Real-time sync from Prisma to Supabase
 export async function syncToSupabase<T>(
@@ -36,6 +36,7 @@ export async function syncToSupabase<T>(
     operation: 'insert' | 'update' | 'delete'
 ) {
     try {
+        const supabase = getSupabaseClient();
         if (operation === 'insert') {
             const { error } = await supabase.from(table).insert(data);
             if (error) throw error;
@@ -57,6 +58,7 @@ export async function syncToSupabase<T>(
 
 // Listen to Supabase changes and trigger AI
 export function setupRealtimeListener() {
+    const supabase = getSupabaseClient();
     // Listen to keyword opportunities
     const keywordChannel = supabase
         .channel('keyword-changes')
@@ -123,6 +125,7 @@ Return as JSON.
     const analysis = await generateText(prompt, { temperature: 0.3 });
 
     // Store AI insights back in Supabase
+    const supabase = getSupabaseClient();
     await supabase.from('KeywordInsights').insert({
         keyword_id: keyword.id,
         analysis: JSON.parse(analysis || '{}'),
@@ -142,6 +145,7 @@ async function scoreLeadWithAI(lead: any) {
     });
 
     // Update lead with AI score in Supabase
+    const supabase = getSupabaseClient();
     await supabase
         .from('Lead')
         .update({
@@ -221,6 +225,7 @@ export class DataSyncWorker {
 
     private async triggerAIAnalysis() {
         // Trigger AI on unanalyzed data
+        const supabase = getSupabaseClient();
         const { data: unanalyzed } = await supabase
             .from('KeywordOpportunity')
             .select('*')
@@ -236,6 +241,7 @@ export class DataSyncWorker {
 
     private async applyAIInsights() {
         // Apply AI recommendations back to system
+        const supabase = getSupabaseClient();
         const { data: insights } = await supabase
             .from('KeywordInsights')
             .select('*')
@@ -257,6 +263,7 @@ export class DataSyncWorker {
 
             const content = await generateSEOContent(insight.keyword, 1500);
 
+            const supabase = getSupabaseClient();
             await supabase.from('ContentAsset').insert({
                 keyword_id: insight.keyword_id,
                 title: `Guide: ${insight.keyword}`,
