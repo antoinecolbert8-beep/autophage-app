@@ -449,10 +449,7 @@ export default function Home() {
               { name: "SENTINEL", role: "Legal & Compliance", img: "/agents/sentinel_v2.png?v=4", desc: "Vérifie vos contrats, assure la conformité RGPD et protège votre business.", gradient: "from-emerald-500 to-teal-500" },
               { name: "HIVE", role: "Swarm Commander", img: "/agents/hive_v2.png?v=4", desc: "Pilote l'ensemble de votre flotte d'agents via WhatsApp.", gradient: "from-amber-500 to-orange-500" },
             ].map((agent, i) => (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
+              <div
                 key={i}
                 className="group relative rounded-[2.5rem] overflow-hidden aspect-[3/4] border border-white/10 bg-[#13131f] shadow-2xl hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all"
               >
@@ -469,14 +466,14 @@ export default function Home() {
                     {agent.role}
                   </div>
                   <h3 className="text-4xl font-black mb-2">{agent.name}</h3>
-                  <p className="text-sm text-gray-300 line-clamp-2 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                  <p className="text-sm text-gray-300 line-clamp-2 mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-300 delay-100">
                     {agent.desc}
                   </p>
-                  <Link href="/agents" className="w-full py-4 bg-white text-black rounded-xl font-bold text-sm hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-200">
+                  <Link href="/agents" className="w-full py-4 bg-white text-black rounded-xl font-bold text-sm hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 opacity-100 group-hover:opacity-100 transition-all duration-300">
                     Déployer <LineIconArrowRight size={16} />
                   </Link>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

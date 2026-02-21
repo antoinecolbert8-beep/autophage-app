@@ -128,14 +128,14 @@ export default function DashboardPage() {
       </BlurFade>
 
       <div className="p-8 max-w-7xl mx-auto relative z-10">
-        <BlurFade delay={0.1} className="mb-8">
+        <div className="mb-8">
           <h1 className="text-3xl font-black mb-2 tracking-tighter uppercase italic">Hyper-Flux Command</h1>
           <p className="text-gray-500 text-sm">
             {userTier === 'grand_horloger'
               ? `Status: OMNISCIENCE ACTIVE. Réseau neuronal synchronisé à 100%.`
               : `Système sécurisé. Prêt pour le déploiement de masse.`}
           </p>
-        </BlurFade>
+        </div>
 
         {/* 1. PIXEL PERFECT: ALIGNMENT & FADE-IN */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
