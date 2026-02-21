@@ -470,9 +470,8 @@ export default function Home() {
               { name: "HIVE", role: "Swarm Commander", img: "/agents/hive_v2.png?v=4", desc: "Pilote l'ensemble de votre flotte d'agents via WhatsApp.", gradient: "from-amber-500 to-orange-500" },
             ].map((agent, i) => (
               <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
                 key={i}
                 className="group relative rounded-[2.5rem] overflow-hidden aspect-[3/4] border border-white/10 bg-[#13131f] shadow-2xl hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all"
