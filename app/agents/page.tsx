@@ -112,9 +112,9 @@ export default function AgentsPage() {
             <div className="max-w-7xl mx-auto mb-20 text-center md:text-left">
                 <Link href="/" className="text-purple-400 hover:text-purple-300 mb-8 inline-block font-bold">← Retour</Link>
                 <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 mb-6 backdrop-blur-md">
-                    <span className="text-sm font-bold text-purple-400 uppercase tracking-widest">🛡️ L'EMPIRE SOUVERAIN</span>
+                    <span className="text-sm font-bold text-purple-400 uppercase tracking-widest">L'EMPIRE SOUVERAIN</span>
                 </div>
-                <h1 className="text-5xl md:text-8xl font-black mb-8 uppercase leading-tight tracking-tighter">LE FLYWHEEL<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">INFINI.</span></h1>
+                <h1 className="text-5xl md:text-8xl font-black mb-8 uppercase leading-tight tracking-tighter">13 FORCES<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">INFINIES.</span></h1>
                 <p className="text-xl text-gray-400 max-w-3xl font-medium leading-relaxed">
                     Ne gérez plus des outils. Pilotez une force d'élite automatisée organisée pour la domination totale.
                 </p>
