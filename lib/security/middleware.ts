@@ -31,21 +31,28 @@ function calculateThreatScore(req: NextRequest, currentStats: RequestLog): numbe
 }
 
 export async function fortressMiddleware(req: NextRequest) {
+    if (process.env.DISABLE_FORTRESS === 'true') {
+        return NextResponse.next();
+    }
+
     const forwardedFor = req.headers.get('x-forwarded-for');
     const realIp = req.headers.get('x-real-ip');
     const ip = req.ip || (forwardedFor ? forwardedFor.split(',')[0].trim() : null) || realIp || 'unknown';
     const now = Date.now();
 
     const host = req.headers.get('host') || '';
+    const isLocal =
+        process.env.NODE_ENV === 'development' ||
+        ip === '::1' || ip === '127.0.0.1' || ip.startsWith('192.168.') || ip.startsWith('10.') || ip.startsWith('172.') ||
+        host.includes('localhost') || host.includes('127.0.0.1') ||
+        req.nextUrl.hostname === 'localhost';
 
     // Whitelist localhost / dev
-    if (
-        process.env.NODE_ENV === 'development' ||
-        ip === '::1' || ip === '127.0.0.1' ||
-        host.includes('localhost') || host.includes('127.0.0.1') ||
-        req.nextUrl.hostname === 'localhost'
-    ) {
-        console.log(`🛡️ FORTRESS: Whitelisted dev request: ${req.nextUrl.pathname} (IP: ${ip})`);
+    if (isLocal) {
+        // Log only API requests to reduce noise, unless it's a block-level event
+        if (req.nextUrl.pathname.startsWith('/api')) {
+            console.log(`🛡️ FORTRESS [WHITELIST]: ${req.nextUrl.pathname} (IP: ${ip})`);
+        }
         const response = NextResponse.next();
         applySecurityHeaders(response);
         return response;
@@ -58,16 +65,20 @@ export async function fortressMiddleware(req: NextRequest) {
 
     // Reset if window expired (Fixed Window)
     if (now - stats.startTime > RATE_LIMIT_WINDOW) {
-        stats = { count: 0, startTime: now, lastRequest: now, score: 0 };
+        stats = { count: 0, startTime: now, lastRequest: 0, score: 0 };
     }
 
+    const requestScore = calculateThreatScore(req, stats);
+
     stats.count++;
-    stats.score += calculateThreatScore(req, stats);
+    // We cap the score increment to prevent sudden bursts from blocking legitimate UI loads
+    stats.score += Math.min(requestScore, 50);
     stats.lastRequest = now;
     trafficMap.set(ip, stats);
 
-    // Block abusive IPs (skip 'unknown' to avoid blocking Railway internals)
-    if ((stats.score > THREAT_THRESHOLD || stats.count > MAX_REQUESTS) && ip !== 'unknown') {
+    // Block abusive IPs (skip 'unknown' and 'isLocal' which is already handled above)
+    // Thresholds: 1000 score or 1000 reqs/min for high-end UI dashboards
+    if ((stats.score > 1000 || stats.count > 1000) && ip !== 'unknown') {
         console.warn(`🛡️ FORTRESS: Blocked IP ${ip} (Score: ${stats.score}, Reqs: ${stats.count})`);
         return new NextResponse(
             JSON.stringify({ error: 'Too many requests. Please slow down.' }),
