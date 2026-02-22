@@ -24,7 +24,8 @@ const TICKER_AGENTS = [
     "Trending Topics", "Frequency Optimizer", "Content Recycling", "Retargeting Pixels",
     "Influencer Detection", "Video Generator", "Revenue Autopilot", "Multi-Language",
     "Lead Scoring AI", "ROI Calculator", "Meeting Assistant AI", "Proposal Generator",
-    "Competitive Intelligence", "SMS Automation", "White-Label Program", "Email Warmup"
+    "Competitive Intelligence", "SMS Automation", "White-Label Program", "Email Warmup",
+    "Domination Globale", "Infrastructure Souveraine", "IA Transmission Layer", "Orchestration Autonome"
 ];
 
 const MESSAGES = [
@@ -50,7 +51,7 @@ export default function Loading() {
                 }
                 return [...prev, MAIN_AGENTS[prev.length].id];
             });
-        }, 200);
+        }, 150);
 
         const msgInterval = setInterval(() => {
             setMsgIndex((prev) => (prev + 1) % MESSAGES.length);
@@ -62,80 +63,93 @@ export default function Loading() {
         };
     }, []);
 
+    // Create a very long ticker to avoid gaps
+    const tickerContent = [...TICKER_AGENTS, ...TICKER_AGENTS, ...TICKER_AGENTS, ...TICKER_AGENTS];
+
     return (
-        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#050508] overflow-hidden select-none">
+        <div className="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-[#050508] overflow-hidden select-none">
             {/* Cinematic Background */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/5 blur-[150px] rounded-full animate-pulse-slow"></div>
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.03)_0%,transparent_70%)]"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-blue-600/10 blur-[150px] rounded-full animate-pulse-slow"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.05)_0%,transparent_70%)]"></div>
             </div>
 
-            {/* Matrix / Digital Dust Overlay */}
-            <div className="absolute inset-0 opacity-[0.02] pointer-events-none mix-blend-overlay border-none">
+            {/* Matrix Dust */}
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay">
                 <div className="w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat"></div>
             </div>
 
-            {/* Ticker Top */}
-            <div className="absolute top-0 left-0 w-full py-4 border-b border-white/5 bg-black/40 backdrop-blur-sm overflow-hidden">
+            {/* TOP TICKER - LENT VERS LA GAUCHE */}
+            <div className="absolute top-0 left-0 w-full py-6 border-b border-white/10 bg-black/60 backdrop-blur-md overflow-hidden">
                 <motion.div
-                    className="flex whitespace-nowrap gap-12 items-center"
-                    animate={{ x: [0, -1000] }}
-                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                    className="flex whitespace-nowrap gap-16 items-center"
+                    initial={{ x: 0 }}
+                    animate={{ x: "-50%" }}
+                    transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                 >
-                    {[...TICKER_AGENTS, ...TICKER_AGENTS].map((name, i) => (
-                        <div key={i} className="flex items-center gap-3">
-                            <div className="w-1 h-1 bg-blue-500 rounded-full"></div>
-                            <span className="text-[10px] font-mono font-bold text-gray-400 tracking-widest uppercase">{name}</span>
+                    {tickerContent.map((name, i) => (
+                        <div key={i} className="flex items-center gap-4">
+                            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full shadow-[0_0_8px_#3b82f6]"></div>
+                            <span className="text-xs font-black text-white/60 tracking-[0.3em] uppercase">{name}</span>
                         </div>
                     ))}
                 </motion.div>
             </div>
 
             {/* Main Content */}
-            <div className="relative z-10 flex flex-col items-center gap-12 w-full max-w-lg px-6 mt-10">
+            <div className="relative z-10 flex flex-col items-center gap-16 w-full max-w-2xl px-8">
 
                 {/* ELA CORE SINGULARITY */}
-                <div className="relative mb-4">
+                <div className="relative">
                     <motion.div
-                        className="w-24 h-24 rounded-2xl bg-black border border-white/10 flex items-center justify-center relative overflow-hidden shadow-[0_0_50px_rgba(59,130,246,0.2)]"
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 1 }}
+                        className="w-32 h-32 rounded-3xl bg-black border-2 border-white/10 flex items-center justify-center relative overflow-hidden shadow-[0_0_80px_rgba(59,130,246,0.25)]"
+                        initial={{ scale: 0.5, opacity: 0, rotate: -45 }}
+                        animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                        transition={{ type: "spring", damping: 15 }}
                     >
                         <motion.div
-                            className="absolute inset-0 bg-gradient-to-br from-blue-500 via-purple-600 to-pink-500 opacity-40 animate-pulse"
+                            className="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 opacity-60"
+                            animate={{ opacity: [0.4, 0.8, 0.4] }}
+                            transition={{ duration: 3, repeat: Infinity }}
                         />
-                        <span className="relative z-10 font-black text-3xl tracking-tighter text-white">ELA</span>
+                        <span className="relative z-10 font-black text-4xl tracking-tighter text-white drop-shadow-2xl">ELA</span>
+
+                        {/* Scanning Effect */}
+                        <motion.div
+                            className="absolute inset-0 w-full h-0.5 bg-white/50 blur-[2px]"
+                            animate={{ top: ["0%", "100%"] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                        />
                     </motion.div>
 
                     {/* Pulsing rings */}
-                    {[...Array(2)].map((_, i) => (
+                    {[...Array(3)].map((_, i) => (
                         <motion.div
                             key={i}
-                            className="absolute inset-0 rounded-2xl border border-white/5"
-                            animate={{ scale: [1, 1.5], opacity: [0.5, 0] }}
-                            transition={{ duration: 2, repeat: Infinity, delay: i * 1 }}
+                            className="absolute inset-0 rounded-3xl border border-blue-500/20"
+                            animate={{ scale: [1, 1.8], opacity: [0.6, 0] }}
+                            transition={{ duration: 3, repeat: Infinity, delay: i * 1 }}
                         />
                     ))}
                 </div>
 
                 {/* AGENT GRID STATUS */}
-                <div className="grid grid-cols-4 md:grid-cols-7 gap-3 w-full">
+                <div className="grid grid-cols-4 md:grid-cols-7 gap-5 w-full">
                     {MAIN_AGENTS.map((agent) => {
                         const isActive = activeAgents.includes(agent.id);
                         return (
-                            <div key={agent.id} className="flex flex-col items-center gap-1.5">
+                            <div key={agent.id} className="flex flex-col items-center gap-3">
                                 <motion.div
-                                    className={`w-10 h-10 rounded-lg flex items-center justify-center text-[10px] font-black border transition-all duration-500 ${isActive
-                                            ? 'bg-blue-500/20 border-blue-500/50 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.3)]'
-                                            : 'bg-white/5 border-white/5 text-white/20'
+                                    className={`w-12 h-12 rounded-xl flex items-center justify-center text-[10px] font-black border-2 transition-all duration-700 ${isActive
+                                            ? 'bg-blue-600/30 border-blue-500/60 text-white shadow-[0_0_25px_rgba(59,130,246,0.4)]'
+                                            : 'bg-white/5 border-white/5 text-white/10'
                                         }`}
-                                    animate={isActive ? { scale: [0.8, 1.1, 1] } : {}}
+                                    animate={isActive ? { scale: [0.9, 1.15, 1], rotate: [0, 5, 0] } : {}}
                                 >
                                     {agent.id[0]}
                                 </motion.div>
-                                <span className={`text-[8px] font-mono tracking-tighter uppercase transition-colors duration-500 ${isActive ? 'text-gray-400' : 'text-white/10'}`}>
-                                    {agent.id}
+                                <span className={`text-[9px] font-bold tracking-widest uppercase transition-colors duration-700 ${isActive ? 'text-blue-400' : 'text-white/10'}`}>
+                                    {isActive ? agent.id : "OFFLINE"}
                                 </span>
                             </div>
                         );
@@ -143,49 +157,53 @@ export default function Loading() {
                 </div>
 
                 {/* STATUS BAR */}
-                <div className="w-full space-y-4">
-                    <div className="h-4 flex items-center justify-center overflow-hidden">
+                <div className="w-full space-y-6 pt-4">
+                    <div className="h-6 flex items-center justify-center overflow-hidden">
                         <AnimatePresence mode="wait">
                             <motion.p
                                 key={msgIndex}
-                                initial={{ opacity: 0, y: 10 }}
+                                initial={{ opacity: 0, y: 15 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                transition={{ duration: 0.3 }}
-                                className="text-[10px] font-black tracking-[0.3em] uppercase text-blue-400/80 text-center"
+                                exit={{ opacity: 0, y: -15 }}
+                                transition={{ duration: 0.4 }}
+                                className="text-xs font-black tracking-[0.4em] uppercase text-blue-500 text-center"
                             >
                                 {MESSAGES[msgIndex]}
                             </motion.p>
                         </AnimatePresence>
                     </div>
 
-                    <div className="relative w-full h-[1px] bg-white/5">
+                    <div className="relative w-full h-[2px] bg-white/5 rounded-full overflow-hidden">
                         <motion.div
-                            className="absolute inset-0 h-full bg-blue-500 shadow-[0_0_10px_#3b82f6]"
+                            className="absolute inset-0 h-full bg-gradient-to-r from-blue-600 via-cyan-400 to-blue-600 shadow-[0_0_15px_#3b82f6]"
                             initial={{ width: "0%" }}
                             animate={{ width: "100%" }}
-                            transition={{ duration: 5, ease: "easeInOut" }}
+                            transition={{ duration: 5, ease: "linear" }}
                         />
                     </div>
 
-                    <div className="flex justify-between items-center text-[8px] font-mono text-gray-700 tracking-widest uppercase px-1">
-                        <span>Agents: {activeAgents.length}/{MAIN_AGENTS.length}</span>
-                        <span>Protocol: Empire Alpha</span>
+                    <div className="flex justify-between items-center text-[9px] font-mono text-gray-600 tracking-[0.2em] uppercase px-1">
+                        <span className="flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></span>
+                            Protocole Empire Alpha-2
+                        </span>
+                        <span>Souveraineté : Verrouillée</span>
                     </div>
                 </div>
             </div>
 
-            {/* Ticker Bottom */}
-            <div className="absolute bottom-0 left-0 w-full py-4 border-t border-white/5 bg-black/40 backdrop-blur-sm overflow-hidden">
+            {/* BOTTOM TICKER - LENT VERS LA GAUCHE (REVERSE LIST) */}
+            <div className="absolute bottom-0 left-0 w-full py-6 border-t border-white/10 bg-black/60 backdrop-blur-md overflow-hidden">
                 <motion.div
-                    className="flex whitespace-nowrap gap-12 items-center"
-                    animate={{ x: [-1000, 0] }}
-                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                    className="flex whitespace-nowrap gap-16 items-center"
+                    initial={{ x: "-50%" }}
+                    animate={{ x: 0 }}
+                    transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                 >
-                    {[...TICKER_AGENTS, ...TICKER_AGENTS].reverse().map((name, i) => (
-                        <div key={i} className="flex items-center gap-3">
-                            <div className="w-1 h-1 bg-pink-500 rounded-full"></div>
-                            <span className="text-[10px] font-mono font-bold text-gray-400 tracking-widest uppercase">{name}</span>
+                    {tickerContent.reverse().map((name, i) => (
+                        <div key={i} className="flex items-center gap-4">
+                            <div className="w-1.5 h-1.5 bg-purple-500 rounded-full shadow-[0_0_8px_#a855f7]"></div>
+                            <span className="text-xs font-black text-white/60 tracking-[0.3em] uppercase">{name}</span>
                         </div>
                     ))}
                 </motion.div>
