@@ -44,7 +44,7 @@ export default function PricingPage() {
             </div>
             <h1 className="text-5xl md:text-7xl font-black mb-8 tracking-tight uppercase">INVESTISSEZ DANS<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">VOTRE EMPIRE.</span></h1>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-10 font-bold">
-              Choisissez votre arsenal. Dominez dès le premier mois.
+              Choisissez votre solution. Dominez dès le premier mois.
             </p>
 
             <div className="inline-flex bg-[#13131f] p-1 rounded-2xl border border-white/10 relative">

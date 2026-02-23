@@ -24,7 +24,7 @@ export default function Navigation() {
       pathname?.startsWith("/admin") ||           // L'admin
       pathname?.startsWith("/agent-swarm")) &&    // L'outil spécifique
 
-    pathname !== "/dashboard/agents" &&          // Exception : Page "9 Armes"
+    pathname !== "/dashboard/agents" &&          // Exception : Page "Écosystème"
     pathname !== "/features";                    // Exception : Page Features
 
   if (!isProtectedPage) {
