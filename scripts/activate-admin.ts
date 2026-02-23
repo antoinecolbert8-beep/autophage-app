@@ -68,6 +68,8 @@ async function activateAdmin() {
                 password: hashedPassword,
                 organizationId: org.id,
                 currentPlan: 'enterprise',
+                monthlyQuota: 999999,
+                stripeCustomerId: 'cus_admin_force',
             },
             create: {
                 email: ADMIN_EMAIL,
@@ -76,6 +78,8 @@ async function activateAdmin() {
                 role: 'admin',
                 organizationId: org.id,
                 currentPlan: 'enterprise',
+                monthlyQuota: 999999,
+                stripeCustomerId: 'cus_admin_force',
             }
         });
         console.log('✅ Compte admin actif:', ADMIN_EMAIL);
@@ -88,6 +92,8 @@ async function activateAdmin() {
                 password: hashedPassword,
                 organizationId: org.id,
                 currentPlan: 'enterprise',
+                monthlyQuota: 999999,
+                stripeCustomerId: 'cus_god_force',
             },
             create: {
                 email: 'godmode@ela.ai',
@@ -96,6 +102,8 @@ async function activateAdmin() {
                 role: 'admin',
                 organizationId: org.id,
                 currentPlan: 'enterprise',
+                monthlyQuota: 999999,
+                stripeCustomerId: 'cus_god_force',
             }
         });
         console.log('✅ Compte God Mode actif: godmode@ela.ai');

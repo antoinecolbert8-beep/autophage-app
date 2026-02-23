@@ -46,8 +46,8 @@ export async function POST(request: NextRequest) {
     const planId = (user.currentPlan?.toUpperCase() || "STARTER") as "STARTER" | "PRO" | "BUSINESS" | "ENTERPRISE";
     const costs = calculateUsageCost("SHORT", planId);
 
-    // Si hors quota, vérifier le moyen de paiement
-    if (!withinQuota && !user.stripeCustomerId) {
+    // Si hors quota, vérifier le moyen de paiement (Bypass pour les admins)
+    if (!withinQuota && !user.stripeCustomerId && user.role !== 'admin') {
       return NextResponse.json(
         { error: "Payment method required for overage usage" },
         { status: 402 }
