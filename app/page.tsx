@@ -114,7 +114,7 @@ export default function Home() {
           </h1>
 
           <p className="text-lg md:text-3xl text-gray-300 max-w-4xl mx-auto mb-6 leading-relaxed font-bold px-2">
-            9 ARMES ULTIMES. ZÉRO PITIÉ.
+            9 UNITÉS DE PERFORMANCE. EXCELLENCE ABSOLUE.
           </p>
           <p className="text-base md:text-xl text-gray-500 max-w-3xl mx-auto mb-10 md:mb-12 px-2">
             Pendant qu'ils dorment, vous <span className="text-blue-500 font-bold">DOMINEZ</span> le marché. 24/7. Sans limite.
@@ -132,7 +132,7 @@ export default function Home() {
             {/* Secondary CTA */}
             <Link href="/agents" className="w-full md:w-auto group px-8 py-4 bg-transparent border-2 border-purple-500/30 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-purple-500/10 transition-all hover:scale-105 hover:border-purple-500 text-purple-400">
               <Star className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" />
-              VOIR L'ARSENAL
+              VOIR L'ÉCOSYSTÈME
             </Link>
           </div>
 
@@ -230,10 +230,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-20">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/30 mb-6">
-              <span className="text-purple-400 font-bold text-sm">🚀 ARSENAL COMPLET</span>
+              <span className="text-purple-400 font-bold text-sm">INFRASTRUCTURE COMPLÈTE</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-black mb-6">
-              20 Armes de Destruction <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">Concurrentielle</span>
+              20 Unités de Domination <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">Du Marché</span>
             </h2>
             <p className="text-lg text-gray-400">
               Technologies de pointe pour dominer chaque aspect de votre croissance digitale.
@@ -243,49 +243,49 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
-                icon: "📊",
+                icon: <LineIconTrendingUp size={24} className="text-blue-500" />,
                 title: "Métriques Temps Réel",
                 desc: "LinkedIn, Twitter, Meta Analytics APIs intégrées pour vraies performances.",
                 color: "from-blue-500 to-cyan-500",
                 tag: "Phase 1"
               },
               {
-                icon: "🖼️",
+                icon: <LineIconZap size={24} className="text-purple-500" />,
                 title: "Upload Média Natif",
                 desc: "Images sur LinkedIn, carrousels Instagram, vidéos Twitter automatiques.",
                 color: "from-purple-500 to-indigo-500",
                 tag: "Phase 1"
               },
               {
-                icon: "🧪",
+                icon: <LineIconStar size={24} className="text-pink-500" />,
                 title: "A/B Testing Auto",
                 desc: "Split test hooks et styles, sélection automatique du winner en 24h.",
                 color: "from-pink-500 to-rose-500",
                 tag: "Phase 1"
               },
               {
-                icon: "🤖",
+                icon: <LineIconCheck size={24} className="text-green-500" />,
                 title: "Auto-Engagement Bot",
                 desc: "Réponses IA aux commentaires, likes intelligents, follow-ups automatiques.",
                 color: "from-green-500 to-emerald-500",
                 tag: "Phase 2"
               },
               {
-                icon: "📈",
+                icon: <LineIconTrendingUp size={24} className="text-orange-500" />,
                 title: "Trending Topics",
                 desc: "Scraping Reddit, Google Trends, Twitter pour alignement parfait.",
                 color: "from-orange-500 to-red-500",
                 tag: "Phase 2"
               },
               {
-                icon: "⚡",
+                icon: <LineIconZap size={24} className="text-yellow-500" />,
                 title: "Frequency Optimizer",
                 desc: "2-5 posts/jour adaptatif selon performance, timing optimal par plateforme.",
                 color: "from-yellow-500 to-amber-500",
                 tag: "Phase 2"
               },
               {
-                icon: "♻️",
+                icon: <LineIconStar size={24} className="text-teal-500" />,
                 title: "Content Recycling",
                 desc: "Repurpose automatique des top 10%, compilations Best-of, evergreen.",
                 color: "from-teal-500 to-cyan-500",
@@ -313,7 +313,7 @@ export default function Home() {
                 tag: "Phase 3"
               },
               {
-                icon: "💰",
+                icon: <LineIconZap size={24} className="text-emerald-500" />,
                 title: "Revenue Autopilot",
                 desc: "Gestion autonome des flux monétaires, splits automatiques, facturation récurrente, analytics financiers temps réel.",
                 color: "from-emerald-500 to-green-500",

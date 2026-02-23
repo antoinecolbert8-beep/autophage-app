@@ -67,7 +67,7 @@ async function activateAdmin() {
                 role: 'admin',
                 password: hashedPassword,
                 organizationId: org.id,
-                tier: 'grand_horloger',
+                currentPlan: 'enterprise',
             },
             create: {
                 email: ADMIN_EMAIL,
@@ -75,7 +75,7 @@ async function activateAdmin() {
                 password: hashedPassword,
                 role: 'admin',
                 organizationId: org.id,
-                tier: 'grand_horloger',
+                currentPlan: 'enterprise',
             }
         });
         console.log('✅ Compte admin actif:', ADMIN_EMAIL);
@@ -87,7 +87,7 @@ async function activateAdmin() {
                 role: 'admin',
                 password: hashedPassword,
                 organizationId: org.id,
-                tier: 'grand_horloger',
+                currentPlan: 'enterprise',
             },
             create: {
                 email: 'godmode@ela.ai',
@@ -95,7 +95,7 @@ async function activateAdmin() {
                 password: hashedPassword,
                 role: 'admin',
                 organizationId: org.id,
-                tier: 'grand_horloger',
+                currentPlan: 'enterprise',
             }
         });
         console.log('✅ Compte God Mode actif: godmode@ela.ai');

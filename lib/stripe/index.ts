@@ -1,13 +1,15 @@
 import Stripe from 'stripe'
 
-if (!process.env.STRIPE_SECRET_KEY) {
-    throw new Error('STRIPE_SECRET_KEY is not defined')
-}
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET;
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+export const stripe = new Stripe(STRIPE_SECRET_KEY || "dummy_key_for_build", {
     apiVersion: '2023-10-16',
     typescript: true,
-})
+});
+
+if (!STRIPE_SECRET_KEY && process.env.NODE_ENV === 'production') {
+    console.warn('⚠️ STRIPE_SECRET_KEY is not defined in production');
+}
 
 // Create a customer
 export async function createCustomer(params: {
