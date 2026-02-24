@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { generateAuthorityContent, createContentAsset } from '@/lib/content/authority-engine';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth-config';
+import { consumeCredits } from '@/lib/billing';
 
 export async function POST(request: NextRequest) {
     try {
@@ -12,6 +15,21 @@ export async function POST(request: NextRequest) {
                 { status: 400 }
             );
         }
+
+        const session = await getServerSession(authOptions);
+        if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        const organizationId = (session.user as any).organizationId;
+
+        // ── ARCHITECTURE SCELLÉE : Débit de crédits ────────────────────────
+        const billing = await consumeCredits(organizationId, 'APEX_GENERATION');
+        if (!billing.success) {
+            return NextResponse.json({
+                error: 'Crédits insuffisants pour APEX Generation.',
+                remaining: billing.remaining,
+                required: 50 // Cost of APEX_GENERATION
+            }, { status: 402 });
+        }
+        // ───────────────────────────────────────────────────────────────────
 
         console.log(`🚀 Generating authority content for: ${keyword}`);
 

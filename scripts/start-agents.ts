@@ -7,9 +7,14 @@ import 'dotenv/config';
 import { SwarmOrchestrator } from "../lib/agents/swarm-orchestrator";
 import { startSelfHealing } from "../lib/self-healing";
 import { ELASelfPromoter } from "../lib/god-mode/self-promotion";
+import { socialWorker } from "../lib/queue/social-worker";
 
 async function main() {
-  console.log("🤖 Démarrage du système multi-agent...\n");
+  console.log("🤖 Démarrage du système multi-agent (Enterprise Mode)...\n");
+
+  // 0. Activation du Worker Social (BullMQ)
+  console.log("👷 Initialisation du Worker Social...");
+  socialWorker.on('ready', () => console.log("✅ Worker Social prêt et à l'écoute."));
 
   // 1. Démarre le système d'auto-réparation
   console.log("🔧 Activation du système d'auto-réparation...");

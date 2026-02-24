@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { db as prisma } from "@/core/db";
 
 /**
@@ -25,42 +26,26 @@ export async function distributeTo100PercentFreeChannels(content: {
     try {
         // 1. RSS Feed (déjà automatique via /blog)
         results.rss = true;
-        console.log("✅ RSS Feed: Auto-updated");
 
-        // 2. Reddit (posts organiques - pas d'API key nécessaire)
-        // Format: Post manuel ou via puppeteer (100% gratuit)
-        console.log("📝 Reddit: Title ready for r/SaaS, r/Entrepreneur");
-        results.reddit = true;
-
-        // 3. Hacker News (Show HN)
-        // Format: titre + URL
-        console.log("🔥 Hacker News: Ready for Show HN");
-        results.hackernews = true;
-
-        // 4. Medium.com (cross-post gratuit)
-        // Utilise l'API Medium gratuite (pas besoin de Medium Partner)
-        console.log("📰 Medium: Cross-post prepared");
-        results.medium = true;
-
-        // 5. Dev.to (gratuit, excellent SEO)
-        console.log("💻 Dev.to: Ready for publication");
-        results.devto = true;
-
-        // 6. LinkedIn (posts organiques)
-        console.log("💼 LinkedIn: Post scheduled");
-        results.linkedin = true;
-
-        // 7. Twitter threads (gratuit)
-        console.log("🐦 Twitter: Thread prepared");
-        results.twitter = true;
-
-        // Log distribution (console only, no DB dependency)
-        console.log(`📊 FREE Distribution logged: ${Object.keys(results).filter(k => results[k as keyof typeof results]).join(', ')}`);
-
-        return results;
+        // 2-7. Connecteurs non-natifs : Routage vers n8n
+        const n8nUrl = process.env.N8N_WEBHOOK_URL;
+        if (n8nUrl) {
+            await axios.post(n8nUrl, {
+                action: 'FREE_TRAFFIC_DISTRIBUTION',
+                data: content,
+                platforms: ['reddit', 'hackernews', 'medium', 'devto']
+            });
+            results.reddit = true;
+            results.hackernews = true;
+            results.medium = true;
+            results.devto = true;
+            console.log("🚀 [FREE TRAFFIC] Batch distribution via n8n SUCCESS");
+        } else {
+            console.warn("⚠️ [FREE TRAFFIC] n8n URL missing, skipping batch distribution");
+        }
 
     } catch (error: any) {
-        console.error("❌ Free distribution error:", error.message);
+        console.warn("⚠️ [FREE TRAFFIC] Skipping non-native distribution:", error.message);
         return results;
     }
 }

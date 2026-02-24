@@ -6,6 +6,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateContentWithGemini, generateImagePrompt } from "@/lib/gemini-content";
 import { LegalSentinel } from "@/lib/security/legal-sentinel";
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth-config';
+import { consumeCredits } from '@/lib/billing';
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,6 +23,24 @@ export async function POST(req: NextRequest) {
     }
 
     console.log(`🧠 Génération Gemini : ${topic} pour ${platform}`);
+
+    const session = await getServerSession(authOptions);
+    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const organizationId = (session.user as any).organizationId;
+
+    // ── ARCHITECTURE SCELLÉE : Débit de crédits ────────────────────────
+    // Coût variable : APEX (50) ou Analyse simple (15)
+    const costType = contentType === 'TEXT' ? 'AI_ANALYSIS' : 'APEX_GENERATION';
+    const billing = await consumeCredits(organizationId, costType);
+
+    if (!billing.success) {
+      return NextResponse.json({
+        error: "Crédits insuffisants.",
+        remaining: billing.remaining,
+        required: costType === 'AI_ANALYSIS' ? 15 : 50
+      }, { status: 402 });
+    }
+    // ───────────────────────────────────────────────────────────────────
 
     // Génère le contenu textuel
     const content = await generateContentWithGemini({

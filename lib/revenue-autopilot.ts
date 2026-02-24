@@ -5,7 +5,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', { apiVersion: '20
 /**
  * REVENUE AUTOPILOT
  * Système autonome de gestion des flux monétaires
- * Version simplifiée compatible avec le schéma Prisma existant
+ * Version optimisée pour l'Architecture Zéro Maintenance
  */
 
 export interface RevenueStream {
@@ -34,7 +34,6 @@ export class RevenueAutopilot {
     }): Promise<RevenueStream> {
         const { name, type, amount, ownerIds, splitPercentages } = params;
 
-        // Validation: somme des % = 100
         const totalPercentage = splitPercentages.reduce((sum, p) => sum + p, 0);
         if (Math.abs(totalPercentage - 100) > 0.01) {
             throw new Error('Split percentages must sum to 100%');
@@ -70,7 +69,6 @@ export class RevenueAutopilot {
 
         console.log(`[Revenue] Processing €${amount} for stream ${streamId}`);
 
-        // Récupérer splits depuis metadata
         const splits = params.metadata?.splits ? JSON.parse(params.metadata.splits) : [];
 
         if (!splits || splits.length === 0) {
@@ -78,40 +76,40 @@ export class RevenueAutopilot {
             return;
         }
 
-        // Distribuer automatiquement selon les splits
         for (const split of splits) {
             const splitAmount = (amount * split.percentage) / 100;
-            await this.creditUserBalance(split.userId, splitAmount);
+            await this.creditOrganizationBalance(split.userId, splitAmount);
         }
 
         console.log(`[Revenue] Distributed €${amount} across ${splits.length} beneficiaries`);
     }
 
     /**
-     * Crédit du solde utilisateur (utilise quota comme wallet temporaire)
+     * Crédit du solde de l'organisation (Wallet centralisé)
      */
-    private static async creditUserBalance(userId: string, amount: number): Promise<void> {
+    private static async creditOrganizationBalance(userId: string, amount: number): Promise<void> {
         const user = await prisma.user.findUnique({
             where: { id: userId },
-            select: { email: true }
+            select: { email: true, organizationId: true }
         });
 
-        if (!user) {
-            console.error(`[Revenue] User ${userId} not found`);
+        if (!user || !user.organizationId) {
+            console.error(`[Revenue] User or Organization not found for ${userId}`);
             return;
         }
 
         // Convertir en crédits (1€ = 10 crédits)
         const credits = Math.round(amount * 10);
 
-        await prisma.user.update({
-            where: { id: userId },
+        // Mise à jour de l'organisation
+        await prisma.organization.update({
+            where: { id: user.organizationId },
             data: {
-                monthlyQuota: { increment: credits }
+                creditBalance: { increment: credits }
             }
         });
 
-        console.log(`[Revenue] Credited ${credits} crédits (€${amount}) to ${user.email}`);
+        console.log(`[Revenue] Credited ${credits} credits (€${amount}) to Org ${user.organizationId} (from ${user.email})`);
     }
 
     /**
@@ -136,7 +134,6 @@ export class RevenueAutopilot {
 
                 if (daysUntilEnd <= 3 && subscription.user.stripeCustomerId) {
                     const customer = await stripe.customers.retrieve(subscription.user.stripeCustomerId);
-
                     if (!customer.deleted) {
                         console.log(`[Revenue] Renewal check for ${subscription.user.email}`);
                     }
@@ -148,21 +145,25 @@ export class RevenueAutopilot {
     }
 
     /**
-     * Analytics financiers en temps réel
+     * Analytics financiers en temps réel basés sur l'organisation
      */
     static async getRevenueAnalytics(): Promise<{
         totalRevenue: number;
         activeSubscriptions: number;
-        churnRate: number;
+        mrr: number;
     }> {
-        const activeSubscriptions = await prisma.subscription.count({
-            where: { status: 'active' }
+        const activeOrgs = await prisma.organization.findMany({
+            where: { status: 'active' },
+            select: { mrr: true }
         });
 
+        const activeSubscriptions = activeOrgs.length;
+        const mrr = activeOrgs.reduce((sum, org) => sum + (org.mrr || 0), 0);
+
         return {
-            totalRevenue: 0, // Would calculate from Stripe
+            totalRevenue: mrr, // Approximation based on active MRR
             activeSubscriptions,
-            churnRate: 0
+            mrr
         };
     }
 
@@ -176,13 +177,11 @@ export class RevenueAutopilot {
     }): Promise<string> {
         const { productName, amount, beneficiaries } = params;
 
-        // Validation
         const totalPercentage = beneficiaries.reduce((sum, b) => sum + b.percentage, 0);
         if (Math.abs(totalPercentage - 100) > 0.01) {
             throw new Error('Beneficiary percentages must sum to 100%');
         }
 
-        // Créer stream
         const stream = await this.createRevenueStream({
             name: productName,
             type: 'revenue_share',
@@ -191,23 +190,15 @@ export class RevenueAutopilot {
             splitPercentages: beneficiaries.map(b => b.percentage)
         });
 
-        // Créer produit Stripe
-        const product = await stripe.products.create({
-            name: productName
-        });
-
+        const product = await stripe.products.create({ name: productName });
         const price = await stripe.prices.create({
             product: product.id,
             unit_amount: amount * 100,
             currency: 'eur'
         });
 
-        // Créer Payment Link
         const paymentLink = await stripe.paymentLinks.create({
-            line_items: [{
-                price: price.id,
-                quantity: 1
-            }],
+            line_items: [{ price: price.id, quantity: 1 }],
             metadata: {
                 streamId: stream.id,
                 splitEnabled: 'true',
@@ -220,7 +211,7 @@ export class RevenueAutopilot {
     }
 
     /**
-     * Calcul des revenus par utilisateur
+     * Calcul des revenus par utilisateur (simplifié)
      */
     static async getUserRevenue(userId: string): Promise<{
         totalEarned: number;
@@ -230,11 +221,8 @@ export class RevenueAutopilot {
             where: { id: userId }
         });
 
-        if (!user) {
-            throw new Error('User not found');
-        }
+        if (!user) throw new Error('User not found');
 
-        // Simplified - would query actual revenue records
         return {
             totalEarned: 0,
             pendingPayouts: 0

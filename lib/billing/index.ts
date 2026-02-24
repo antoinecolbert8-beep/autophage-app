@@ -17,6 +17,7 @@ export const CREDIT_COSTS = {
     PULSE_OUTREACH: 5,        // Per lead outreach
     INDEXING_FORCE: 20,       // Google indexing push
     AI_ANALYSIS: 15,          // Vertex AI analysis
+    POST_PUBLISH: 10,         // Native social publish (Segment E)
 } as const;
 
 // Credit packages available for purchase

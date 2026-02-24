@@ -1,5 +1,4 @@
 import { generateText } from '@/lib/ai/vertex';
-import { publishToMultiplePlatforms } from '@/lib/social-media-manager';
 import { ViralEngine } from '@/lib/viral-engine';
 import { WhatsAppNotifier } from '@/lib/whatsapp-notifier';
 import { PlatformAnalytics } from '@/lib/platform-analytics';
@@ -7,6 +6,8 @@ import { PulseEngine } from '@/lib/realtime-pulse';
 import { db as prisma } from "@/core/db";
 import { LegalSentinel } from '@/lib/security/legal-sentinel';
 import { ShopifyAutomation } from '@/lib/integrations/shopify';
+import { enqueueSocialPost } from '@/lib/queue/social-queue';
+import { consumeCredits } from '@/lib/billing';
 
 /**
  * GOD MODE: SELF-PROMOTION ENGINE (V3 - PERFORMANCE TRACKING)
@@ -82,7 +83,11 @@ export class ELASelfPromoter {
             for (const order of orders.slice(0, 2)) { // Limit to 2 posts max per cycle
                 const mainItem = order.lineItems[0]?.title || 'produit ELA';
                 const message = `🔥 NOUVELLE COMMANDE : Un souverain vient de s'équiper avec "${mainItem}" — €${order.totalPrice}. Le mouvement s'accélère. Rejoignez-nous.`;
-                await this.schedulePost(message, 'SHOPIFY_ECOM', '');
+
+                const org = await prisma.organization.findFirst({ where: { users: { some: { id: userId } } } });
+                const orgId = org?.id || 'org_global';
+
+                await this.schedulePost(message, 'SHOPIFY_ECOM', '', orgId);
                 console.log(`[SHOPIFY] Broadcasted real sale: Order ${order.id}`);
             }
         } catch (err) {
@@ -210,6 +215,22 @@ export class ELASelfPromoter {
      * DECISION ENGINE
      */
     private static async shouldPostNow(platform: Platform, currentHour: number, userId: string): Promise<boolean> {
+        // 1. Check daily budget/limit (SRE Guard)
+        const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+        const dailyCount = await prisma.usageLog.count({
+            where: {
+                organizationId: (await prisma.user.findUnique({ where: { id: userId }, select: { organizationId: true } }))?.organizationId,
+                timestamp: { gte: dayAgo },
+                actionType: 'SNAP_DISTRIBUTION'
+            }
+        });
+
+        const DAILY_MAX = 15; // Sécurité SRE: max 15 posts auto par jour globalement
+        if (dailyCount >= DAILY_MAX) {
+            console.warn(`[GOD MODE] Daily limit reached (${dailyCount}/${DAILY_MAX}). Sleeping to save budget.`);
+            return false;
+        }
+
         const optimalHours = this.PLATFORM_SCHEDULES[platform] || [9];
         if (!optimalHours.includes(currentHour)) {
             if (!process.env.FORCE_POST) return false;
@@ -239,7 +260,7 @@ export class ELASelfPromoter {
      */
     private static async executePromotion(platform: Platform, userId: string) {
         const topic = await this.generateDynamicTopic();
-        const content = await this.generatePostContent(topic, platform);
+        let content = await this.generatePostContent(topic, platform);
 
         const PRODUCTION_DOMAIN = process.env.NEXT_PUBLIC_APP_URL || 'https://ela-revolution.com';
         const ASSETS = [
@@ -253,22 +274,35 @@ export class ELASelfPromoter {
             return { success: false, error: "Content Validation Failed" };
         }
 
-        // --- LEGAL COMPLIANCE LAYER ---
-        const flatContent = Array.isArray(content) ? content.join(" ") : content;
-        const compliance = await LegalSentinel.checkContent(flatContent, platform, platform === 'SHOPIFY_ECOM');
+        // --- LEGAL COMPLIANCE LAYER WITH SANITIZATION ---
+        let flatContent = Array.isArray(content) ? content.join(" ") : content;
+        let compliance = await LegalSentinel.checkContent(flatContent, platform, platform === 'SHOPIFY_ECOM');
 
         if (!compliance.isCompliant) {
-            console.warn(`[LEGAL SENTINEL] Blocked post for ${platform}: ${compliance.threats.join(", ")}`);
-            // Attempt to re-generate once or sanitize
-            if (compliance.score > 50) {
-                console.log("[LEGAL SENTINEL] Sanitizing content instead of blocking.");
-                // For now, we allow it with a warning in logs, or sanitize
-            } else {
-                return { success: false, error: "Legal Compliance Failure: " + compliance.threats[0] };
+            console.warn(`[LEGAL SENTINEL] Threat detected: ${compliance.threats.join(", ")}`);
+
+            if (compliance.score > 40) {
+                console.log("[GOD MODE] Attempting AI Sanitization (Tone shift to Corporate/Engaging)...");
+                const sanitized = await this.sanitizeAndRewrite(flatContent);
+                content = sanitized;
+                flatContent = sanitized;
+                // Re-check compliance after rewrite
+                compliance = await LegalSentinel.checkContent(flatContent, platform, platform === 'SHOPIFY_ECOM');
+            }
+
+            if (!compliance.isCompliant) {
+                console.error(`[GOD MODE] Post ABORTED. Still not compliant after rewrite.`);
+                return { success: false, error: "Hard Legal Block: " + compliance.threats[0] };
             }
         }
 
-        let success = await this.schedulePost(content, platform, randomAsset);
+        const org = await prisma.organization.findFirst({ where: { users: { some: { id: userId } } } });
+        if (!org) {
+            console.error(`[GOD MODE] Org not found for system user ${userId}`);
+            return { success: false };
+        }
+
+        let success = await this.schedulePost(content, platform, randomAsset, org.id);
 
         const post = await prisma.post.create({
             data: {
@@ -459,26 +493,69 @@ export class ELASelfPromoter {
         }
     }
 
-    private static async schedulePost(content: string | string[], platform: Platform, mediaUrl: string) {
-        console.log(`[GOD MODE] Publishing to ${platform}...`);
+    /**
+     * AI SANITIZATION LOOP
+     * Rewrites aggressive content into professional, high-engaging but safe tone.
+     */
+    private static async sanitizeAndRewrite(content: string): Promise<string> {
+        const prompt = `
+        You are a Legal & Growth PR Expert. 
+        Rewrite the following content to be "Sovereign Corporate" style.
+        
+        Rules:
+        - Maintain the high stakes and the value of ELA.
+        - ELIMINATE all toxic, aggressive, or hateful language.
+        - Focus on "Automation Efficiency" and "Market Dominance" instead of "Slavery/Destruction".
+        - Ensure 100% compliance with social media safety guidelines.
+        - Language: French.
+
+        Content to sanitize:
+        "${content}"
+        `;
+
+        try {
+            const sanitized = await generateText(prompt, { temperature: 0.7 });
+            return sanitized.trim();
+        } catch (e) {
+            return "ELA Genesis : L'automatisation souveraine pour une efficacité démultipliée. Rejoignez la révolution.";
+        }
+    }
+
+    private static async schedulePost(content: string | string[], platform: Platform, mediaUrl: string, organizationId: string) {
+        console.log(`[GOD MODE] Enqueuing to ${platform} via BullMQ...`);
         let targetPlatform: any = platform;
         if (platform === 'X_PLATFORM') targetPlatform = 'TWITTER';
 
-        let finalContent = "";
-        if (Array.isArray(content)) finalContent = content[0];
-        else finalContent = content as string;
+        const finalContent = Array.isArray(content) ? content.join("\n\n") : content;
+
+        // ── ARCHITECTURE SCELLÉE : Débit de crédits (Self-Promotion cost: 5) ──
+        const billing = await consumeCredits(organizationId, 'SNAP_DISTRIBUTION');
+        if (!billing.success) {
+            console.error(`[GOD MODE] Out of credits for ${platform}. Expansion paused.`);
+            return false;
+        }
+        // ───────────────────────────────────────────────────────────────────
 
         try {
-            const result = await publishToMultiplePlatforms({
-                platform: targetPlatform,
-                content: finalContent,
-                mediaUrls: [mediaUrl],
-                hashtags: ['ELA', 'AI', 'Automation']
-            }, [targetPlatform]);
+            if (process.env.GOD_MODE_AUDIT === "true") {
+                console.log(`[GOD MODE AUDIT] Job simulation SUCCESS for ${platform}`);
+                return true;
+            }
 
-            return result[targetPlatform]?.success || false;
+            const jobId = await enqueueSocialPost({
+                post: {
+                    content: finalContent,
+                    mediaUrls: [mediaUrl],
+                    platform: targetPlatform
+                },
+                platforms: [targetPlatform],
+                organizationId
+            });
+
+            console.log(`[GOD MODE] Job enqueued: ${jobId} for ${platform}`);
+            return true;
         } catch (error) {
-            console.error(`[GOD MODE] Failed to publish to ${platform} `, error);
+            console.error(`[GOD MODE] Failed to enqueue to ${platform}`, error);
             return false;
         }
     }

@@ -65,16 +65,22 @@ export class LegalSentinel {
             }
         }
 
-        // 4. Over-aggressive Claims
+        // 4. Over-aggressive / High Risk Claims
+        const toxicTerms = /esclave|matrix|suicide|destruction|nucléaire|matrix|pill/i;
+        if (toxicTerms.test(content)) {
+            threats.push("Tonalité trop agressive ou toxique détectée.");
+            score -= 40;
+        }
+
         const hyperbolicTerms = /garanti|100% sûr|aucun risque|immédiat|fortune/i;
         if (hyperbolicTerms.test(content)) {
             threats.push("Allégations potentiellement trompeuses ou trop agressives.");
             suggestions.push("Tempérez les promesses de résultats pour éviter les plaintes consommateurs.");
-            score -= 10;
+            score -= 20;
         }
 
         return {
-            isCompliant: score >= 70,
+            isCompliant: score >= 75, // Seuil de tolérance réduit pour la prod
             threats,
             suggestions,
             score: Math.max(0, score)

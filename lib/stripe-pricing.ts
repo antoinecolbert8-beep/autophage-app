@@ -146,6 +146,7 @@ export function calculateUsageCost(type: "SHORT" | "REEL" | "CARROUSEL", plan: P
 
 /**
  * Créer une session Stripe Checkout pour un abonnement
+ * AUDIT FIX: success_url pointe vers /onboarding?welcome=true pour guider le nouvel utilisateur.
  */
 export async function createCheckoutSession(params: {
   userId: string;
@@ -155,13 +156,30 @@ export async function createCheckoutSession(params: {
   successUrl: string;
   cancelUrl: string;
 }) {
-  const { userId, userEmail, organizationId, planId, successUrl, cancelUrl } = params;
+  const { userId, userEmail, organizationId, planId, cancelUrl } = params;
 
   const plan = PLANS[planId];
 
   if (!plan.stripePriceId) {
-    throw new Error(`Plan ${planId} n'a pas de Price ID Stripe`);
+    throw new Error(
+      `[Stripe] Aucun Price ID configuré pour le plan ${planId}. ` +
+      `Ajoutez STRIPE_PRICE_${planId} dans votre .env avec un vrai ID Stripe (ex: price_xxxxxxxxx).`
+    );
   }
+
+  // AUDIT FIX: Guard contre les placeholder IDs encore en place
+  const placeholderPattern = /^price_(starter|pro|business|enterprise)_eur_monthly$/;
+  if (placeholderPattern.test(plan.stripePriceId)) {
+    throw new Error(
+      `[Stripe] Le Price ID "${plan.stripePriceId}" est un placeholder ! ` +
+      `Créez un vrai produit dans votre Stripe Dashboard et mettez à jour STRIPE_PRICE_${planId}.`
+    );
+  }
+
+  // AUDIT FIX: Toujours rediriger vers /onboarding après paiement
+  // Le ?session_id permet au webhook de trouver la session si nécessaire
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const onboardingSuccessUrl = `${appUrl}/onboarding?welcome=true&session_id={CHECKOUT_SESSION_ID}`;
 
   const session = await stripe.checkout.sessions.create({
     customer_email: userEmail,
@@ -179,11 +197,11 @@ export async function createCheckoutSession(params: {
         userId,
         organizationId,
         plan: planId,
-        tierId: planId, // Added for compatibility with other handlers
+        tierId: planId,
         monthlyCredits: plan.quota.toString(),
       },
     },
-    success_url: successUrl,
+    success_url: onboardingSuccessUrl,
     cancel_url: cancelUrl,
     allow_promotion_codes: true,
   });

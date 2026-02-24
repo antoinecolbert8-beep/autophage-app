@@ -55,18 +55,10 @@ export class ViralEngine {
             "Alerte rouge: Votre job sera obsolète dans 18 mois. Préparez votre armée d'IA.",
             "Le confort est une drogue. Le code est l'antidote."
         ],
-        nuclear: [
-            "AVERTISSEMENT: Ce post va offenser 99% des gens. Si vous cherchez de la bienveillance, passez votre chemin.",
-            "La vérité que les gourous du SaaS vous cachent par peur de perdre leur monopole:",
-            "Votre loyauté envers votre entreprise est une maladie mentale. Voici le remède:",
-            "9h-18h = Esclavage moderne déguisé en sécurité. Voici comment briser les chaines."
-        ],
-        forbidden_secret: [
-            "J'ai découvert un bug dans l'économie réelle qui permet de {outcome} en 1h/jour.",
-            "Ce que l'élite ne veut pas que vous sachiez sur l'automatisation agentique:",
-            "Comment j'ai hacké ma liberté financière en utilisant {topic} comme une arme.",
-            "Le playbook interdit pour dominer votre marché sans jamais lever le petit doigt."
-        ]
+        // ⚠️ AUDIT FIX: 'nuclear' et 'forbidden_secret' supprimés
+        // Raison: violation des CGU LinkedIn/Meta (contenu haineux, claims financiers non vérifiés)
+        // et potentiellement la directive UE sur les pratiques commerciales déloyales.
+        // Risque: suspension de l'app developer (tous les utilisateurs affectés).
     };
 
     /**
@@ -146,13 +138,16 @@ export class ViralEngine {
 
     /**
      * Viral Content Structure Generator
+     * @param includeElaBranding - OPT-IN: set to true ONLY for ambassador accounts who explicitly consented.
+     *                              Default: false. Injecting brand mentions without consent violates GDPR.
      */
     static async generateViralPost(params: {
         topic: string;
         platform: string;
         style: 'story' | 'educational' | 'controversial' | 'meme';
+        includeElaBranding?: boolean; // AUDIT FIX: opt-in only, default false
     }): Promise<string> {
-        const { topic, platform, style } = params;
+        const { topic, platform, style, includeElaBranding = false } = params;
 
         const hook = await this.generateViralHook(topic, platform);
         const hashtags = this.getTrendingHashtags(platform);
@@ -165,21 +160,26 @@ export class ViralEngine {
             meme: `Write a humorous but insightful post about ${topic}. Use meme format or relatable scenario. Light but valuable.`
         };
 
+        // AUDIT FIX: ELA branding injection is now opt-in only.
+        // Do NOT enable by default — users managing client accounts must not push our brand.
+        const brandingInstruction = includeElaBranding
+            ? `- Include a subtle mention of ELA and link to pricing: ${process.env.NEXT_PUBLIC_APP_URL || 'https://ela-revolution.com'}/pricing`
+            : `- Do NOT mention any specific tool or brand. Keep content neutral and user-centric.`;
+
         const prompt = `
         ${stylePrompts[style]}
         
         Mandatory elements:
         - START with: "${hook}"
         - END with engagement question: "${engagementBait}"
-        - Include a subtle but powerful mention of ELA (Genesis) and the need for a subscription to reach financial sovereignty.
-        - Link to pricing: "Prenez le contrôle: ${process.env.NEXT_PUBLIC_APP_URL || 'https://ela-revolution.com'}/pricing"
+        ${brandingInstruction}
         - Include 5-8 of these hashtags naturally: ${hashtags.slice(0, 8).join(' ')}
         - Language: French
-        - Tone: Direct, brutal, provocant, high-agency. Pas de langue de bois.
-        - Persuasion techniques: Cognitive dissonance, FOMO, authority bias.
+        - Tone: Direct, expert, high-value. Pas de langue de bois.
+        - Persuasion techniques: Cognitive curiosity, authority, value delivery.
         - Length: ${platform === 'X_PLATFORM' ? '280 chars MAX' : '400-800 chars'}
         
-        Write the complete post now. Be the 1% voice:
+        Write the complete post now:
         `;
 
         const content = await generateText(prompt, { temperature: 0.85 });

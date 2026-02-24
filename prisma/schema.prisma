@@ -278,6 +278,11 @@ model Integration {
   lastSync      DateTime?
   syncFrequency Int       @default(60) // minutes
 
+  // ⚡ ARCHITECTURE ZÉRO MAINTENANCE: OAuth Rotation
+  refreshToken      String?   // Encrypted via Fortress
+  tokenExpiresAt    DateTime?
+  requiresReauth    Boolean   @default(false)
+
   dataPoints DataPoint[]
 
   organizationId String
