@@ -43,6 +43,21 @@ export interface SocialJobPayload {
  */
 export async function enqueueSocialPost(payload: SocialJobPayload) {
     const jobId = `post_${Date.now()}_${Math.random().toString(36).substring(7)}`;
+
+    // ── FALLBACK SANS REDIS (Audit / Local Dev) ──
+    // Si Redis n'est pas disponible, on traite la tâche immédiatement de manière synchrone
+    // pour ne pas bloquer les cycles de God Mode.
+    if (redisConnection.status !== 'ready') {
+        console.warn(`⚠️ Redis non connecté (${redisConnection.status}). Exécution synchrone pour ${jobId}`);
+        try {
+            await publishToMultiplePlatforms(payload.post, payload.platforms, payload.organizationId);
+            return `${jobId}_sync`;
+        } catch (error: any) {
+            console.error(`❌ Échec de l'exécution synchrone fallback:`, error.message);
+            throw error;
+        }
+    }
+
     await socialQueue.add('publish', payload, { jobId });
     return jobId;
 }
