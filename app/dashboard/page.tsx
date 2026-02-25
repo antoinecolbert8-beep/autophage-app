@@ -20,7 +20,14 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { SovereigntyGauge } from "@/components/SovereigntyGauge";
 import { ImperialPulse } from "@/components/ImperialPulse";
 import { getSovereigntyStats } from "@/actions/sovereignty-actions";
-import { MeshGradient, Particles3D, MagneticCursor } from "@/components/AdvancedVisuals";
+import {
+  MeshGradient,
+  Particles3D,
+  MagneticCursor,
+  GrainTexture,
+  NeuralWeb,
+  CyberGlitch
+} from "@/components/AdvancedVisuals";
 
 // Dynamic import to avoid SSR issues with Three.js Canvas
 const NeuroSchema = dynamic(() => import("@/components/NeuroSchema"), {
@@ -96,6 +103,7 @@ export default function DashboardPage() {
       <MeshGradient />
       <Particles3D />
       <GrainTexture />
+      <NeuralWeb />
       <MagneticCursor />
       {/* 2. CORTEX VISUEL: NEUROSCHEMA BACKGROUND */}
       <NeuroSchema />
@@ -133,7 +141,9 @@ export default function DashboardPage() {
 
       <div className="p-8 max-w-7xl mx-auto relative z-10">
         <div className="mb-8">
-          <h1 className="text-3xl font-black mb-2 tracking-tighter uppercase italic">Hyper-Flux Command</h1>
+          <CyberGlitch>
+            <h1 className="text-3xl font-black mb-2 tracking-tighter uppercase italic">Hyper-Flux Command</h1>
+          </CyberGlitch>
           <p className="text-gray-500 text-sm">
             {userTier === 'grand_horloger'
               ? `Status: OMNISCIENCE ACTIVE. Réseau neuronal synchronisé à 100%.`
