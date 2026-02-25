@@ -10,41 +10,36 @@ function Network({ count = 100 }) {
     const linesGeometry = useRef<THREE.BufferGeometry>(null!);
 
     // Generate random points in a sphere
-    const particles = useMemo(() => {
-        const temp = new Float32Array(count * 3);
+    const { particles, lines } = useMemo(() => {
+        const p = new Float32Array(count * 3);
+        const l = [];
         for (let i = 0; i < count; i++) {
             const theta = THREE.MathUtils.randFloatSpread(360);
             const phi = THREE.MathUtils.randFloatSpread(360);
+            const r = 2 + Math.random() * 0.5;
 
-            // Sphere distribution
-            const x = Math.sin(theta) * Math.cos(phi) * 2;
-            const y = Math.sin(theta) * Math.sin(phi) * 2;
-            const z = Math.cos(theta) * 2;
-
-            temp[i * 3] = x;
-            temp[i * 3 + 1] = y;
-            temp[i * 3 + 2] = z;
+            p[i * 3] = Math.sin(theta) * Math.cos(phi) * r;
+            p[i * 3 + 1] = Math.sin(theta) * Math.sin(phi) * r;
+            p[i * 3 + 2] = Math.cos(theta) * r;
         }
-        return temp;
-    }, [count]);
 
-    // Connect close points
-    const connections = useMemo(() => {
-        // This is a simplified static connection for performance
-        // Real-time dynamic connections are CPU heavy for JS
-        return particles;
-    }, [particles]);
+        // Connect random pairs
+        for (let i = 0; i < count; i++) {
+            if (Math.random() > 0.7) {
+                const target = Math.floor(Math.random() * count);
+                l.push(p[i * 3], p[i * 3 + 1], p[i * 3 + 2]);
+                l.push(p[target * 3], p[target * 3 + 1], p[target * 3 + 2]);
+            }
+        }
+        return { particles: p, lines: new Float32Array(l) };
+    }, [count]);
 
     useFrame((state) => {
         const t = state.clock.getElapsedTime();
-
-        // Breathing rotation
         if (points.current) {
             points.current.rotation.x = t * 0.05;
-            points.current.rotation.y = t * 0.03;
-
-            // Breathing scale (Pulsation)
-            const scale = 1 + Math.sin(t * 1.5) * 0.05;
+            points.current.rotation.y = t * 0.08;
+            const scale = 1 + Math.sin(t * 1.5) * 0.02;
             points.current.scale.set(scale, scale, scale);
         }
     });
@@ -54,13 +49,24 @@ function Network({ count = 100 }) {
             <Points ref={points} positions={particles} stride={3} frustumCulled={false}>
                 <PointMaterial
                     transparent
-                    color="#3b82f6" // Blue-500
-                    size={0.05}
+                    color="#66fcf1"
+                    size={0.08}
                     sizeAttenuation={true}
                     depthWrite={false}
-                    opacity={0.8}
+                    opacity={0.6}
                 />
             </Points>
+            <lineSegments>
+                <bufferGeometry>
+                    <bufferAttribute
+                        attach="attributes-position"
+                        count={lines.length / 3}
+                        array={lines}
+                        itemSize={3}
+                    />
+                </bufferGeometry>
+                <lineBasicMaterial color="#66fcf1" transparent opacity={0.1} />
+            </lineSegments>
         </group>
     );
 }

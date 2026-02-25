@@ -16,6 +16,7 @@ import {
 
 import BlurFade from "@/components/ui/blur-fade";
 import { GrainTexture, TextReveal, CyberGlitch } from "@/components/AdvancedVisuals";
+import { DominationTicker } from "@/components/DominationTicker";
 
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -29,17 +30,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7] font-sans selection:bg-[#66fcf1]/30 overflow-x-hidden snap-y snap-mandatory scroll-smooth">
+      <DominationTicker />
       <GrainTexture />
-      {/* 🚨 GLOBAL ALERT BANNER */}
-      <div className="w-full bg-[#66fcf1] py-2 px-8 flex items-center justify-center gap-6 overflow-hidden relative z-[60]">
-        <div className="flex animate-marquee whitespace-nowrap gap-12 text-[10px] font-black text-[#0b0c10] uppercase tracking-[0.2em]">
-          {[...Array(10)].map((_, i) => (
-            <span key={i} className="flex items-center gap-3">
-              <Zap size={12} fill="currentColor" /> ALERTE GÉNÉRALE : L'INFRASTRUCTURE ELA EST DÉSORMAIS OUVERTE AUX MÉDIAS ET PARTENAIRES
-            </span>
-          ))}
-        </div>
-      </div>
 
       {/* --- HEADER --- */}
       <header
