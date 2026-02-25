@@ -26,7 +26,8 @@ import {
   MagneticCursor,
   GrainTexture,
   NeuralWeb,
-  CyberGlitch
+  CyberGlitch,
+  Vortex3D
 } from "@/components/AdvancedVisuals";
 import { CognitiveThought } from "@/components/CognitiveThought";
 
@@ -105,6 +106,7 @@ export default function DashboardPage() {
       <Particles3D />
       <GrainTexture />
       <NeuralWeb />
+      <Vortex3D />
       <MagneticCursor />
       {/* 2. CORTEX VISUEL: NEUROSCHEMA BACKGROUND */}
       <NeuroSchema />

@@ -477,4 +477,48 @@ export const TacticalMap = () => {
   );
 };
 
+// 🌀 Vortex 3D (Interactive Abstract Core)
+export const Vortex3D = () => {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
+      <div className="absolute inset-0 flex items-center justify-center">
+        <motion.div
+          className="w-[600px] h-[600px] rounded-full border border-cyan-500/20 shadow-[0_0_100px_rgba(102,252,241,0.1)]"
+          animate={{
+            rotate: 360,
+            scale: [1, 1.1, 1],
+            borderColor: ["rgba(102,252,241,0.1)", "rgba(102,252,241,0.3)", "rgba(102,252,241,0.1)"]
+          }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.div
+          className="absolute w-[400px] h-[400px] rounded-full border border-blue-500/10"
+          animate={{ rotate: -360, scale: [1, 1.2, 1] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.div
+          className="absolute w-[800px] h-[800px] rounded-full border border-purple-500/5"
+          animate={{ rotate: 180, scale: [0.9, 1, 0.9] }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+        />
+      </div>
+    </div>
+  );
+};
+
+// 📺 CRT Scanline Effect
+export const Scanline = () => {
+  return (
+    <div className="fixed inset-0 pointer-events-none z-[60] overflow-hidden opacity-[0.03]">
+      <motion.div
+        className="w-full h-[100px] bg-gradient-to-b from-transparent via-white to-transparent"
+        animate={{ top: ["-100px", "100%"] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+        style={{ position: 'absolute' }}
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,118,0.06))] bg-[length:100%_4px,3px_100%]" />
+    </div>
+  );
+};
+
 // 🔚 Footer (Placeholder fix if needed, but keeping the core visuals)

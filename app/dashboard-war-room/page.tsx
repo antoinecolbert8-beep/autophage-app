@@ -17,7 +17,8 @@ import {
   SpotlightEffect,
   GlassCard3D,
   TacticalMap,
-  CyberGlitch
+  CyberGlitch,
+  Scanline
 } from "@/components/AdvancedVisuals";
 import { CognitiveThought } from "@/components/CognitiveThought";
 
@@ -44,6 +45,7 @@ export default function WarRoomPage() {
       <Particles3D />
       <GrainTexture />
       <SpotlightEffect />
+      <Scanline />
 
       {/* --- DOMINANCE OVERLAY --- */}
       <AnimatePresence>
