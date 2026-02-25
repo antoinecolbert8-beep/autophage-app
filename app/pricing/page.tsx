@@ -118,6 +118,24 @@ export default function PricingPage() {
               </div>
               <Link href="/signup?plan=god_mode" className="w-full py-5 bg-white text-black rounded-xl font-black text-[10px] uppercase tracking-[0.3em] text-center transition-all btn-haptic">INITIALISER GOD MODE</Link>
             </div>
+
+            {/* NETWORK EMPIRE (The Reseller/Media Tier) */}
+            <div className="card-saphir p-12 bg-[#66fcf1]/5 border-[#66fcf1]/30 group hover:border-[#66fcf1] transition-all relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#66fcf1]/10 blur-3xl -z-10" />
+              <h3 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-[#66fcf1]">Empire Network</h3>
+              <div className="flex items-baseline gap-1 mb-10">
+                <span className="text-6xl font-black text-white stat-value tracking-tighter">{activeTab === 'monthly' ? '1497' : '1197'}€</span>
+                <span className="text-gray-700 text-[10px] font-mono uppercase tracking-widest">/mois</span>
+              </div>
+              <p className="text-[11px] text-gray-500 mb-10 min-h-[40px] font-light italic leading-relaxed">Infrastructure Whitelabel pour réseaux de médias et agences de scaling.</p>
+              <div className="space-y-6 mb-12 border-t border-white/5 pt-10">
+                <div className="flex items-center gap-4 text-[10px] font-bold text-white uppercase tracking-widest"><Zap className="w-4 h-4 text-[#66fcf1]" /> LICENCE RESELLER</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-white uppercase tracking-widest"><Zap className="w-4 h-4 text-[#66fcf1]" /> API DÉDIÉE ILLIMITÉE</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-white uppercase tracking-widest"><Zap className="w-4 h-4 text-[#66fcf1]" /> DASHBOARD WHITELABEL</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-white uppercase tracking-widest"><Zap className="w-4 h-4 text-[#66fcf1]" /> PARTAGE DE REVENUS 50%</div>
+              </div>
+              <Link href="/contact?subject=network_empire" className="w-full py-5 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-black text-[10px] uppercase tracking-[0.3em] text-center hover:shadow-[0_0_50px_rgba(102,252,241,0.4)] transition-all btn-haptic">NÉGOCIER L'ALLIANCE</Link>
+            </div>
           </div>
 
           <div className="mt-20 text-center">
