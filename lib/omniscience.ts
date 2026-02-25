@@ -65,7 +65,7 @@ export class Omniscience {
         const leads = await prisma.lead.findMany({
             where: {
                 organizationId,
-                status: 'NEW',
+                stage: 'cold',
                 score: { gte: 70 } // Target high probability first
             },
             take: 50
@@ -92,7 +92,7 @@ export class Omniscience {
             // Update status
             await prisma.lead.update({
                 where: { id: lead.id },
-                data: { status: 'CONTACTED' }
+                data: { stage: 'warm' }
             });
         }
 
@@ -109,7 +109,7 @@ export class Omniscience {
         const riskyUsers = await prisma.user.findMany({
             where: {
                 organizationId,
-                lastLogin: { lte: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) } // No login for 3 days
+                updatedAt: { lte: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) } // No activity for 3 days
             }
         });
 
