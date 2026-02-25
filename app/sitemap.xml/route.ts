@@ -18,7 +18,7 @@ export async function GET() {
             }
         });
 
-        const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://autophage.vercel.app';
+        const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://ela-revolution.com';
 
         const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -32,11 +32,21 @@ export async function GET() {
         <lastmod>${new Date().toISOString()}</lastmod>
         <priority>0.9</priority>
     </url>
+    <url>
+        <loc>${baseUrl}/press</loc>
+        <lastmod>${new Date().toISOString()}</lastmod>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>${baseUrl}/partners</loc>
+        <lastmod>${new Date().toISOString()}</lastmod>
+        <priority>0.8</priority>
+    </url>
     ${articles.map(article => `
     <url>
         <loc>${baseUrl}/blog/${article.slug}</loc>
         <lastmod>${article.lastUpdated?.toISOString() || new Date().toISOString()}</lastmod>
-        <priority>0.8</priority>
+        <priority>0.7</priority>
     </url>`).join('')}
 </urlset>`;
 

@@ -570,8 +570,21 @@ export default function Home() {
             <div className="md:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-12">
               {[
                 { title: "CALIBRES", links: ["Vox", "Nexus", "Sentinel", "Hive"] },
-                { title: "MANUFACTURE", links: ["Genèse", "Infrastructure", "Tarifs", "Contact"] },
-                { title: "PROTOCOLES", links: ["Termes", "Confidentialité", "Cookies", "Sécurité"] }
+                {
+                  title: "MANUFACTURE", links: [
+                    { name: "Genèse", href: "#" },
+                    { name: "Espace Presse", href: "/press" },
+                    { name: "Affiliation", href: "/partners" },
+                    { name: "Tarifs", href: "/pricing" }
+                  ]
+                },
+                {
+                  title: "PROTOCOLES", links: [
+                    { name: "Termes", href: "/legal-shield" },
+                    { name: "Confidentialité", href: "/legal-shield" },
+                    { name: "Sécurité", href: "#" }
+                  ]
+                }
               ].map((section) => (
                 <div key={section.title}>
                   <h4 className="text-[10px] font-black text-white uppercase tracking-[0.5em] mb-8 flex items-center gap-4">
@@ -579,9 +592,9 @@ export default function Home() {
                   </h4>
                   <ul className="space-y-4">
                     {section.links.map((link) => (
-                      <li key={link}>
-                        <Link href="#" className="text-[10px] font-bold text-gray-600 uppercase tracking-[0.2em] hover:text-white transition-colors">
-                          {link}
+                      <li key={typeof link === 'string' ? link : link.name}>
+                        <Link href={typeof link === 'string' ? "#" : link.href} className="text-[10px] font-bold text-gray-600 uppercase tracking-[0.2em] hover:text-white transition-colors">
+                          {typeof link === 'string' ? link : link.name}
                         </Link>
                       </li>
                     ))}
