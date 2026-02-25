@@ -15,6 +15,7 @@ import {
 } from "@/components/AppIcons";
 
 import BlurFade from "@/components/ui/blur-fade";
+import { GrainTexture, TextReveal } from "@/components/AdvancedVisuals";
 
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -28,6 +29,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7] font-sans selection:bg-[#66fcf1]/30 overflow-x-hidden snap-y snap-mandatory scroll-smooth">
+      <GrainTexture />
       {/* 🚨 GLOBAL ALERT BANNER */}
       <div className="w-full bg-[#66fcf1] py-2 px-8 flex items-center justify-center gap-6 overflow-hidden relative z-[60]">
         <div className="flex animate-marquee whitespace-nowrap gap-12 text-[10px] font-black text-[#0b0c10] uppercase tracking-[0.2em]">
@@ -136,8 +138,7 @@ export default function Home() {
           </div>
 
           <h1 className="text-5xl md:text-[10rem] font-black tracking-tighter mb-12 leading-[0.85] uppercase stat-value text-white">
-            MAÎTRISE<br />
-            <span className="text-[#66fcf1] opacity-90">ALGORITHMIQUE.</span>
+            <TextReveal>MAÎTRISE ALGORITHMIQUE.</TextReveal>
           </h1>
 
           <p className="text-xl md:text-3xl text-gray-500 max-w-4xl mx-auto mb-16 leading-tight font-light tracking-[0.1em] px-2 italic uppercase">

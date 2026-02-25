@@ -6,8 +6,8 @@
  */
 
 import { ELASelfPromoter } from './god-mode/self-promotion';
-import { SalesAutomation } from './sales-automation';
-import { FeedbackLoop } from './feedback-loop';
+import * as SalesAutomation from './sales-automation';
+import * as FeedbackLoop from './feedback-loop';
 import { db as prisma } from "@/core/db";
 import { PulseEngine } from './realtime-pulse';
 import { AutoEngagementBot } from './engagement-bot';

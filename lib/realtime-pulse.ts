@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 
-export type PulseType = 'LEAD_CAPTURED' | 'SALE_COMPLETED' | 'AGENT_EXECUTED' | 'POST_VIRAL';
+export type PulseType = 'LEAD_CAPTURED' | 'SALE_COMPLETED' | 'AGENT_EXECUTED' | 'POST_VIRAL' | 'SYSTEM_UPGRADE';
 
 export interface PulseEvent {
     id: string;

@@ -95,6 +95,7 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7] overflow-hidden relative font-sans">
       <MeshGradient />
       <Particles3D />
+      <GrainTexture />
       <MagneticCursor />
       {/* 2. CORTEX VISUEL: NEUROSCHEMA BACKGROUND */}
       <NeuroSchema />
