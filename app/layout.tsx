@@ -107,6 +107,51 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr" className={`${inter.variable} ${outfit.variable}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              "name": "ELA Revolution",
+              "operatingSystem": "All",
+              "applicationCategory": "BusinessApplication",
+              "offers": {
+                "@type": "Offer",
+                "price": "37.00",
+                "priceCurrency": "EUR"
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.9",
+                "reviewCount": "12400"
+              }
+            })
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "ELA",
+              "url": "https://ela-revolution.com",
+              "logo": "https://ela-revolution.com/logo-ela.png",
+              "sameAs": [
+                "https://twitter.com/ela_revolution",
+                "https://linkedin.com/company/ela-revolution"
+              ],
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+33-1-00-00-00-00",
+                "contactType": "customer service"
+              }
+            })
+          }}
+        />
+      </head>
       <body className="bg-[#0b0c10] font-sans antialiased text-[#c5c6c7] selection:bg-[#66fcf1]/30 selection:text-white">
         <div className="loading-bar-precision" />
         <Script
