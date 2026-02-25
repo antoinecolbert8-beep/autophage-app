@@ -1,10 +1,9 @@
-import { PartnerService } from '../lib/services/partner-service';
 import { db as prisma } from '../core/db';
 
 async function massOnboardPartners() {
     console.log("🚀 STARTING MASS PARTNER ONBOARDING PROTOCOL...");
 
-    // 1. Identify Target Networks/Media (Manual high-impact list + potential for automated Discovery)
+    // 1. Identify Target Networks/Media
     const targetNetworks = [
         "TechCrunch", "Wired", "ForbesTech", "Entrepreneur", "HackerNews",
         "StationF", "TheFamily", "BFM Business", "LesEchos", "JournalDuNet"
@@ -12,38 +11,50 @@ async function massOnboardPartners() {
 
     console.log(`🎯 Targeting ${targetNetworks.length} high-authority networks...`);
 
-    // 2. Prepare "Reseller/Network" offer
-    // In God Mode, we bypass standard friction and target the "Enterprise/Network" tier
+    // 2. Prepare Reseller/Network offer
     const resellerOffer = {
         name: "ELA Network License v1",
         commission: "30% Lifetime Recurring",
         benefit: "Priority support + Whitelabel options"
     };
 
-    // 3. Simulated/Logged outreach (In real scenario, would trigger DMs or Emails)
+    // 3. Sequential outreach and lead creation
     console.log("📢 Triggering outreach sequences...");
+
+    // Get the administrative organization
+    const org = await prisma.organization.findFirst({
+        where: { name: { contains: 'Audit' } }
+    });
+    const orgId = org?.id || 'cmm1qar0y00008xbwkciy978q';
 
     for (const network of targetNetworks) {
         try {
-            // Log as potential lead for manual sniper follow-up or automated bot
-            await prisma.lead.upsert({
-                where: {
-                    email_organizationId: {
-                        email: `partnerships@${network.toLowerCase().replace(' ', '-')}.com`,
-                        organizationId: 'org_global' // Assuming global admin org
-                    }
-                },
-                update: { stage: 'warm', score: 85 },
-                create: {
-                    email: `partnerships@${network.toLowerCase().replace(' ', '-')}.com`,
-                    company: network,
-                    stage: 'warm',
-                    score: 85,
-                    organizationId: 'org_global',
-                    scoreBreakdown: JSON.stringify({ demographic: 20, behavioral: 20, engagement: 25, intent: 20 })
-                }
+            const email = `partnerships@${network.toLowerCase().replace(/\s/g, '-')}.com`;
+
+            // Check if exists first
+            const existing = await prisma.lead.findFirst({
+                where: { email, organizationId: orgId }
             });
-            console.log(`   ✅ Target queued: ${network}`);
+
+            if (existing) {
+                await prisma.lead.update({
+                    where: { id: existing.id },
+                    data: { stage: 'warm', score: 90 }
+                });
+                console.log(`   🔄 Target updated: ${network}`);
+            } else {
+                await prisma.lead.create({
+                    data: {
+                        email,
+                        company: network,
+                        stage: 'warm',
+                        score: 85,
+                        organizationId: orgId,
+                        scoreBreakdown: JSON.stringify({ demographic: 20, behavioral: 20, engagement: 25, intent: 20 })
+                    }
+                });
+                console.log(`   ✅ Target created: ${network}`);
+            }
         } catch (e: any) {
             console.error(`   ❌ Failed for ${network}:`, e.message);
         }
