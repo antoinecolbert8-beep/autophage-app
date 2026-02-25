@@ -14,11 +14,12 @@ export async function syncUserToDatabase(params: {
     plan?: string
     tier?: string
     supabaseUserId?: string
+    referredBy?: string
 }) {
     console.log('🔄 Syncing user to database:', params.email)
 
     try {
-        const { email, name, company, plan = 'starter', tier } = params
+        const { email, name, company, plan = 'starter', tier, referredBy } = params
 
         // 1. Check if user already exists
         const existingUser = await prisma.user.findUnique({
@@ -37,12 +38,7 @@ export async function syncUserToDatabase(params: {
         }
 
         // 2. Create Organization first
-        // If company name is not provided, generate a default one
         const orgName = company || `${name.split(' ')[0]}'s Agency`
-
-        // Generate a domain slug from the org name (simple version)
-        // e.g. "My Company" -> "my-company"
-        // Add random suffix to ensure uniqueness
         const domain = orgName.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Math.random().toString(36).substring(2, 7)
 
         const organization = await prisma.organization.create({
@@ -56,18 +52,41 @@ export async function syncUserToDatabase(params: {
 
         console.log('✅ Organization created:', organization.id)
 
-        // 3. Create User linked to Organization
+        // 3. Handle Referral if exists
+        let referrerId = null;
+        if (referredBy) {
+            const referrer = await prisma.user.findUnique({
+                where: { referralCode: referredBy }
+            });
+            if (referrer) {
+                referrerId = referrer.id;
+                console.log(`🎯 Referral detected! Referrer: ${referrer.email}`);
+            }
+        }
+
+        // 4. Create User linked to Organization
         const newUser = await prisma.user.create({
             data: {
                 email,
                 name,
-                role: 'admin', // First user is always admin
+                role: 'admin',
                 organizationId: organization.id,
                 currentPlan: plan,
-                // If we have the supabaseUserId, we could store it if the schema supported it directly in a dedicated field
-                // For now, we rely on email matching or Auth integration
+                referralCode: `ELA-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+                referredBy: referrerId ? referredBy : null // Store the code string for record
             }
         })
+
+        // 5. Create Referral record if we found a referrer
+        if (referrerId) {
+            await prisma.referral.create({
+                data: {
+                    referrerId: referrerId,
+                    refereeId: newUser.id,
+                    status: 'pending' // Becomes 'active' after first payment
+                }
+            });
+        }
 
         console.log('✅ User created:', newUser.id)
 

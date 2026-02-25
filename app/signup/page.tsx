@@ -36,12 +36,14 @@ function SignupContent() {
       return;
     }
 
+    const ref = searchParams ? searchParams.get("ref") : null;
+
     try {
       // Real Supabase signup
       const { user } = await authService.signUp(email, password, {
         name,
         company,
-        plan: plan || "starter", // Default to starter if not specified
+        plan: plan || "starter",
         tier: plan === "god_mode" ? "grand_horloger" : "standard"
       });
 
@@ -53,7 +55,8 @@ function SignupContent() {
           name,
           company,
           plan: plan || "starter",
-          tier: plan === "god_mode" ? "grand_horloger" : "standard"
+          tier: plan === "god_mode" ? "grand_horloger" : "standard",
+          referredBy: ref || undefined
         });
 
         if (dbResult?.success) {
@@ -65,6 +68,7 @@ function SignupContent() {
             localStorage.setItem('ela_tier', plan === "god_mode" ? "grand_horloger" : "standard");
             localStorage.setItem('ela_user_name', name || "Utilisateur");
             localStorage.setItem('ela_user_email', email);
+            if (ref) localStorage.setItem('ela_referral_source', ref);
           }
         } else {
           console.error("❌ Database sync failed:", dbResult?.error);
@@ -331,8 +335,6 @@ function SignupContent() {
         </div>
       </main>
     </div>
-  );
-}
   );
 }
 
