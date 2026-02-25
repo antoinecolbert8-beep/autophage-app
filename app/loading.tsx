@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { NeuralWeb } from "@/components/AdvancedVisuals";
 
 const MAIN_AGENTS = [
     { id: "APEX", role: "Content" },
@@ -70,6 +71,7 @@ export default function Loading() {
         <div className="fixed inset-0 z-[999] flex flex-col items-center justify-center bg-[#050508] overflow-hidden select-none">
             {/* Cinematic Background */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <NeuralWeb />
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-blue-600/10 blur-[150px] rounded-full animate-pulse-slow"></div>
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.05)_0%,transparent_70%)]"></div>
             </div>
@@ -141,8 +143,8 @@ export default function Loading() {
                             <div key={agent.id} className="flex flex-col items-center gap-3">
                                 <motion.div
                                     className={`w-12 h-12 rounded-xl flex items-center justify-center text-[10px] font-black border-2 transition-all duration-700 ${isActive
-                                            ? 'bg-blue-600/30 border-blue-500/60 text-white shadow-[0_0_25px_rgba(59,130,246,0.4)]'
-                                            : 'bg-white/5 border-white/5 text-white/10'
+                                        ? 'bg-blue-600/30 border-blue-500/60 text-white shadow-[0_0_25px_rgba(59,130,246,0.4)]'
+                                        : 'bg-white/5 border-white/5 text-white/10'
                                         }`}
                                     animate={isActive ? { scale: [0.9, 1.15, 1], rotate: [0, 5, 0] } : {}}
                                 >

@@ -33,6 +33,9 @@ export const OmniscienceTerminal = () => {
                 { lvl: 'SUCC', msg: 'Payment Processed: €99.00', path: 'STRIPE/WEBHOOK' },
                 { lvl: 'INFO', msg: 'User navigation', path: '/dashboard/settings' },
                 { lvl: 'INFO', msg: 'LinkedIn Auto-Poster Triggered', path: 'GOD-MODE/AUTO' },
+                { lvl: 'CRIT', msg: 'Anomalous attempt detected (SQLi attempt blocked)', path: 'WAF/SHIELD' },
+                { lvl: 'INFO', msg: 'Neural Network Re-weighting: +0.42% accuracy', path: 'BRAIN/NEURO' },
+                { lvl: 'SUCC', msg: 'Omni-channel Saturation phase delta: COMPLETED', path: 'OMNI/EXEC' },
             ];
 
             const randomAction = actions[Math.floor(Math.random() * actions.length)] as any;
@@ -45,7 +48,7 @@ export const OmniscienceTerminal = () => {
             };
 
             setLogs(prev => [...prev.slice(-15), newLog]); // Keep last 15
-        }, 1200);
+        }, 800);
 
         return () => clearInterval(interval);
     }, []);
@@ -57,7 +60,7 @@ export const OmniscienceTerminal = () => {
 
     const getColor = (lvl: string) => {
         switch (lvl) {
-            case 'CRIT': return 'text-red-500';
+            case 'CRIT': return 'text-red-500 animate-pulse';
             case 'WARN': return 'text-yellow-500';
             case 'SUCC': return 'text-green-400';
             default: return 'text-blue-400';

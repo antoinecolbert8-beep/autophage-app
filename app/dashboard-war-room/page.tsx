@@ -15,11 +15,14 @@ import {
   Particles3D,
   GrainTexture,
   SpotlightEffect,
-  GlassCard3D
+  GlassCard3D,
+  TacticalMap,
+  CyberGlitch
 } from "@/components/AdvancedVisuals";
 
 export default function WarRoomPage() {
   const [revenue, setRevenue] = useState(12450);
+  const [isDominating, setIsDominating] = useState(false);
   const [logs, setLogs] = useState([
     { id: 1, type: "SYSTEM", msg: "Attaque marketing lancée sur le secteur Retail...", time: "NOMINAL" },
     { id: 2, type: "BOT-142", msg: "500 emails envoyés (Taux ouverture: 82%)", time: "ACTIVE" },
@@ -29,10 +32,10 @@ export default function WarRoomPage() {
   // Revenue Ticker
   useEffect(() => {
     const interval = setInterval(() => {
-      setRevenue(prev => prev + Math.floor(Math.random() * 50));
-    }, 2000);
+      setRevenue(prev => prev + (isDominating ? Math.floor(Math.random() * 500) : Math.floor(Math.random() * 50)));
+    }, isDominating ? 500 : 2000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isDominating]);
 
   return (
     <div className="min-h-screen bg-[#050507] text-[#c5c6c7] overflow-hidden relative font-sans">
@@ -40,6 +43,34 @@ export default function WarRoomPage() {
       <Particles3D />
       <GrainTexture />
       <SpotlightEffect />
+
+      {/* --- DOMINANCE OVERLAY --- */}
+      <AnimatePresence>
+        {isDominating && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="fixed inset-0 z-[100] pointer-events-none border-[10px] border-red-600 animate-pulse bg-red-600/5 backdrop-invert-[0.05]"
+          >
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20rem] font-black text-red-600/10 rotate-[-15deg] select-none tracking-tighter">
+              DOMINANCE
+            </div>
+            <motion.div
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+            >
+              <div className="text-red-600 font-black text-4xl mb-4 tracking-[0.5em] uppercase animate-bounce">singularité active</div>
+              <div className="text-white/40 font-mono text-xs uppercase tracking-widest leading-loose text-center">
+                Capture de marché en cours...<br />
+                Neutralisation de la concurrence...<br />
+                Saturation sémantique globale : 94%<br />
+                ROI Estimé : +1,240%
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* --- HUD OVERLAY --- */}
       <div className="fixed inset-0 pointer-events-none z-10">
@@ -57,7 +88,9 @@ export default function WarRoomPage() {
               <LineIconChevronLeft size={20} className="text-gray-400 group-hover:text-white" />
             </Link>
             <div className="flex flex-col">
-              <h1 className="text-2xl font-black tracking-[0.3em] uppercase text-red-600 stat-value">WAR ROOM</h1>
+              <CyberGlitch>
+                <h1 className="text-2xl font-black tracking-[0.3em] uppercase text-red-600 stat-value">WAR ROOM</h1>
+              </CyberGlitch>
               <div className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse shadow-[0_0_8px_#dc2626]" />
                 <span className="text-[9px] font-mono text-red-500/50 tracking-[0.4em] uppercase">DEFCON 1 • SOUVERAINETÉ ACTIVE</span>
@@ -84,6 +117,7 @@ export default function WarRoomPage() {
           {/* Global Scan Panel */}
           <div className="col-span-8 flex flex-col gap-8">
             <GlassCard3D className="flex-1 p-0 overflow-hidden group">
+              <TacticalMap />
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 {/* Tactical Radar */}
                 <div className="w-[800px] h-[800px] border border-red-600/5 rounded-full animate-[spin_60s_linear_infinite]" />
@@ -144,21 +178,28 @@ export default function WarRoomPage() {
               <button
                 onClick={async () => {
                   if (confirm("INITIER LA SINGULARITÉ ? Cette action lancera une saturation globale omni-canal et une prospection ultra-agressive sur l'ensemble de vos cibles qualifiées.")) {
+                    setIsDominating(true);
                     const res = await fetch('/api/omniscience/trigger', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify({ organizationId: 'org_global' })
                     });
                     const data = await res.json();
-                    if (data.success) alert("SINGULARITÉ ACTIVÉE. Domination en cours. Les essaims sont déployés.");
-                    else alert("ERREUR : " + (data.error || "Protocole interrompu."));
+                    if (data.success) {
+                      // Simuler l'effet de domination pendant quelques secondes
+                      setTimeout(() => setIsDominating(false), 8000);
+                    } else {
+                      setIsDominating(false);
+                      alert("ERREUR : " + (data.error || "Protocole interrompu."));
+                    }
                   }
                 }}
-                className="w-full py-6 bg-red-600 hover:bg-red-700 text-white font-black rounded-xl transition-all active:scale-95 shadow-[0_0_30px_rgba(220,38,38,0.4)] uppercase tracking-[0.3em] text-xs btn-haptic flex items-center justify-center gap-4 group"
+                className={`w-full py-6 font-black rounded-xl transition-all active:scale-95 shadow-[0_0_30px_rgba(220,38,38,0.4)] uppercase tracking-[0.3em] text-xs btn-haptic flex items-center justify-center gap-4 group ${isDominating ? 'bg-white text-red-600 animate-pulse' : 'bg-red-600 text-white hover:bg-red-700'}`}
+                disabled={isDominating}
               >
-                Lancer la Singularité
+                {isDominating ? 'Domination en cours...' : 'Lancer la Singularité'}
                 <motion.div animate={{ x: [0, 5, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
-                  <LineIconZap size={16} fill="white" />
+                  <LineIconZap size={16} fill={isDominating ? "#dc2626" : "white"} />
                 </motion.div>
               </button>
             </div>
