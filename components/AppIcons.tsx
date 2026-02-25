@@ -48,14 +48,14 @@ export const LineIconUsers = ({ className = "", size = 24 }: IconProps) => (
   </svg>
 );
 
-export const LineIconZap = ({ className = "", size = 24 }: IconProps) => (
+export const LineIconZap = ({ className = "", size = 24, fill = "none", strokeWidth = 2 }: IconProps) => (
   <svg
     width={size}
     height={size}
     viewBox="0 0 24 24"
-    fill="none"
+    fill={fill}
     stroke="currentColor"
-    strokeWidth="2"
+    strokeWidth={strokeWidth}
     strokeLinecap="round"
     strokeLinejoin="round"
     className={className}

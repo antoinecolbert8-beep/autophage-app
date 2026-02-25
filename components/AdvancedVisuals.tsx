@@ -6,7 +6,7 @@
  */
 
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 // 🌟 Mesh Gradient Animé (comme Stripe)
 export const MeshGradient = () => {

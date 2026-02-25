@@ -15,7 +15,7 @@ import {
 } from "@/components/AppIcons";
 
 import BlurFade from "@/components/ui/blur-fade";
-import { GrainTexture, TextReveal } from "@/components/AdvancedVisuals";
+import { GrainTexture, TextReveal, CyberGlitch } from "@/components/AdvancedVisuals";
 
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -146,9 +146,11 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 w-full">
-            <Link href="/signup" className="w-full md:w-auto px-16 py-7 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-black text-[12px] uppercase tracking-[0.4em] hover:shadow-[0_0_60px_rgba(102,252,241,0.5)] transition-all btn-haptic">
-              INITIALISER LE PROTOCOLE
-            </Link>
+            <CyberGlitch>
+              <Link href="/signup" className="w-full md:w-auto px-16 py-7 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-black text-[12px] uppercase tracking-[0.4em] hover:shadow-[0_0_60px_rgba(102,252,241,0.5)] transition-all btn-haptic block text-center">
+                INITIALISER LE PROTOCOLE
+              </Link>
+            </CyberGlitch>
 
             <Link href="/agents" className="w-full md:w-auto px-12 py-7 bg-white/5 border border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.4em] text-white hover:bg-white/10 transition-all btn-haptic group">
               CATALOGUE DES CALIBRES <span className="ml-2 group-hover:translate-x-1 inline-block transition-transform">→</span>
