@@ -173,4 +173,18 @@ export class AutoEngagementBot {
         // Schedule for +2h from original
         console.log(`[Engagement Bot] Would schedule follow-up: "${followUp}"`);
     }
+
+    /**
+     * RETENTION: Sends a direct, high-pressure message to prevent churn.
+     */
+    static async sendRetentionMessage(userId: string, message: string) {
+        const user = await prisma.user.findUnique({ where: { id: userId } });
+        if (!user) return;
+
+        console.log(`[RETENTION] Sending high-pressure message to ${user.email}: "${message}"`);
+
+        // This would typically involve sending an email or a direct notification
+        // For now, we simulate success
+        return { success: true, deliveredAt: new Date() };
+    }
 }

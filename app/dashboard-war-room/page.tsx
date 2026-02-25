@@ -44,6 +44,27 @@ export default function WarRoomPage() {
           </div>
 
           <div className="col-span-4 flex flex-col gap-6">
+            <div className="bg-black/80 border border-red-600 p-6 rounded-xl shadow-[0_0_50px_rgba(220,38,38,0.2)]">
+              <h4 className="text-red-500 font-black text-center mb-4 uppercase tracking-[0.3em] text-sm">Contrôle Alpha</h4>
+              <button
+                onClick={async () => {
+                  if (confirm("INITIER LA SINGULARITÉ ? Cette action lancera une saturation globale omni-canal et une prospection agressive sur 50 cibles.")) {
+                    const res = await fetch('/api/omniscience/trigger', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ organizationId: 'org_global' }) // Placeholder OR dynamic from session
+                    });
+                    const data = await res.json();
+                    if (data.success) alert("SINGULARITÉ ACTIVÉE. Domination en cours.");
+                    else alert("ERREUR : " + (data.error || "Protocole interrompu."));
+                  }
+                }}
+                className="w-full py-4 bg-red-600 hover:bg-red-700 text-white font-black rounded-lg transition-all active:scale-95 shadow-[0_0_20px_rgba(220,38,38,0.5)] uppercase tracking-widest text-sm"
+              >
+                Lancer la Singularité
+              </button>
+            </div>
+
             <div className="flex-1 bg-black/50 border border-red-900/20 rounded-xl p-6 overflow-hidden">
               <h3 className="font-mono text-red-500 text-sm mb-4 border-b border-red-900/30 pb-2">LIVE FEED</h3>
               <div className="space-y-2 font-mono text-xs text-red-400/70">
