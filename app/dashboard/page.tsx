@@ -28,6 +28,7 @@ import {
   NeuralWeb,
   CyberGlitch
 } from "@/components/AdvancedVisuals";
+import { CognitiveThought } from "@/components/CognitiveThought";
 
 // Dynamic import to avoid SSR issues with Three.js Canvas
 const NeuroSchema = dynamic(() => import("@/components/NeuroSchema"), {
@@ -149,6 +150,10 @@ export default function DashboardPage() {
               ? `Status: OMNISCIENCE ACTIVE. Réseau neuronal synchronisé à 100%.`
               : `Système sécurisé. Prêt pour le déploiement de masse.`}
           </p>
+        </div>
+
+        <div className="mb-8">
+          <CognitiveThought />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

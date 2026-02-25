@@ -19,6 +19,7 @@ import {
   TacticalMap,
   CyberGlitch
 } from "@/components/AdvancedVisuals";
+import { CognitiveThought } from "@/components/CognitiveThought";
 
 export default function WarRoomPage() {
   const [revenue, setRevenue] = useState(12450);
@@ -162,7 +163,7 @@ export default function WarRoomPage() {
 
           {/* Controls & Metrics */}
           <div className="col-span-4 flex flex-col gap-8">
-
+            <CognitiveThought />
             {/* Action Trigger */}
             <div className="card-saphir bg-gradient-to-br from-red-600/5 to-transparent border-red-600/20 p-8 shadow-[0_0_60px_rgba(220,38,38,0.1)] group">
               <div className="flex items-center gap-4 mb-8">
@@ -210,9 +211,11 @@ export default function WarRoomPage() {
                 <LineIconTrendingUp size={16} className="text-red-500/30" />
               </div>
               <p className="font-mono text-red-500/40 text-[9px] mb-2 uppercase tracking-[0.4em]">REVENU GÉNÉRÉ (SESSION_ALPHA)</p>
-              <div className="text-6xl font-black text-white stat-value tracking-tighter">
-                {revenue.toLocaleString()} <span className="text-red-600">€</span>
-              </div>
+              <CyberGlitch>
+                <div className="text-6xl font-black text-white stat-value tracking-tighter">
+                  {revenue.toLocaleString()} <span className="text-red-600">€</span>
+                </div>
+              </CyberGlitch>
               <div className="mt-4 h-1 bg-white/5 rounded-full overflow-hidden">
                 <motion.div
                   className="h-full bg-red-600 shadow-[0_0_10px_#dc2626]"

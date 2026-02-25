@@ -6,6 +6,8 @@
 interface IconProps {
   className?: string;
   size?: number;
+  fill?: string;
+  strokeWidth?: number;
 }
 
 export const LineIconRocket = ({ className = "", size = 24 }: IconProps) => (
