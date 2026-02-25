@@ -20,24 +20,21 @@ import {
 
 export default function FeaturesPage() {
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white font-sans selection:bg-pink-500/30 overflow-x-hidden">
+    <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7] font-sans selection:bg-[#66fcf1]/30 selection:text-white overflow-x-hidden">
       {/* HEADER - Consistent with other pages */}
       <header className="fixed top-0 left-0 w-full z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-white/5 py-4">
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group text-gray-400 hover:text-white transition-colors">
-            <ArrowLeft size={20} />
-            <span className="font-bold">Retour</span>
+          <Link href="/" className="flex items-center gap-2 group text-gray-400 hover:text-[#66fcf1] transition-colors">
+            <ArrowLeft size={16} />
+            <span className="text-[10px] font-black uppercase tracking-[0.2em]">RETOUR AU CADRAN</span>
           </Link>
 
           <Link href="/" className="flex items-center gap-3 group">
             <img
               src="/logo-ela.png"
               alt="ELA"
-              className="w-16 h-16 object-contain drop-shadow-[0_0_10px_rgba(217,119,6,0.4)]"
+              className="w-12 h-12 object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"
             />
-            <span className="text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 group-hover:to-amber-300 transition-all">
-              ELA
-            </span>
           </Link>
 
           <div className="w-20"></div>
@@ -51,23 +48,14 @@ export default function FeaturesPage() {
 
         <div className="max-w-7xl mx-auto relative z-10">
           {/* Header Section */}
-          <div className="text-center mb-20">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="inline-block px-4 py-1 mb-6 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 text-sm font-bold text-blue-400 backdrop-blur-md">
-                🚀 FONCTIONNALITÉS
-              </div>
-              <h1 className="text-5xl md:text-7xl font-black mb-8 tracking-tight">
-                <span className="text-white">Puissance</span>{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">Illimitée.</span>
-              </h1>
-              <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-                ELA regroupe tous les outils pour automatiser et dominer votre marché.
-              </p>
-            </motion.div>
+          <div className="text-center mb-32">
+            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-xl">
+              <span className="text-[10px] font-black text-[#66fcf1] uppercase tracking-[0.3em]">MANUFACTURE ELA // INFRASTRUCTURE</span>
+            </div>
+            <h1 className="text-5xl md:text-9xl font-black mb-10 tracking-tighter uppercase stat-value text-white">PUISSANCE<br /><span className="text-[#66fcf1]">SOUVERAINE.</span></h1>
+            <p className="text-xl text-gray-500 max-w-2xl mx-auto font-light italic leading-relaxed">
+              &bdquo; ELA synchronise vos calibres stratégiques haute technologie pour une domination totale du marché. &rdquo;
+            </p>
           </div>
 
           {/* Features Grid */}
@@ -77,103 +65,88 @@ export default function FeaturesPage() {
                 icon: LineIconZap,
                 title: "Automatisation Totale",
                 description: "9 agents IA spécialisés travaillent 24/7 sans pause, sans erreur, sans limite.",
-                features: ["Workflows intelligents", "Déclencheurs auto", "Intégrations natives", "Zéro maintenance"],
-                gradient: "from-yellow-500 to-orange-500"
+                features: ["MÉCANIQUE AI", "DÉCLENCHEURS AUTO", " SYNC NATIVE", "ZÉRO FRICTION"],
+                gradient: "from-[#66fcf1]/20 to-[#0b0c10]"
               },
               {
                 icon: LineIconBarChart,
                 title: "Analytics Temps Réel",
                 description: "Dashboards interactifs et rapports automatiques pour piloter votre croissance.",
-                features: ["Tableaux de bord live", "Prédictions IA", "Export illimité", "Alertes intelligentes"],
-                gradient: "from-blue-500 to-cyan-500"
+                features: ["CADRAN LIVE", "PRÉDICTIONS V10", "EXPORT ILLIMITÉ", "ALERTES PRÉCISION"],
+                gradient: "from-[#1f2833] to-[#0b0c10]"
               },
               {
                 icon: LineIconGlobe,
                 title: "Multi-Plateformes",
                 description: "Connectez tous vos outils : YouTube, TikTok, Instagram, LinkedIn, Stripe, Shopify.",
-                features: ["10+ intégrations", "API complète", "Webhooks", "Sync bidirectionnelle"],
-                gradient: "from-purple-500 to-pink-500"
+                features: ["11+ INTÉGRATIONS", "API SOUVERAINE", "WEBHOOK BRIDGE", "SYNC NOBLE"],
+                gradient: "from-[#45a29e]/20 to-[#0b0c10]"
               },
               {
                 icon: LineIconShield,
-                title: "Sécurité Bancaire",
+                title: "Sécurité Noble",
                 description: "Chiffrement 256-bit, conformité RGPD, hébergement certifié en France.",
-                features: ["SSL 256-bit", "RGPD compliant", "ISO 27001", "Backups quotidiens"],
-                gradient: "from-green-500 to-emerald-500"
+                features: ["CALIBRE SSL", "RGPD COMPLIANT", "AUDIT PERMANENT", "BACKUPS NOIR"],
+                gradient: "from-white/10 to-[#0b0c10]"
               },
               {
                 icon: LineIconClock,
-                title: "Support Premium",
+                title: "Support Manufacture",
                 description: "Équipe d'experts disponible 24/7 pour vous accompagner vers le succès.",
-                features: ["Chat en direct", "Support prioritaire", "Onboarding dédié", "Tutoriels vidéo"],
-                gradient: "from-red-500 to-pink-500"
+                features: ["CHAT MANUFACTURE", "SUPPORT SOUVERAIN", "ONBOARDING ÉLITE", "TUTOS MÉCANIQUES"],
+                gradient: "from-[#c5c6c7]/5 to-[#0b0c10]"
               },
               {
                 icon: LineIconRocket,
-                title: "Scalabilité Infinie",
+                title: "Scalabilité Souveraine",
                 description: "De 10 à 10 000 utilisateurs sans limite de performance. 99.9% uptime.",
-                features: ["Cloud infrastructure", "Auto-scaling", "CDN global", "Zero downtime"],
-                gradient: "from-orange-500 to-amber-500"
+                features: ["INFRA NOIR", "AUTO-SCALING", "CDN MONDIAL", "ZERO FRICTION"],
+                gradient: "from-[#66fcf1]/5 to-[#0b0c10]"
               }
             ].map((feature, i) => (
-              <motion.div
+              <div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="group p-[1px] rounded-[2rem] bg-gradient-to-br from-white/10 via-transparent to-white/5 hover:from-blue-500/30 hover:to-purple-500/30 transition-all duration-500"
+                className="group card-saphir overflow-hidden hover:border-[#66fcf1]/20 transition-all duration-700 p-10 snap-start"
               >
-                <div className="bg-[#13131f]/95 backdrop-blur-xl rounded-[2rem] p-8 h-full">
-                  <div className="flex items-start gap-6">
-                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.gradient} p-[1px] shrink-0`}>
-                      <div className="w-full h-full bg-[#13131f] rounded-2xl flex items-center justify-center">
-                        <feature.icon size={28} className={`bg-gradient-to-r ${feature.gradient} bg-clip-text text-transparent`} />
-                      </div>
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-black text-white mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-blue-400 transition-all">{feature.title}</h3>
-                      <p className="text-gray-400 mb-6 leading-relaxed">{feature.description}</p>
-                      <ul className="grid grid-cols-2 gap-3">
-                        {feature.features.map((item, j) => (
-                          <li key={j} className="flex items-center gap-2 text-sm text-gray-300">
-                            <LineIconCheck size={16} className="text-green-500 shrink-0" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                <div className="flex items-start gap-8">
+                  <div className={`w-20 h-20 rounded-2xl bg-white/5 border border-white/10 shrink-0 flex items-center justify-center group-hover:border-[#66fcf1]/30 transition-all duration-700`}>
+                    <feature.icon size={32} className={`text-[#66fcf1] transition-transform duration-700 group-hover:scale-110`} />
+                  </div>
+                  <div>
+                    <h3 className="text-3xl font-black text-white mb-4 stat-value tracking-tighter">{feature.title}</h3>
+                    <p className="text-gray-500 mb-10 text-[11px] font-light leading-relaxed italic">"{feature.description}"</p>
+                    <ul className="grid grid-cols-2 gap-4">
+                      {feature.features.map((item, j) => (
+                        <li key={j} className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.1em] text-gray-500 group-hover:text-white transition-colors">
+                          <LineIconCheck size={14} className="text-[#66fcf1] shrink-0" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
 
           {/* CTA Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mt-24 text-center"
-          >
-            <div className="inline-block p-[1px] rounded-3xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
-              <div className="bg-[#0a0a0f] rounded-3xl px-16 py-12">
-                <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
-                  Prêt à <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-pink-500">Dominer</span> ?
-                </h2>
-                <p className="text-gray-400 mb-8 max-w-xl mx-auto">
-                  Paiement sécurisé. Annulation facile. Support 24/7.
-                </p>
-                <Link
-                  href="/signup"
-                  className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-amber-500 to-amber-600 text-black font-bold text-lg rounded-xl hover:shadow-[0_0_40px_rgba(217,119,6,0.5)] transition-all transform hover:-translate-y-1"
-                >
-                  <Zap size={20} fill="currentColor" />
-                  COMMENCER MAINTENANT
-                </Link>
-              </div>
+          <div className="mt-32 text-center snap-start">
+            <div className="card-saphir border-[#66fcf1]/20 p-20 max-w-4xl mx-auto shadow-[0_0_100px_rgba(102,252,241,0.05)]">
+              <h2 className="text-4xl md:text-7xl font-black text-white mb-8 stat-value tracking-tighter">
+                PRÊT À <span className="text-[#66fcf1]">DOMINER ?</span>
+              </h2>
+              <p className="text-xl text-gray-500 mb-12 font-light italic leading-relaxed">
+                Initialisez votre infrastructure et lancez vos calibres stratégiques dès aujourd'hui.
+              </p>
+              <Link
+                href="/signup"
+                className="inline-flex items-center gap-6 px-16 py-8 bg-[#66fcf1] text-[#0b0c10] font-black text-xs uppercase tracking-[0.3em] rounded-xl hover:shadow-[0_0_60px_rgba(102,252,241,0.4)] transition-all btn-haptic"
+              >
+                INITIALISER LE PROTOCOLE
+                <Zap size={18} fill="currentColor" />
+              </Link>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>

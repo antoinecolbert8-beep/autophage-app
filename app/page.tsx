@@ -27,44 +27,48 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white font-sans selection:bg-pink-500/30 overflow-x-hidden">
+    <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7] font-sans selection:bg-[#66fcf1]/30 overflow-x-hidden snap-y snap-mandatory scroll-smooth">
       {/* --- HEADER --- */}
       <header
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled || mobileMenuOpen ? "bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-white/5 py-4" : "bg-transparent py-6"
           }`}
       >
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-8 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-4 group z-50">
-            <img
-              src="/logo-ela.png"
-              alt="ELA"
-              className="w-12 h-12 md:w-20 md:h-20 object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(217,119,6,0.5)]"
-            />
-            <span className="text-xl md:text-2xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 group-hover:to-amber-300 transition-all">
+            <div className="w-12 h-12 border border-[#66fcf1]/30 rounded-full flex items-center justify-center bg-white/5 relative group-hover:border-[#66fcf1]/60 transition-colors duration-700">
+              <div className="w-8 h-8 border border-[#66fcf1] rounded-full border-t-transparent animate-[spin_3s_linear_infinite]" />
+              <div className="absolute inset-0 bg-[#66fcf1]/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            </div>
+            <span className="text-2xl font-black tracking-[0.3em] uppercase text-white stat-value pt-1">
               ELA
             </span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8">
-            <Link href="/agents" className="text-sm font-bold text-gray-400 hover:text-white transition-colors hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]">AGENTS</Link>
-            <Link href="/features" className="text-sm font-bold text-gray-400 hover:text-white transition-colors">FONCTIONNALITÉS</Link>
-            <Link href="/pricing" className="text-sm font-bold text-gray-400 hover:text-white transition-colors">TARIFS</Link>
-            <Link href="/contact" className="text-sm font-bold text-gray-400 hover:text-white transition-colors">CONTACT</Link>
+          <nav className="hidden md:flex items-center gap-10">
+            {['Agents', 'Features', 'Pricing', 'Contact'].map((item) => (
+              <Link
+                key={item}
+                href={`/${item.toLowerCase()}`}
+                className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 hover:text-[#66fcf1] transition-all relative group"
+              >
+                {item}
+                <span className="absolute -bottom-1 left-0 w-0 h-px bg-[#66fcf1] transition-all group-hover:w-full" />
+              </Link>
+            ))}
           </nav>
 
-          <div className="hidden md:flex items-center gap-6">
-            <Link href="/login" className="text-sm font-bold hover:text-blue-400 transition-colors">SE CONNECTER</Link>
+          <div className="hidden md:flex items-center gap-8">
+            <Link href="/login" className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 hover:text-white transition-colors">LOGIN</Link>
             <Link
               href="/signup"
-              className="px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 rounded-lg font-bold text-sm tracking-wide hover:shadow-[0_0_30px_rgba(217,119,6,0.5)] transition-all transform hover:-translate-y-1 relative overflow-hidden group"
+              className="px-8 py-3.5 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-black text-[10px] uppercase tracking-[0.3em] transition-all hover:shadow-[0_0_30px_rgba(102,252,241,0.3)] btn-haptic"
             >
-              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-              <span className="relative flex items-center gap-2 text-black"><Zap size={16} fill="currentColor" /> COMMENCER</span>
+              INITIALISER
             </Link>
           </div>
 
-          <button className="md:hidden text-white z-50 relative" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          <button className="md:hidden text-[#66fcf1] z-50 relative" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
@@ -72,20 +76,26 @@ export default function Home() {
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="absolute top-0 left-0 w-full h-screen bg-[#0a0a0f] flex flex-col pt-32 px-6 z-40"
+              initial={{ opacity: 0, x: '100%' }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: '100%', opacity: 0 }}
+              className="absolute top-0 left-0 w-full h-screen bg-[#0b0c10] flex flex-col pt-32 px-8 z-40 border-l border-white/5"
             >
-              <nav className="flex flex-col gap-8 text-center">
-                <Link href="/agents" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-bold text-white hover:text-amber-400 transition-colors">AGENTS</Link>
-                <Link href="/features" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-bold text-white hover:text-amber-400 transition-colors">FONCTIONNALITÉS</Link>
-                <Link href="/pricing" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-bold text-white hover:text-amber-400 transition-colors">TARIFS</Link>
-                <Link href="/contact" onClick={() => setMobileMenuOpen(false)} className="text-2xl font-bold text-white hover:text-amber-400 transition-colors">CONTACT</Link>
-                <hr className="border-white/10 my-4" />
-                <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="text-xl font-bold text-gray-400 hover:text-white">SE CONNECTER</Link>
-                <Link href="/signup" onClick={() => setMobileMenuOpen(false)} className="py-4 bg-gradient-to-r from-amber-500 to-amber-600 rounded-xl font-bold text-black text-xl">
-                  COMMENCER MAINTENANT
+              <nav className="flex flex-col gap-12 text-left">
+                {['Agents', 'Features', 'Pricing', 'Contact'].map((item) => (
+                  <Link
+                    key={item}
+                    href={`/${item.toLowerCase()}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-4xl font-black text-white stat-value uppercase tracking-tighter hover:text-[#66fcf1] transition-colors"
+                  >
+                    {item}.
+                  </Link>
+                ))}
+                <div className="h-px bg-white/5 w-24" />
+                <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="text-[12px] font-black uppercase tracking-[0.4em] text-gray-500">SE CONNECTER</Link>
+                <Link href="/signup" onClick={() => setMobileMenuOpen(false)} className="py-6 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-black text-[12px] uppercase tracking-[0.4em] text-center btn-haptic">
+                  INITIALISER LE PROTOCOLE
                 </Link>
               </nav>
             </motion.div>
@@ -94,71 +104,53 @@ export default function Home() {
       </header>
 
       {/* --- HERO SECTION --- */}
-      <section className="relative pt-32 pb-20 px-6 overflow-hidden min-h-[90vh] flex items-center justify-center">
-        {/* Animated Background Grid - Optimized for Mobile */}
-        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-20"></div>
-        {/* Hide heavy blobs on mobile */}
-        <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none animate-pulse-slow"></div>
-        <div className="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-pink-600/10 blur-[100px] rounded-full pointer-events-none mix-blend-screen"></div>
+      <section className="relative pt-44 pb-32 px-8 overflow-hidden min-h-screen flex items-center justify-center snap-start">
+        {/* Animated Background Atmosphere */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(102,252,241,0.03),transparent_70%)] opacity-50" />
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-[#66fcf1]/5 blur-[120px] rounded-full pointer-events-none animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-blue-900/10 blur-[100px] rounded-full pointer-events-none" />
 
         <div className="relative max-w-7xl mx-auto text-center z-10">
-          {/* Trust Badge */}
-          <div className="inline-flex items-center gap-3 px-4 py-2 md:px-6 md:py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 mb-8 backdrop-blur-md">
-            <Zap className="w-4 h-4 md:w-5 md:h-5 text-blue-500" fill="currentColor" />
-            <span className="text-xs md:text-sm font-bold text-white">SYSTÈME AUTONOME</span>
+          {/* Trust Badge (Mechanical) */}
+          <div className="inline-flex items-center gap-4 px-6 py-2.5 rounded-full bg-white/5 border border-white/10 mb-16 backdrop-blur-xl group hover:border-[#66fcf1]/30 transition-all duration-700">
+            <div className="w-2 h-2 rounded-full bg-[#66fcf1] animate-pulse shadow-[0_0_10px_#66fcf1]"></div>
+            <span className="text-[10px] font-black tracking-[0.4em] uppercase text-gray-600 group-hover:text-[#66fcf1] transition-colors italic">CALIBRE SOUVERAIN V10.4 // OPÉRATIONNEL</span>
           </div>
 
-          <h1 className="text-4xl md:text-9xl font-black tracking-tighter mb-8 leading-[1.1] md:leading-[0.9] uppercase break-words">
-            <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">ÉCRASEZ LA</span>
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">CONCURRENCE.</span>
+          <h1 className="text-5xl md:text-[10rem] font-black tracking-tighter mb-12 leading-[0.85] uppercase stat-value text-white">
+            MAÎTRISE<br />
+            <span className="text-[#66fcf1] opacity-90">ALGORITHMIQUE.</span>
           </h1>
 
-          <p className="text-lg md:text-3xl text-gray-300 max-w-4xl mx-auto mb-6 leading-relaxed font-bold px-2">
-            9 UNITÉS DE PERFORMANCE. EXCELLENCE ABSOLUE.
-          </p>
-          <p className="text-base md:text-xl text-gray-500 max-w-3xl mx-auto mb-10 md:mb-12 px-2">
-            Pendant qu'ils dorment, vous <span className="text-blue-500 font-bold">DOMINEZ</span> le marché. 24/7. Sans limite.
+          <p className="text-xl md:text-3xl text-gray-500 max-w-4xl mx-auto mb-16 leading-tight font-light tracking-[0.1em] px-2 italic uppercase">
+            &bdquo; Le temps est l'alliage noble de votre succès.<br />Automatisez votre héritage avec une précision séculaire. &rdquo;
           </p>
 
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 w-full px-4">
-            {/* Primary CTA - Most prominent */}
-            <Link href="/signup" className="w-full md:w-auto group px-8 md:px-12 py-5 md:py-6 bg-gradient-to-r from-blue-600 to-pink-600 rounded-xl font-black text-lg md:text-xl flex items-center justify-center gap-4 hover:shadow-[0_0_60px_rgba(236,72,153,0.6)] transition-all transform hover:-translate-y-2 hover:scale-110 relative overflow-hidden">
-              <div className="absolute inset-0 bg-white/30 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
-              <Target className="w-5 h-5 md:w-6 md:h-6 relative z-10" />
-              <span className="relative z-10 uppercase tracking-wider">PRENEZ LE POUVOIR</span>
-              <Rocket className="w-5 h-5 md:w-6 md:h-6 relative z-10 group-hover:translate-x-2 group-hover:-translate-y-1 transition-transform" />
+          <div className="flex flex-col md:flex-row items-center justify-center gap-8 w-full">
+            <Link href="/signup" className="w-full md:w-auto px-16 py-7 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-black text-[12px] uppercase tracking-[0.4em] hover:shadow-[0_0_60px_rgba(102,252,241,0.5)] transition-all btn-haptic">
+              INITIALISER LE PROTOCOLE
             </Link>
 
-            {/* Secondary CTA */}
-            <Link href="/agents" className="w-full md:w-auto group px-8 py-4 bg-transparent border-2 border-purple-500/30 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-purple-500/10 transition-all hover:scale-105 hover:border-purple-500 text-purple-400">
-              <Star className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" />
-              VOIR L'ÉCOSYSTÈME
+            <Link href="/agents" className="w-full md:w-auto px-12 py-7 bg-white/5 border border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.4em] text-white hover:bg-white/10 transition-all btn-haptic group">
+              CATALOGUE DES CALIBRES <span className="ml-2 group-hover:translate-x-1 inline-block transition-transform">→</span>
             </Link>
           </div>
-
-          {/* Trust indicators */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs md:text-sm text-gray-500">
-            <span className="flex items-center gap-2"><Check className="w-3 h-3 md:w-4 md:h-4 text-amber-500" /> Paiement sécurisé</span>
-            <span className="flex items-center gap-2"><Check className="w-3 h-3 md:w-4 md:h-4 text-amber-500" /> Annulation facile</span>
-            <span className="flex items-center gap-2"><Check className="w-3 h-3 md:w-4 md:h-4 text-amber-500" /> Support 24/7</span>
-          </div>
-
         </div>
       </section>
 
       {/* --- SOCIAL PROOF (Marquee) --- */}
-      <section className="py-6 md:py-10 border-y border-white/5 bg-white/5 backdrop-blur-sm overflow-hidden relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0f] via-transparent to-[#0a0a0f] z-10 pointer-events-none"></div>
+      <section className="py-10 border-y border-white/5 bg-white/[0.02] backdrop-blur-xl overflow-hidden relative snap-start">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0b0c10] via-transparent to-[#0b0c10] z-10 pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-6 relative">
-          <div className="flex items-center gap-12 justify-center opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+          <div className="flex items-center gap-12 justify-center opacity-30 grayscale hover:grayscale-0 transition-all duration-700">
             <div className="flex animate-marquee whitespace-nowrap gap-28 items-center w-max hover:paused">
               {[...Array(4)].map((_, setIndex) => (
                 <div key={setIndex} className="flex gap-28 shrink-0 items-center animate-marquee">
-                  <span className="text-2xl font-black tracking-widest text-white">ACME</span>
-                  <span className="text-2xl font-black tracking-widest text-white">STARK</span>
-                  <span className="text-2xl font-black tracking-widest text-white">WAYNE</span>
-                  <span className="text-2xl font-black tracking-widest text-white">CYBERDYNE</span>
-                  <span className="text-2xl font-black tracking-widest text-white">TYRELL</span>
+                  <span className="text-xl font-black tracking-[0.4em] text-white">HOROLOGY</span>
+                  <span className="text-xl font-black tracking-[0.4em] text-white">PRECISION</span>
+                  <span className="text-xl font-black tracking-[0.4em] text-white">EXCELLENCE</span>
+                  <span className="text-xl font-black tracking-[0.4em] text-white">DOMINATION</span>
+                  <span className="text-xl font-black tracking-[0.4em] text-white">SOUVERAINE</span>
                 </div>
               ))}
             </div>
@@ -167,257 +159,115 @@ export default function Home() {
       </section>
 
       {/* --- VALUE PROP (Keep Focus) --- */}
-      <section className="py-32 px-6 bg-[#0f0f16]" id="features">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/30 mb-6">
-              <span className="text-amber-400 font-bold text-sm">💡 POURQUOI ELA</span>
+      <section className="py-40 px-8 bg-[#0f0f16]/50 snap-start relative overflow-hidden" id="features">
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#66fcf1]/5 to-transparent pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-center max-w-4xl mx-auto mb-40">
+            <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full border border-white/10 bg-white/5 mb-10 backdrop-blur-xl">
+              <span className="text-gray-500 font-black text-[10px] uppercase tracking-[0.4em]">MANUFACTURE ELA // CALIBRATION V10.4</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-black mb-6">Votre Concurrent Dort.<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">Vous Dominez.</span></h2>
-            <p className="text-lg text-gray-400">
-              Pendant que d'autres perdent du temps sur des tâches répétitives, vos agents IA génèrent des leads, du contenu et des revenus — <span className="text-white font-semibold">24 heures sur 24</span>.
+            <h2 className="text-5xl md:text-8xl font-black mb-8 stat-value text-white uppercase tracking-tighter">
+              L'EXCELLENCE<br />
+              <span className="text-[#66fcf1]">MÉCANIQUE.</span>
+            </h2>
+            <p className="text-xl text-gray-500 font-light tracking-wide italic leading-relaxed">
+              &bdquo; Pendant qu'ils dorment, vos <span className="text-[#66fcf1] font-bold">Calibres IA</span> saturent le marché avec une précision de 0.01 micro-seconde. &rdquo;
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {[
-              { title: "+148k€ / an", desc: "De revenus additionnels générés en moyenne par nos clients Enterprise.", color: "from-amber-500 to-yellow-500", icon: LineIconTrendingUp, illustration: "/images/productivity.png" },
-              { title: "+3.200h / an", desc: "D'heures de production économisées. Vos équipes se concentrent sur la stratégie.", color: "from-amber-400 to-orange-500", icon: LineIconZap, illustration: "/images/costs.png" },
-              { title: "R.O.I. x12", desc: "Retour sur investissement moyen constaté dès le premier trimestre d'utilisation.", color: "from-yellow-400 to-amber-600", icon: LineIconStar, illustration: "/images/onboarding.png" }
+              { title: "+148K€ / AN", desc: "VALEUR INCRÉMENTALE MOYENNE", color: "#66fcf1", icon: LineIconTrendingUp },
+              { title: "+3.200H / AN", desc: "GAIN DE TEMPS OPÉRATIONNEL", color: "#66fcf1", icon: LineIconZap },
+              { title: "R.O.I. X12", desc: "MULTIPLICATEUR DE SOUVERAINETÉ", color: "#66fcf1", icon: LineIconStar }
             ].map((item, i) => (
               <div
                 key={i}
-                className="group relative p-8 rounded-[2rem] bg-[#0c0a09]/80 backdrop-blur-md border border-white/5 hover:border-amber-500/20 transition-all duration-500 overflow-hidden hover:-translate-y-2 cursor-default"
+                className="card-saphir group p-12 flex flex-col items-center text-center hover:border-[#66fcf1]/30 transition-all duration-700"
               >
-                {/* Subtle gradient blob */}
-                <div className={`absolute -top-20 -right-20 w-60 h-60 bg-gradient-to-br ${item.color} opacity-5 blur-[80px] group-hover:opacity-10 transition-opacity duration-700`}></div>
-
-                {/* Icon container */}
-                <div className="mb-8 relative z-10 w-fit">
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.color} p-[1px] shadow-lg shadow-amber-500/10`}>
-                    <div className="w-full h-full rounded-2xl bg-[#0c0a09] flex items-center justify-center">
-                      <item.icon size={26} className="text-amber-400" />
-                    </div>
-                  </div>
+                <div className="mb-10 w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-[#66fcf1]/40 transition-all duration-700 relative">
+                  <item.icon size={32} className="text-[#66fcf1]" />
+                  <div className="absolute inset-0 bg-[#66fcf1]/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
 
-                <h3 className="text-3xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 group-hover:to-white transition-all tracking-tight">{item.title}</h3>
-                <p className="text-gray-400 leading-relaxed mb-8 text-sm group-hover:text-gray-300 transition-colors font-medium border-l-2 border-white/5 pl-4">{item.desc}</p>
+                <h3 className="text-5xl font-black mb-4 stat-value text-white tracking-tighter">{item.title}</h3>
+                <p className="text-gray-600 uppercase text-[9px] font-black tracking-[0.4em] mb-10">{item.desc}</p>
 
-                {/* Image container */}
-                <div className="relative h-32 w-full rounded-xl overflow-hidden opacity-80 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 border border-white/5 group-hover:border-amber-500/20">
-                  <Image
-                    src={item.illustration}
-                    alt={item.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    priority={true}
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    quality={90}
-                  />
+                {/* Precision Mechanical Line */}
+                <div className="w-full h-px bg-white/5 relative">
+                  <div className="absolute top-0 left-0 h-full bg-[#66fcf1] w-0 group-hover:w-full transition-all duration-1000 ease-out shadow-[0_0_8px_#66fcf1]" />
                 </div>
-
-                {/* Bottom accent line */}
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-500/50 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
               </div>
             ))}
           </div>
         </div >
       </section >
 
-      {/* --- COMPREHENSIVE FEATURES GRID --- */}
-      <section className="py-32 px-6 bg-gradient-to-b from-[#0f0f16] to-[#0a0a0f]">
+      {/* --- INFRASTRUCTURE GRID --- */}
+      <section className="py-40 px-8 bg-gradient-to-b from-[#0f0f16] to-[#0b0c10] snap-start relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+
         <div className="max-w-7xl mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/30 mb-6">
-              <span className="text-purple-400 font-bold text-sm">INFRASTRUCTURE COMPLÈTE</span>
+          <div className="text-center max-w-4xl mx-auto mb-40">
+            <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full border border-white/10 bg-white/5 mb-10 backdrop-blur-xl">
+              <span className="text-[#66fcf1] font-black text-[10px] uppercase tracking-[0.4em]">MANUFACTURE ELA // ARCHITECTURE</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-black mb-6">
-              20 Unités de Domination <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">Du Marché</span>
+            <h2 className="text-5xl md:text-8xl font-black mb-10 stat-value text-white uppercase tracking-tighter">
+              20 COMPLICATIONS<br />
+              <span className="text-[#66fcf1]">SOUVERAINES.</span>
             </h2>
-            <p className="text-lg text-gray-400">
-              Technologies de pointe pour dominer chaque aspect de votre croissance digitale.
+            <p className="text-xl text-gray-500 font-light tracking-wide italic leading-relaxed">
+              &bdquo; Des pièces d'orfèvrerie algorithmique conçues pour dominer chaque aspect de votre <span className="text-white font-bold">Empire Digital</span>. &rdquo;
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              {
-                icon: <LineIconTrendingUp size={24} className="text-blue-500" />,
-                title: "Métriques Temps Réel",
-                desc: "LinkedIn, Twitter, Meta Analytics APIs intégrées pour vraies performances.",
-                color: "from-blue-500 to-cyan-500",
-                tag: "Phase 1"
-              },
-              {
-                icon: <LineIconZap size={24} className="text-purple-500" />,
-                title: "Upload Média Natif",
-                desc: "Images sur LinkedIn, carrousels Instagram, vidéos Twitter automatiques.",
-                color: "from-purple-500 to-indigo-500",
-                tag: "Phase 1"
-              },
-              {
-                icon: <LineIconStar size={24} className="text-pink-500" />,
-                title: "A/B Testing Auto",
-                desc: "Split test hooks et styles, sélection automatique du winner en 24h.",
-                color: "from-pink-500 to-rose-500",
-                tag: "Phase 1"
-              },
-              {
-                icon: <LineIconCheck size={24} className="text-green-500" />,
-                title: "Auto-Engagement Bot",
-                desc: "Réponses IA aux commentaires, likes intelligents, follow-ups automatiques.",
-                color: "from-green-500 to-emerald-500",
-                tag: "Phase 2"
-              },
-              {
-                icon: <LineIconTrendingUp size={24} className="text-orange-500" />,
-                title: "Trending Topics",
-                desc: "Scraping Reddit, Google Trends, Twitter pour alignement parfait.",
-                color: "from-orange-500 to-red-500",
-                tag: "Phase 2"
-              },
-              {
-                icon: <LineIconZap size={24} className="text-yellow-500" />,
-                title: "Frequency Optimizer",
-                desc: "2-5 posts/jour adaptatif selon performance, timing optimal par plateforme.",
-                color: "from-yellow-500 to-amber-500",
-                tag: "Phase 2"
-              },
-              {
-                icon: <LineIconStar size={24} className="text-teal-500" />,
-                title: "Content Recycling",
-                desc: "Repurpose automatique des top 10%, compilations Best-of, evergreen.",
-                color: "from-teal-500 to-cyan-500",
-                tag: "Phase 2"
-              },
-              {
-                icon: "🎯",
-                title: "Retargeting Pixels",
-                desc: "Meta Pixel + LinkedIn Insight Tag, audiences custom des engagés.",
-                color: "from-indigo-500 to-purple-500",
-                tag: "Phase 3"
-              },
-              {
-                icon: "👥",
-                title: "Influencer Detection",
-                desc: "Identification micro-influencers, outreach auto, tracking collaborations.",
-                color: "from-rose-500 to-pink-500",
-                tag: "Phase 3"
-              },
-              {
-                icon: "🎬",
-                title: "Video Generator",
-                desc: "Scripts Reels/Shorts/TikTok auto, voiceover ElevenLabs, B-roll suggestions.",
-                color: "from-violet-500 to-purple-500",
-                tag: "Phase 3"
-              },
-              {
-                icon: <LineIconZap size={24} className="text-emerald-500" />,
-                title: "Revenue Autopilot",
-                desc: "Gestion autonome des flux monétaires, splits automatiques, facturation récurrente, analytics financiers temps réel.",
-                color: "from-emerald-500 to-green-500",
-                tag: "Phase 3"
-              },
-              {
-                icon: "🌍",
-                title: "Multi-Language",
-                desc: "5 langues (FR/EN/ES/DE/IT), traduction virale, geo-targeting intelligent.",
-                color: "from-sky-500 to-blue-500",
-                tag: "Phase 3"
-              },
-              {
-                icon: "🎯",
-                title: "Lead Scoring AI",
-                desc: "Score 0-100 prédictif, intent signals, timing optimal, auto-routing intelligent.",
-                color: "from-cyan-500 to-blue-500",
-                tag: "Growth"
-              },
-              {
-                icon: "💡",
-                title: "ROI Calculator",
-                desc: "Widget public, calcul instantané, lead capture automatique, conversion +85%.",
-                color: "from-green-500 to-teal-500",
-                tag: "Growth"
-              },
-              {
-                icon: "📝",
-                title: "Meeting Assistant AI",
-                desc: "Transcription calls, action items auto, CRM sync, emails follow-up générés.",
-                color: "from-purple-500 to-pink-500",
-                tag: "Growth"
-              },
-              {
-                icon: "📄",
-                title: "Proposal Generator",
-                desc: "Devis en 30s, templates industrie, ROI intégré, e-signature, upsells auto.",
-                color: "from-orange-500 to-red-500",
-                tag: "Growth"
-              },
-              {
-                icon: "🔍",
-                title: "Competitive Intelligence",
-                desc: "Surveillance 24/7, prix concurrence, gap analysis, alertes stratégiques.",
-                color: "from-indigo-500 to-violet-500",
-                tag: "Growth"
-              },
-              {
-                icon: "📱",
-                title: "SMS Automation",
-                desc: "Reminders RDV, confirmations, follow-ups, broadcast campaigns via Twilio.",
-                color: "from-blue-500 to-cyan-500",
-                tag: "Growth"
-              },
-              {
-                icon: "🏷️",
-                title: "White-Label Program",
-                desc: "Branding custom, sous-domaines, revenue share 30-50%, tiers revendeurs.",
-                color: "from-pink-500 to-rose-500",
-                tag: "Scale"
-              },
-              {
-                icon: "📧",
-                title: "Email Warmup",
-                desc: "DNS health, deliverability 100/100, spam test auto, reputation tracking.",
-                color: "from-emerald-500 to-green-500",
-                tag: "Scale"
-              }
+              { icon: "📈", title: "MÉTRIQUES RÉELLES", desc: "LinkedIn, Twitter, Meta Analytics APIs synchronisées.", tag: "PHASE 1" },
+              { icon: "⚡", title: "UPLOAD NATIF", desc: "Carrousels, vidéos et média haute fidélité automatiques.", tag: "PHASE 1" },
+              { icon: "💎", title: "A/B TESTING AUTO", desc: "Split test neuromarketing avec sélection de vainqueur.", tag: "PHASE 1" },
+              { icon: "🤖", title: "ENGAGEMENT BOT", desc: "Réponses IA aux commentaires et likes intelligents.", tag: "PHASE 2" },
+              { icon: "📡", title: "TRENDING TOPICS", desc: "Scraping stratégique Reddit, Google Trends et Twitter.", tag: "PHASE 2" },
+              { icon: "⏱️", title: "FREQUENCY OPTIMIZER", desc: "2-5 publications adaptatives par cycle solaire.", tag: "PHASE 2" },
+              { icon: "♻️", title: "CONTENT RECYCLING", desc: "Repurpose automatique des calibres les plus performants.", tag: "PHASE 2" },
+              { icon: "🎯", title: "RETARGETING PIXELS", desc: "Audiences custom basées sur l'engagement réel.", tag: "PHASE 3" },
+              { icon: "👥", title: "INFLUENCER ENGINE", desc: "Identification et outreach automatique micro-influences.", tag: "PHASE 3" },
+              { icon: "🎬", title: "VIDEO GENERATOR", desc: "Scripts Reels/TikTok auto avec voiceover ElevenLabs.", tag: "PHASE 3" },
+              { icon: "💰", title: "REVENUE AUTOPILOT", desc: "Gestion des flux monétaires et analytics financiers.", tag: "PHASE 3" },
+              { icon: "🌍", title: "MULTI-LANGUAGE", desc: "5 langues natives avec traduction virale intelligente.", tag: "PHASE 3" },
             ].map((feature, i) => (
               <div
                 key={i}
-                className="group relative p-6 rounded-2xl bg-[#13131f] border border-white/5 hover:border-white/20 transition-all duration-500 overflow-hidden hover:-translate-y-2"
+                className="group relative p-10 rounded-2xl card-saphir border-white/5 hover:border-[#66fcf1]/30 transition-all duration-700 overflow-hidden"
               >
-                {/* Gradient blob */}
-                <div className={`absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br ${feature.color} opacity-0 blur-[60px] group-hover:opacity-10 transition-opacity duration-700`}></div>
+                <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#66fcf1]/5 opacity-0 blur-[60px] group-hover:opacity-100 transition-opacity duration-700" />
 
-                {/* Tag */}
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-3xl">{feature.icon}</span>
-                  <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">{feature.tag}</span>
+                <div className="flex items-center justify-between mb-10">
+                  <span className="text-4xl grayscale group-hover:grayscale-0 transition-all duration-500">{feature.icon}</span>
+                  <span className="text-[9px] font-black text-gray-700 uppercase tracking-[0.4em] group-hover:text-[#66fcf1] transition-colors">{feature.tag}</span>
                 </div>
 
-                <h3 className="text-xl font-black mb-3 text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r" style={{ backgroundImage: `linear-gradient(to right, ${feature.color.split(' ')[1]}, ${feature.color.split(' ')[3]})` }}>
+                <h3 className="text-2xl font-black mb-4 text-white tracking-tighter stat-value uppercase">
                   {feature.title}
                 </h3>
 
-                <p className="text-sm text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors">
+                <p className="text-[11px] text-gray-600 leading-relaxed font-light group-hover:text-gray-400 transition-colors uppercase tracking-wider">
                   {feature.desc}
                 </p>
 
-                {/* Bottom accent */}
-                <div className={`absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r ${feature.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500`}></div>
+                <div className="absolute bottom-0 left-0 w-0 h-px bg-[#66fcf1] group-hover:w-full transition-all duration-700 shadow-[0_0_8px_#66fcf1]" />
               </div>
             ))}
           </div>
 
-          {/* CTA */}
-          <div className="text-center mt-16">
+          <div className="text-center mt-40">
             <Link
               href="/features"
-              className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-bold text-lg hover:shadow-[0_0_40px_rgba(168,85,247,0.4)] transition-all transform hover:-translate-y-1"
+              className="inline-flex items-center gap-8 px-16 py-7 bg-white/5 border border-white/10 rounded-xl font-black text-[12px] uppercase tracking-[0.4em] text-white hover:bg-white hover:text-[#0b0c10] transition-all group btn-haptic"
             >
-              Explorer Toutes Les Fonctionnalités
-              <ArrowRight className="w-5 h-5" />
+              EXPLORER LA MANUFACTURE
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
             </Link>
           </div>
         </div>
@@ -425,52 +275,54 @@ export default function Home() {
 
 
       {/* --- AGENTS GRID --- */}
-      < section className="py-32 px-6 relative" id="agents" >
+      <section className="py-40 px-8 relative snap-start bg-[#0b0c10]" id="agents" >
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-6">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-32 gap-10">
             <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/30 mb-6">
-                <span className="text-purple-400 font-bold text-sm">🤖 L'ÉQUIPE</span>
+              <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full border border-white/10 bg-white/5 mb-10 backdrop-blur-xl">
+                <span className="text-gray-600 font-black text-[10px] uppercase tracking-[0.4em]">MANUFACTURE ELA // LA COLLECTION</span>
               </div>
-              <h2 className="text-4xl md:text-6xl font-black mb-6">9 Experts.<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">Zéro Salaire.</span></h2>
-              <p className="text-gray-400 max-w-xl text-lg">
-                Chaque agent maîtrise son domaine. Ils travaillent ensemble, sans pause café, sans RTT, sans erreur.
+              <h2 className="text-5xl md:text-8xl font-black mb-10 stat-value text-white uppercase tracking-tighter">
+                9 PIÈCES<br />
+                <span className="text-[#66fcf1]">D'HORLOGERIE.</span>
+              </h2>
+              <p className="text-gray-500 max-w-2xl text-xl font-light italic leading-relaxed">
+                &bdquo; Chaque calibre IA est une prouesse d'ingénierie. Une orchestration continue sans la moindre friction humaine. &rdquo;
               </p>
             </div>
-            <Link href="/agents" className="px-8 py-4 rounded-xl border border-white/10 hover:bg-white/5 hover:border-white/30 transition-all font-bold flex items-center gap-3 group">
-              Voir tous les agents <LineIconChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+            <Link href="/agents" className="px-10 py-5 rounded-xl border border-[#66fcf1]/20 bg-[#66fcf1]/5 hover:bg-[#66fcf1]/10 transition-all font-black text-[10px] uppercase tracking-[0.3em] text-[#66fcf1] flex items-center gap-4 group btn-haptic">
+              CONSULTER L'ÉCOSYSTÈME <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { name: "VOX", role: "Telephony Expert", img: "/agents/vox_v2.png?v=4", desc: "Gère vos appels entrants et sortants avec une voix humaine indiscernable.", gradient: "from-blue-500 to-indigo-500" },
-              { name: "NEXUS", role: "Sales & Outreach", img: "/agents/nexus_v2.png?v=4", desc: "Prospecte sur LinkedIn et Email, qualifie les leads et booke vos RDV.", gradient: "from-[#667eea] to-[#764ba2]" },
-              { name: "SENTINEL", role: "Legal & Compliance", img: "/agents/sentinel_v2.png?v=4", desc: "Vérifie vos contrats, assure la conformité RGPD et protège votre business.", gradient: "from-emerald-500 to-teal-500" },
-              { name: "HIVE", role: "Swarm Commander", img: "/agents/hive_v2.png?v=4", desc: "Pilote l'ensemble de votre flotte d'agents via WhatsApp.", gradient: "from-amber-500 to-orange-500" },
+              { name: "VOX", role: "Telephony Expert", img: "/agents/vox_v2.png?v=4", desc: "MOUVEMENT VOCAL AUTONOME" },
+              { name: "NEXUS", role: "Sales & Outreach", img: "/agents/nexus_v2.png?v=4", desc: "OUTREACH HAUTE PRÉCISION" },
+              { name: "SENTINEL", role: "Legal & Compliance", img: "/agents/sentinel_v2.png?v=4", desc: "GARDE-TEMPS JURIDIQUE" },
+              { name: "HIVE", role: "Swarm Commander", img: "/agents/hive_v2.png?v=4", desc: "TOURBILLON DE COMMANDE" },
             ].map((agent, i) => (
               <div
                 key={i}
-                className="group relative rounded-[2.5rem] overflow-hidden aspect-[3/4] border border-white/10 bg-[#13131f] shadow-2xl hover:shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-all"
+                className="group relative rounded-3xl overflow-hidden aspect-[3/4.5] border border-white/5 card-saphir p-0"
               >
                 <img
                   src={agent.img}
                   alt={agent.name}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  loading="eager"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-40 grayscale group-hover:grayscale-0 group-hover:opacity-70"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-[#0a0a0f]/40 to-transparent opacity-90"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0b0c10] via-[#0b0c10]/20 to-transparent"></div>
 
-                <div className="absolute bottom-0 left-0 w-full p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                  <div className={`w-fit px-4 py-1.5 rounded-full bg-gradient-to-r ${agent.gradient} text-xs font-black mb-4 uppercase tracking-wider`}>
+                <div className="absolute bottom-0 left-0 w-full p-10">
+                  <div className="w-fit px-4 py-1.5 rounded-full bg-[#66fcf1]/10 border border-[#66fcf1]/20 text-[9px] font-black mb-6 uppercase tracking-[0.3em] text-[#66fcf1] backdrop-blur-md">
                     {agent.role}
                   </div>
-                  <h3 className="text-4xl font-black mb-2">{agent.name}</h3>
-                  <p className="text-sm text-gray-300 line-clamp-2 mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                  <h3 className="text-4xl font-black mb-3 text-white tracking-tighter stat-value uppercase">{agent.name}</h3>
+                  <p className="text-[9px] text-gray-500 uppercase font-black tracking-[0.2em] mb-8 leading-relaxed">
                     {agent.desc}
                   </p>
-                  <Link href="/agents" className="w-full py-4 bg-white text-black rounded-xl font-bold text-sm hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 opacity-100 group-hover:opacity-100 transition-all duration-300">
-                    Déployer <LineIconArrowRight size={16} />
+                  <Link href="/agents" className="w-full py-5 bg-white/5 border border-white/10 text-white rounded-xl font-black text-[10px] uppercase tracking-[0.3em] hover:bg-white hover:text-[#0b0c10] transition-all flex items-center justify-center gap-3 group btn-haptic">
+                    DÉPLOYER <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </div>
               </div>
@@ -479,92 +331,74 @@ export default function Home() {
         </div>
       </section >
 
-      {/* --- WHATSAPP SECTION --- */}
-      < section className="py-32 px-6 bg-gradient-to-b from-[#0f0f16] to-[#0a0a0f] border-y border-white/5" >
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-20">
-          <div className="flex-1">
-            <div className="w-20 h-20 rounded-3xl bg-[#25D366]/20 flex items-center justify-center mb-10 text-[#25D366]">
-              <span className="text-5xl">💬</span>
+      {/* --- WHATSAPP SECTION (HIVE CADRAN) --- */}
+      <section className="py-48 px-8 bg-gradient-to-b from-[#0b0c10] to-[#0f0f16] snap-start relative overflow-hidden" >
+        {/* Atmosphere */}
+        <div className="absolute top-1/2 left-0 w-full h-px bg-[#66fcf1]/5" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#66fcf1]/5 blur-[150px] rounded-full" />
+
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-40 relative z-10">
+          <div className="flex-1 space-y-12">
+            <div className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full border border-[#66fcf1]/20 bg-[#66fcf1]/5 mb-4">
+              <span className="text-[#66fcf1] font-black text-[10px] uppercase tracking-[0.4em]">CALIBRE HIVE // TRANSMISSION VOCALE</span>
             </div>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#25D366]/10 border border-[#25D366]/30 mb-6">
-              <span className="text-[#25D366] font-bold text-sm">📱 CONTRÔLE TOTAL</span>
-            </div>
-            <h2 className="text-5xl md:text-6xl font-black mb-8 leading-tight">Pilotez l'Empire<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-[#25D366] to-emerald-400">Depuis WhatsApp.</span></h2>
-            <p className="text-xl text-gray-400 mb-10 leading-relaxed">
-              Plus besoin de dashboards complexes. Envoyez simplement un message vocal à HIVE pour lancer une campagne, vérifier vos stats ou générer un contrat. C'est aussi simple que de parler à un ami.
+            <h2 className="text-5xl md:text-[7rem] font-black mb-8 leading-[0.85] stat-value text-white uppercase tracking-tighter">
+              L'EMPIRE RÉPOND<br />
+              <span className="text-[#66fcf1]">À VOTRE VOIX.</span>
+            </h2>
+            <p className="text-2xl text-gray-500 leading-relaxed font-light italic uppercase tracking-wider">
+              &bdquo; Libérez-vous des interfaces conventionnelles. Le <span className="text-white font-bold">Mouvement HIVE</span> synchronise votre flotte d'agents par un simple scellement vocal. &rdquo;
             </p>
-            <div className="space-y-4 mb-12">
-              <div className="flex items-center gap-4 text-emerald-400 bg-emerald-400/10 p-4 rounded-xl border border-emerald-400/20">
-                <CheckCircle2 className="w-6 h-6 shrink-0" />
-                <span className="font-medium text-lg">Commandes vocales & textuelles en langage naturel : parlez comme à un humain.</span>
-              </div>
-              <div className="flex items-center gap-4 text-emerald-400 bg-emerald-400/10 p-4 rounded-xl border border-emerald-400/20">
-                <CheckCircle2 className="w-6 h-6 shrink-0" />
-                <span className="font-medium text-lg">Rapports PDF & Excel générés instantanément : finis les exports manuels.</span>
-              </div>
-              <div className="flex items-center gap-4 text-emerald-400 bg-emerald-400/10 p-4 rounded-xl border border-emerald-400/20">
-                <CheckCircle2 className="w-6 h-6 shrink-0" />
-                <span className="font-medium text-lg">Notifications de leads en temps réel : ne manquez plus jamais une opportunité.</span>
-              </div>
-              <div className="flex items-center gap-4 text-emerald-400 bg-emerald-400/10 p-4 rounded-xl border border-emerald-400/20">
-                <CheckCircle2 className="w-6 h-6 shrink-0" />
-                <span className="font-medium text-lg">Multi-Utilisateurs : donnez accès à toute votre équipe commercial.</span>
-              </div>
-              <div className="flex items-center gap-4 text-emerald-400 bg-emerald-400/10 p-4 rounded-xl border border-emerald-400/20">
-                <CheckCircle2 className="w-6 h-6 shrink-0" />
-                <span className="font-medium text-lg">Sécurité Chiffrée : vos données sensibles restent protégées.</span>
-              </div>
-              <div className="flex items-center gap-4 text-emerald-400 bg-emerald-400/10 p-4 rounded-xl border border-emerald-400/20">
-                <CheckCircle2 className="w-6 h-6 shrink-0" />
-                <span className="font-medium text-lg">Disponibilité 24/7 : votre business ne dort jamais, HIVE non plus.</span>
-              </div>
-            </div>
-            <a href="#pricing" className="px-10 py-5 bg-[#25D366] text-black font-bold text-lg rounded-2xl hover:shadow-[0_0_50px_rgba(37,211,102,0.5)] transition-all transform hover:-translate-y-1 hover:scale-105 flex items-center gap-3 group cursor-pointer text-center justify-center">
-              Connecter WhatsApp Maintenant
-              <LineIconArrowRight className="group-hover:translate-x-1 transition-transform" />
-            </a>
-            <p className="mt-4 text-sm text-[#25D366]/80 font-mono animate-pulse">⚡ Place limitée : accès Beta disponible.</p>
+
+            <Link href="#pricing" className="inline-flex px-16 py-7 bg-[#66fcf1] text-[#0b0c10] font-black text-[12px] uppercase tracking-[0.4em] rounded-xl hover:shadow-[0_0_60px_rgba(102,252,241,0.5)] transition-all flex items-center gap-4 group btn-haptic">
+              CONNECTER VOTRE CALIBRE
+              <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+            </Link>
           </div>
-          <div className="flex-1 relative mx-auto w-full max-w-md">
-            <div className="absolute inset-0 bg-[#25D366] rounded-full blur-[120px] opacity-20 animate-pulse-slow"></div>
-            <div className="relative z-10 bg-[#0a0a0f] border border-white/10 rounded-[3rem] p-4 shadow-2xl">
-              <div className="bg-[#13131f] rounded-[2.5rem] h-[650px] overflow-hidden border border-white/5 relative flex flex-col">
-                {/* Fake Chat Header */}
-                <div className="bg-[#202c33] p-6 flex items-center gap-4 border-b border-white/5">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 p-[2px] overflow-hidden">
-                    <img src="/agents/hive_v2.png?v=3" alt="Hive" className="w-full h-full rounded-full object-cover" />
+
+          <div className="flex-1 relative w-full max-w-md">
+            <div className="card-saphir border-white/10 p-3 shadow-2xl relative overflow-hidden">
+              {/* Mechanical Light Effect */}
+              <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#66fcf1]/30 to-transparent animate-pulse" />
+
+              <div className="bg-[#0b0c10] rounded-2xl h-[700px] overflow-hidden border border-white/5 relative flex flex-col">
+                {/* Secure Channel Header */}
+                <div className="bg-white/5 p-10 flex items-center gap-6 border-b border-white/10 backdrop-blur-3xl">
+                  <div className="w-16 h-16 rounded-full border-2 border-[#66fcf1]/30 p-1 relative">
+                    <img src="/agents/hive_v2.png?v=3" alt="Hive" className="w-full h-full rounded-full object-cover grayscale opacity-70" />
+                    <div className="absolute bottom-1 right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-[#0b0c10]" />
                   </div>
                   <div>
-                    <p className="font-bold text-white text-lg">HIVE (ELA)</p>
-                    <p className="text-xs text-[#25D366] font-mono">En ligne</p>
+                    <h4 className="font-black text-white text-xl tracking-tighter uppercase stat-value">HIVE /// ELA</h4>
+                    <p className="text-[10px] text-[#66fcf1] font-mono tracking-[0.3em] uppercase opacity-60">SYNC_NOMINAL_10.4</p>
                   </div>
                 </div>
-                {/* Fake Chat Body */}
-                <div className="p-6 space-y-6 mt-auto bg-[url('/assets/whatsapp-bg.png')] bg-opacity-10">
+
+                {/* Transmission Stream */}
+                <div className="p-10 space-y-10 mt-auto bg-gradient-to-b from-transparent to-[#66fcf1]/5">
                   <motion.div
                     initial={{ opacity: 0, x: 20 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="bg-[#005c4b] p-4 rounded-2xl rounded-tr-none ml-auto w-fit max-w-[85%] text-sm shadow-lg border border-white/5"
+                    className="bg-[#005c4b]/80 backdrop-blur-xl p-6 rounded-3xl rounded-tr-none ml-auto w-fit max-w-[90%] text-sm text-white/90 border border-white/10 shadow-2xl font-light italic"
                   >
-                    Lance une campagne de prospection sur les CEO tech à Paris.
+                    &bdquo; Lance une campagne de prospection sur les CEO tech à Paris. &rdquo;
                   </motion.div>
                   <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.4 }}
-                    className="bg-[#202c33] p-4 rounded-2xl rounded-tl-none w-fit max-w-[85%] text-sm shadow-lg border border-white/5"
+                    className="bg-[#202c33]/90 backdrop-blur-xl p-6 rounded-3xl rounded-tl-none w-fit max-w-[90%] text-sm text-[#66fcf1] border border-[#66fcf1]/20 shadow-2xl font-mono"
                   >
-                    Bien reçu. J'active NEXUS sur LinkedIn. Cible : CEO Tech @ Paris.
+                    [SYSTEM] Bien reçu. J'active NEXUS sur LinkedIn.
                     <br /><br />
-                    Je commence l'extraction des profils. Je t'envoie un rapport dans 5 minutes. 🚀
+                    Cible : CEO Tech @ Paris. Extraction des calibres en cours... 🦾
                   </motion.div>
                 </div>
-                {/* Fake Input */}
-                <div className="p-4 bg-[#202c33] border-t border-white/5 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-gray-400">+</div>
-                  <div className="flex-1 h-10 bg-[#2a3942] rounded-full px-4 flex items-center text-gray-400 text-sm">Message...</div>
-                  <div className="w-10 h-10 rounded-full bg-[#005c4b] flex items-center justify-center text-white"><Zap size={18} /></div>
+
+                {/* Input Console */}
+                <div className="p-6 bg-[#202c33] border-t border-white/10 flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 font-black">+</div>
+                  <div className="flex-1 h-12 bg-black/40 rounded-full px-6 flex items-center text-gray-500 text-[10px] font-black uppercase tracking-[0.2em]">TRANSMISSION...</div>
+                  <div className="w-12 h-12 rounded-full bg-[#66fcf1] flex items-center justify-center text-[#0b0c10] shadow-[0_0_20px_rgba(102,252,241,0.5)]"><Zap size={20} /></div>
                 </div>
               </div>
             </div>
@@ -572,88 +406,47 @@ export default function Home() {
         </div>
       </section >
 
-      {/* --- 3 STEPS --- */}
-      < section className="py-32 px-6 bg-[#0f0f16] relative overflow-hidden" >
-        {/* Ambient Background Elements */}
-        < div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none -translate-x-1/2" ></div >
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-600/10 blur-[120px] rounded-full pointer-events-none translate-x-1/2"></div>
+      {/* --- 3 STEPS (LES PILIERS) --- */}
+      <section className="py-48 px-8 bg-[#0f0f16]/30 relative overflow-hidden snap-start" >
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#66fcf1]/5 blur-[150px] rounded-full" />
 
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-center mb-24 cursor-default">
-            <h2 className="text-4xl md:text-5xl font-black mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500">Pourquoi vous allez perdre si vous n'automatisez pas.</h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              Vos concurrents saturent déjà l'espace numérique. HIVE vous donne l'avantage injuste de l'omniprésence.
+          <div className="text-center mb-40">
+            <h2 className="text-5xl md:text-[8rem] font-black mb-10 stat-value text-white uppercase tracking-tighter leading-tight">
+              L'AVANTAGE<br />
+              <span className="text-[#66fcf1]">INJUSTE.</span>
+            </h2>
+            <p className="text-xl text-gray-500 max-w-2xl mx-auto font-light italic uppercase tracking-widest">
+              &bdquo; Le monde se divise en deux : ceux qui règlent les complications, et ceux qui les subissent. &rdquo;
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
             {[
               {
-                title: "Omniprésence Sociale",
-                desc: "Ne laissez plus aucune plateforme vide. HIVE inonde LinkedIn, X, Instagram et TikTok de contenu pertinent simultanément. Soyez partout, tout le temps.",
-                color: "blue",
-                bgIcons: (
-                  <>
-                    <LineIconGlobe className="absolute top-4 right-4 w-12 h-12 text-blue-500/10 rotate-12" />
-                    <div className="absolute bottom-4 left-4 font-black text-6xl text-blue-500/5 -rotate-12 z-0">IN</div>
-                    <div className="absolute bottom-12 right-12 font-black text-6xl text-blue-500/5 rotate-6 z-0">X</div>
-                  </>
-                ),
-                accent: "LinkedIn & X"
+                title: "OMNIPRÉSENCE",
+                desc: "Saturez l'espace numérique avec une régularité de métronome. LinkedIn, X, TikTok — un seul calibre pour tout dominer.",
+                accent: "CHRONOGI // ALLIAGE"
               },
               {
-                title: "Neuromarketing IA",
-                desc: "L'IA analyse les biais cognitifs de votre audience pour rédiger des hooks impossibles à ignorer. Capturez l'attention reptilienne de vos prospects en 0.3 seconde.",
-                color: "purple",
-                bgIcons: (
-                  <>
-                    <LineIconZap className="absolute top-4 right-4 w-12 h-12 text-purple-500/10 -rotate-6" />
-                    <div className="absolute bottom-8 right-8 font-black text-6xl text-purple-500/5 rotate-12 z-0">🧠</div>
-                  </>
-                ),
-                accent: "Conversion Max"
+                title: "PRÉCISION",
+                desc: "Hooks neuromarketing taillés au diamant. Capturez l'attention en 0.01 micro-seconde avant que l'oeil ne cligne.",
+                accent: "CALIBRE // SAPHIR"
               },
               {
-                title: "Monétisation Passive",
-                desc: "Chaque interaction est une opportunité de vente. HIVE transforme votre audience en revenus récurrents pendant que vous dormez. L'automatisation est votre meilleur commercial.",
-                color: "pink",
-                bgIcons: (
-                  <>
-                    <LineIconTrendingUp className="absolute top-4 right-4 w-12 h-12 text-pink-500/10 rotate-45" />
-                    <div className="absolute bottom-4 left-4 font-black text-6xl text-pink-500/5 -rotate-6 z-0">€</div>
-                  </>
-                ),
-                accent: "Revenus 24/7"
+                title: "SOUVERAINETÉ",
+                desc: "Transformez chaque tick d'horloge en revenus passifs. Votre business devient une complication perpétuelle de profit.",
+                accent: "HERITAGE // NOBLE"
               }
             ].map((item, i) => (
-              <div key={i} className={`relative overflow-hidden flex flex-col items-center text-center p-10 rounded-[2.5rem] border transition-all duration-500 group hover:-translate-y-3 cursor-default
-                ${item.color === 'blue' ? 'bg-[#13131f] border-blue-500/20 hover:border-blue-500 hover:shadow-[0_0_50px_rgba(59,130,246,0.2)]' : ''}
-                ${item.color === 'purple' ? 'bg-[#13131f] border-purple-500/20 hover:border-purple-500 hover:shadow-[0_0_50px_rgba(168,85,247,0.2)]' : ''}
-                ${item.color === 'pink' ? 'bg-[#13131f] border-pink-500/20 hover:border-pink-500 hover:shadow-[0_0_50px_rgba(236,72,153,0.2)]' : ''}
-                
-                /* CASCADE DIAGONALE */
-                ${i === 1 ? "md:mt-12" : ""}
-                ${i === 2 ? "md:mt-24" : ""}
-              `}>
-                {/* Visual Background Elements */}
-                {item.bgIcons}
-                <div className={`absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-700 pointer-events-none
-                    ${item.color === 'blue' ? 'from-blue-500/10 to-cyan-500/5' : ''}
-                    ${item.color === 'purple' ? 'from-purple-500/10 to-indigo-500/5' : ''}
-                    ${item.color === 'pink' ? 'from-pink-500/10 to-rose-500/5' : ''}
-                `}></div>
-
-                {/* Accent Tag */}
-                <div className={`mb-8 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border transition-colors relative z-10
-                    ${item.color === 'blue' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20 group-hover:bg-blue-500 group-hover:text-white' : ''}
-                    ${item.color === 'purple' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20 group-hover:bg-purple-500 group-hover:text-white' : ''}
-                    ${item.color === 'pink' ? 'bg-pink-500/10 text-pink-400 border-pink-500/20 group-hover:bg-pink-500 group-hover:text-white' : ''}
-                `}>
+              <div key={i} className={`card-saphir flex flex-col items-center text-center p-16 group hover:border-[#66fcf1]/40 transition-all duration-1000 ${i === 1 ? 'md:translate-y-16' : i === 2 ? 'md:translate-y-32' : ''}`}>
+                <div className="mb-12 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-[9px] font-black uppercase tracking-[0.5em] text-gray-700 group-hover:text-[#66fcf1] transition-colors backdrop-blur-xl">
                   {item.accent}
                 </div>
+                <h3 className="text-4xl font-black mb-10 stat-value text-white tracking-tighter uppercase">{item.title}</h3>
+                <p className="text-gray-500 text-[11px] leading-relaxed font-light uppercase tracking-wider">{item.desc}</p>
 
-                <h3 className="text-3xl font-black mb-6 relative z-10">{item.title}</h3>
-                <p className="text-gray-400 text-lg leading-relaxed relative z-10">{item.desc}</p>
+                <div className="mt-16 w-16 h-px bg-white/10 group-hover:bg-[#66fcf1]/40 group-hover:w-24 transition-all duration-700" />
               </div>
             ))}
           </div>
@@ -661,124 +454,161 @@ export default function Home() {
       </section >
 
       {/* --- PRICING --- */}
-      < section className="py-32 px-6 bg-[#0a0a0f]" id="pricing" >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-black mb-6">Investissez dans votre domination.</h2>
-            <p className="text-gray-400">Des tarifs transparents. Rentabilité dès le premier mois.</p>
+      <section className="py-40 px-8 bg-[#0b0c10] snap-start relative overflow-hidden" id="pricing" >
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-[#66fcf1]/5 blur-[120px] rounded-full pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="text-center mb-32">
+            <div className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-xl">
+              <span className="text-[10px] font-black text-[#66fcf1] uppercase tracking-[0.3em]">TARIFS // ALLIAGE NOBLE</span>
+            </div>
+            <h2 className="text-5xl md:text-8xl font-black mb-10 stat-value text-white tracking-tighter uppercase">INVESTISSEZ DANS<br /><span className="text-[#66fcf1]">VOTRE HÉRITAGE.</span></h2>
+            <p className="text-xl text-gray-500 font-light italic max-w-2xl mx-auto leading-relaxed">
+              &bdquo; Rentabilité mécanique. Performance garantie par le scellement algorithmique. &rdquo;
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
             {/* STARTER */}
-            <div className="p-8 rounded-[2rem] bg-[#13131f] border border-white/5 flex flex-col hover:border-[#667eea]/30 transition-all">
-              <h3 className="text-2xl font-bold mb-2">Starter</h3>
-              <div className="flex items-baseline gap-1 mb-6">
-                <span className="text-5xl font-black">37€</span>
-                <span className="text-gray-500">/mois</span>
+            <div className="card-saphir p-12 flex flex-col group hover:border-white/20 transition-all">
+              <h3 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-gray-500">Mouvement Starter</h3>
+              <div className="flex items-baseline gap-1 mb-10 text-white">
+                <span className="text-6xl font-black stat-value tracking-tighter">37€</span>
+                <span className="text-gray-700 text-[10px] font-mono uppercase tracking-widest">/mois</span>
               </div>
-              <p className="text-sm text-gray-400 mb-8 min-h-[40px]">L'essentiel pour automatiser vos premières tâches.</p>
-              <div className="space-y-4 mb-8">
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> 1 Agent (au choix)</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> 1.000 Crédits/mois</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> Support Email</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> Accès Dashboard</div>
-
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> Mises à jour Hebdomadaires</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> Sécurité SSL</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> Accès Mobile</div>
+              <p className="text-[11px] text-gray-600 mb-10 min-h-[40px] font-light italic leading-relaxed">L'essentiel pour automatiser vos premières complications.</p>
+              <div className="space-y-6 mb-12 border-t border-white/5 pt-10">
+                <div className="flex items-center gap-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> 1 CALIBRE IA</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> 1.000 CRÉDITS</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> SUPPORT STANDARD</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> ACCÈS CADRAN LIVE</div>
               </div>
-              <Link href="/signup?plan=starter" className="w-full py-4 border border-white/20 rounded-xl font-bold text-center hover:bg-white hover:text-black transition-colors">Commencer</Link>
+              <Link href="/signup?plan=starter" className="w-full py-5 border border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.3em] text-center hover:bg-white hover:text-black transition-all btn-haptic">INITIALISER</Link>
             </div>
 
-            {/* PRO (Highlighted) */}
-            <div className="p-8 rounded-[2rem] bg-[#1a1a2e] border border-[#667eea] flex flex-col relative transform md:-translate-y-8 shadow-[0_0_50px_rgba(102,126,234,0.1)]">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 py-1 bg-[#667eea] rounded-full text-xs font-bold uppercase tracking-widest shrink-0 whitespace-nowrap">
-                Recommandé
+            {/* PRO */}
+            <div className="card-saphir p-12 flex flex-col relative border-[#66fcf1]/20 shadow-[0_0_50px_rgba(102,252,241,0.05)] transform md:-translate-y-12 group">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 py-1.5 bg-[#66fcf1] rounded-full text-[8px] font-black uppercase tracking-[0.3em] text-[#0b0c10]">
+                RECOMMANDE
               </div>
-              <h3 className="text-2xl font-bold mb-2 text-[#667eea]">Pro</h3>
-              <div className="flex items-baseline gap-1 mb-6">
-                <span className="text-5xl font-black">197€</span>
-                <span className="text-gray-500">/mois</span>
+              <h3 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-[#66fcf1]">Mouvement Pro</h3>
+              <div className="flex items-baseline gap-1 mb-10 text-white">
+                <span className="text-6xl font-black stat-value tracking-tighter">197€</span>
+                <span className="text-gray-700 text-[10px] font-mono uppercase tracking-widest">/mois</span>
               </div>
-              <p className="text-sm text-gray-400 mb-8 min-h-[40px]">La suite complète pour scaler votre entreprise rapidement.</p>
-              <div className="space-y-4 mb-8">
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> 3 Agents IA</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> 2,500 Crédits/mois</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> WhatsApp Command (HIVE)</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> Accès API (Limité)</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> Support Prioritaire</div>
-
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> Intégration CRM (HubSpot)</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> Exports Ilimités</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> Accès Beta Fonctionnalités</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> Formation Vidéo Offerte</div>
+              <p className="text-[11px] text-gray-500 mb-10 min-h-[40px] font-light italic leading-relaxed">La suite de complications complète pour scaler votre Empire.</p>
+              <div className="space-y-6 mb-12 border-t border-white/5 pt-10">
+                <div className="flex items-center gap-4 text-[10px] font-bold text-white uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> 3 CALIBRES IA</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-white uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> 2.500 CRÉDITS</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-white uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> COMMANDE VOCALE HIVE</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-white uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> SUPPORT PRIORITAIRE</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-white uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> INTÉGRATION CRM</div>
               </div>
-              <Link href="/signup?plan=growth" className="w-full py-4 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-xl font-bold text-white text-center hover:shadow-lg hover:shadow-[#667eea]/25 transition-all transform hover:-translate-y-1">S'abonner maintenant</Link>
+              <Link href="/signup?plan=growth" className="w-full py-5 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-black text-[10px] uppercase tracking-[0.3em] text-center hover:shadow-[0_0_40px_rgba(102,252,241,0.4)] transition-all btn-haptic">DÉPLOYER LA FORCE</Link>
             </div>
 
-            {/* GOD MODE (Divine/Gold Edition) */}
-            <div className="relative p-1 bg-[#1a1005] rounded-[2.5rem] group transform hover:scale-105 transition-all duration-500 shadow-[0_0_100px_rgba(217,119,6,0.3)]">
-              {/* Animated Border Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-r from-amber-500 via-purple-600 to-amber-500 rounded-[2.5rem] opacity-50 blur-lg group-hover:opacity-100 animate-gradient-xy transition-opacity"></div>
-
-              <div className="relative h-full p-10 bg-[#0c0a09] rounded-[2.3rem] flex flex-col overflow-hidden">
-                {/* Cosmic Background Effect */}
-                <div className="absolute inset-0 bg-[url('/assets/noise.png')] opacity-20 mix-blend-overlay"></div>
-                <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-amber-600/20 blur-[100px] rounded-full pointer-events-none"></div>
-
-                <div className="relative z-10">
-                  <div className="inline-block px-4 py-1 mb-4 rounded-full bg-amber-500/10 border border-amber-500/50 text-amber-500 text-xs font-black tracking-[0.2em] uppercase">
-                    Souveraineté Totale
-                  </div>
-                  <h3 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-600 mb-2">
-                    GOD MODE
-                  </h3>
-                  <div className="mb-8 flex items-baseline gap-1">
-                    <span className="text-6xl font-black text-white tracking-tighter">497€</span>
-                    <span className="text-gray-400 font-mono">/mois</span>
-                  </div>
-
-                  <p className="text-base text-gray-300 mb-8 border-l-2 border-amber-500 pl-4 italic">
-                    "Pour ceux qui ne concurrencent pas, mais qui règnent."
-                  </p>
-
-                  <div className="space-y-5 mb-10">
-                    {[
-                      "Agents Illimités & Autonomes",
-                      "Crédits Infinis (Fair Usage)",
-                      "Machine d'Auto-Promotion Incluse",
-                      "Accès API 'Souverain' (Priority)",
-                      "Dedicated Server (Tenant Unique)",
-                      "Audit de Domination Mensuel",
-                      "Accès Direct aux Fondateurs"
-                    ].map((feature, i) => (
-                      <div key={i} className="flex items-center gap-4 group/item">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center shadow-lg shadow-amber-500/20 text-black">
-                          <Zap className="w-5 h-5 fill-current" />
-                        </div>
-                        <span className="text-gray-200 font-medium group-hover/item:text-amber-200 transition-colors">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <Link href="/signup?plan=god_mode" className="block w-full py-5 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-black text-lg font-black text-center shadow-[0_0_40px_rgba(245,158,11,0.4)] hover:shadow-[0_0_60px_rgba(245,158,11,0.6)] hover:scale-[1.02] transition-all relative overflow-hidden group/btn">
-                    <span className="relative z-10 flex items-center justify-center gap-2">
-                      INITIALISER LE PROTOCOLE <Zap className="w-5 h-5 fill-black" />
-                    </span>
-                    <div className="absolute inset-0 bg-white/30 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
-                  </Link>
-                </div>
+            {/* GOD MODE */}
+            <div className="card-saphir p-12 bg-gradient-to-br from-[#1f2833]/40 to-black/40 border-white/10 group">
+              <h3 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-[#c5c6c7]">Mouvement Suprême</h3>
+              <div className="flex items-baseline gap-1 mb-10 text-white">
+                <span className="text-6xl font-black stat-value tracking-tighter">497€</span>
+                <span className="text-gray-700 text-[10px] font-mono uppercase tracking-widest">/mois</span>
               </div>
+              <p className="text-[11px] text-[#c5c6c7] mb-10 min-h-[40px] font-light italic leading-relaxed">Pour ceux qui ne concurrencent pas, mais qui règnent par la Précision.</p>
+              <div className="space-y-6 mb-12 border-t border-white/5 pt-10">
+                <div className="flex items-center gap-4 text-[10px] font-bold text-[#c5c6c7] uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> DOMINATION TOTALE</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-[#c5c6c7] uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> CRÉDITS ILLIMITÉS</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-[#c5c6c7] uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> SERVEUR DÉDIÉ</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-[#c5c6c7] uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> ACCÈS DIRECT ARCHITECTES</div>
+              </div>
+              <Link href="/signup?plan=god_mode" className="w-full py-5 bg-white text-black rounded-xl font-black text-[10px] uppercase tracking-[0.3em] text-center transition-all btn-haptic">INITIALISER GOD MODE</Link>
             </div>
+          </div>
+
+          <div className="mt-24 text-center">
+            <p className="text-[8px] font-black text-gray-700 uppercase tracking-[0.5em]">
+              TOUS LES PRIX SONT EN EUR HT // TVA APPLICABLE SELON VOTRE JURIDICTION // GARANTIE DE 30 CYCLES
+            </p>
           </div>
         </div>
       </section >
 
-      <footer className="py-12 border-t border-white/5 bg-[#0a0a0f]">
-        <div className="max-w-7xl mx-auto px-6 text-center text-gray-500">
-          &copy; 2026 ELA Corp. All rights reserved.
+      {/* --- FOOTER (The Grand Manufacture) --- */}
+      <footer className="py-32 px-8 bg-[#0b0c10] border-t border-white/5 relative z-10 snap-start overflow-hidden">
+        {/* Background Mechanical Detail */}
+        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-[#66fcf1]/5 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-16 mb-24">
+
+            {/* Branding Column */}
+            <div className="md:col-span-5 space-y-10">
+              <div className="flex items-center gap-6">
+                <div className="w-16 h-16 border border-[#66fcf1]/30 rounded-full flex items-center justify-center bg-white/5 relative group">
+                  <div className="w-10 h-10 border border-[#66fcf1] rounded-full border-t-transparent animate-[spin_6s_linear_infinite]" />
+                  <div className="absolute inset-0 bg-[#66fcf1]/5 rounded-full blur-xl" />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-black text-white stat-value tracking-tighter uppercase">EMPIRE LABORATORY</h2>
+                  <p className="text-[10px] text-[#66fcf1] font-black uppercase tracking-[0.4em]">MANUFACTURE D'IA DE HAUTE PRÉCISION</p>
+                </div>
+              </div>
+              <p className="text-[11px] text-gray-500 font-light italic leading-relaxed uppercase tracking-[0.1em] max-w-sm">
+                &bdquo; Nous ne créons pas seulement des algorithmes. Nous forgeons les calibres qui orchestreront le futur de votre souveraineté numérique. &rdquo;
+              </p>
+              <div className="flex gap-6">
+                {['Twitter', 'LinkedIn', 'Instagram'].map((social) => (
+                  <Link key={social} href="#" className="w-10 h-10 rounded-xl border border-white/5 bg-white/[0.02] flex items-center justify-center hover:border-[#66fcf1]/30 hover:bg-[#66fcf1]/5 transition-all group">
+                    <span className="text-[8px] font-black uppercase text-gray-700 group-hover:text-[#66fcf1]">{social[0]}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Links Columns */}
+            <div className="md:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-12">
+              {[
+                { title: "CALIBRES", links: ["Vox", "Nexus", "Sentinel", "Hive"] },
+                { title: "MANUFACTURE", links: ["Genèse", "Infrastructure", "Tarifs", "Contact"] },
+                { title: "PROTOCOLES", links: ["Termes", "Confidentialité", "Cookies", "Sécurité"] }
+              ].map((section) => (
+                <div key={section.title}>
+                  <h4 className="text-[10px] font-black text-white uppercase tracking-[0.5em] mb-8 flex items-center gap-4">
+                    <div className="w-4 h-px bg-[#66fcf1]/30" /> {section.title}
+                  </h4>
+                  <ul className="space-y-4">
+                    {section.links.map((link) => (
+                      <li key={link}>
+                        <Link href="#" className="text-[10px] font-bold text-gray-600 uppercase tracking-[0.2em] hover:text-white transition-colors">
+                          {link}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div className="flex items-center gap-6">
+              <span className="text-[8px] font-mono text-gray-800 uppercase tracking-[0.4em]">LAT: 48.8566 // LONG: 2.3522</span>
+              <div className="w-1 h-1 rounded-full bg-[#66fcf1]/30" />
+              <span className="text-[8px] font-mono text-gray-800 uppercase tracking-[0.4em]">ELA-V10.4-RELEASE</span>
+            </div>
+
+            <p className="text-[10px] font-black text-gray-700 uppercase tracking-[0.5em]">
+              © 2026 ELA // SOUVERAINE PRÉCISION // TOUS DROITS RÉSERVÉS
+            </p>
+
+            <div className="flex items-center gap-4 px-4 py-1.5 rounded-full bg-white/5 border border-white/10">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+              <span className="text-[8px] font-black text-gray-400 uppercase tracking-[0.2em]">ALL SYSTEMS NOMINAL</span>
+            </div>
+          </div>
         </div>
       </footer>
-    </div >
+    </div>
   );
 }

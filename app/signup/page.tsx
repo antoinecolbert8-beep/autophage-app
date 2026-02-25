@@ -108,15 +108,17 @@ function SignupContent() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-[rgb(6,4,3)] text-white flex items-center justify-center p-6">
-        <div className="max-w-md text-center">
-          <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <span className="text-2xl">✓</span>
+      <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7] flex flex-col items-center justify-center p-8 relative overflow-hidden">
+        {/* Success Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#66fcf1]/10 blur-[120px] rounded-full" />
+
+        <div className="max-w-md text-center relative z-10">
+          <div className="w-20 h-20 border border-[#66fcf1]/30 rounded-2xl flex items-center justify-center mx-auto mb-10 bg-white/5 backdrop-blur-xl">
+            <div className="w-8 h-8 border-2 border-[#66fcf1] rounded-full border-t-transparent animate-spin" />
           </div>
-          <h1 className="text-2xl font-semibold mb-4">Compte créé !</h1>
-          <p className="text-[rgba(255,255,255,0.7)]">
-            Un email de confirmation a été envoyé à <strong>{email}</strong>.
-            Vérifiez votre boîte de réception pour activer votre compte.
+          <h1 className="text-3xl font-black mb-6 stat-value text-white uppercase tracking-tighter">PROTOCOLE INITIALISÉ</h1>
+          <p className="text-gray-500 text-[11px] font-light italic leading-relaxed uppercase tracking-[0.1em]">
+            &bdquo; Un certificat de synchronisation a été envoyé à <strong className="text-white">{email}</strong>. Vérifiez votre boîte de réception pour valider l'accès. &rdquo;
           </p>
         </div>
       </div>
@@ -124,198 +126,213 @@ function SignupContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[rgb(6,4,3)] text-white">
-      {/* Header */}
-      <div className="border-b border-[rgba(255,255,255,0.1)]">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="h-20 flex items-center justify-between">
-            <Link href="/" className="flex items-center space-x-4">
-              <img src="/logo-ela.png" alt="ELA" className="w-16 h-16 object-contain" />
-              <span className="text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-amber-200 to-amber-500">ELA</span>
+    <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7] font-sans selection:bg-[#66fcf1]/30 overflow-hidden relative">
+      {/* Background Glows */}
+      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-[#66fcf1]/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-900/10 blur-[100px] rounded-full pointer-events-none" />
+
+      {/* Header (Mechanical) */}
+      <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-8">
+          <div className="h-24 flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-4 group">
+              <div className="w-10 h-10 border border-[#66fcf1]/30 rounded-full flex items-center justify-center bg-white/5 relative group-hover:border-[#66fcf1]/60 transition-colors duration-700">
+                <div className="w-6 h-6 border border-[#66fcf1] rounded-full border-t-transparent animate-[spin_3s_linear_infinite]" />
+              </div>
+              <span className="text-xl font-black tracking-[0.3em] uppercase text-white stat-value pt-1">ELA</span>
             </Link>
-            <div className="flex items-center space-x-6">
-              <span className="text-sm text-[rgba(255,255,255,0.7)]">Déjà client ?</span>
-              <Link href="/login" className="text-sm font-semibold hover:opacity-80">
-                Se connecter
+            <div className="flex items-center gap-8">
+              <span className="text-[10px] font-black text-gray-700 uppercase tracking-[0.2em] hidden sm:block">DÉJÀ CLIENT ?</span>
+              <Link href="/login" className="text-[10px] font-black uppercase tracking-[0.2em] text-[#66fcf1] border border-[#66fcf1]/30 px-6 py-2.5 rounded-lg hover:bg-[#66fcf1]/5 transition-all btn-haptic">
+                S'IDENTIFIER
               </Link>
             </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* Contenu */}
-      <div className="py-12 px-6">
+      {/* Acquisition Section */}
+      <main className="pt-40 pb-24 px-8 relative z-10">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-start">
-            {/* Formulaire */}
-            <div className="bg-[rgba(255,255,255,0.02)] rounded-[15px] p-10 backdrop-blur-sm">
-              <div className="mb-10">
-                <h1 className="text-3xl font-semibold mb-2">
-                  {plan === "god_mode" ? "Activation Protocol: GOD MODE" : "Créer votre compte"}
-                </h1>
-                <p className="text-[rgba(255,255,255,0.7)]">
-                  {plan === "god_mode" ? "Initialisation de la souveraineté numérique." : "Activez votre compte et démarrez immédiatement"}
-                </p>
-              </div>
+          <div className="grid lg:grid-cols-12 gap-16 items-start">
 
-              {error && (
-                <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
-                  {error}
-                </div>
-              )}
+            {/* Form Column */}
+            <div className="lg:col-span-7">
+              <div className="card-saphir p-12 relative group overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 border-r border-t border-[#66fcf1]/10 rounded-tr-3xl pointer-events-none" />
 
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Nom complet *
-                  </label>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full px-4 py-3 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-lg focus:outline-none focus:ring-2 focus:ring-white/20 text-white placeholder:text-[rgba(255,255,255,0.3)]"
-                    placeholder="John Doe"
-                    required
-                    autoComplete="name"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Email professionnel *
-                  </label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-3 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-lg focus:outline-none focus:ring-2 focus:ring-white/20 text-white placeholder:text-[rgba(255,255,255,0.3)]"
-                    placeholder="john@entreprise.com"
-                    required
-                    autoComplete="email"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Entreprise (optionnel)
-                  </label>
-                  <input
-                    type="text"
-                    value={company}
-                    onChange={(e) => setCompany(e.target.value)}
-                    className="w-full px-4 py-3 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-lg focus:outline-none focus:ring-2 focus:ring-white/20 text-white placeholder:text-[rgba(255,255,255,0.3)]"
-                    placeholder="Mon Entreprise"
-                    autoComplete="organization"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Mot de passe *
-                  </label>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-3 bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] rounded-lg focus:outline-none focus:ring-2 focus:ring-white/20 text-white placeholder:text-[rgba(255,255,255,0.3)]"
-                    placeholder="••••••••"
-                    required
-                    minLength={8}
-                    autoComplete="new-password"
-                  />
-                  <p className="mt-2 text-sm text-[rgba(255,255,255,0.5)]">
-                    Au moins 8 caractères
+                <div className="mb-12">
+                  <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 mb-8">
+                    <span className="text-[8px] font-black text-[#66fcf1] uppercase tracking-[0.3em]">
+                      {plan === "god_mode" ? "AUTORITÉ SUPRÊME" : "CRÉATION DE COMPTE"}
+                    </span>
+                  </div>
+                  <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter uppercase text-white stat-value">
+                    {plan === "god_mode" ? "ACTIVER LE GOD MODE." : "REJOINDRE L'EMPIRE."}
+                  </h1>
+                  <p className="text-gray-500 text-[11px] font-light italic leading-relaxed uppercase tracking-[0.1em]">
+                    {plan === "god_mode"
+                      ? "&bdquo; Initialisation du protocole de souveraineté numérique absolue. &rdquo;"
+                      : "&bdquo; Activez votre calibre et commencez votre domination immédiatement. &rdquo;"}
                   </p>
                 </div>
 
-                <label className="flex items-start space-x-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="mt-1 w-4 h-4 rounded"
-                    required
-                  />
-                  <span className="text-sm leading-relaxed">
-                    J'accepte les{" "}
-                    <Link href="/legal/terms" className="font-medium underline hover:opacity-80">
-                      conditions générales
-                    </Link>
-                    {" "}et la{" "}
-                    <Link href="/legal/privacy" className="font-medium underline hover:opacity-80">
-                      politique de confidentialité
-                    </Link>
-                  </span>
-                </label>
+                {error && (
+                  <div className="mb-8 p-5 bg-red-500/5 border border-red-500/20 rounded-xl text-red-400 text-[10px] font-black uppercase tracking-wider flex items-center gap-4 animate-pulse">
+                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,1)]" />
+                    {error}
+                  </div>
+                )}
 
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="btn-limova letter-spaced w-full justify-center text-lg py-4 disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-80 transition-opacity"
-                >
-                  {loading ? "Création du compte..." : (plan === "god_mode" ? "ACTIVER MON EMPIRE" : "Créer mon compte")}
-                </button>
-              </form>
+                <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <label className="block text-[8px] font-black uppercase tracking-[0.3em] text-gray-600 ml-1">NOM COMPLET</label>
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#66fcf1]/40 text-white placeholder:text-gray-800 transition-all text-[11px] font-black uppercase tracking-wider"
+                      placeholder="JOHN DOE"
+                      required
+                      autoComplete="name"
+                    />
+                  </div>
 
-              <p className="text-center text-sm text-[rgba(255,255,255,0.5)] mt-6">
-                Paiement sécurisé • Annulation facile
-              </p>
+                  <div className="space-y-3">
+                    <label className="block text-[8px] font-black uppercase tracking-[0.3em] text-gray-600 ml-1">PROFESSIONNEL EMAIL</label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#66fcf1]/40 text-white placeholder:text-gray-800 transition-all text-[11px] font-black uppercase tracking-wider"
+                      placeholder="JOHN@ENTREPRISE.COM"
+                      required
+                      autoComplete="email"
+                    />
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="block text-[8px] font-black uppercase tracking-[0.3em] text-gray-600 ml-1">ENTREPRISE (OPTIONNEL)</label>
+                    <input
+                      type="text"
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
+                      className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#66fcf1]/40 text-white placeholder:text-gray-800 transition-all text-[11px] font-black uppercase tracking-wider"
+                      placeholder="L'ORGANISATION"
+                      autoComplete="organization"
+                    />
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="block text-[8px] font-black uppercase tracking-[0.3em] text-gray-600 ml-1">CLÉ DE SÉCURITÉ</label>
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#66fcf1]/40 text-white placeholder:text-gray-800 transition-all text-[11px] font-black uppercase tracking-wider"
+                      placeholder="••••••••"
+                      required
+                      minLength={8}
+                      autoComplete="new-password"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2 space-y-8 pt-4">
+                    <label className="flex items-start gap-4 cursor-pointer group">
+                      <div className="w-5 h-5 mt-1 rounded border border-white/10 bg-white/5 flex items-center justify-center transition-colors group-hover:border-[#66fcf1]/30">
+                        <input type="checkbox" className="hidden peer" required />
+                        <div className="w-2 h-2 rounded-full bg-[#66fcf1] opacity-0 peer-checked:opacity-100 transition-opacity shadow-[0_0_8px_rgba(102,252,241,1)]" />
+                      </div>
+                      <span className="text-[9px] leading-relaxed font-black text-gray-600 uppercase tracking-[0.15em] group-hover:text-gray-400 transition-colors">
+                        J'APPROUVE LES <Link href="/legal/terms" className="text-white hover:text-[#66fcf1] underline decoration-[#66fcf1]/20">CONDITIONS GÉNÉRALES</Link> ET LA <Link href="/legal/privacy" className="text-white hover:text-[#66fcf1] underline decoration-[#66fcf1]/20">POLITIQUE DE CONFIDENTIALITÉ</Link>.
+                      </span>
+                    </label>
+
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full py-6 bg-[#66fcf1] text-[#0b0c10] font-black text-[12px] uppercase tracking-[0.4em] rounded-xl hover:shadow-[0_0_50px_rgba(102,252,241,0.4)] transition-all flex items-center justify-center gap-4 btn-haptic disabled:opacity-50"
+                    >
+                      {loading ? (
+                        <div className="w-5 h-5 border-2 border-[#0b0c10] border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        plan === "god_mode" ? "INITIER MON EMPIRE" : "DÉMARRER LA DOMINATION"
+                      )}
+                    </button>
+
+                    <p className="text-center text-[8px] font-black text-gray-700 uppercase tracking-[0.4em]">
+                      PAIEMENT SÉCURISÉ • SÉQUESTRE PRISMA • ANNULATION INSTANTANÉE
+                    </p>
+                  </div>
+                </form>
+              </div>
             </div>
 
-            {/* Avantages */}
-            <div className="space-y-8">
-              <div>
-                <h2 className="text-2xl font-semibold mb-6">
-                  {plan === "god_mode" ? "Inclus dans le God Mode" : "Pourquoi choisir ELA ?"}
+            {/* Benefits Column */}
+            <div className="lg:col-span-5 space-y-12">
+              <div className="relative">
+                <h2 className="text-[12px] font-black uppercase tracking-[0.5em] mb-12 text-[#66fcf1] flex items-center gap-4">
+                  <div className="w-12 h-px bg-[#66fcf1]/30" /> {plan === "god_mode" ? "PRIVILÈGES SOUVERAINS" : "CALIBRES INCLUS"}
                 </h2>
-                <ul className="space-y-4">
+                <div className="grid gap-6">
                   {(plan === "god_mode" ? [
-                    "Agents Illimités & Crédits Infinis",
-                    "Support Prioritaire Exclusif",
-                    "Accès API Intégral (Souverain)",
-                    "Sécurité Renforcée (Dedicated Tenant)",
-                    "Audit Stratégique Mensuel",
-                    "Formation Équipe Incluse"
+                    { label: "Agents Illimités", desc: "Orchestration totale sans restriction de calibre." },
+                    { label: "Crédits Infinis", desc: "Génération APEX et PULSE haute fréquence illimitée." },
+                    { label: "Support Prioritaire", desc: "Ligne directe avec les architectes ELA 24/7." },
+                    { label: "Dedicated Tenant", desc: "Infrastructure isolée pour une sécurité maximale." },
+                    { label: "Audit Mensuel", desc: "Analyse stratégique par nos experts horlogers." }
                   ] : [
-                    "Accès immédiat à la plateforme",
-                    "9 agents IA spécialisés inclus",
-                    "Support client 24/7 en français",
-                    "Sécurité maximale (ISO 27001)",
-                    "Données hébergées en France",
-                    "Intégrations illimitées",
-                    "Formation complète incluse",
-                    "Mises à jour gratuites à vie"
+                    { label: "9 Agents IA", desc: "Spécialistes de la saturation sémantique omni-canale." },
+                    { label: "Support 24/7", desc: "Accès permanent à l'assistance en français." },
+                    { label: "Sécurité ISO", desc: "Standard militaire pour la protection des calibres." },
+                    { label: "Hébergement France", desc: "Souveraineté des données garantie sur le sol européen." },
+                    { label: "Mises à jour à vie", desc: "Évolution constante des mécaniques algorithmiques." }
                   ]).map((item, i) => (
-                    <li key={i} className="flex items-center space-x-3">
-                      <div className="w-6 h-6 bg-white/10 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-xs">✓</span>
+                    <div key={i} className="flex gap-6 group">
+                      <div className="w-10 h-10 border border-white/5 bg-white/[0.02] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:border-[#66fcf1]/30 group-hover:bg-[#66fcf1]/5 transition-all duration-500">
+                        <span className="text-[#66fcf1] text-[10px] font-black">0{i + 1}</span>
                       </div>
-                      <span className="font-medium">{item}</span>
-                    </li>
+                      <div>
+                        <h3 className="text-[10px] font-black uppercase tracking-widest text-white mb-1">{item.label}</h3>
+                        <p className="text-[9px] text-gray-500 font-light italic leading-relaxed">{item.desc}</p>
+                      </div>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
 
-              <div className="bg-[rgba(255,255,255,0.05)] rounded-[15px] p-6 border border-[rgba(255,255,255,0.1)]">
-                <h3 className="font-semibold mb-3">
-                  🎉 Offre de lancement
+              {/* Promotional Ribbon */}
+              <div className="bg-white/5 border border-[#66fcf1]/20 rounded-2xl p-8 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-2 h-full bg-[#66fcf1] opacity-30 shadow-[0_0_20px_rgba(102,252,241,0.5)]" />
+                <h3 className="text-white font-black text-[11px] uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#66fcf1] animate-pulse" /> OFFRE DE LANCEMENT
                 </h3>
-                <p className="text-[rgba(255,255,255,0.7)] leading-relaxed">
-                  Les 100 premiers inscrits bénéficient de <span className="font-semibold text-white">50% de réduction</span> à vie sur l'abonnement Pro !
+                <p className="text-[10px] text-gray-400 font-light leading-relaxed uppercase tracking-[0.1em]">
+                  LES 100 PREMIERS UNITÉS BÉNÉFICIENT DE <span className="text-[#66fcf1] font-black">50% DE RÉDUCTION</span> À VIE SUR L'ABONNEMENT PROFESSIONNEL.
                 </p>
               </div>
 
-              <div className="bg-[rgba(255,255,255,0.03)] rounded-[15px] p-6">
-                <p className="text-sm text-[rgba(255,255,255,0.7)] italic">
-                  "ELA a transformé notre manière de travailler. Nous avons automatisé 80% de nos tâches répétitives et économisé 20h par semaine."
+              {/* Social Proof (Mechanical) */}
+              <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-8 italic">
+                <p className="text-[10px] text-gray-500 leading-relaxed font-light mb-6">
+                  &bdquo; ELA a transformé notre orchestration algorithmique. Nous avons automatisé 80% des flux sémantiques. &rdquo;
                 </p>
-                <p className="text-sm font-semibold mt-3">
-                  — Marie Dupont, CEO @ TechCorp
-                </p>
+                <div className="flex items-center gap-4">
+                  <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10" />
+                  <div>
+                    <p className="text-[9px] font-black text-white uppercase tracking-widest">MARIE DUPONT</p>
+                    <p className="text-[8px] text-gray-700 font-mono uppercase tracking-tighter">CEO @ TECHCORP // SÉQUENCEUR</p>
+                  </div>
+                </div>
               </div>
+
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
+  );
+}
   );
 }
 

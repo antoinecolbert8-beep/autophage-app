@@ -1,121 +1,106 @@
 /**
  * API Route: GET /api/dashboard/unified-stats
- * Tableau de bord unifié - Toutes les métriques en un seul endpoint
+ * Tableau de bord unifié — Métriques réelles avec session guard
+ * Fix C-1: Session obligatoire. orgId dérivé de la session (jamais du query param).
+ * Fix C-5: leadsQualified et revenue reliés aux données réelles.
  */
 
 import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth-config";
 import { db as prisma } from "@/core/db";
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
+  // ── FIX C-1: Authentification obligatoire ──────────────────────────────────
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const { searchParams } = req.nextUrl;
-    const userId = searchParams.get("userId");
-    const period = searchParams.get("period") || "7d"; // 7d, 30d, 90d
+    const period = searchParams.get("period") || "7d";
 
     const daysAgo = period === "30d" ? 30 : period === "90d" ? 90 : 7;
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - daysAgo);
 
-    // Statistiques agrégées
+    // ── Résolution sécurisée de l'organisation via session ────────────────────
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: { id: true, organizationId: true },
+    });
+
+    if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
+
+    const orgId = user.organizationId;
+
+    // ── Requêtes agrégées en parallèle ────────────────────────────────────────
     const [
       totalActions,
       contentGenerated,
       leadsQualified,
       callsHandled,
       postsPublished,
-      revenue,
+      org,
+      topContent,
+      activityByPlatform,
     ] = await Promise.all([
       // Actions bot (likes, comments, visites)
       prisma.actionHistory.count({
-        where: {
-          createdAt: { gte: startDate },
-          ...(userId && { userId }),
-        },
+        where: { userId: user.id, createdAt: { gte: startDate } },
       }),
 
       // Contenus générés
       prisma.post.count({
-        where: {
-          createdAt: { gte: startDate },
-          ...(userId && { userId }),
-        },
+        where: { userId: user.id, createdAt: { gte: startDate } },
       }),
 
-      // Leads qualifiés (simulation - à adapter selon ton schema)
-      0, // TODO: compter leads depuis CRM
+      // Leads qualifiés — FIX C-5: données réelles depuis org
+      prisma.lead.count({
+        where: { organizationId: orgId, createdAt: { gte: startDate } },
+      }),
 
       // Appels gérés (téléphonie)
       prisma.actionHistory.count({
-        where: {
-          platform: "PHONE",
-          createdAt: { gte: startDate },
-        },
+        where: { userId: user.id, platform: "PHONE", createdAt: { gte: startDate } },
       }),
 
-      // Posts publiés sur réseaux
+      // Posts publiés avec stats
       prisma.contentStat.groupBy({
         by: ["postId"],
         where: { collectedAt: { gte: startDate } },
       }).then((r) => r.length),
 
-      // Revenue (simulation)
-      0, // TODO: intégrer Stripe
-    ]);
-
-    const orgId = searchParams.get('orgId') || 'system-default';
-
-    // Safety check for organization
-    const org = await prisma.organization.findUnique({
-      where: { id: orgId },
-      include: {
-        leads: { take: 10, orderBy: { createdAt: 'desc' } },
-        campaigns: { where: { active: true } }
-      }
-    });
-
-    if (!org) {
-      return NextResponse.json({
-        stats: [
-          { title: "LEADS", value: "0", icon: "Users", color: "text-blue-400" },
-          { title: "REVENU", value: "0€", icon: "Euro", color: "text-green-400" },
-          { title: "CAMPAGNES", value: "0", icon: "Zap", color: "text-purple-400" },
-          { title: "TEMPS DE CHARGE", value: "0ms", icon: "Clock", color: "text-emerald-400" }
-        ],
-        recentActivity: []
-      });
-    }
-
-    // Calculer les stats réelles
-    const totalLeads = org.leads.length;
-    const activeCampaigns = org.campaigns.length;
-    const totalRevenue = org.mrr || 0;
-
-    // Top contenus
-    const topContent = await prisma.contentStat.groupBy({
-      by: ["postId"],
-      where: { collectedAt: { gte: startDate } },
-      _sum: {
-        views: true,
-        likes: true,
-        comments: true,
-        shares: true,
-      },
-      orderBy: {
-        _sum: {
-          views: "desc",
+      // Organisation avec campagnes actives
+      prisma.organization.findUnique({
+        where: { id: orgId },
+        select: {
+          mrr: true,
+          creditBalance: true,
+          tier: true,
+          campaigns: { where: { active: true }, select: { id: true } },
         },
-      },
-      take: 5,
-    });
+      }),
 
-    // Activité par plateforme
-    const activityByPlatform = await prisma.actionHistory.groupBy({
-      by: ["platform"],
-      where: { createdAt: { gte: startDate } },
-      _count: true,
-    });
+      // Top contenus par engagement
+      prisma.contentStat.groupBy({
+        by: ["postId"],
+        where: { collectedAt: { gte: startDate } },
+        _sum: { views: true, likes: true, comments: true, shares: true },
+        orderBy: { _sum: { views: "desc" } },
+        take: 5,
+      }),
+
+      // Activité par plateforme
+      prisma.actionHistory.groupBy({
+        by: ["platform"],
+        where: { userId: user.id, createdAt: { gte: startDate } },
+        _count: true,
+      }),
+    ]);
 
     return NextResponse.json({
       success: true,
@@ -123,11 +108,13 @@ export async function GET(req: NextRequest) {
       stats: {
         totalActions,
         contentGenerated,
-        leadsQualified: totalLeads, // Using the newly calculated totalLeads
+        leadsQualified,
         callsHandled,
         postsPublished,
-        revenue: `${totalRevenue}€`, // Using the newly calculated totalRevenue
-        activeCampaigns, // Adding activeCampaigns
+        revenue: `${org?.mrr ?? 0}€`,       // FIX C-5: MRR réel
+        activeCampaigns: org?.campaigns?.length ?? 0,
+        creditBalance: org?.creditBalance ?? 0,
+        tier: org?.tier ?? 'starter',
       },
       topContent: topContent.map((c) => ({
         postId: c.postId,
@@ -154,8 +141,3 @@ export async function GET(req: NextRequest) {
     );
   }
 }
-
-
-
-
-

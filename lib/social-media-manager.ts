@@ -348,26 +348,108 @@ export async function publishToInstagram(post: SocialPost, credentials?: any): P
   }
 }
 
-// ============================================================================== 
-// STUBS FOR OTHERS (TikTok, Snapchat, YouTube)
-// ============================================================================== 
-// These APIs are complex to implement "raw" without specialized SDKs or intricate OAuth flows.
-// For the purpose of "Native Autonomy" vs "Make.com", we will log them as "Not Implemented Native" 
-// or simulate success to not break the loop.
+// ==============================================================================
+// HYBRID PUBLISHING — Pilier 4: Séparation OAuth vs Webhooks
+// ==============================================================================
+// Ces plateformes nécessitent des SDK spécialisés pour un accès natif complet.
+// Stratégie : Si un token natif est présent en DB → tentative native.
+// Sinon : basculement automatique vers le Webhook Bridge (Make.com/n8n).
+// Aucun post n'est jamais silencieusement perdu.
 
-export async function publishToTikTok(post: SocialPost): Promise<PostResult> {
-  console.warn("🎵 TikTok Native API: Manual configuration required in TikTok Developer Console.");
-  return { success: false, error: "TikTok Integration: Missing TIKTOK_ACCESS_TOKEN and configuration." };
+// Canaux natifs OAuth (requiert configuration utilisateur)
+export const OAUTH_PLATFORMS = ['LINKEDIN', 'FACEBOOK', 'INSTAGRAM', 'TWITTER', 'X_PLATFORM'] as const;
+// Canaux orchestrés via notre infrastructure ELA (Make/n8n)
+export const WEBHOOK_PLATFORMS = ['SNAPCHAT', 'REDDIT', 'MEDIUM', 'HACKERNEWS', 'DEVTO'] as const;
+
+async function sendToWebhookBridge(
+  post: SocialPost,
+  platform: string,
+  organizationId?: string
+): Promise<PostResult> {
+  const webhookUrl = process.env.MAKE_ORCHESTRATOR_URL || process.env.MAKE_WEBHOOK_URL;
+  if (!webhookUrl) {
+    return { success: false, error: `Webhook Bridge not configured. Set MAKE_ORCHESTRATOR_URL in .env.` };
+  }
+  try {
+    const response = await axios.post(webhookUrl, {
+      platform,
+      action: 'PUBLISH_CONTENT',
+      payload: {
+        content: post.content,
+        mediaUrls: post.mediaUrls || [],
+        hashtags: post.hashtags || [],
+        source: 'ELA_HYBRID_BRIDGE',
+      },
+      organizationId: organizationId || null,
+    }, { timeout: 15_000 });
+    return {
+      success: true,
+      postId: `bridge_${platform}_${Date.now()}`,
+      url: response.data?.url || null,
+    };
+  } catch (error: any) {
+    return { success: false, error: `Bridge fail (${platform}): ${error.message}` };
+  }
 }
 
-export async function publishToYouTubeShort(post: SocialPost): Promise<PostResult> {
-  console.warn("📺 YouTube Native API: Manual configuration required in Google Cloud Console.");
-  return { success: false, error: "YouTube Integration: Missing YOUTUBE_ACCESS_TOKEN and configuration." };
+export async function publishToTikTok(
+  post: SocialPost,
+  credentials?: any,
+  organizationId?: string
+): Promise<PostResult> {
+  const nativeToken = credentials?.accessToken;
+  if (!nativeToken) {
+    console.log(`🌉 TikTok: No native token — routing via Webhook Bridge.`);
+    return sendToWebhookBridge(post, 'TIKTOK', organizationId);
+  }
+  // Native TikTok Content Posting API v2 (si token configuré par l'utilisateur)
+  try {
+    const res = await axios.post(
+      'https://open.tiktokapis.com/v2/post/publish/content/init/',
+      { post_info: { title: post.content.slice(0, 150), privacy_level: 'PUBLIC_TO_EVERYONE' } },
+      { headers: { Authorization: `Bearer ${nativeToken}`, 'Content-Type': 'application/json' } }
+    );
+    return { success: true, postId: res.data?.data?.publish_id };
+  } catch (error: any) {
+    console.warn(`⚠️ TikTok native failed, falling back to bridge: ${error.message}`);
+    return sendToWebhookBridge(post, 'TIKTOK', organizationId);
+  }
 }
 
-export async function publishToSnapchat(post: SocialPost): Promise<PostResult> {
-  console.warn("👻 Snapchat Native API: Manual configuration required in Snap Kit.");
-  return { success: false, error: "Snapchat Integration: Missing SNAPCHAT_ACCESS_TOKEN and configuration." };
+export async function publishToYouTubeShort(
+  post: SocialPost,
+  credentials?: any,
+  organizationId?: string
+): Promise<PostResult> {
+  const nativeToken = credentials?.oauthToken;
+  if (!nativeToken) {
+    console.log(`📺 YouTube: No native token — routing via Webhook Bridge.`);
+    return sendToWebhookBridge(post, 'YOUTUBE_SHORT', organizationId);
+  }
+  return { success: false, error: 'YouTube native upload requires a video file — use the /api/youtube upload flow.' };
+}
+
+export async function publishToSnapchat(
+  post: SocialPost,
+  credentials?: any,
+  organizationId?: string
+): Promise<PostResult> {
+  const nativeToken = credentials?.accessToken;
+  if (!nativeToken) {
+    console.log(`👻 Snapchat: No native token — routing via Webhook Bridge.`);
+    return sendToWebhookBridge(post, 'SNAPCHAT', organizationId);
+  }
+  try {
+    const res = await axios.post(
+      'https://adsapi.snapchat.com/v1/me/stories',
+      { story: { type: 'PUBLIC', media: { type: 'TEXT', text: post.content } } },
+      { headers: { Authorization: `Bearer ${nativeToken}` } }
+    );
+    return { success: true, postId: res.data?.story?.id };
+  } catch (error: any) {
+    console.warn(`⚠️ Snapchat native failed, falling back to bridge: ${error.message}`);
+    return sendToWebhookBridge(post, 'SNAPCHAT', organizationId);
+  }
 }
 
 // ============================================================================== 
@@ -493,8 +575,7 @@ export async function publishToMultiplePlatforms(
             });
             results[platform] = {
               success: true,
-              message: `Orchestré via Webhook (${platform})`,
-              postId: `ext_${Date.now()}`
+              postId: `ext_${platform}_${Date.now()}`
             };
           } catch (error: any) {
             results[platform] = { success: false, error: `Webhook fail: ${error.message}` };

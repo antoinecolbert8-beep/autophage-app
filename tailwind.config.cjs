@@ -16,7 +16,15 @@ module.exports = {
                 display: ['var(--font-outfit)', 'sans-serif'],
             },
             colors: {
-                // Cyberpunk Palette
+                // L'Alliage Noble Palette
+                noble: {
+                    black: '#0b0c10',
+                    steel: '#1f2833',
+                    cyan: '#66fcf1',
+                    chrome: '#c5c6c7',
+                    teal: '#45a29e',
+                },
+                // Cyberpunk Palette (Legacy support)
                 cyber: {
                     black: '#0a0a0f',
                     dark: '#13131f',

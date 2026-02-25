@@ -79,10 +79,15 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'provider and credentials are required' }, { status: 400 });
     }
 
-    // Validate provider is allowed
+    // Validate provider is allowed — all channels supported by the UI must be listed here
     const ALLOWED_PROVIDERS = [
+        // Native OAuth channels
         'LINKEDIN', 'X_PLATFORM', 'TWITTER', 'FACEBOOK', 'INSTAGRAM',
-        'SHOPIFY', 'WHATSAPP', 'TIKTOK', 'SNAPCHAT', 'GOOGLE_ANALYTICS'
+        'SHOPIFY', 'WHATSAPP', 'TIKTOK', 'GOOGLE_ANALYTICS', 'YOUTUBE_SEO',
+        // Orchestrated / Webhook channels (Make.com / n8n bridge)
+        'SNAPCHAT', 'REDDIT', 'MEDIUM', 'HACKERNEWS', 'DEVTO',
+        // Extended ELA modules
+        'EMAIL_NEWSLETTER', 'ADS_SCALE', 'AFFILIATE_LEVERAGE',
     ];
     if (!ALLOWED_PROVIDERS.includes(provider.toUpperCase())) {
         return NextResponse.json({ error: `Provider '${provider}' is not supported` }, { status: 400 });

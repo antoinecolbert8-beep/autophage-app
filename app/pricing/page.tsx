@@ -9,24 +9,21 @@ export default function PricingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white font-sans selection:bg-pink-500/30 overflow-x-hidden">
+    <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7] font-sans selection:bg-[#66fcf1]/30 overflow-x-hidden">
       {/* HEADER (Simplified for Subpage) */}
       <header className="fixed top-0 left-0 w-full z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-white/5 py-4">
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group text-gray-400 hover:text-white transition-colors">
-            <ArrowLeft size={20} />
-            <span className="font-bold">Retour</span>
+          <Link href="/" className="flex items-center gap-2 group text-gray-500 hover:text-[#66fcf1] transition-colors">
+            <ArrowLeft size={16} />
+            <span className="text-[10px] font-black uppercase tracking-[0.2em]">RETOUR AU CADRAN</span>
           </Link>
 
           <Link href="/" className="flex items-center gap-3 group">
             <img
               src="/logo-ela.png"
               alt="ELA"
-              className="w-16 h-16 object-contain drop-shadow-[0_0_10px_rgba(217,119,6,0.4)]"
+              className="w-12 h-12 object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"
             />
-            <span className="text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 group-hover:to-amber-300 transition-all">
-              ELA
-            </span>
           </Link>
 
           <div className="w-20"></div> {/* Spacer */}
@@ -38,133 +35,88 @@ export default function PricingPage() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none"></div>
 
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 mb-6 backdrop-blur-md">
-              <span className="text-sm font-bold text-blue-400 uppercase tracking-widest">💰 TARIFS PREMIUM</span>
+          <div className="text-center mb-24">
+            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-xl">
+              <span className="text-[10px] font-black text-[#66fcf1] uppercase tracking-[0.3em]">TARIFS // ALLIAGE NOBLE</span>
             </div>
-            <h1 className="text-5xl md:text-7xl font-black mb-8 tracking-tight uppercase">INVESTISSEZ DANS<br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">VOTRE EMPIRE.</span></h1>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-10 font-bold">
-              Choisissez votre solution. Dominez dès le premier mois.
+            <h1 className="text-5xl md:text-8xl font-black mb-8 tracking-tighter uppercase stat-value text-white">INVESTISSEZ DANS<br /><span className="text-[#66fcf1]">VOTRE HÉRITAGE.</span></h1>
+            <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-12 font-light italic leading-relaxed">
+              &bdquo; Rentabilité mécanique. Performance garantie par le Calibre SOUVERAIN v10.4. &rdquo;
             </p>
 
-            <div className="inline-flex bg-[#13131f] p-1 rounded-2xl border border-white/10 relative">
+            <div className="inline-flex bg-white/5 p-1 rounded-2xl border border-white/10 relative">
               <button
                 onClick={() => setActiveTab('monthly')}
-                className={`px-8 py-3 rounded-xl text-sm font-bold transition-all relative z-10 ${activeTab === 'monthly' ? 'text-white' : 'text-gray-400 hover:text-white'}`}
+                className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all relative z-10 ${activeTab === 'monthly' ? 'text-[#0b0c10]' : 'text-gray-500 hover:text-white'}`}
               >
                 Mensuel
               </button>
               <button
                 onClick={() => setActiveTab('yearly')}
-                className={`px-8 py-3 rounded-xl text-sm font-bold transition-all relative z-10 ${activeTab === 'yearly' ? 'text-white' : 'text-gray-400 hover:text-white'}`}
+                className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all relative z-10 ${activeTab === 'yearly' ? 'text-[#0b0c10]' : 'text-gray-500 hover:text-white'}`}
               >
-                Annuel <span className="text-emerald-400 text-xs ml-1">-20%</span>
+                Annuel <span className="ml-1 opacity-60">-20%</span>
               </button>
 
               {/* Sliding Background */}
-              <div className={`absolute top-1 bottom-1 w-[50%] bg-white/10 rounded-xl transition-all duration-300 ${activeTab === 'monthly' ? 'left-1' : 'left-[49%]'}`}></div>
+              <div className={`absolute top-1 bottom-1 w-[50%] bg-[#66fcf1] rounded-xl transition-all duration-500 ease-out ${activeTab === 'monthly' ? 'left-1' : 'left-[49%]'}`}></div>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
             {/* STARTER */}
-            <div className="p-8 rounded-[2rem] bg-[#13131f] border border-white/5 flex flex-col hover:border-[#667eea]/30 transition-all group">
-              <h3 className="text-2xl font-bold mb-2 group-hover:text-white transition-colors">Starter</h3>
-              <div className="flex items-baseline gap-1 mb-6">
-                <span className="text-5xl font-black">{activeTab === 'monthly' ? '37' : '30'}€</span>
-                <span className="text-gray-500">/mois</span>
+            <div className="card-saphir p-12 flex flex-col group hover:border-white/20 transition-all">
+              <h3 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-gray-500">Mouvement Starter</h3>
+              <div className="flex items-baseline gap-1 mb-10">
+                <span className="text-6xl font-black text-white stat-value tracking-tighter">{activeTab === 'monthly' ? '37' : '30'}€</span>
+                <span className="text-gray-700 text-[10px] font-mono uppercase tracking-widest">/mois</span>
               </div>
-              <p className="text-sm text-gray-400 mb-8 min-h-[40px]">L'essentiel pour automatiser vos premières tâches.</p>
-              <div className="space-y-4 mb-8">
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> 1 Agent (au choix)</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> {activeTab === 'monthly' ? '1,000' : '1,200'} Crédits/mois</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> Support Email</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> Accès Dashboard</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> Mises à jour Hebdomadaires</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> Sécurité SSL</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-gray-400" /> Accès Mobile</div>
+              <p className="text-[11px] text-gray-600 mb-10 min-h-[40px] font-light italic leading-relaxed">L'essentiel pour automatiser vos premières complications.</p>
+              <div className="space-y-6 mb-12 border-t border-white/5 pt-10">
+                <div className="flex items-center gap-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest"><Zap className="w-4 h-4 text-[#66fcf1]" /> 1 CALIBRE IA</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest"><Zap className="w-4 h-4 text-[#66fcf1]" /> {activeTab === 'monthly' ? '1,000' : '1,200'} CRÉDITS</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest"><Zap className="w-4 h-4 text-[#66fcf1]" /> SUPPORT STANDARD</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest"><Zap className="w-4 h-4 text-[#66fcf1]" /> ACCÈS CADRAN LIVE</div>
               </div>
-              <Link href="/signup?plan=starter" className="w-full py-4 border border-white/20 rounded-xl font-bold text-center hover:bg-white hover:text-black transition-colors">Commencer</Link>
+              <Link href="/signup?plan=starter" className="w-full py-5 border border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.3em] text-center hover:bg-white hover:text-black transition-all btn-haptic">INITIALISER</Link>
             </div>
 
             {/* PRO (Highlighted) */}
-            <div className="p-8 rounded-[2rem] bg-[#1a1a2e] border border-[#667eea] flex flex-col relative transform md:-translate-y-4 shadow-[0_0_50px_rgba(102,126,234,0.1)]">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 py-1 bg-[#667eea] rounded-full text-xs font-bold uppercase tracking-widest shrink-0 whitespace-nowrap shadow-lg shadow-[#667eea]/40">
-                Recommandé
+            <div className="card-saphir p-12 flex flex-col relative border-[#66fcf1]/20 shadow-[0_0_50px_rgba(102,252,241,0.05)] transform md:-translate-y-8 group">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 py-1.5 bg-[#66fcf1] rounded-full text-[8px] font-black uppercase tracking-[0.3em] text-[#0b0c10]">
+                RECOMMANDE
               </div>
-              <h3 className="text-2xl font-bold mb-2 text-[#667eea]">Pro</h3>
-              <div className="flex items-baseline gap-1 mb-6">
-                <span className="text-5xl font-black">{activeTab === 'monthly' ? '197' : '157'}€</span>
-                <span className="text-gray-500">/mois</span>
+              <h3 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-[#66fcf1]">Mouvement Pro</h3>
+              <div className="flex items-baseline gap-1 mb-10">
+                <span className="text-6xl font-black text-white stat-value tracking-tighter">{activeTab === 'monthly' ? '197' : '157'}€</span>
+                <span className="text-gray-700 text-[10px] font-mono uppercase tracking-widest">/mois</span>
               </div>
-              <p className="text-sm text-gray-400 mb-8 min-h-[40px]">La suite complète pour scaler votre entreprise rapidement.</p>
-              <div className="space-y-4 mb-8">
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> 3 Agents IA</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> {activeTab === 'monthly' ? '2,500' : '3,000'} Crédits/mois</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> WhatsApp Command (HIVE)</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> Accès API (Limité)</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> Support Prioritaire</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> Intégration CRM (HubSpot)</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> Exports Ilimités</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> Accès Beta Fonctionnalités</div>
-                <div className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-blue-400" /> Formation Vidéo Offerte</div>
+              <p className="text-[11px] text-gray-500 mb-10 min-h-[40px] font-light italic leading-relaxed">La suite de complications complète pour scaler votre Empire.</p>
+              <div className="space-y-6 mb-12 border-t border-white/5 pt-10">
+                <div className="flex items-center gap-4 text-[10px] font-bold text-white uppercase tracking-widest"><Zap className="w-4 h-4 text-[#66fcf1]" /> 3 CALIBRES IA</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-white uppercase tracking-widest"><Zap className="w-4 h-4 text-[#66fcf1]" /> {activeTab === 'monthly' ? '2,500' : '3,000'} CRÉDITS</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-white uppercase tracking-widest"><Zap className="w-4 h-4 text-[#66fcf1]" /> COMMANDE VOCALE HIVE</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-white uppercase tracking-widest"><Zap className="w-4 h-4 text-[#66fcf1]" /> SUPPORT PRIORITAIRE</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-white uppercase tracking-widest"><Zap className="w-4 h-4 text-[#66fcf1]" /> INTÉGRATION CRM</div>
               </div>
-              <Link href="/signup?plan=growth" className="w-full py-4 bg-gradient-to-r from-[#667eea] to-[#764ba2] rounded-xl font-bold text-white text-center hover:shadow-lg hover:shadow-[#667eea]/25 transition-all transform hover:-translate-y-1">S'abonner maintenant</Link>
+              <Link href="/signup?plan=growth" className="w-full py-5 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-black text-[10px] uppercase tracking-[0.3em] text-center hover:shadow-[0_0_40px_rgba(102,252,241,0.4)] transition-all btn-haptic">DÉPLOYER LA FORCE</Link>
             </div>
 
             {/* GOD MODE (Divine/Gold Edition) - SAME AS LANDING PAGE */}
-            <div className="relative p-1 bg-[#1a1005] rounded-[2.5rem] group transform hover:scale-105 transition-all duration-500 shadow-[0_0_100px_rgba(217,119,6,0.3)] z-10">
-              {/* Animated Border Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-r from-amber-500 via-purple-600 to-amber-500 rounded-[2.5rem] opacity-50 blur-lg group-hover:opacity-100 animate-gradient-xy transition-opacity"></div>
-
-              <div className="relative h-full p-10 bg-[#0c0a09] rounded-[2.3rem] flex flex-col overflow-hidden">
-                {/* Cosmic Background Effect */}
-                <div className="absolute inset-0 bg-[url('/assets/noise.png')] opacity-20 mix-blend-overlay"></div>
-                <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-amber-600/20 blur-[100px] rounded-full pointer-events-none"></div>
-
-                <div className="relative z-10">
-                  <div className="inline-block px-4 py-1 mb-4 rounded-full bg-amber-500/10 border border-amber-500/50 text-amber-500 text-xs font-black tracking-[0.2em] uppercase">
-                    Souveraineté Totale
-                  </div>
-                  <h3 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-600 mb-2">
-                    GOD MODE
-                  </h3>
-                  <div className="mb-8 flex items-baseline gap-1">
-                    <span className="text-6xl font-black text-white tracking-tighter">{activeTab === 'monthly' ? '497' : '397'}€</span>
-                    <span className="text-gray-400 font-mono">/mois</span>
-                  </div>
-
-                  <p className="text-base text-gray-300 mb-8 border-l-2 border-amber-500 pl-4 italic">
-                    "Pour ceux qui ne concurrencent pas, mais qui règnent."
-                  </p>
-
-                  <div className="space-y-5 mb-10">
-                    {[
-                      "Agents Illimités & Autonomes",
-                      "Crédits Infinis (Fair Usage)",
-                      "Machine d'Auto-Promotion Incluse",
-                      "Accès API 'Souverain' (Priority)",
-                      "Dedicated Server (Tenant Unique)",
-                      "Audit de Domination Mensuel",
-                      "Accès Direct aux Fondateurs"
-                    ].map((feature, i) => (
-                      <div key={i} className="flex items-center gap-4 group/item">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center shadow-lg shadow-amber-500/20 text-black">
-                          <Zap className="w-5 h-5 fill-current" />
-                        </div>
-                        <span className="text-gray-200 font-medium group-hover/item:text-amber-200 transition-colors">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <Link href="/signup?plan=god_mode" className="block w-full py-5 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-black text-lg font-black text-center shadow-[0_0_40px_rgba(245,158,11,0.4)] hover:shadow-[0_0_60px_rgba(245,158,11,0.6)] hover:scale-[1.02] transition-all relative overflow-hidden group/btn">
-                    <span className="relative z-10 flex items-center justify-center gap-2">
-                      INITIALISER LE PROTOCOLE <Zap className="w-5 h-5 fill-black" />
-                    </span>
-                    <div className="absolute inset-0 bg-white/30 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></div>
-                  </Link>
-                </div>
+            <div className="card-saphir p-12 bg-gradient-to-br from-[#1f2833]/40 to-black/40 border-white/10 group">
+              <h3 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-[#c5c6c7]">Mouvement Suprême</h3>
+              <div className="flex items-baseline gap-1 mb-10">
+                <span className="text-6xl font-black text-white stat-value tracking-tighter">{activeTab === 'monthly' ? '497' : '397'}€</span>
+                <span className="text-gray-700 text-[10px] font-mono uppercase tracking-widest">/mois</span>
               </div>
+              <p className="text-[11px] text-[#c5c6c7] mb-10 min-h-[40px] font-light italic leading-relaxed">Pour ceux qui ne concurrencent pas, mais qui règnent par la Précision.</p>
+              <div className="space-y-6 mb-12 border-t border-white/5 pt-10">
+                <div className="flex items-center gap-4 text-[10px] font-bold text-[#c5c6c7] uppercase tracking-widest"><Zap className="w-4 h-4 text-[#66fcf1]" /> DOMINATION TOTALE</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-[#c5c6c7] uppercase tracking-widest"><Zap className="w-4 h-4 text-[#66fcf1]" /> CRÉDITS ILLIMITÉS</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-[#c5c6c7] uppercase tracking-widest"><Zap className="w-4 h-4 text-[#66fcf1]" /> SERVEUR DÉDIÉ</div>
+                <div className="flex items-center gap-4 text-[10px] font-bold text-[#c5c6c7] uppercase tracking-widest"><Zap className="w-4 h-4 text-[#66fcf1]" /> ACCÈS DIRECT ARCHITECTES</div>
+              </div>
+              <Link href="/signup?plan=god_mode" className="w-full py-5 bg-white text-black rounded-xl font-black text-[10px] uppercase tracking-[0.3em] text-center transition-all btn-haptic">INITIALISER GOD MODE</Link>
             </div>
           </div>
 

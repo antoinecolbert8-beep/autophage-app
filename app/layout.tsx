@@ -107,7 +107,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr" className={`${inter.variable} ${outfit.variable}`}>
-      <body className="font-sans antialiased">
+      <body className="bg-[#0b0c10] font-sans antialiased text-[#c5c6c7] selection:bg-[#66fcf1]/30 selection:text-white">
+        <div className="loading-bar-precision" />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-QJSJ2KCMEC"
           strategy="afterInteractive"
@@ -123,7 +124,10 @@ export default function RootLayout({
         </Script>
         <GlobalErrorBoundary>
           <Providers>
-            <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
+            <ClientLayoutWrapper>
+              <div className="fixed inset-0 bg-[#0b0c10] -z-50" />
+              {children}
+            </ClientLayoutWrapper>
           </Providers>
         </GlobalErrorBoundary>
       </body>

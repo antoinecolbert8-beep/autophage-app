@@ -216,10 +216,17 @@ export class ELASelfPromoter {
      */
     private static async shouldPostNow(platform: Platform, currentHour: number, userId: string): Promise<boolean> {
         // 1. Check daily budget/limit (SRE Guard)
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+            select: { organizationId: true }
+        });
+
+        if (!user?.organizationId) return false;
+
         const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
         const dailyCount = await prisma.usageLog.count({
             where: {
-                organizationId: (await prisma.user.findUnique({ where: { id: userId }, select: { organizationId: true } }))?.organizationId,
+                organizationId: user.organizationId,
                 timestamp: { gte: dayAgo },
                 actionType: 'SNAP_DISTRIBUTION'
             }
@@ -231,7 +238,28 @@ export class ELASelfPromoter {
             return false;
         }
 
-        const optimalHours = this.PLATFORM_SCHEDULES[platform] || [9];
+        // 2. ADAPTIVE SCHEDULING (Zero-Friction Autonomy)
+        let optimalHours = this.PLATFORM_SCHEDULES[platform] || [9];
+
+        try {
+            const aiProfile = await prisma.aIProfile.findUnique({
+                where: { organizationId: user.organizationId }
+            });
+
+            if (aiProfile?.bestPostTimes) {
+                const learnedTimes = JSON.parse(aiProfile.bestPostTimes);
+                const platformTimes = learnedTimes[platform];
+
+                if (platformTimes && platformTimes.length > 0) {
+                    console.log(`[AUTONOMY] Using learned times for ${platform}: ${platformTimes.join(', ')}`);
+                    // Convert "HH:00" to HH
+                    optimalHours = platformTimes.map((t: string) => parseInt(t.split(':')[0]));
+                }
+            }
+        } catch (e) {
+            console.warn("[AUTONOMY] Failed to fetch adaptive schedule, using static fallback.");
+        }
+
         if (!optimalHours.includes(currentHour)) {
             if (!process.env.FORCE_POST) return false;
         }
@@ -248,7 +276,7 @@ export class ELASelfPromoter {
         });
 
         if (lastPost) {
-            console.log(`[Scheduling] Already posted on ${platform} at ${lastPost.createdAt.toISOString()} `);
+            console.log(`[Scheduling] Already posted on ${platform} at ${lastPost.createdAt.toISOString()}`);
             return false;
         }
 

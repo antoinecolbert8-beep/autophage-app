@@ -1,6 +1,7 @@
 import { Worker, Job } from 'bullmq';
 import { redisConnection, SocialJobPayload } from './social-queue';
 import { publishToMultiplePlatforms } from '../social-media-manager';
+import { updateAIProfileForOrg } from '../workers/ai-profile-worker';
 
 /**
  * 🛠️ SOCIAL PUBLISHING WORKER (Sealed Architecture)
@@ -16,12 +17,20 @@ export const socialWorker = new Worker(
         try {
             const results = await publishToMultiplePlatforms(post, platforms, organizationId);
 
+            // ── Pilier 3: Mise à jour du profil IA (Feedback Loop) ──────────────
+            if (organizationId) {
+                try {
+                    await updateAIProfileForOrg(organizationId);
+                    console.log(`🧠 AI Profile updated for org ${organizationId}`);
+                } catch (aiErr: any) {
+                    console.error(`⚠️ AI Profile Worker failed (non-blocking):`, aiErr.message);
+                }
+            }
+
             // Analyse des résultats pour validation du worker
             const failures = Object.entries(results).filter(([_, res]) => !res.success);
             if (failures.length > 0) {
                 console.warn(`🛑 Job ${job.id} partially failed:`, failures);
-                // We don't necessarily throw here if some platforms succeeded,
-                // but individual platform logic in SocialMediaManager already handles retries.
             } else {
                 console.log(`✅ Job ${job.id} completed successfully for all platforms.`);
             }

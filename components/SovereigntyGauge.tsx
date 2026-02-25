@@ -35,21 +35,21 @@ export const SovereigntyGauge = ({ score, title, nextMilestone }: SovereigntyGau
                     cy="50%"
                     r="45%"
                     className="stroke-white/5 fill-none"
-                    strokeWidth="4"
+                    strokeWidth="1"
                 />
                 <motion.circle
                     cx="50%"
                     cy="50%"
                     r="45%"
-                    className="stroke-cyan-400 fill-none"
-                    strokeWidth="6"
+                    className="stroke-[#66fcf1] fill-none"
+                    strokeWidth="1.5"
                     strokeDasharray={strokeDasharray}
                     initial={{ strokeDashoffset: strokeDasharray }}
                     animate={{ strokeDashoffset }}
                     transition={{ duration: 2, ease: "easeOut" }}
                     strokeLinecap="round"
                     style={{
-                        filter: "drop-shadow(0 0 8px rgba(34, 211, 238, 0.5))",
+                        filter: "drop-shadow(0 0 4px rgba(102, 252, 241, 0.4))",
                     }}
                 />
             </svg>

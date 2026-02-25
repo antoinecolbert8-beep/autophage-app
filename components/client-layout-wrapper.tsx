@@ -61,22 +61,26 @@ export default function ClientLayoutWrapper({
         <div className="min-h-screen bg-[#0a0a0f] text-white font-sans selection:bg-cyan-500/30">
             {/* Background Gradients for ELA Theme */}
             <div className="fixed inset-0 z-0 pointer-events-none">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[128px] opacity-20" />
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-pink-600/10 rounded-full blur-[128px] opacity-20" />
-                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03]" />
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#66fcf1]/5 rounded-full blur-[128px] opacity-20" />
+                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#1f2833]/10 rounded-full blur-[128px] opacity-20" />
+                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02]" />
             </div>
 
             {/* Global Navigation - Controlled by Matrix Logic */}
             {showSidebar && <Navigation />}
 
             {/* Main Content Area */}
-            <main
+            <motion.main
                 key={pathname}
+                variants={pageVariants}
+                initial="initial"
+                animate="enter"
+                exit="exit"
                 className={`relative z-10 ${showSidebar ? "ml-20 lg:ml-64 p-4 md:p-8" : ""
                     }`}
             >
                 {children}
-            </main>
+            </motion.main>
         </div>
     );
 }

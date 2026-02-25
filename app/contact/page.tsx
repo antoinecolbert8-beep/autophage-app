@@ -55,23 +55,21 @@ export default function ContactPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[#0a0a0f] text-white font-sans selection:bg-pink-500/30 overflow-hidden flex flex-col">
+        <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7] font-sans selection:bg-[#66fcf1]/30 selection:text-white overflow-hidden flex flex-col">
             {/* HEADER */}
             <header className="fixed top-0 left-0 w-full z-50 bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-white/5 py-4">
                 <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-                    <Link href="/" className="flex items-center gap-2 group text-gray-400 hover:text-white transition-colors">
-                        <ArrowLeft size={20} />
-                        <span className="font-bold">Retour</span>
+                    <Link href="/" className="flex items-center gap-2 group text-gray-400 hover:text-[#66fcf1] transition-colors">
+                        <ArrowLeft size={16} />
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">RETOUR AU CADRAN</span>
                     </Link>
 
-                    <Link href="/" className="flex items-center gap-2 group">
-                        <div className="relative w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-pink-500 flex items-center justify-center overflow-hidden border border-white/20 shadow-[0_0_20px_rgba(59,130,246,0.5)]">
-                            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-30"></div>
-                            <Zap className="w-4 h-4 text-white relative z-10" />
-                        </div>
-                        <span className="text-lg font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 group-hover:to-white transition-all">
-                            ELA AI
-                        </span>
+                    <Link href="/" className="flex items-center gap-3 group">
+                        <img
+                            src="/logo-ela.png"
+                            alt="ELA"
+                            className="w-12 h-12 object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]"
+                        />
                     </Link>
 
                     <div className="w-20"></div>
@@ -81,9 +79,9 @@ export default function ContactPage() {
             {/* CHAT CONTAINER */}
             <div className="flex-1 pt-24 pb-24 px-4 md:px-6 relative flex flex-col items-center justify-center">
                 {/* Background Ambient */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-blue-600/5 blur-[120px] rounded-full pointer-events-none"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-[#66fcf1]/5 blur-[120px] rounded-full pointer-events-none"></div>
 
-                <div className="w-full max-w-4xl bg-[#13131f] border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col h-[80vh] relative z-10 backdrop-blur-sm">
+                <div className="w-full max-w-4xl card-saphir border-white/5 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col h-[80vh] relative z-10 p-0">
 
                     {/* Chat Area */}
                     <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide" ref={scrollRef}>
@@ -96,21 +94,21 @@ export default function ContactPage() {
                                     className={`flex gap-4 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                                 >
                                     {msg.role === 'assistant' && (
-                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center shrink-0 border border-white/20">
-                                            <Bot size={20} />
+                                        <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                                            <Bot size={18} className="text-[#66fcf1]" />
                                         </div>
                                     )}
 
-                                    <div className={`max-w-[80%] p-4 rounded-2xl text-sm md:text-base leading-relaxed ${msg.role === 'user'
-                                        ? 'bg-white text-black font-medium rounded-tr-none'
-                                        : 'bg-[#0a0a0f] border border-white/10 text-gray-300 rounded-tl-none'
+                                    <div className={`max-w-[80%] p-6 rounded-2xl text-[11px] font-black uppercase tracking-[0.1em] leading-relaxed ${msg.role === 'user'
+                                        ? 'bg-white text-[#0b0c10] rounded-tr-none'
+                                        : 'bg-white/5 border border-white/10 text-white rounded-tl-none'
                                         }`}>
                                         {msg.content}
                                     </div>
 
                                     {msg.role === 'user' && (
-                                        <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center shrink-0 border border-white/10">
-                                            <User size={20} />
+                                        <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0 border border-white/10">
+                                            <User size={18} className="text-white" />
                                         </div>
                                     )}
                                 </motion.div>
@@ -132,25 +130,25 @@ export default function ContactPage() {
                     </div>
 
                     {/* Input Area */}
-                    <div className="p-4 bg-[#0a0a0f] border-t border-white/10">
-                        <form onSubmit={sendMessage} className="relative flex items-center gap-3">
+                    <div className="p-6 bg-[#0a0a0f]/80 backdrop-blur-xl border-t border-white/5">
+                        <form onSubmit={sendMessage} className="relative flex items-center gap-4">
                             <input
                                 type="text"
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 placeholder="Posez votre question à l'IA ELA..."
-                                className="flex-1 bg-[#13131f] border border-white/10 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-blue-500 transition-colors placeholder:text-gray-500"
+                                className="flex-1 bg-white/5 border border-white/10 rounded-xl px-6 py-5 text-[10px] font-black uppercase tracking-[0.2em] text-white focus:outline-none focus:border-[#66fcf1]/50 transition-all placeholder:text-gray-600"
                             />
                             <button
                                 type="submit"
                                 disabled={!input.trim() || isLoading}
-                                className="p-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl text-white disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all transform hover:-translate-y-1"
+                                className="p-5 bg-white text-black rounded-xl disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all btn-haptic"
                             >
-                                <Send size={20} />
+                                <Send size={18} />
                             </button>
                         </form>
-                        <div className="text-center mt-2">
-                            <p className="text-[10px] text-gray-600 uppercase tracking-widest">Powered by ELA AI v2.4</p>
+                        <div className="text-center mt-6">
+                            <p className="text-[10px] text-gray-700 font-mono tracking-[0.3em] uppercase">POWERED BY ELA // CALIBRE VOCAL v2.4</p>
                         </div>
                     </div>
                 </div>

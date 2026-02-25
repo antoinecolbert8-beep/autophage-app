@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import {
     Linkedin, Twitter, Facebook, Instagram, ShoppingBag, MessageCircle, Video,
     ChevronLeft, Check, X, Plus, Eye, EyeOff, Loader2, Zap, Shield, RefreshCw,
-    Youtube, Mail, Target, Share2
+    Youtube, Mail, Target, Share2, Ghost, PenLine, Hash, Code
 } from "lucide-react";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -173,6 +173,64 @@ const PLATFORMS: PlatformConfig[] = [
             { key: "stripeConnectId", label: "Stripe Connect ID (Optionnel)", placeholder: "acct_..." },
         ]
     },
+    {
+        key: "SNAPCHAT",
+        label: "Snapchat",
+        icon: Ghost,
+        color: "text-yellow-400",
+        gradient: "from-yellow-400 to-yellow-600",
+        description: "Touchez une audience jeune avec des Stories éphémères et du contenu viral.",
+        fields: [
+            { key: "accessToken", label: "Access Token", placeholder: "snap_...", type: "password" },
+        ]
+    },
+    {
+        key: "REDDIT",
+        label: "Reddit",
+        icon: Share2,
+        color: "text-orange-500",
+        gradient: "from-orange-500 to-red-700",
+        description: "Engagez les communautés de niche dans les Subreddits pertinents.",
+        fields: [
+            { key: "clientId", label: "Client ID", placeholder: "xxxxxxxxx" },
+            { key: "clientSecret", label: "Client Secret", placeholder: "xxxxxxxxx", type: "password" },
+            { key: "username", label: "Username", placeholder: "u/votre-nom" },
+            { key: "password", label: "Password", placeholder: "xxxxxxxxx", type: "password" },
+        ]
+    },
+    {
+        key: "MEDIUM",
+        label: "Medium",
+        icon: PenLine,
+        color: "text-white",
+        gradient: "from-gray-700 to-black",
+        description: "Publiez des articles de fond pour asseoir votre autorité intellectuelle.",
+        fields: [
+            { key: "integrationToken", label: "Integration Token", placeholder: "xxxxxxxxx", type: "password" },
+        ]
+    },
+    {
+        key: "HACKERNEWS",
+        label: "Hacker News",
+        icon: Hash,
+        color: "text-orange-600",
+        gradient: "from-orange-400 to-orange-700",
+        description: "Soumettez vos contenus aux bâtisseurs et ingénieurs du monde entier.",
+        fields: [
+            { key: "topic", label: "Default Topic", placeholder: "Show HN" },
+        ]
+    },
+    {
+        key: "DEVTO",
+        label: "Dev.to",
+        icon: Code,
+        color: "text-gray-100",
+        gradient: "from-blue-900 to-slate-900",
+        description: "Connectez-vous à la plus grande communauté de développeurs au monde.",
+        fields: [
+            { key: "apiKey", label: "API Key", placeholder: "xxxxxxxxx", type: "password" },
+        ]
+    },
 ];
 
 // ─── Integration Card ────────────────────────────────────────────────────────
@@ -217,7 +275,7 @@ function IntegrationCard({
     };
 
     return (
-        <div className={`bg-[#13131f] border rounded-2xl overflow-hidden transition-all duration-300 ${isConnected ? "border-white/10 shadow-lg" : "border-white/5"
+        <div className={`card-saphir overflow-hidden group ${isConnected ? "border-[#66fcf1]/20 shadow-[0_0_20px_rgba(102,252,241,0.05)]" : "border-white/5"
             }`}>
             {/* Header */}
             <div className="p-6 flex items-center justify-between">
@@ -242,16 +300,16 @@ function IntegrationCard({
                         <button
                             onClick={handleDisconnect}
                             disabled={disconnecting}
-                            className="text-xs px-3 py-1.5 rounded-lg border border-red-500/20 text-red-400 hover:bg-red-500/10 transition-all"
+                            className="text-[10px] uppercase font-bold px-3 py-1.5 rounded-lg border border-red-900/20 text-red-500/70 hover:bg-red-500/5 transition-all btn-haptic"
                         >
                             {disconnecting ? <Loader2 className="w-3 h-3 animate-spin" /> : "Déconnecter"}
                         </button>
                     )}
                     <button
                         onClick={() => setExpanded(!expanded)}
-                        className={`text-xs px-4 py-2 rounded-xl font-bold transition-all ${isConnected
-                            ? "bg-white/5 text-gray-400 hover:bg-white/10"
-                            : `bg-gradient-to-r ${platform.gradient} text-white hover:opacity-90`
+                        className={`text-[10px] uppercase tracking-widest px-4 py-2 rounded-xl font-bold transition-all btn-haptic ${isConnected
+                            ? "bg-white/5 text-gray-500 hover:bg-white/10"
+                            : `bg-gradient-to-r ${platform.gradient} text-white hover:opacity-90 shadow-lg shadow-black/20`
                             }`}
                     >
                         {isConnected ? "Reconfigurer" : "Connecter"}
@@ -379,9 +437,9 @@ export default function IntegrationsPage() {
     const connectedCount = integrations.filter((i) => i.hasCredentials && i.status === "active").length;
 
     return (
-        <div className="min-h-screen bg-[#0a0a0f] text-white">
+        <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7]">
             {/* Header */}
-            <div className="p-6 border-b border-white/5 flex items-center justify-between sticky top-0 bg-[#0a0a0f]/80 backdrop-blur-xl z-30">
+            <div className="p-6 border-b border-white/5 flex items-center justify-between sticky top-0 bg-[#0b0c10]/80 backdrop-blur-xl z-30">
                 <div className="flex items-center gap-4">
                     <Link href="/dashboard" className="p-2 hover:bg-white/5 rounded-full transition-colors">
                         <ChevronLeft className="w-5 h-5 text-gray-400" />
@@ -413,17 +471,20 @@ export default function IntegrationsPage() {
             </div>
 
             <div className="max-w-4xl mx-auto p-8">
-                {/* Hero Banner */}
-                <div className="mb-10 bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-pink-600/10 border border-white/10 rounded-[2rem] p-8 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
+                {/* Hero Banner — High Precision Style */}
+                <div className="mb-10 card-saphir border-[#66fcf1]/10 p-10 relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03]" />
                     <div className="relative z-10">
-                        <h2 className="text-3xl font-black mb-3 tracking-tight">
-                            🌐 Votre Empire Digital, Connecté en <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-pink-400">10 Secondes</span>
+                        <h2 className="text-3xl font-black mb-4 tracking-tighter stat-value text-white">
+                            🌐 EMPIRE DIGITAL <span className="text-[#66fcf1]">CONNECTÉ</span>
                         </h2>
-                        <p className="text-gray-400 max-w-xl leading-relaxed">
-                            Entrez vos clés API une seule fois. ELA s'occupe de tout : publication autonome 24/7,
-                            diffusion multi-canal, suivi des performances, et alertes instantanées.
+                        <p className="text-gray-500 max-w-xl leading-relaxed text-sm font-light">
+                            Entrez vos clés API une seule fois. ELA active son <span className="text-[#66fcf1] font-bold">Calibre Souverain</span> :
+                            publication autonome 24/7, diffusion multi-canal et synchronisation atomique.
                         </p>
+                    </div>
+                    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <Zap size={120} className="text-[#66fcf1]" />
                     </div>
                 </div>
 

@@ -29,27 +29,27 @@ const PLATFORMS = [
         id: "LINKEDIN",
         label: "LinkedIn",
         icon: Linkedin,
-        color: "from-blue-600 to-blue-400",
-        glow: "shadow-blue-500/30",
-        description: "Réseau B2B idéal pour votre audience cible",
+        color: "bg-white/5",
+        glow: "hover:border-[#66fcf1]/50",
+        description: "FORCE B2B // CALIBRE RÉSEAU",
         connectUrl: "/dashboard/integrations?platform=linkedin",
     },
     {
         id: "TWITTER",
         label: "Twitter / X",
         icon: Twitter,
-        color: "from-sky-500 to-sky-300",
-        glow: "shadow-sky-500/30",
-        description: "Viralité maximale, engagement instantané",
+        color: "bg-white/5",
+        glow: "hover:border-[#66fcf1]/50",
+        description: "VIRALITÉ HAUTE FRÉQUENCE",
         connectUrl: "/dashboard/integrations?platform=twitter",
     },
     {
         id: "INSTAGRAM",
         label: "Instagram",
         icon: Instagram,
-        color: "from-pink-600 to-orange-400",
-        glow: "shadow-pink-500/30",
-        description: "Reach visuel, audience grand public",
+        color: "bg-white/5",
+        glow: "hover:border-[#66fcf1]/50",
+        description: "REACH VISUEL // ESTHÉTIQUE NOBLE",
         connectUrl: "/dashboard/integrations?platform=instagram",
     },
 ];
@@ -198,7 +198,7 @@ export default function OnboardingPage() {
 
     // ─── Render ─────────────────────────────────────────────────────────────────
     return (
-        <div className="min-h-screen bg-[#0a0a0f] text-white flex flex-col items-center justify-center px-4 py-16 relative overflow-hidden">
+        <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7] font-sans flex flex-col items-center justify-center px-4 py-16 relative overflow-hidden selection:bg-[#66fcf1]/30">
             {/* Background glows */}
             <div className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-cyan-500/10 blur-[120px] rounded-full" />
             <div className="pointer-events-none absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-600/10 blur-[100px] rounded-full" />
@@ -206,20 +206,20 @@ export default function OnboardingPage() {
             <div className="w-full max-w-2xl relative z-10">
 
                 {/* ── Header ── */}
-                <motion.div {...fadeUp} className="text-center mb-10">
+                <motion.div {...fadeUp} className="text-center mb-16">
                     {isWelcome && (
-                        <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-cyan-400 border border-cyan-400/30 rounded-full px-4 py-1.5 mb-4">
-                            <Zap className="w-3 h-3" /> Bienvenue dans l'Empire ELA
-                        </span>
+                        <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-xl">
+                            <span className="text-[10px] font-black text-[#66fcf1] uppercase tracking-[0.3em]">CALIBRATION // INITIALISATION</span>
+                        </div>
                     )}
-                    <h1 className="text-4xl font-black mb-2" style={{ fontFamily: "Outfit, sans-serif" }}>
-                        Votre premier post en{" "}
-                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">
-                            5 minutes
+                    <h1 className="text-4xl md:text-6xl font-black mb-6 tracking-tighter uppercase stat-value text-white">
+                        VOTRE PREMIER POST EN{" "}
+                        <span className="text-[#66fcf1]">
+                            300 SECONDES.
                         </span>
                     </h1>
-                    <p className="text-gray-400 text-base">
-                        Suivez ces 3 étapes pour obtenir votre premier résultat concret.
+                    <p className="text-gray-500 text-[11px] font-light italic leading-relaxed uppercase tracking-[0.1em]">
+                        &bdquo; Synchronisez vos calibres stratégiques pour obtenir un résultat immédiat. &rdquo;
                     </p>
                 </motion.div>
 
@@ -233,11 +233,11 @@ export default function OnboardingPage() {
                             <div key={s.id} className="flex items-center">
                                 <div className={`flex flex-col items-center gap-1.5 transition-all duration-300`}>
                                     <div
-                                        className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-500 ${isDone
-                                                ? "bg-cyan-500 border-cyan-500"
-                                                : isActive
-                                                    ? "border-cyan-400 bg-cyan-400/10 shadow-lg shadow-cyan-500/30"
-                                                    : "border-white/10 bg-white/5"
+                                        className={`w-12 h-12 rounded-xl flex items-center justify-center border transition-all duration-700 ${isDone
+                                            ? "bg-[#66fcf1] border-[#66fcf1] shadow-[0_0_20px_rgba(102,252,241,0.3)]"
+                                            : isActive
+                                                ? "border-[#66fcf1] bg-white/5 shadow-lg shadow-[#66fcf1]/10"
+                                                : "border-white/5 bg-white/[0.02]"
                                             }`}
                                     >
                                         {isDone ? (
@@ -262,10 +262,10 @@ export default function OnboardingPage() {
                 <AnimatePresence mode="wait">
                     {/* ───── STEP 1 ───── */}
                     {step === 1 && (
-                        <motion.div key="step1" {...fadeUp} className="bg-[#13131f] border border-white/10 rounded-3xl p-8">
-                            <h2 className="text-2xl font-bold mb-2">Connecte ton réseau social</h2>
-                            <p className="text-gray-400 text-sm mb-6">
-                                Choisis la plateforme sur laquelle tu veux publier ton premier post automatisé.
+                        <motion.div key="step1" {...fadeUp} className="card-saphir p-10 relative group">
+                            <h2 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-[#66fcf1]">Phase 01 // Connexion</h2>
+                            <p className="text-gray-500 text-[11px] font-light italic leading-relaxed mb-10">
+                                Sélectionnez le calibre social que vous souhaitez synchroniser aujourd'hui.
                             </p>
 
                             <div className="grid gap-3 mb-6">
@@ -276,17 +276,17 @@ export default function OnboardingPage() {
                                         <button
                                             key={p.id}
                                             onClick={() => handleSelectPlatform(p.id)}
-                                            className={`flex items-center gap-4 p-4 rounded-xl border-2 transition-all duration-300 text-left ${selectedPlatform === p.id
-                                                    ? "border-cyan-400 bg-cyan-400/5 shadow-lg shadow-cyan-500/20"
-                                                    : "border-white/10 hover:border-white/20 bg-white/[0.02]"
-                                                }`}
+                                            className={`flex items-center gap-6 p-6 rounded-2xl border-2 transition-all duration-500 text-left ${selectedPlatform === p.id
+                                                ? "border-[#66fcf1]/50 bg-white/5 shadow-lg shadow-[#66fcf1]/5"
+                                                : "border-white/5 hover:border-white/10 bg-white/[0.02]"
+                                                } btn-haptic`}
                                         >
-                                            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${p.color} flex items-center justify-center shadow-lg ${p.glow}`}>
-                                                <Icon className="w-5 h-5 text-white" />
+                                            <div className={`w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-500 ${selectedPlatform === p.id ? "border-[#66fcf1]/50 shadow-inner" : ""}`}>
+                                                <Icon className={`w-5 h-5 ${selectedPlatform === p.id ? "text-[#66fcf1]" : "text-gray-600"}`} />
                                             </div>
                                             <div className="flex-1">
-                                                <p className="font-semibold text-sm">{p.label}</p>
-                                                <p className="text-xs text-gray-400">{p.description}</p>
+                                                <p className={`font-black uppercase tracking-[0.2em] text-[10px] ${selectedPlatform === p.id ? "text-white" : "text-gray-500"}`}>{p.label}</p>
+                                                <p className="text-[9px] text-gray-700 font-mono tracking-wider uppercase mt-1">{p.description}</p>
                                             </div>
                                             {isConnected && (
                                                 <span className="text-xs text-green-400 font-semibold flex items-center gap-1">
@@ -306,19 +306,19 @@ export default function OnboardingPage() {
                                     initial={{ opacity: 0, y: 8 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     onClick={handleConnectPlatform}
-                                    className="w-full py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold rounded-2xl shadow-lg shadow-cyan-500/25 transition-all flex items-center justify-center gap-2"
+                                    className="w-full py-5 bg-[#66fcf1] text-[#0b0c10] font-black text-[10px] uppercase tracking-[0.3em] rounded-xl hover:shadow-[0_0_40px_rgba(102,252,241,0.4)] transition-all btn-haptic flex items-center justify-center gap-3"
                                 >
                                     <Link2 className="w-4 h-4" />
-                                    Connecter {PLATFORMS.find((p) => p.id === selectedPlatform)?.label}
+                                    CONNECTER LE CALIBRE
                                 </motion.button>
                             )}
 
                             {selectedPlatform && connectedPlatforms.includes(selectedPlatform) && (
                                 <button
                                     onClick={() => setStep(2)}
-                                    className="w-full py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold rounded-2xl shadow-lg shadow-cyan-500/25 transition-all flex items-center justify-center gap-2"
+                                    className="w-full py-5 bg-white text-black font-black text-[10px] uppercase tracking-[0.3em] rounded-xl transition-all btn-haptic flex items-center justify-center gap-3"
                                 >
-                                    Continuer <ArrowRight className="w-4 h-4" />
+                                    SUITE PROTOCOLAIRE <ArrowRight className="w-4 h-4" />
                                 </button>
                             )}
                         </motion.div>
@@ -326,52 +326,35 @@ export default function OnboardingPage() {
 
                     {/* ───── STEP 2 ───── */}
                     {step === 2 && (
-                        <motion.div key="step2" {...fadeUp} className="bg-[#13131f] border border-white/10 rounded-3xl p-8">
-                            <h2 className="text-2xl font-bold mb-2">Génère ton premier post IA</h2>
-                            <p className="text-gray-400 text-sm mb-6">
-                                Donne un sujet ou une thématique — l'IA s'occupe du reste.
+                        <motion.div key="step2" {...fadeUp} className="card-saphir p-10">
+                            <h2 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-[#66fcf1]">Phase 02 // Génération</h2>
+                            <p className="text-gray-500 text-[11px] font-light italic leading-relaxed mb-10">
+                                Définissez l'angle d'attaque stratégique — l'IA orchestrera la mécanique.
                             </p>
 
-                            <div className="mb-6">
-                                <label className="block text-sm font-semibold mb-2 text-gray-300">
-                                    Sur quel sujet veux-tu publier ?
+                            <div className="mb-10">
+                                <label className="block text-[8px] font-black uppercase tracking-[0.3em] mb-4 text-gray-600">
+                                    OBJECTIF DU CALIBRE
                                 </label>
                                 <input
                                     type="text"
                                     value={topic}
                                     onChange={(e) => setTopic(e.target.value)}
                                     onKeyDown={(e) => e.key === "Enter" && !isGenerating && topic.trim() && handleGenerate()}
-                                    placeholder="Ex: productivité, automatisation IA, growth hacking..."
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-cyan-400/50 focus:ring-1 focus:ring-cyan-400/25 transition-all text-sm"
+                                    placeholder="Ex: productivité, automatisation IA, domination..."
+                                    className="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-5 text-white placeholder-gray-800 focus:outline-none focus:border-[#66fcf1]/50 transition-all text-[11px] font-black uppercase tracking-[0.1em]"
                                 />
-                            </div>
-
-                            <div className="mb-6 bg-white/[0.02] border border-white/5 rounded-xl p-4">
-                                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Styles disponibles</p>
-                                <div className="grid grid-cols-2 gap-2">
-                                    {[
-                                        { label: "📚 Éducatif", desc: "5 conseils actionnables" },
-                                        { label: "📖 Histoire", desc: "Storytelling personnel" },
-                                        { label: "🔥 Controversé", desc: "Hot take polarisant" },
-                                        { label: "😂 Humour", desc: "Format mème/relatable" },
-                                    ].map((s) => (
-                                        <div key={s.label} className="bg-white/[0.03] rounded-lg p-2.5">
-                                            <p className="text-xs font-semibold">{s.label}</p>
-                                            <p className="text-xs text-gray-500">{s.desc}</p>
-                                        </div>
-                                    ))}
-                                </div>
                             </div>
 
                             <button
                                 onClick={handleGenerate}
                                 disabled={isGenerating || !topic.trim()}
-                                className="w-full py-3.5 bg-gradient-to-r from-purple-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 text-white font-bold rounded-2xl shadow-lg shadow-purple-500/25 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full py-5 bg-[#66fcf1] text-[#0b0c10] font-black text-[10px] uppercase tracking-[0.3em] rounded-xl hover:shadow-[0_0_40px_rgba(102,252,241,0.4)] transition-all btn-haptic flex items-center justify-center gap-3"
                             >
                                 {isGenerating ? (
-                                    <><Loader2 className="w-4 h-4 animate-spin" /> Génération en cours...</>
+                                    <><Loader2 className="w-4 h-4 animate-spin" /> SYNCHRONISATION...</>
                                 ) : (
-                                    <><Sparkles className="w-4 h-4" /> Générer le post</>
+                                    <><Sparkles className="w-4 h-4" /> GÉNÉRER LE CALIBRE</>
                                 )}
                             </button>
                         </motion.div>
@@ -379,47 +362,43 @@ export default function OnboardingPage() {
 
                     {/* ───── STEP 3 ───── */}
                     {step === 3 && (
-                        <motion.div key="step3" {...fadeUp} className="bg-[#13131f] border border-white/10 rounded-3xl p-8">
-                            <h2 className="text-2xl font-bold mb-2">Vérifie et publie 🚀</h2>
-                            <p className="text-gray-400 text-sm mb-5">
-                                Ton post est prêt. Vérifie-le, ajuste si nécessaire, puis publie.
+                        <motion.div key="step3" {...fadeUp} className="card-saphir p-10">
+                            <h2 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-[#66fcf1]">Phase 03 // Publication</h2>
+                            <p className="text-gray-500 text-[11px] font-light italic leading-relaxed mb-10">
+                                Le calibre est prêt. Vérifiez l'alignement avant l'exécution finale.
                             </p>
 
                             {generatedPost && !publishResult && (
                                 <>
-                                    <div className="bg-white/[0.03] border border-white/10 rounded-xl p-4 mb-5 relative">
-                                        <span className="absolute top-3 right-3 text-xs text-gray-500 font-mono">
-                                            {generatedPost.platform}
+                                    <div className="bg-white/5 border border-white/10 rounded-xl p-8 mb-8 relative group">
+                                        <span className="absolute top-4 right-6 text-[8px] text-gray-700 font-black uppercase tracking-[0.3em]">
+                                            PLATFORME: {generatedPost.platform}
                                         </span>
                                         <textarea
-                                            className="w-full bg-transparent text-sm text-gray-200 leading-relaxed resize-none outline-none"
-                                            rows={8}
+                                            className="w-full bg-transparent text-[11px] text-gray-200 leading-relaxed font-black uppercase tracking-[0.1em] resize-none outline-none min-h-[150px]"
                                             value={generatedPost.content}
                                             onChange={(e) =>
                                                 setGeneratedPost({ ...generatedPost, content: e.target.value })
                                             }
                                         />
-                                        <p className="text-xs text-gray-600 text-right mt-1">
-                                            {generatedPost.content.length} caractères
-                                        </p>
                                     </div>
 
-                                    <div className="flex gap-3">
+                                    <div className="flex gap-4">
                                         <button
                                             onClick={() => setStep(2)}
-                                            className="flex-1 py-3 border border-white/10 hover:border-white/20 text-gray-400 hover:text-white font-semibold rounded-2xl transition-all text-sm"
+                                            className="flex-1 py-5 border border-white/10 text-gray-600 hover:text-white font-black text-[10px] uppercase tracking-[0.3em] rounded-xl transition-all btn-haptic"
                                         >
-                                            ← Régénérer
+                                            RÉ-INITIALISER
                                         </button>
                                         <button
                                             onClick={handlePublish}
                                             disabled={isPublishing}
-                                            className="flex-[2] py-3 bg-gradient-to-r from-green-500 to-emerald-400 hover:from-green-400 hover:to-emerald-300 text-black font-bold rounded-2xl shadow-lg shadow-green-500/25 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                                            className="flex-[2] py-5 bg-[#66fcf1] text-[#0b0c10] font-black text-[10px] uppercase tracking-[0.3em] rounded-xl hover:shadow-[0_0_40px_rgba(102,252,241,0.4)] transition-all flex items-center justify-center gap-3 btn-haptic disabled:opacity-50"
                                         >
                                             {isPublishing ? (
-                                                <><Loader2 className="w-4 h-4 animate-spin" /> Publication...</>
+                                                <><Loader2 className="w-4 h-4 animate-spin" /> EXÉCUTION...</>
                                             ) : (
-                                                <><Rocket className="w-4 h-4" /> Publier maintenant</>
+                                                <><Rocket className="w-4 h-4" /> PUBLIER LE CALIBRE</>
                                             )}
                                         </button>
                                     </div>
@@ -431,20 +410,20 @@ export default function OnboardingPage() {
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.95 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    className={`rounded-2xl p-6 text-center ${publishResult.success
-                                            ? "bg-green-500/10 border border-green-500/30"
-                                            : "bg-orange-500/10 border border-orange-500/30"
+                                    className={`rounded-2xl p-10 text-center ${publishResult.success
+                                        ? "bg-white/5 border border-[#66fcf1]/30"
+                                        : "bg-white/5 border border-red-500/30"
                                         }`}
                                 >
-                                    <p className="text-lg font-bold mb-2">
-                                        {publishResult.success ? "🎉 Félicitations !" : "⚠️ Presque !"}
+                                    <p className="text-2xl font-black mb-4 stat-value text-white uppercase tracking-tighter">
+                                        {publishResult.success ? "SYNCHRONISATION TERMINÉE" : "ERREUR DE CALIBRE"}
                                     </p>
-                                    <p className="text-sm text-gray-300 mb-6">{publishResult.message}</p>
+                                    <p className="text-[11px] text-gray-500 italic leading-relaxed mb-10 font-light">"{publishResult.message}"</p>
                                     <button
                                         onClick={handleGoToDashboard}
-                                        className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2"
+                                        className="w-full py-5 bg-[#66fcf1] text-[#0b0c10] font-black text-[10px] uppercase tracking-[0.3em] rounded-xl transition-all btn-haptic flex items-center justify-center gap-3"
                                     >
-                                        Accéder à mon tableau de bord <ArrowRight className="w-4 h-4" />
+                                        ACCÉDER AU CADRAN PRINCIPAL <ArrowRight className="w-4 h-4" />
                                     </button>
                                 </motion.div>
                             )}
