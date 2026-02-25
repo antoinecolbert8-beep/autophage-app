@@ -38,7 +38,11 @@ export const metadata: Metadata = {
     "génération vidéos IA",
     "carrousels Instagram automatiques",
     "agent téléphonique IA",
-    "rédaction SEO IA"
+    "rédaction SEO IA",
+    "affiliation",
+    "espace presse",
+    "media kit",
+    "partenariat IA"
   ],
   authors: [{ name: "ELA Team" }],
   creator: "ELA",

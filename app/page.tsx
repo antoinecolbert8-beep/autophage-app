@@ -45,13 +45,13 @@ export default function Home() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-10">
-            {['Agents', 'Features', 'Pricing', 'Contact'].map((item) => (
+            {['Agents', 'Features', 'Pricing', 'Partners', 'Press'].map((item) => (
               <Link
                 key={item}
-                href={`/${item.toLowerCase()}`}
+                href={`/${item.toLowerCase().replace('press', 'press')}`}
                 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 hover:text-[#66fcf1] transition-all relative group"
               >
-                {item}
+                {item === 'Press' ? 'Presse' : item}
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-[#66fcf1] transition-all group-hover:w-full" />
               </Link>
             ))}
@@ -111,6 +111,13 @@ export default function Home() {
         <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-blue-900/10 blur-[100px] rounded-full pointer-events-none" />
 
         <div className="relative max-w-7xl mx-auto text-center z-10">
+          {/* Breaking News / Press Banner */}
+          <Link href="/press" className="inline-flex items-center gap-4 px-6 py-2 rounded-full bg-[#66fcf1]/10 border border-[#66fcf1]/30 mb-8 backdrop-blur-xl group hover:bg-[#66fcf1]/20 transition-all duration-500 animate-bounce">
+            <span className="w-2 h-2 rounded-full bg-[#66fcf1] shadow-[0_0_10px_#66fcf1]"></span>
+            <span className="text-[9px] font-black tracking-[0.2em] uppercase text-[#66fcf1]">COMMUNIQUÉ OFFICIEL : DÉPLOIEMENT DU CALIBRE V10.4 SOUVERAIN</span>
+            <ArrowRight size={12} className="text-[#66fcf1] group-hover:translate-x-1 transition-transform" />
+          </Link>
+
           {/* Trust Badge (Mechanical) */}
           <div className="inline-flex items-center gap-4 px-6 py-2.5 rounded-full bg-white/5 border border-white/10 mb-16 backdrop-blur-xl group hover:border-[#66fcf1]/30 transition-all duration-700">
             <div className="w-2 h-2 rounded-full bg-[#66fcf1] animate-pulse shadow-[0_0_10px_#66fcf1]"></div>
@@ -532,6 +539,51 @@ export default function Home() {
           </div>
         </div>
       </section >
+
+      {/* --- PARTNERSHIP SECTION (Revenue Engine) --- */}
+      <section className="py-40 px-8 relative snap-start overflow-hidden border-t border-white/5">
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_50%,rgba(102,252,241,0.02),transparent_50%)]" />
+        <div className="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row items-center gap-20">
+          <div className="flex-1">
+            <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full border border-white/10 bg-white/5 mb-10">
+              <span className="text-[#66fcf1] font-black text-[10px] uppercase tracking-[0.4em]">FORGEZ L'EMPIRE</span>
+            </div>
+            <h2 className="text-5xl md:text-7xl font-black mb-8 text-white uppercase tracking-tighter leading-none">
+              REJOIGNEZ LA<br /><span className="text-[#66fcf1]">MANUFACTURE.</span>
+            </h2>
+            <p className="text-xl text-gray-500 font-light italic leading-relaxed mb-12">
+              Devenez un maillon de notre infrastructure. Touchez <span className="text-white font-bold">30% de commission récurrente à vie</span> sur chaque calibre déployé via votre lien de tracking.
+            </p>
+            <Link href="/partners" className="inline-flex items-center gap-4 px-12 py-6 bg-white text-black rounded-xl font-black text-[10px] uppercase tracking-[0.3em] hover:bg-[#66fcf1] transition-all btn-haptic">
+              ACCÉDER AU PROGRAMME PARTENAIRE
+            </Link>
+          </div>
+          <div className="flex-1 w-full relative">
+            <div className="aspect-square rounded-[60px] border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-12 relative overflow-hidden group">
+              <div className="absolute inset-0 bg-[#66fcf1]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+              <div className="relative z-10 h-full flex flex-col justify-between">
+                <div className="flex justify-between items-start">
+                  <div className="text-6xl font-black text-white stat-value">30%</div>
+                  <div className="w-16 h-16 border border-[#66fcf1]/30 rounded-full flex items-center justify-center animate-[spin_10s_linear_infinite]">
+                    <Zap className="text-[#66fcf1]" />
+                  </div>
+                </div>
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4 text-[10px] font-black text-[#66fcf1] uppercase tracking-[0.4em]">
+                    <div className="w-8 h-px bg-[#66fcf1]" /> REVENUS PASSIFS RÉCURRENTS
+                  </div>
+                  <div className="flex items-center gap-4 text-[10px] font-black text-gray-600 uppercase tracking-[0.4em]">
+                    <div className="w-8 h-px bg-white/10" /> PAIEMENTS AUTOMATISÉS
+                  </div>
+                  <div className="flex items-center gap-4 text-[10px] font-black text-gray-600 uppercase tracking-[0.4em]">
+                    <div className="w-8 h-px bg-white/10" /> TRACKING SÉCURISÉ (90 JOURS)
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* --- FOOTER (The Grand Manufacture) --- */}
       <footer className="py-32 px-8 bg-[#0b0c10] border-t border-white/5 relative z-10 snap-start overflow-hidden">
