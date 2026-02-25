@@ -28,6 +28,17 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7] font-sans selection:bg-[#66fcf1]/30 overflow-x-hidden snap-y snap-mandatory scroll-smooth">
+      {/* 🚨 GLOBAL ALERT BANNER */}
+      <div className="w-full bg-[#66fcf1] py-2 px-8 flex items-center justify-center gap-6 overflow-hidden relative z-[60]">
+        <div className="flex animate-marquee whitespace-nowrap gap-12 text-[10px] font-black text-[#0b0c10] uppercase tracking-[0.2em]">
+          {[...Array(10)].map((_, i) => (
+            <span key={i} className="flex items-center gap-3">
+              <Zap size={12} fill="currentColor" /> ALERTE GÉNÉRALE : L'INFRASTRUCTURE ELA EST DÉSORMAIS OUVERTE AUX MÉDIAS ET PARTENAIRES
+            </span>
+          ))}
+        </div>
+      </div>
+
       {/* --- HEADER --- */}
       <header
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled || mobileMenuOpen ? "bg-[#0a0a0f]/90 backdrop-blur-xl border-b border-white/5 py-4" : "bg-transparent py-6"
