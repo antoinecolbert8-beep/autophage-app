@@ -20,26 +20,35 @@ export async function runHighVolumeSEO() {
     }
 
     // 2. Fetch Real Trends (Wait for RSS)
-    const trends = await getRealTrends('FR');
-    if (trends.length === 0) { console.error("❌ No Trends found."); return; }
+    let trends = [];
+    try {
+        trends = await getRealTrends('FR');
+    } catch (e) {
+        console.warn("⚠️ Trend fetch failed, using fallback high-impact keywords.");
+    }
 
-    // 3. LOOP THROUGH TOP 5 TRENDS (Saturation Strategy)
-    console.log(`🌊 FLOOD MODE: Targeting top ${trends.length} trends simultaneously...`);
+    if (trends.length === 0) {
+        console.log("🛠️ Using FALLBACK SEO Strategy...");
+        trends = [
+            { keyword: "Meilleure AI pour entreprise 2026", volume: 15000 },
+            { keyword: "Automatisation marketing souveraine", volume: 8000 },
+            { keyword: "Gagner 50k par mois avec l'affiliation IA", volume: 12000 },
+            { keyword: "ELA Revolution avis et test", volume: 5000 },
+            { keyword: "Infrastructure IA performance", volume: 4000 }
+        ];
+    }
+
+    // 3. LOOP THROUGH TRENDS (Saturation Strategy)
+    console.log(`🌊 FLOOD MODE: Targeting ${trends.length} keywords simultaneously...`);
 
     for (const trend of trends) {
-        console.log(`\n🎯 Processing Trend: "${trend.keyword}"`);
+        console.log(`\n🎯 Processing: "${trend.keyword}"`);
 
         try {
-            // Check urgency/volume to prioritize (optional, but good for "Real Work" feel)
-            if (trend.volume < 1000) {
-                console.log("   -> Skipping (Volume too low)");
-                continue;
-            }
-
             const assetData = await createContentAsset(
                 project.id,
                 trend.keyword,
-                1500 // Longer authority articles
+                1800 // High authority length
             );
 
             await prisma.contentAsset.create({
