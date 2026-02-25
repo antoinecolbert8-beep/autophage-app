@@ -4,7 +4,9 @@ import Navigation from "./navigation";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Suspense } from "react";
 import Loading from "@/app/loading";
+import { ReferralTracker } from "./ReferralTracker";
 
 /**
  * PAGE TRANSITION VARIANTS
@@ -59,6 +61,9 @@ export default function ClientLayoutWrapper({
 
     return (
         <div className="min-h-screen bg-[#0a0a0f] text-white font-sans selection:bg-cyan-500/30">
+            <Suspense fallback={null}>
+                <ReferralTracker />
+            </Suspense>
             {/* Background Gradients for ELA Theme */}
             <div className="fixed inset-0 z-0 pointer-events-none">
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#66fcf1]/5 rounded-full blur-[128px] opacity-20" />
