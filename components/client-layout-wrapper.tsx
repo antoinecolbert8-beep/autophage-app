@@ -15,22 +15,25 @@ import { ReferralTracker } from "./ReferralTracker";
 const pageVariants: Variants = {
     initial: {
         opacity: 0,
-        y: 8,
+        scale: 0.98,
+        filter: "blur(10px)",
     },
     enter: {
         opacity: 1,
-        y: 0,
+        scale: 1,
+        filter: "blur(0px)",
         transition: {
-            duration: 0.4,
-            ease: [0.25, 0.1, 0.25, 1.0], // Cubic bezier for smooth feel
+            duration: 0.8,
+            ease: [0.16, 1, 0.3, 1], // Custom cinematic ease
         },
     },
     exit: {
         opacity: 0,
-        y: -8,
+        scale: 1.02,
+        filter: "blur(10px)",
         transition: {
-            duration: 0.3,
-            ease: [0.25, 0.1, 0.25, 1.0],
+            duration: 0.4,
+            ease: [0.7, 0, 0.84, 0],
         },
     },
 };
