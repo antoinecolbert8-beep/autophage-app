@@ -3,7 +3,7 @@
 import Navigation from "./navigation";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Suspense } from "react";
 import Loading from "@/app/loading";
 import { ReferralTracker } from "./ReferralTracker";
@@ -12,7 +12,7 @@ import { ReferralTracker } from "./ReferralTracker";
  * PAGE TRANSITION VARIANTS
  * Professional fade + subtle slide for premium feel
  */
-const pageVariants = {
+const pageVariants: Variants = {
     initial: {
         opacity: 0,
         y: 8,
