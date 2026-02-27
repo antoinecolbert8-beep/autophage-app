@@ -40,22 +40,52 @@ export async function POST(request: NextRequest) {
         break;
       }
 
-      // One-time credit purchase completed (mode === 'payment')
+      // One-time credit purchase completed or Contract Escrow Payment
       // Subscription checkouts are handled by customer.subscription.created
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
         if (session.mode === 'payment') {
-          const { handlePaymentSuccess } = await import('@/lib/billing/index');
-          handlePaymentSuccess(session.id).catch(e =>
-            console.error('❌ Credit provisioning failed:', e)
-          );
 
-          // Trigger FOMO loop
-          await triggerEvidenceBroadcast({
-            plan: 'Crédits Souverains',
-            amount: (session.amount_total || 0) / 100,
-            customerEmail: session.customer_details?.email || undefined,
-          }).catch(e => console.error('FOMO Loop trigger failed:', e));
+          // 🛡️ 1. PAIEMENT SÉQUESTRE POUR CONTRAT DE SOUS-TRAITANCE
+          if (session.metadata?.contractId) {
+            const contractId = session.metadata.contractId;
+            console.log(`💰 Escrow Secured for Contract: ${contractId}`);
+
+            const contract = await prisma.contract.update({
+              where: { id: contractId },
+              data: { status: 'IN_PROGRESS' }, // L'argent est sécurisé, le freelance peut commencer
+              include: { buyer: true, seller: true }
+            });
+
+            // Génération immédiate de la trace comptable Google Sheets
+            if (session.payment_intent) {
+              const accountingRecord = await prisma.accountingRecord.create({
+                data: {
+                  transactionId: typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent.id,
+                  taxAmount: 0, // Sera recalculé par le sync si manquant
+                  netAmount: (session.amount_total || 0) / 100, // Brut temporaire avant commission
+                  isSyncedToSheets: false,
+                  invoiceUrl: session.invoice ? String(session.invoice) : '',
+                  aiNote: 'Stripe Escrow Lock - B2B Contract',
+                  contractId: contract.id
+                }
+              });
+            }
+          }
+          // 🪙 2. ACHAT UNILATÉRAL DE CRÉDITS (Comportement original)
+          else {
+            const { handlePaymentSuccess } = await import('@/lib/billing/index');
+            handlePaymentSuccess(session.id).catch(e =>
+              console.error('❌ Credit provisioning failed:', e)
+            );
+
+            // Trigger FOMO loop
+            await triggerEvidenceBroadcast({
+              plan: 'Crédits Souverains',
+              amount: (session.amount_total || 0) / 100,
+              customerEmail: session.customer_details?.email || undefined,
+            }).catch(e => console.error('FOMO Loop trigger failed:', e));
+          }
         }
         break;
       }
