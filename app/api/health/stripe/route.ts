@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     try {
         const authHeader = req.headers.get('authorization');
         // Protection du endpoint
-        if (process.env.ADMIN_LOCKDOWN_KEY && authHeader !== \`Bearer \${process.env.ADMIN_LOCKDOWN_KEY}\`) {
+        if (process.env.ADMIN_LOCKDOWN_KEY && authHeader !== `Bearer ${process.env.ADMIN_LOCKDOWN_KEY}`) {
             // return NextResponse.json({ error: 'Accès Refusé' }, { status: 403 });
         }
 
@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
         // 1. Check Live vs Test Mode
         const isLiveMode = stripeKey.startsWith('sk_live_');
         const isTestMode = stripeKey.startsWith('sk_test_');
-        
+
         // 2. Webhook Configuration Check
         const hasWebhook = webhookSecret.length > 10;
 
@@ -46,8 +46,8 @@ export async function GET(req: NextRequest) {
                 stripeKeyProvided: stripeKey.length > 0,
                 isLiveMode,
                 webhookSecretProvided: hasWebhook,
-                advice: cashReady 
-                    ? "L'infrastructure est armée. Le système peut encaisser." 
+                advice: cashReady
+                    ? "L'infrastructure est armée. Le système peut encaisser."
                     : "L'infrastructure financière est en mode test ou incomplète. Vérifiez les variables d'environnement STRIPE_SECRET_KEY et STRIPE_WEBHOOK_SECRET."
             }
         });

@@ -63,14 +63,60 @@ Réponds UNIQUEMENT avec le numéro de l'option choisie.`;
   protected async logAction(action: string, result: any) {
     console.log(`[${this.name}] ${action}:`, result);
 
-    await prisma.actionHistory.create({
-      data: {
-        userId: "AGENT",
-        platform: "SYSTEM",
-        action: `AGENT_${this.name.toUpperCase()}_${action}`,
-        context: JSON.stringify({ result }),
-      },
-    });
+    const logData = {
+      userId: "AGENT",
+      platform: "SYSTEM",
+      action: `AGENT_${this.name.toUpperCase()}_${action}`,
+      context: JSON.stringify({ result }),
+    };
+
+    try {
+      await prisma.actionHistory.create({ data: logData });
+    } catch (e: any) {
+      // Lazy initialization of system entities if P2003 (foreign key) occurs
+      if (e.code === 'P2003') {
+        console.log(`[${this.name}] System user missing. Initializing APEX fortress identities...`);
+        await this.ensureSystemUserExists();
+        await prisma.actionHistory.create({ data: logData });
+      } else {
+        console.error(`[${this.name}] Logging failed:`, e.message);
+      }
+    }
+  }
+
+  /**
+   * 🛡️ APEX FORTRESS IDENTITY INITIALIZATION
+   */
+  private async ensureSystemUserExists() {
+    try {
+      // 1. Create System Organization
+      await prisma.organization.upsert({
+        where: { id: "SYSTEM" },
+        update: {},
+        create: {
+          id: "SYSTEM",
+          name: "Sovereign System",
+          domain: "system.ela.ai",
+          status: "active"
+        }
+      });
+
+      // 2. Create System Agent User
+      await prisma.user.upsert({
+        where: { id: "AGENT" },
+        update: {},
+        create: {
+          id: "AGENT",
+          email: "agent@ela.ai",
+          name: "Apex Agent",
+          organizationId: "SYSTEM",
+          role: "admin"
+        }
+      });
+      console.log("✅ [SYSTEM] Apex identities secured.");
+    } catch (initError: any) {
+      console.error("❌ [SYSTEM] Identity initialization failed:", initError.message);
+    }
   }
 
   /**

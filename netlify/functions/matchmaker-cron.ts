@@ -19,10 +19,10 @@ export const handler = schedule('0 9 * * *', async (event) => {
     const siteUrl = process.env.URL || 'http://localhost:3000';
 
     try {
-        const response = await fetch(\`\${siteUrl}/api/cron/matchmaker\`, {
+        const response = await fetch(`${siteUrl}/api/cron/matchmaker`, {
             method: 'GET',
             headers: {
-                'Authorization': \`Bearer \${process.env.CRON_SECRET || ''}\`
+                'Authorization': `Bearer ${process.env.CRON_SECRET || ''}`
             }
         });
 

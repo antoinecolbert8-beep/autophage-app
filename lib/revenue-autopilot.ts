@@ -58,6 +58,7 @@ export class RevenueAutopilot {
 
     /**
      * Traitement automatique des paiements entrants
+     * S'assure que 30% reviennent à l'affilié par défaut si présent (Coup de Foudre)
      */
     static async processIncomingPayment(params: {
         streamId: string;
@@ -65,23 +66,27 @@ export class RevenueAutopilot {
         customerId: string;
         metadata?: Record<string, any>;
     }): Promise<void> {
-        const { streamId, amount } = params;
+        const { streamId, amount, metadata } = params;
 
         console.log(`[Revenue] Processing €${amount} for stream ${streamId}`);
 
-        const splits = params.metadata?.splits ? JSON.parse(params.metadata.splits) : [];
-
-        if (!splits || splits.length === 0) {
-            console.warn('[Revenue] No splits configured for this stream');
-            return;
+        // 1. GESTION DES AFFILIÉS (30% Split "Coup de Foudre")
+        if (metadata?.affiliateId) {
+            const affiliateAmount = amount * 0.3;
+            console.log(`💸 Affiliate detected: ${metadata.affiliateId}. Splitting €${affiliateAmount.toFixed(2)} (30%)`);
+            await this.creditOrganizationBalance(metadata.affiliateId, affiliateAmount);
         }
 
-        for (const split of splits) {
-            const splitAmount = (amount * split.percentage) / 100;
-            await this.creditOrganizationBalance(split.userId, splitAmount);
-        }
+        // 2. GESTION DES SPLITS PERSONNALISÉS
+        const splits = metadata?.splits ? JSON.parse(metadata.splits) : [];
 
-        console.log(`[Revenue] Distributed €${amount} across ${splits.length} beneficiaries`);
+        if (splits && splits.length > 0) {
+            for (const split of splits) {
+                const splitAmount = (amount * split.percentage) / 100;
+                await this.creditOrganizationBalance(split.userId, splitAmount);
+            }
+            console.log(`[Revenue] Distributed €${amount} across ${splits.length} custom beneficiaries`);
+        }
     }
 
     /**

@@ -15,23 +15,30 @@ export const SUBSCRIPTION_TIERS = {
     starter: {
         id: 'starter',
         name: 'ELA Starter',
-        priceMonthly: 99,
-        credits: 500,
-        features: ['500 crédits/mois', 'APEX Basic', 'PULSE Email'],
+        priceMonthly: 37,
+        credits: 1000,
+        features: ['1000 crédits/mois', 'APEX Basic', 'PULSE Email'],
     },
     pro: {
         id: 'pro',
         name: 'ELA Pro',
-        priceMonthly: 299,
-        credits: 2500,
-        features: ['2500 crédits/mois', 'APEX Full', 'PULSE Multi-Canal', 'Priority Support'],
+        priceMonthly: 197,
+        credits: 5000,
+        features: ['5000 crédits/mois', 'APEX Full', 'PULSE Multi-Canal', 'Priority Support'],
     },
-    enterprise: {
-        id: 'enterprise',
-        name: 'ELA Enterprise',
-        priceMonthly: 999,
+    supreme: {
+        id: 'supreme',
+        name: 'ELA Supreme',
+        priceMonthly: 497,
         credits: 15000,
         features: ['15000 crédits/mois', 'Tout inclus', 'API dédiée', 'Account Manager'],
+    },
+    empire: {
+        id: 'empire',
+        name: 'ELA Empire',
+        priceMonthly: 1497,
+        credits: 50000,
+        features: ['50000 crédits/mois', 'Infrastructure Dédiée', 'Zéro Limite', 'Stratèges Dédiés'],
     },
 };
 

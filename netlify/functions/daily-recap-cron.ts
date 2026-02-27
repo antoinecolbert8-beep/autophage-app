@@ -11,10 +11,10 @@ export const handler = schedule('0 18 * * *', async (event) => {
     const siteUrl = process.env.URL || 'http://localhost:3000';
 
     try {
-        const response = await fetch(\`\${siteUrl}/api/cron/daily-recap\`, {
+        const response = await fetch(`${siteUrl}/api/cron/daily-recap`, {
             method: 'GET',
             headers: {
-                'Authorization': \`Bearer \${process.env.CRON_SECRET || ''}\`
+                'Authorization': `Bearer ${process.env.CRON_SECRET || ''}`
             }
         });
 

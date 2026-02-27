@@ -17,32 +17,32 @@ export const PLANS = {
   STARTER: {
     id: "starter",
     name: "ELA Starter",
-    price: 99,
+    price: 37,
     currency: "eur",
     interval: "month" as const,
-    quota: 500, // credits/month
-    stripePriceId: process.env.STRIPE_PRICE_STARTER || "price_starter_eur_monthly",
+    quota: 1000, // credits/month - Upgraded from 500
+    stripePriceId: process.env.STRIPE_PRICE_STARTER_LIVE || "price_starter_eur_monthly",
     paymentLink: "https://buy.stripe.com/7sY00j6gZ1tt2mp9A18EM04",
     features: [
-      "500 crédits/mois",
+      "1000 crédits/mois",
       "APEX Basic Generation",
       "PULSE Email Outreach",
       "Sitemap SEO Dynamique",
       "Support standard",
     ],
-    overage: 0, // No overage, buy packages
+    overage: 0,
   },
   PRO: {
     id: "pro",
     name: "ELA Pro",
-    price: 299,
+    price: 197,
     currency: "eur",
     interval: "month" as const,
-    quota: 2500,
-    stripePriceId: process.env.STRIPE_PRICE_PRO || "price_pro_eur_monthly",
+    quota: 5000, // Upgraded from 2500
+    stripePriceId: process.env.STRIPE_PRICE_PRO_LIVE || "price_pro_eur_monthly",
     paymentLink: "https://buy.stripe.com/4gM14n20J4FFe579A18EM05",
     features: [
-      "2500 crédits/mois",
+      "5000 crédits/mois",
       "APEX Full Generation",
       "PULSE Multi-Canal",
       "Rapports hebdomadaires",
@@ -50,15 +50,15 @@ export const PLANS = {
     ],
     overage: 0,
   },
-  BUSINESS: {
-    id: "enterprise",
-    name: "ELA Enterprise",
-    price: 999,
+  SUPREME: {
+    id: "supreme",
+    name: "ELA Supreme",
+    price: 497,
     currency: "eur",
     interval: "month" as const,
     quota: 15000,
-    stripePriceId: process.env.STRIPE_PRICE_BUSINESS || "price_business_eur_monthly",
-    paymentLink: "https://buy.stripe.com/4gM14n20J4FFe579A18EM05_BUSINESS", // Added fallback/missing link
+    stripePriceId: process.env.STRIPE_PRICE_SUPREME_LIVE || "price_supreme_eur_monthly",
+    paymentLink: "https://buy.stripe.com/4gM14n20J4FFe579A18EM05_BUSINESS",
     features: [
       "15000 crédits/mois",
       "Accès API Dédié",
@@ -68,17 +68,17 @@ export const PLANS = {
     ],
     overage: 0,
   },
-  ENTERPRISE: {
-    id: "god_mode",
-    name: "God Mode (Custom)",
-    price: 1999,
+  EMPIRE: {
+    id: "empire",
+    name: "ELA Empire",
+    price: 1497,
     currency: "eur",
     interval: "month" as const,
-    quota: -1, // Unlimited
-    stripePriceId: null,
+    quota: 50000, // Credits massively increased for Empire
+    stripePriceId: process.env.STRIPE_PRICE_EMPIRE_LIVE || "price_empire_eur_monthly",
     paymentLink: "https://buy.stripe.com/4gMfZhcFn9ZZ7GJeUl8EM06",
     features: [
-      "Crédits illimités",
+      "50000 crédits/mois",
       "Infrastructure Serveur Dédiée",
       "SLA 99.99% Garanti",
       "Custom Workflow Design",

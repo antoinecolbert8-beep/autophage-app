@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     try {
         const authHeader = req.headers.get('authorization');
         // Protection basique asymétrique pour éviter le spam externe
-        if (process.env.ADMIN_LOCKDOWN_KEY && authHeader !== \`Bearer \${process.env.ADMIN_LOCKDOWN_KEY}\`) {
+        if (process.env.ADMIN_LOCKDOWN_KEY && authHeader !== `Bearer ${process.env.ADMIN_LOCKDOWN_KEY}`) {
             // return NextResponse.json({ error: 'Accès Refusé' }, { status: 403 });
         }
 
@@ -84,10 +84,10 @@ export async function POST(req: NextRequest) {
             data: seedListings
         });
 
-        return NextResponse.json({ 
-            success: true, 
+        return NextResponse.json({
+            success: true,
             message: "Ghost Marketplace Injected.",
-            insertedRows: created.count 
+            insertedRows: created.count
         });
 
     } catch (e) {

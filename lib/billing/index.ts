@@ -20,11 +20,11 @@ export const CREDIT_COSTS = {
     POST_PUBLISH: 10,         // Native social publish (Segment E)
 } as const;
 
-// Credit packages available for purchase
+// Credit packages available for purchase (Coup de Foudre Pricing)
 export const CREDIT_PACKAGES = [
-    { id: 'starter', credits: 500, priceEuros: 49, popular: false },
-    { id: 'pro', credits: 2000, priceEuros: 149, popular: true },
-    { id: 'enterprise', credits: 10000, priceEuros: 499, popular: false },
+    { id: 'starter_pack', credits: 1000, priceEuros: 37, popular: false },
+    { id: 'pro_pack', credits: 5000, priceEuros: 197, popular: true },
+    { id: 'supreme_pack', credits: 15000, priceEuros: 497, popular: false },
 ];
 
 interface UsageRecord {
@@ -45,6 +45,8 @@ export async function getCreditBalance(organizationId: string): Promise<number> 
     return org?.creditBalance || 0;
 }
 
+import { reportUsageToStripe, getMeteredSubscriptionItem } from './usage';
+
 /**
  * Consume credits for an action
  * Returns true if successful, false if insufficient credits
@@ -57,11 +59,23 @@ export async function consumeCredits(
     const cost = CREDIT_COSTS[actionType] * multiplier;
 
     try {
+        // 🔒 KILL-SWITCH GUARD: Check if org is suspended
+        const org = await prisma.organization.findUnique({
+            where: { id: organizationId },
+            select: { status: true, creditBalance: true }
+        });
+
+        if (org?.status === 'suspended') {
+            console.warn(`🛑 Attempted usage from SUSPENDED organization: ${organizationId}`);
+            return { success: false, remaining: org.creditBalance, consumed: 0 };
+        }
+
         // Atomic decrement with check
         const result = await prisma.organization.updateMany({
             where: {
                 id: organizationId,
                 creditBalance: { gte: cost },
+                status: 'active', // Only active orgs can consume
             },
             data: {
                 creditBalance: { decrement: cost },
@@ -82,6 +96,61 @@ export async function consumeCredits(
                 timestamp: new Date(),
             },
         });
+
+        // 📈 PAY-PER-USE REPORTING (Sovereign Integration)
+        // If the org has a linked Stripe subscription, we "bip" chez Stripe
+        try {
+            const integration = await prisma.integration.findFirst({
+                where: { organizationId, provider: 'stripe', status: 'active' }
+            });
+
+            if (integration) {
+                const config = JSON.parse(integration.config);
+                const subscriptionId = config.subscriptionId;
+
+                if (subscriptionId) {
+                    // Optimized: check if we already have the subscriptionItemId in config
+                    let subscriptionItemId = config.subscriptionItemId;
+
+                    if (!subscriptionItemId) {
+                        subscriptionItemId = await getMeteredSubscriptionItem(subscriptionId);
+                        // Cache it for future use
+                        if (subscriptionItemId) {
+                            await prisma.integration.update({
+                                where: { id: integration.id },
+                                data: { config: JSON.stringify({ ...config, subscriptionItemId }) }
+                            });
+                        }
+                    }
+
+                    if (subscriptionItemId) {
+                        try {
+                            const report = await reportUsageToStripe(subscriptionItemId, 1);
+                            if (!report.success) throw report.error;
+                        } catch (err) {
+                            console.error("❌ Stripe Reporting Failed. Queueing local log for manual reconciliation.");
+                            // We create a specific UsageLog entry marked for retry/audit
+                            await prisma.usageLog.create({
+                                data: {
+                                    organizationId,
+                                    actionType: 'AI_ANALYSIS', // Or the actual action
+                                    creditsUsed: 0,
+                                    metadata: JSON.stringify({
+                                        error: "STRIPE_REPORTING_FAILED",
+                                        subscriptionItemId,
+                                        originalAction: actionType,
+                                        pendingReconciliation: true
+                                    }),
+                                    timestamp: new Date(),
+                                },
+                            });
+                        }
+                    }
+                }
+            }
+        } catch (billingError) {
+            console.warn("⚠️ Billing reporting bypassed:", billingError);
+        }
 
         const remaining = await getCreditBalance(organizationId);
         return { success: true, remaining, consumed: cost };

@@ -1,4 +1,4 @@
-import { generateContentWithGemini } from './gemini-content';
+import { generateCriticalContent } from './ai-orchestrator';
 import { sendRealEmail } from './services/send-grid';
 import { consumeCredits, CREDIT_COSTS } from './billing/index';
 import { prisma } from './prisma';
@@ -59,7 +59,7 @@ export async function executeLocalAutomation(
         switch (action) {
             // ========== AI/CONTENT GENERATION ==========
             case 'GENERATE_SHORT_SCRIPT':
-                result = await generateContentWithGemini({
+                result = await generateCriticalContent({
                     topic: payload.topic || 'Default Topic',
                     platform: 'YOUTUBE_SHORT',
                     contentType: 'VIDEO_SCRIPT',
@@ -83,7 +83,7 @@ export async function executeLocalAutomation(
 
             case 'GENERATE_SMART_RESPONSE':
             case 'GENERATE_LANDING_COPY':
-                result = await generateContentWithGemini({
+                result = await generateCriticalContent({
                     topic: payload.context || payload.query || 'Response',
                     platform: 'LINKEDIN',
                     contentType: 'TEXT',
@@ -144,7 +144,7 @@ export async function executeLocalAutomation(
             // ========== LEAD QUALIFICATION ==========
             case 'QUALIFY_LEAD_AI':
             case 'GENERATE_PROSPECT_MESSAGE':
-                result = await generateContentWithGemini({
+                result = await generateCriticalContent({
                     topic: `Qualify lead: ${JSON.stringify(payload.lead || payload)}`,
                     platform: 'LINKEDIN',
                     contentType: 'TEXT',
