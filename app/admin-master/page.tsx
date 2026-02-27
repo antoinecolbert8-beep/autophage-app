@@ -8,9 +8,17 @@ import {
   LineIconShield,
   LineIconUsers,
   LineIconZap,
-  LineIconBarChart
+  LineIconBarChart,
+  LineIconSearch
 } from "@/components/AppIcons";
 import { LogOut, Settings, Database, Globe, Activity } from "lucide-react";
+import {
+  GrainTexture,
+  Scanline,
+  NeuralWeb,
+  CyberGlitch,
+  GlassCard3D
+} from "@/components/AdvancedVisuals";
 
 export default function AdminMasterPage() {
   const router = useRouter();
@@ -51,100 +59,127 @@ export default function AdminMasterPage() {
   if (!isAuthed) return null;
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white">
+    <div className="min-h-screen bg-[#050508] text-white overflow-x-hidden relative font-sans">
+      <NeuralWeb />
+      <GrainTexture />
+      <Scanline />
+
       {/* Header */}
-      <div className="p-6 border-b border-red-500/20 flex items-center justify-between bg-gradient-to-r from-red-950/50 to-transparent">
-        <div className="flex items-center gap-4">
-          <Link href="/dashboard" className="p-2 hover:bg-white/5 rounded-full transition-colors">
-            <LineIconChevronLeft size={20} className="text-gray-400" />
+      <div className="p-6 border-b border-white/5 flex items-center justify-between bg-black/40 backdrop-blur-3xl sticky top-0 z-30">
+        <div className="flex items-center gap-6">
+          <Link href="/dashboard" className="p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all border border-white/10 group btn-haptic">
+            <LineIconChevronLeft size={20} className="text-gray-400 group-hover:text-white" />
           </Link>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center">
-              <LineIconShield size={20} />
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-red-600 to-red-900 flex items-center justify-center shadow-[0_0_30px_rgba(220,38,38,0.2)] border border-red-500/30">
+              <LineIconShield size={24} className="text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-black text-red-500">ELA MASTER COMMAND</h1>
-              <p className="text-xs text-gray-500 font-mono">Session active • Niveau 4</p>
+              <CyberGlitch>
+                <h1 className="text-2xl font-black tracking-[0.2em] uppercase text-red-600 stat-value">ELA MASTER COMMAND</h1>
+              </CyberGlitch>
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />
+                <span className="text-[10px] font-mono text-red-500/50 tracking-[0.4em] uppercase">SYSTEM_ACCESS_L4 // ROOT_CORTEX</span>
+              </div>
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="px-3 py-1 bg-green-500/20 text-green-400 border border-green-500/30 rounded font-bold text-xs uppercase flex items-center gap-2">
-            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-            Système Opérationnel
+        <div className="flex items-center gap-6">
+          <div className="px-4 py-2 bg-red-600/10 border border-red-600/30 rounded-xl flex items-center gap-3">
+            <div className="w-2 h-2 rounded-full bg-red-600 animate-pulse shadow-[0_0_10px_#dc2626]" />
+            <span className="text-[10px] font-black text-red-600 uppercase tracking-widest">INFRASTRUCTURE: OPTIMALE</span>
           </div>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-xl text-red-400 text-sm font-bold transition-colors"
+            className="p-3 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white rounded-xl transition-all border border-red-600/20 btn-haptic"
           >
-            <LogOut size={16} />
-            Déconnexion
+            <LogOut size={20} />
           </button>
         </div>
       </div>
 
-      <div className="p-8 max-w-7xl mx-auto">
+      <div className="p-8 max-w-7xl mx-auto relative z-10 pt-12">
         {/* Stats Grid */}
-        <div className="grid grid-cols-4 gap-6 mb-8">
-          <div className="group p-[1px] rounded-2xl bg-gradient-to-br from-red-500/30 to-pink-500/10">
-            <div className="bg-[#13131f] rounded-2xl p-6 h-full">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-red-400 font-bold text-sm">Utilisateurs Actifs</h3>
-                <LineIconUsers size={20} className="text-red-400" />
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+          <GlassCard3D className="p-8 group bg-gradient-to-br from-red-600/5 to-transparent">
+            <div className="flex items-center justify-between mb-6">
+              <div className="p-3 bg-red-600/10 rounded-xl text-red-600">
+                <LineIconUsers size={20} />
               </div>
-              <p className="text-4xl font-black">12,482</p>
-              <p className="text-xs text-green-400 mt-2">+847 cette semaine</p>
+              <span className="text-[10px] font-black text-red-600/50 uppercase tracking-widest">ACTIVE_USERS</span>
             </div>
-          </div>
-          <div className="group p-[1px] rounded-2xl bg-gradient-to-br from-purple-500/30 to-blue-500/10">
-            <div className="bg-[#13131f] rounded-2xl p-6 h-full">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-purple-400 font-bold text-sm">Revenus Mensuels</h3>
-                <LineIconBarChart size={20} className="text-purple-400" />
+            <p className="text-5xl font-black tracking-tighter mb-2 stat-value">12.4k</p>
+            <div className="flex items-center gap-2 text-green-400 text-[10px] font-black uppercase tracking-wider">
+              <span className="animate-bounce">↑</span> +6.2% <span className="text-gray-600 font-normal">DELTA_H_24</span>
+            </div>
+          </GlassCard3D>
+
+          <GlassCard3D className="p-8 group bg-gradient-to-br from-purple-600/5 to-transparent">
+            <div className="flex items-center justify-between mb-6">
+              <div className="p-3 bg-purple-600/10 rounded-xl text-purple-600">
+                <LineIconBarChart size={20} />
               </div>
-              <p className="text-4xl font-black">842k €</p>
-              <p className="text-xs text-green-400 mt-2">+12% vs mois dernier</p>
+              <span className="text-[10px] font-black text-purple-600/50 uppercase tracking-widest">MRR_FLOW</span>
             </div>
-          </div>
-          <div className="group p-[1px] rounded-2xl bg-gradient-to-br from-blue-500/30 to-cyan-500/10">
-            <div className="bg-[#13131f] rounded-2xl p-6 h-full">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-blue-400 font-bold text-sm">Charge Serveur</h3>
-                <Activity size={20} className="text-blue-400" />
+            <p className="text-5xl font-black tracking-tighter mb-2 stat-value">€842k</p>
+            <div className="flex items-center gap-2 text-green-400 text-[10px] font-black uppercase tracking-wider">
+              <span className="animate-bounce">↑</span> +12.4% <span className="text-gray-600 font-normal">DELTA_M_1</span>
+            </div>
+          </GlassCard3D>
+
+          <GlassCard3D className="p-8 group bg-gradient-to-br from-blue-600/5 to-transparent">
+            <div className="flex items-center justify-between mb-6">
+              <div className="p-3 bg-blue-600/10 rounded-xl text-blue-600">
+                <Activity size={20} />
               </div>
-              <p className="text-4xl font-black">34%</p>
-              <p className="text-xs text-gray-400 mt-2">Infrastructure stable</p>
+              <span className="text-[10px] font-black text-blue-600/50 uppercase tracking-widest">CORE_LOAD</span>
             </div>
-          </div>
-          <div className="group p-[1px] rounded-2xl bg-gradient-to-br from-green-500/30 to-emerald-500/10">
-            <div className="bg-[#13131f] rounded-2xl p-6 h-full">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-green-400 font-bold text-sm">Incidents</h3>
-                <LineIconShield size={20} className="text-green-400" />
+            <p className="text-5xl font-black tracking-tighter mb-2 stat-value">34%</p>
+            <div className="text-gray-500 text-[10px] font-black uppercase tracking-wider">
+              STATUS: <span className="text-blue-400">NOMINAL_SPEED</span>
+            </div>
+          </GlassCard3D>
+
+          <GlassCard3D className="p-8 group bg-gradient-to-br from-green-600/5 to-transparent">
+            <div className="flex items-center justify-between mb-6">
+              <div className="p-3 bg-green-600/10 rounded-xl text-green-600">
+                <LineIconZap size={20} />
               </div>
-              <p className="text-4xl font-black">0</p>
-              <p className="text-xs text-green-400 mt-2">Aucun incident ouvert</p>
+              <span className="text-[10px] font-black text-green-600/50 uppercase tracking-widest">SYSTEM_BREACH</span>
             </div>
-          </div>
+            <p className="text-5xl font-black tracking-tighter mb-2 stat-value">00</p>
+            <div className="text-gray-500 text-[10px] font-black uppercase tracking-wider">
+              PROTECTION: <span className="text-green-400">MAXIMUM</span>
+            </div>
+          </GlassCard3D>
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-3 gap-6 mb-8">
-          <button className="p-6 bg-[#13131f] border border-white/5 hover:border-red-500/30 rounded-2xl text-left transition-all group">
-            <Database size={24} className="text-red-400 mb-4 group-hover:scale-110 transition-transform" />
-            <h3 className="font-bold text-lg mb-2">Base de données</h3>
-            <p className="text-sm text-gray-500">Gérer les données utilisateurs et analytics</p>
-          </button>
-          <button className="p-6 bg-[#13131f] border border-white/5 hover:border-purple-500/30 rounded-2xl text-left transition-all group">
-            <Settings size={24} className="text-purple-400 mb-4 group-hover:scale-110 transition-transform" />
-            <h3 className="font-bold text-lg mb-2">Configuration</h3>
-            <p className="text-sm text-gray-500">Paramètres système et intégrations API</p>
-          </button>
-          <button className="p-6 bg-[#13131f] border border-white/5 hover:border-blue-500/30 rounded-2xl text-left transition-all group">
-            <Globe size={24} className="text-blue-400 mb-4 group-hover:scale-110 transition-transform" />
-            <h3 className="font-bold text-lg mb-2">Auto-Promotion</h3>
-            <p className="text-sm text-gray-500">Déclencher manuellement la promotion</p>
-          </button>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <GlassCard3D className="p-8 group hover:bg-white/[0.02] cursor-pointer transition-all border-white/5 hover:border-red-600/30">
+            <div className="w-14 h-14 bg-red-600/10 rounded-2xl flex items-center justify-center text-red-600 mb-6 group-hover:scale-110 transition-transform">
+              <Database size={28} />
+            </div>
+            <h3 className="font-black text-lg mb-2 tracking-tight uppercase">Souverain DB</h3>
+            <p className="text-[11px] text-gray-500 font-light italic leading-relaxed uppercase tracking-wider">Gérer les calibres utilisateurs et synchroniser les accès organisationnels.</p>
+          </GlassCard3D>
+
+          <GlassCard3D className="p-8 group hover:bg-white/[0.02] cursor-pointer transition-all border-white/5 hover:border-purple-600/30">
+            <div className="w-14 h-14 bg-purple-600/10 rounded-2xl flex items-center justify-center text-purple-600 mb-6 group-hover:scale-110 transition-transform">
+              <Settings size={28} />
+            </div>
+            <h3 className="font-black text-lg mb-2 tracking-tight uppercase">Config. Matrice</h3>
+            <p className="text-[11px] text-gray-500 font-light italic leading-relaxed uppercase tracking-wider">Ajuster les réglages système, seuils API et orchestrations autonomes.</p>
+          </GlassCard3D>
+
+          <GlassCard3D className="p-8 group hover:bg-white/[0.02] cursor-pointer transition-all border-white/5 hover:border-blue-600/30">
+            <div className="w-14 h-14 bg-blue-600/10 rounded-2xl flex items-center justify-center text-blue-400 mb-6 group-hover:scale-110 transition-transform">
+              <Globe size={28} />
+            </div>
+            <h3 className="font-black text-lg mb-2 tracking-tight uppercase">Auto-Expansion</h3>
+            <p className="text-[11px] text-gray-500 font-light italic leading-relaxed uppercase tracking-wider">Déclencher manuellement le protocole de diffusion omni-canale globale.</p>
+          </GlassCard3D>
         </div>
 
         {/* User Table */}

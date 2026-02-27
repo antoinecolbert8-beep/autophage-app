@@ -474,22 +474,26 @@ export async function publishToMultiplePlatforms(
       console.warn("⚠️ Background token refresh failed, proceeding with current tokens.");
     }
 
-    const integrations = await prisma.integration.findMany({
-      where: { organizationId, status: 'active' }
-    });
-    // Map integrations to credentials
-    integrations.forEach(int => {
-      try {
-        const creds = JSON.parse(int.credentials);
-        if (int.provider === 'LINKEDIN') dbCredentials.LINKEDIN = creds;
-        if (int.provider === 'FACEBOOK' || int.provider === 'INSTAGRAM') {
-          dbCredentials.META = creds; // Shared token
+    try {
+      const integrations = await prisma.integration.findMany({
+        where: { organizationId, status: 'active' }
+      });
+      // Map integrations to credentials
+      integrations.forEach(int => {
+        try {
+          const creds = JSON.parse(int.credentials);
+          if (int.provider === 'LINKEDIN') dbCredentials.LINKEDIN = creds;
+          if (int.provider === 'FACEBOOK' || int.provider === 'INSTAGRAM') {
+            dbCredentials.META = creds; // Shared token
+          }
+          if (int.provider === 'TWITTER' || int.provider === 'X_PLATFORM') dbCredentials.TWITTER = creds;
+        } catch (e) {
+          console.error(`Invalid JSON for integration ${int.id}`);
         }
-        if (int.provider === 'TWITTER' || int.provider === 'X_PLATFORM') dbCredentials.TWITTER = creds;
-      } catch (e) {
-        console.error(`Invalid JSON for integration ${int.id}`);
-      }
-    });
+      });
+    } catch (error) {
+      console.error("❌ Failed to fetch integrations for organization:", error);
+    }
   }
 
   // SECURITY FIX: No global env fallback in multi-tenant mode.

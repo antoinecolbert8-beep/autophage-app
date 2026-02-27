@@ -416,6 +416,27 @@ export const CyberGlitch = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
+// ⚠️ Global Interference (Emergency/Dominance Overlay)
+export const GlobalInterference = ({ active }: { active: boolean }) => {
+  return (
+    <AnimatePresence>
+      {active && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[200] pointer-events-none overflow-hidden"
+        >
+          <div className="absolute inset-0 bg-red-600/5 animate-[glitch_0.2s_infinite] mix-blend-overlay" />
+          <div className="absolute inset-0 bg-gradient-to-t from-red-600/10 via-transparent to-red-600/10 animate-pulse" />
+          <div className="absolute top-0 left-0 w-full h-[2px] bg-red-600/40 animate-[move_2s_linear_infinite] shadow-[0_0_15px_#dc2626]" />
+          <div className="absolute bottom-0 left-0 w-full h-[2px] bg-red-600/40 animate-[move_2s_linear_infinite_reverse] shadow-[0_0_15px_#dc2626]" />
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 // 🎨 Grain Texture Overlay
 export const GrainTexture = () => {
   return (
@@ -521,4 +542,277 @@ export const Scanline = () => {
   );
 };
 
-// 🔚 Footer (Placeholder fix if needed, but keeping the core visuals)
+// 🖐️ Biometric Scanner (High-Security Overlay)
+export const BiometricScanner = ({ onComplete }: { onComplete?: () => void }) => {
+  const [progress, setProgress] = useState(0);
+  const [status, setStatus] = useState("SCANNING_BIOMETRIC_DATA");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          setStatus("ACCESS_GRANTED_SOUVERAIN");
+          setTimeout(() => onComplete?.(), 1000);
+          return 100;
+        }
+        return prev + 2;
+      });
+    }, 30);
+    return () => clearInterval(interval);
+  }, [onComplete]);
+
+  return (
+    <div className="fixed inset-0 z-[100] bg-black/90 flex flex-col items-center justify-center backdrop-blur-3xl">
+      <div className="relative w-80 h-80 flex items-center justify-center">
+        {/* Rotating Rings */}
+        <motion.div
+          className="absolute inset-0 border-2 border-cyan-500/20 rounded-full"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.div
+          className="absolute inset-4 border border-cyan-500/10 rounded-full"
+          animate={{ rotate: -360 }}
+          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+        />
+
+        {/* Progress Circle */}
+        <svg className="w-full h-full -rotate-90">
+          <circle
+            cx="160" cy="160" r="140"
+            stroke="currentColor" strokeWidth="2"
+            className="text-white/5" fill="transparent"
+          />
+          <motion.circle
+            cx="160" cy="160" r="140"
+            stroke="currentColor" strokeWidth="2"
+            className="text-cyan-500" fill="transparent"
+            strokeDasharray={880}
+            strokeDashoffset={880 - (880 * progress) / 100}
+            strokeLinecap="round"
+          />
+        </svg>
+
+        {/* Fingerprint Visual */}
+        <motion.div
+          className="absolute text-cyan-500 opacity-40"
+          animate={{ opacity: [0.2, 0.6, 0.2] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.5">
+            <path d="M12 11c0-1.1-.9-2-2-2m2 4c0-2.2-1.8-4-4-4M8 11c0 1.1.9 2 2 2m-2 4c0-3.3 2.7-6 6-6M10 12c0 2.2 1.8 4 4 4m2-4c0 3.3-2.7 6-6 6M12 13c0 1.1.9 2 2 2m2 4c0-5.5-4.5-10-10-10M14 14c0 1.1.9 2 2 2m4 0c0-7.7-6.3-14-14-14M16 16c0 1.1.9 2 2 2" />
+          </svg>
+        </motion.div>
+
+        {/* Scanner Line */}
+        <motion.div
+          className="absolute w-[280px] h-px bg-cyan-500 shadow-[0_0_15px_#66fcf1]"
+          animate={{ top: ["20%", "80%", "20%"] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
+
+      <div className="mt-12 text-center space-y-4">
+        <p className="text-[#66fcf1] font-mono text-xs tracking-[0.5em] uppercase animate-pulse">{status}</p>
+        <div className="text-white/20 font-black text-4xl tracking-tighter uppercase">{progress}%</div>
+      </div>
+
+      <div className="absolute bottom-10 font-mono text-[9px] text-gray-700 tracking-[0.3em] uppercase">
+        ENCRYPTED_SOUVERAIN_PROTOCOL_v4.0 // ELA_BIOMETRIC
+      </div>
+    </div>
+  );
+};
+
+// 🔮 OmniSphere (Central 3D Core - Requires Three.js but let's do a high-end SVG/CSS version for compatibility)
+export const OmniSphere = () => {
+  return (
+    <div className="relative w-[500px] h-[500px] flex items-center justify-center group pointer-events-none">
+      {/* Core Glow */}
+      <div className="absolute w-[200px] h-[200px] bg-cyan-500/20 blur-[80px] rounded-full animate-pulse" />
+
+      {/* Morphing Shapes */}
+      <motion.div
+        className="absolute w-[300px] h-[300px] border border-cyan-500/20 rounded-full"
+        animate={{
+          borderRadius: ["40% 60% 70% 30% / 40% 50% 60% 50%", "50% 50% 20% 80% / 50% 20% 80% 50%", "40% 60% 70% 30% / 40% 50% 60% 50%"],
+          rotate: 360,
+          scale: [1, 1.05, 1]
+        }}
+        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+      />
+
+      <motion.div
+        className="absolute w-[350px] h-[350px] border border-blue-500/10 rounded-full"
+        animate={{
+          borderRadius: ["50% 20% 80% 50% / 50% 50% 20% 80%", "40% 60% 70% 30% / 40% 50% 60% 50%", "50% 20% 80% 50% / 50% 50% 20% 80%"],
+          rotate: -360,
+          scale: [1, 1.1, 1]
+        }}
+        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+      />
+
+      {/* Floating Data Nodes */}
+      {[...Array(12)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-1 h-1 bg-cyan-400 rounded-full"
+          animate={{
+            x: [Math.cos(i * 30) * 150, Math.cos(i * 30) * 180, Math.cos(i * 30) * 150],
+            y: [Math.sin(i * 30) * 150, Math.sin(i * 30) * 180, Math.sin(i * 30) * 150],
+            opacity: [0.2, 0.8, 0.2]
+          }}
+          transition={{ duration: 4 + i % 3, repeat: Infinity, ease: "easeInOut" }}
+          style={{ filter: 'blur(1px)' }}
+        />
+      ))}
+
+      <div className="relative z-10 text-center">
+        <h4 className="text-[#66fcf1] font-black text-xs uppercase tracking-[0.5em] mb-2">OMNISCIENCE_CORE</h4>
+        <div className="w-16 h-[2px] bg-gradient-to-r from-transparent via-[#66fcf1] to-transparent mx-auto" />
+      </div>
+    </div>
+  );
+};
+
+// 🔘 NeuralPulse Effect (Standard component, but can be used as overlay)
+export const NeuralPulse = () => {
+  const [pulses, setPulses] = useState<{ id: number, x: number, y: number }[]>([]);
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const id = Date.now();
+      setPulses(prev => [...prev, { id, x: e.clientX, y: e.clientY }]);
+      setTimeout(() => {
+        setPulses(prev => prev.filter(p => p.id !== id));
+      }, 1000);
+    };
+    window.addEventListener('mousedown', handleClick);
+    return () => window.removeEventListener('mousedown', handleClick);
+  }, []);
+
+  return (
+    <div className="fixed inset-0 pointer-events-none z-[100] overflow-hidden">
+      {pulses.map(p => (
+        <motion.div
+          key={p.id}
+          initial={{ scale: 0, opacity: 0.5 }}
+          animate={{ scale: 10, opacity: 0 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="absolute w-12 h-12 border border-cyan-500 rounded-full"
+          style={{ left: p.x - 24, top: p.y - 24 }}
+        />
+      ))}
+    </div>
+  );
+};
+
+// 🌪️ Reality Distortion (Major System Event Overlay)
+export const RealityDistortion = ({ active }: { active: boolean }) => {
+  return (
+    <AnimatePresence>
+      {active && (
+        <motion.div
+          initial={{ opacity: 0, scale: 1.1, filter: 'blur(20px) brightness(2)' }}
+          animate={{ opacity: 1, scale: 1, filter: 'blur(0px) brightness(1)' }}
+          exit={{ opacity: 0, scale: 0.9, filter: 'blur(40px) brightness(0)' }}
+          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+          className="fixed inset-0 z-[300] pointer-events-none overflow-hidden"
+        >
+          {/* Chromatic Aberration Simulation */}
+          <div className="absolute inset-0 bg-red-600/5 mix-blend-screen animate-pulse" style={{ clipPath: 'inset(1px 0 0 0)' }} />
+          <div className="absolute inset-0 bg-cyan-600/5 mix-blend-screen animate-pulse-slow" style={{ clipPath: 'inset(0 1px 0 0)' }} />
+
+          {/* Lens Flare Simulation */}
+          <div className="absolute top-1/4 left-1/4 w-[800px] h-[800px] bg-white/5 rounded-full blur-[160px] animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-red-600/5 rounded-full blur-[140px] animate-pulse-slow" />
+
+          {/* Edge Distortion */}
+          <div className="absolute inset-0 border-[40px] border-red-900/10 blur-[60px]" />
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+// 🌊 Data Tsunami (High-Frequency Stream)
+export const DataTsunami = ({ active }: { active: boolean }) => {
+  const [data, setData] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (!active) {
+      setData([]);
+      return;
+    }
+    const interval = setInterval(() => {
+      const chars = "010101-ERROR-DOMINANCE-ELA-SYNC-MARKET-CAPTURE-ROI-999";
+      const line = Array(15).fill(0).map(() => chars[Math.floor(Math.random() * chars.length)]).join("");
+      setData(prev => [line, ...prev].slice(0, 40));
+    }, 50);
+    return () => clearInterval(interval);
+  }, [active]);
+
+  return (
+    <AnimatePresence>
+      {active && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[250] pointer-events-none flex font-mono text-[8px] text-red-600/20 leading-none overflow-hidden"
+        >
+          {[...Array(20)].map((_, i) => (
+            <div key={i} className="flex-1 whitespace-nowrap overflow-hidden transition-all duration-1000" style={{ writingMode: 'vertical-rl' }}>
+              {data.map((line, j) => (
+                <span key={j} className="block py-2">{line}</span>
+              ))}
+            </div>
+          ))}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+// 🖥️ Holographic Interface (Floating Data Panels)
+export const HolographicInterface = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <motion.div
+      initial={{ rotateX: 20, rotateY: -10, translateZ: 50, opacity: 0 }}
+      animate={{ rotateX: 10, rotateY: -5, translateZ: 0, opacity: 1 }}
+      className="relative p-6 border border-cyan-500/30 bg-cyan-950/20 backdrop-blur-3xl rounded-3xl shadow-[0_0_50px_rgba(6,182,212,0.1)] overflow-hidden group"
+      style={{ transformStyle: 'preserve-3d' }}
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-50" />
+      <div className="relative z-10">{children}</div>
+      <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-cyan-500/10 blur-[40px] rounded-full group-hover:bg-cyan-500/20 transition-all" />
+    </motion.div>
+  );
+};
+
+// 🔡 Glitch Text (High-End Distortion)
+export const GlitchText = ({ text }: { text: string }) => {
+  return (
+    <div className="relative inline-block">
+      <span className="relative z-10">{text}</span>
+      <motion.span
+        className="absolute top-0 left-0 -z-10 text-red-500 opacity-70"
+        animate={{ x: [-2, 2, -1, 0], y: [1, -1, 0] }}
+        transition={{ duration: 0.2, repeat: Infinity, repeatType: 'mirror' }}
+      >
+        {text}
+      </motion.span>
+      <motion.span
+        className="absolute top-0 left-0 -z-20 text-blue-500 opacity-70"
+        animate={{ x: [2, -2, 1, 0], y: [-1, 1, 0] }}
+        transition={{ duration: 0.2, repeat: Infinity, repeatType: 'mirror', delay: 0.1 }}
+      >
+        {text}
+      </motion.span>
+    </div>
+  );
+};
+
+// 🔚 Final Visual Library

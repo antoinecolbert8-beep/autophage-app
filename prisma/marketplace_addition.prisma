@@ -1,0 +1,67 @@
+model MarketplaceListing {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Listing Data
+  title          String
+  description    String       @db.Text
+  type           String       // "SERVICE", "DIGITAL_ASSET", "PHYSICAL_ASSET"
+  priceCent      Int          // Amount in smallest currency unit
+  currency       String       @default("EUR")
+  status         String       @default("ACTIVE") // ACTIVE, PAUSED, SOLD, DELISTED
+  
+  // IA Targeting & Matching (Global Vector Indexing)
+  category       String
+  tags           String       // JSON: ["AI", "Consulting", "Automation"]
+  vectorId       String?      // Reference to Pinecone/PGVector embedding ID
+  targetLanguages String      @default("[\"EN\", \"FR\"]") // JSON array of languages
+
+  // Location / Global reach
+  isGlobal       Boolean      @default(true)
+  latitude       Float?       // For local marketplace features (LeCoin 2.0)
+  longitude      Float?
+  city           String?
+  country        String?
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  transactions   MarketplaceTransaction[]
+
+  @@index([organizationId])
+  @@index([category])
+  @@index([status])
+  @@index([latitude, longitude]) // Geo-spatial queries
+}
+
+model MarketplaceTransaction {
+  id             String       @id @default(cuid())
+  listingId      String
+  listing        MarketplaceListing @relation(fields: [listingId], references: [id], onDelete: Restrict)
+  
+  buyerId        String
+  buyer          User         @relation("BuyerTransactions", fields: [buyerId], references: [id])
+  sellerId       String
+  seller         User         @relation("SellerTransactions", fields: [sellerId], references: [id])
+
+  // Financials & Escrow (Stripe Connect)
+  amountCent     Int
+  currency       String
+  stripePaymentIntentId String? @unique
+  stripeTransferId      String? @unique
+  
+  status         String       @default("ESCROW_PENDING") // ESCROW_PENDING, ESCROW_HELD, COMPLETED, DISPUTED, REFUNDED
+  
+  // IA Negotiation / Conversation
+  conversationId String?      // ID to link to the AI negotiation chain
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([buyerId])
+  @@index([sellerId])
+  @@index([status])
+}

@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { BiometricScanner } from "@/components/AdvancedVisuals";
 import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
@@ -11,6 +13,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isScanning, setIsScanning] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,8 +34,9 @@ export default function LoginPage() {
       }
 
       if (result?.ok) {
-        router.push("/dashboard");
-        router.refresh();
+        // Trigger cinematic scan before redirect
+        setLoading(false);
+        setIsScanning(true);
       }
     } catch (err: any) {
       setError(err.message || "Erreur de connexion. Réessayez.");
@@ -42,6 +46,18 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7] font-sans selection:bg-[#66fcf1]/30 overflow-hidden relative">
+      <AnimatePresence>
+        {isScanning && (
+          <BiometricScanner
+            onComplete={() => {
+              setIsScanning(false);
+              router.push("/dashboard");
+              router.refresh();
+            }}
+          />
+        )}
+      </AnimatePresence>
+
       {/* Background Glows (Orbital) */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#66fcf1]/5 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-blue-900/10 blur-[100px] rounded-full pointer-events-none" />

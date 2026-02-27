@@ -5,6 +5,7 @@
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import OpenAI from "openai";
+import { getSocialPostPrompt } from "@/lib/prompts/social-posts";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || process.env.VERTEX_AI_API_KEY || "");
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || "" });
@@ -48,9 +49,7 @@ export async function generateContentWithGemini(
   const platformSpecs = getPlatformSpecs(request.platform);
   const toneGuide = getToneGuide(request.tone ?? "professional");
 
-  const prompt = `Tu es un expert en création de contenu viral pour ${request.platform}.
-
-**Sujet** : ${request.topic}
+  const prompt = getSocialPostPrompt(request.topic, (request as any).boldness || 'challenger') + `
 **Audience** : ${request.targetAudience ?? "professionnels"}
 **Ton** : ${toneGuide}
 **Type** : ${request.contentType}
@@ -82,8 +81,7 @@ ${request.keywords?.length ? `**Mots-clés à intégrer** : ${request.keywords.j
     "slug": "url-optimisee"
   }
 }
-
-**IMPORTANT** : Évite le ton "ChatGPT". Sois direct, authentique, actionnable.`;
+`;
 
   try {
     const result = await model.generateContent(prompt);

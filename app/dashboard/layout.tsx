@@ -43,9 +43,9 @@ export default function DashboardLayout({
 
     return (
         <RealTimeProvider>
-            <div className="flex min-h-screen bg-[#0a0a0f]">
+            <div className="flex h-screen bg-[#0a0a0f] overflow-hidden">
                 <Navigation />
-                <main className="flex-1 ml-64 p-8 overflow-y-auto h-screen">
+                <main className="flex-1 w-full md:ml-64 pb-24 md:pb-0 h-full overflow-y-auto overflow-x-hidden scroll-smooth transition-all duration-300">
                     {children}
                 </main>
             </div>

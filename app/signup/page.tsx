@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authService } from "@/lib/supabase/auth";
+import { BiometricScanner } from "@/components/AdvancedVisuals";
 
 function SignupContent() {
   const router = useRouter();
@@ -18,6 +19,7 @@ function SignupContent() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isScanning, setIsScanning] = useState(false);
 
   // Auto-fill company if God Mode
   if (plan === "god_mode" && !company) {
@@ -63,8 +65,8 @@ function SignupContent() {
           console.log("✅ Database sync successful:", dbResult);
           // Persist IDs locally for payment flow
           if (typeof window !== 'undefined') {
-            localStorage.setItem('ela_user_id', dbResult.userId);
-            localStorage.setItem('ela_org_id', dbResult.organizationId);
+            if (dbResult.userId) localStorage.setItem('ela_user_id', dbResult.userId);
+            if (dbResult.organizationId) localStorage.setItem('ela_org_id', dbResult.organizationId);
             localStorage.setItem('ela_tier', plan === "god_mode" ? "grand_horloger" : "standard");
             localStorage.setItem('ela_user_name', name || "Utilisateur");
             localStorage.setItem('ela_user_email', email);
@@ -72,14 +74,11 @@ function SignupContent() {
           }
         } else {
           console.error("❌ Database sync failed:", dbResult?.error);
-          // Optional: Show error to user or retry? For now proceeding but logging error.
         }
 
-        setSuccess(true);
-        // Redirect to payment immediately
-        setTimeout(() => {
-          router.push(`/payment?plan=${plan || 'starter'}`);
-        }, 1500);
+        // 🎬 CINEMATIC STEP: Show Scan after success but before payment
+        setLoading(false);
+        setIsScanning(true);
       }
     } catch (err: any) {
       console.error("Signup Error:", err);
@@ -131,6 +130,17 @@ function SignupContent() {
 
   return (
     <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7] font-sans selection:bg-[#66fcf1]/30 overflow-hidden relative">
+      {isScanning && (
+        <BiometricScanner
+          onComplete={() => {
+            setIsScanning(false);
+            setSuccess(true);
+            setTimeout(() => {
+              router.push(`/payment?plan=${plan || 'starter'}`);
+            }, 1000);
+          }}
+        />
+      )}
       {/* Background Glows */}
       <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-[#66fcf1]/5 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-900/10 blur-[100px] rounded-full pointer-events-none" />

@@ -18,7 +18,10 @@ import {
   GlassCard3D,
   TacticalMap,
   CyberGlitch,
-  Scanline
+  Scanline,
+  GlobalInterference,
+  RealityDistortion,
+  DataTsunami
 } from "@/components/AdvancedVisuals";
 import { CognitiveThought } from "@/components/CognitiveThought";
 
@@ -46,6 +49,9 @@ export default function WarRoomPage() {
       <GrainTexture />
       <SpotlightEffect />
       <Scanline />
+      <GlobalInterference active={isDominating} />
+      <RealityDistortion active={isDominating} />
+      <DataTsunami active={isDominating} />
 
       {/* --- DOMINANCE OVERLAY --- */}
       <AnimatePresence>

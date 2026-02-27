@@ -7,6 +7,7 @@ import {
 } from '@/lib/billing/subscriptions';
 import { triggerAutomation } from '@/lib/automations';
 import { prisma } from '@/core/db';
+import { triggerEvidenceBroadcast } from '@/lib/jobs/evidence-broadcaster';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2023-10-16',
@@ -42,12 +43,19 @@ export async function POST(request: NextRequest) {
       // One-time credit purchase completed (mode === 'payment')
       // Subscription checkouts are handled by customer.subscription.created
       case 'checkout.session.completed': {
-        const session = event.data.object as Stripe.CheckoutSession;
+        const session = event.data.object as Stripe.Checkout.Session;
         if (session.mode === 'payment') {
           const { handlePaymentSuccess } = await import('@/lib/billing/index');
           handlePaymentSuccess(session.id).catch(e =>
             console.error('❌ Credit provisioning failed:', e)
           );
+
+          // Trigger FOMO loop
+          await triggerEvidenceBroadcast({
+            plan: 'Crédits Souverains',
+            amount: (session.amount_total || 0) / 100,
+            customerEmail: session.customer_details?.email || undefined,
+          }).catch(e => console.error('FOMO Loop trigger failed:', e));
         }
         break;
       }
@@ -57,6 +65,13 @@ export async function POST(request: NextRequest) {
         const invoice = event.data.object as Stripe.Invoice;
         if (invoice.subscription) {
           await handleSubscriptionRenewed(invoice);
+
+          // Trigger FOMO loop
+          await triggerEvidenceBroadcast({
+            plan: 'Abonnement Professionnel',
+            amount: (invoice.amount_paid || 0) / 100,
+            customerEmail: invoice.customer_email || undefined,
+          }).catch(e => console.error('FOMO Loop trigger failed:', e));
         }
         break;
       }

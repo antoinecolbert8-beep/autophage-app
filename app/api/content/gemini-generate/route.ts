@@ -13,7 +13,7 @@ import { consumeCredits } from '@/lib/billing';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { topic, platform, contentType, tone, targetAudience, keywords, generateImages } = body;
+    const { topic, platform, contentType, tone, targetAudience, keywords, generateImages, boldness } = body;
 
     if (!topic || !platform) {
       return NextResponse.json(
@@ -50,7 +50,8 @@ export async function POST(req: NextRequest) {
       tone,
       targetAudience,
       keywords,
-    });
+      boldness,
+    } as any);
 
     // --- NEW: LEGAL COMPLIANCE CHECK ---
     const compliance = await LegalSentinel.checkContent(

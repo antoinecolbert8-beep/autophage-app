@@ -44,6 +44,9 @@ model Organization {
   // 🤖 AI: Per-tenant isolated AI profile (RGPD compliant)
   aiProfile AIProfile?
 
+  // Marketplace
+  marketplaceListings MarketplaceListing[]
+
   @@index([domain])
 }
 
@@ -63,9 +66,9 @@ model User {
   quotaResetDate   DateTime @default(now())
 
   // Spore Protocol (Referral)
-  referralCode     String?   @unique
-  referredBy       String?
-  referralTier     Int       @default(0) // Current unlocked tier (0=none, 1,3,5,10,25)
+  referralCode String? @unique
+  referredBy   String?
+  referralTier Int     @default(0) // Current unlocked tier (0=none, 1,3,5,10,25)
 
   organizationId String
   organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -81,11 +84,20 @@ model User {
   auditLogs      AuditLog[]
 
   // 🛡️ SECURITY: Explicit relation for action history
-  actionHistory  ActionHistory[]
+  actionHistory ActionHistory[]
 
   // 🚀 Viral Engine: Referral relations
-  referralsGiven    Referral[] @relation("ReferralsGiven")
-  referralReceived  Referral?  @relation("ReferralReceived")
+  referralsGiven      Referral[]               @relation("ReferralsGiven")
+  referralReceived    Referral?                @relation("ReferralReceived")
+  // Models inverses
+  marketplaceListings MarketplaceListing[]
+  buyerTransactions   MarketplaceTransaction[] @relation("BuyerTransactions")
+  sellerTransactions  MarketplaceTransaction[] @relation("SellerTransactions")
+
+  listingsOffered Listing[]     @relation("ListingsOffered")
+  contractsBought Contract[]    @relation("ContractsBought")
+  contractsSold   Contract[]    @relation("ContractsSold")
+  transactions    Transaction[] @relation("UserTransactions")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -288,9 +300,9 @@ model Integration {
   syncFrequency Int       @default(60) // minutes
 
   // ⚡ ARCHITECTURE ZÉRO MAINTENANCE: OAuth Rotation
-  refreshToken      String?   // Encrypted via Fortress
-  tokenExpiresAt    DateTime?
-  requiresReauth    Boolean   @default(false)
+  refreshToken   String? // Encrypted via Fortress
+  tokenExpiresAt DateTime?
+  requiresReauth Boolean   @default(false)
 
   dataPoints DataPoint[]
 
@@ -388,7 +400,7 @@ model CreditPurchase {
   id              String   @id @default(cuid())
   credits         Int
   amountPaid      Float?
-  paymentIntentId String?  @unique  // Unique for idempotency — prevents double credit grants
+  paymentIntentId String?  @unique // Unique for idempotency — prevents double credit grants
   timestamp       DateTime @default(now())
 
   organizationId String
@@ -471,7 +483,7 @@ model WarChest {
   reserved_cents         Int    @default(0) // Reserved for pending ops
   currency               String @default("EUR")
 
-  organizationId String? @unique
+  organizationId String?       @unique
   organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
@@ -546,7 +558,7 @@ model ActionHistory {
   action   String // post, comment, like, send, etc.
   targetId String? // ID of target entity
   context  String? // String // Json    // Additional context data
-  status   String  @default( "completed")
+  status   String  @default("completed")
 
   createdAt DateTime @default(now())
 
@@ -753,16 +765,22 @@ model AuditLog {
 
 // Parrainage direct 1-niveau (non-MLM, conforme loi française)
 model Referral {
-  id         String   @id @default(cuid())
+  id         String @id @default(cuid())
   referrerId String
-  referrer   User     @relation("ReferralsGiven", fields: [referrerId], references: [id], onDelete: Cascade)
-  refereeId  String   @unique // Un utilisateur ne peut avoir qu'un seul parrain
-  referee    User     @relation("ReferralReceived", fields: [refereeId], references: [id], onDelete: Cascade)
+  referrer   User   @relation("ReferralsGiven", fields: [referrerId], references: [id], onDelete: Cascade)
+  refereeId  String @unique // Un utilisateur ne peut avoir qu'un seul parrain
+  referee    User   @relation("ReferralReceived", fields: [refereeId], references: [id], onDelete: Cascade)
 
   // active = filleul a effectué au moins 1 post payant dans les 30 derniers jours
-  status     String   @default("pending") // pending, active, churned
-  rewardTier Int?     // Palier atteint par le parrain lors de l'activation (1,3,5,10,25)
+  status     String    @default("pending") // pending, escrow, active, churned, fraudulent
+  rewardTier Int? // Palier atteint par le parrain lors de l'activation (1,3,5,10,25)
   rewardedAt DateTime?
+
+  // 🛡️ VERROU DE RENTABILITÉ (Anti-Sybil)
+  trustScore            Float     @default(1.0) // Chute si card_type = prepaid/gift
+  escrowEndsAt          DateTime? // Période de séquestre (14 jours)
+  refereeLTV            Float     @default(0) // Valeur vie du filleul (doit dépasser coût God Mode)
+  isProfitabilityLocked Boolean   @default(true) // Débloqué uniquement quand Σ LTV > Coût
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -797,19 +815,199 @@ model AIProfile {
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   // Préférences apprises par publish performance
-  bestPostTimes  String   @default("[]")  // JSON: {"LINKEDIN":["09:00","18:00"]}
-  topHashtags    String   @default("[]")  // JSON: ["#SaaS","#IA"]
-  contentStyle   String   @default("educational") // Inféré: educational, storytelling, controversy
-  avgEngagement  Float    @default(0)
-  publishCount   Int      @default(0)
-  successRate    Float    @default(0)     // Ratio posts succeeded / total
+  bestPostTimes String @default("[]") // JSON: {"LINKEDIN":["09:00","18:00"]}
+  topHashtags   String @default("[]") // JSON: ["#SaaS","#IA"]
+  contentStyle  String @default("educational") // Inféré: educational, storytelling, controversy
+  avgEngagement Float  @default(0)
+  publishCount  Int    @default(0)
+  successRate   Float  @default(0) // Ratio posts succeeded / total
 
   // RGPD
-  consentGiven   Boolean  @default(false)
-  anonymizedAt   DateTime?
+  consentGiven Boolean   @default(false)
+  anonymizedAt DateTime?
+
+  // Sovereign Score / Ledger de Réputation
+  reputationScore Float @default(100) // Initial trust score, max 100, drops on disputes, climbs on success
+
+  // Fiscalité & Compliance
+  vatNumber    String?   // Obligatoire pour Reverse Charge B2B en UE
+  countryCode  String?   @default("FR") // ISO Pays (ex: FR, US, DE)
 
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 
   @@index([organizationId])
+}
+
+model MarketplaceListing {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Listing Data
+  title       String
+  description String
+  type        String // "SERVICE", "DIGITAL_ASSET", "PHYSICAL_ASSET"
+  priceCent   Int // Amount in smallest currency unit
+  currency    String @default("EUR")
+  status      String @default("ACTIVE") // ACTIVE, PAUSED, SOLD, DELISTED
+
+  // IA Targeting & Matching (Global Vector Indexing)
+  category        String
+  tags            String // JSON: ["AI", "Consulting", "Automation"]
+  vectorId        String? // Reference to Pinecone/PGVector embedding ID
+  targetLanguages String  @default("[\"EN\", \"FR\"]") // JSON array of languages
+
+  // Location / Global reach
+  isGlobal  Boolean @default(true)
+  latitude  Float? // For local marketplace features (LeCoin 2.0)
+  longitude Float?
+  city      String?
+  country   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  transactions MarketplaceTransaction[]
+
+  @@index([organizationId])
+  @@index([category])
+  @@index([status])
+  @@index([latitude, longitude]) // Geo-spatial queries
+}
+
+model MarketplaceTransaction {
+  id        String             @id @default(cuid())
+  listingId String
+  listing   MarketplaceListing @relation(fields: [listingId], references: [id], onDelete: Restrict)
+
+  buyerId  String
+  buyer    User   @relation("BuyerTransactions", fields: [buyerId], references: [id])
+  sellerId String
+  seller   User   @relation("SellerTransactions", fields: [sellerId], references: [id])
+
+  // Financials & Escrow (Stripe Connect)
+  amountCent            Int
+  currency              String
+  stripePaymentIntentId String? @unique
+  stripeTransferId      String? @unique
+
+  status String @default("ESCROW_PENDING") // ESCROW_PENDING, ESCROW_HELD, COMPLETED, DISPUTED, REFUNDED
+
+  // IA Negotiation / Conversation
+  conversationId String? // ID to link to the AI negotiation chain
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([buyerId])
+  @@index([sellerId])
+  @@index([status])
+}
+
+// ==========================================
+// PILIER 6 : ELA GLOBAL MARKET & OUTSOURCING
+// ==========================================
+
+model Listing {
+  id       String @id @default(cuid())
+  sellerId String
+  seller   User   @relation("ListingsOffered", fields: [sellerId], references: [id])
+
+  title       String
+  description String // Note: @db.Text n'est pas supporté par SQLite standard, donc retiré.
+  priceAmount Float
+  currency    String @default("EUR")
+  category    String // ex: "CONTENT_CREATION", "LEAD_GEN", "DESIGN"
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  contracts Contract[]
+}
+
+model Contract {
+  id       String @id @default(cuid())
+  buyerId  String
+  buyer    User   @relation("ContractsBought", fields: [buyerId], references: [id])
+  sellerId String
+  seller   User   @relation("ContractsSold", fields: [sellerId], references: [id])
+
+  listingId String?
+  listing   Listing? @relation(fields: [listingId], references: [id])
+
+  // L'IA agit comme Tiers de Confiance
+  status      String @default("PENDING_ESCROW") // PENDING_ESCROW, IN_PROGRESS, IN_REVIEW, COMPLETED, DISPUTED, CANCELLED
+  totalAmount Float
+  currency    String @default("EUR")
+  platformFee Float // Commission souveraine d'ELA (ex: 10%)
+
+  aiPrompt String? // Les instructions générées par l'IA pour encadrer le prestataire
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  milestones   Milestone[]
+  transactions Transaction[]
+}
+
+model Milestone {
+  id         String   @id @default(cuid())
+  contractId String
+  contract   Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+
+  title       String
+  description String
+  amount      Float
+  status      String @default("PENDING") // PENDING, SUBMITTED, AI_VERIFIED, PAID
+
+  proofOfWorkUrl    String? // Lien vers le livrable (URL du post, document, image)
+  aiValidationScore Float? // Score de 0 à 100 donné par l'IA d'ELA. Si > 80, l'argent est libéré.
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Transaction {
+  id         String   @id @default(cuid())
+  contractId String
+  contract   Contract @relation(fields: [contractId], references: [id])
+  userId     String
+  user       User     @relation("UserTransactions", fields: [userId], references: [id])
+
+  stripeChargeId   String? @unique // Preuve d'encaissement
+  stripeTransferId String? @unique // Preuve de reversement au sous-traitant
+
+  type     String // ESCROW_DEPOSIT, ESCROW_RELEASE, PLATFORM_FEE, REFUND
+  amount   Float
+  currency String @default("EUR")
+  status   String @default("PROCESSING") // PROCESSING, SUCCEEDED, FAILED
+
+  createdAt DateTime @default(now())
+
+  accountingRecord AccountingRecord?
+}
+
+// ==========================================
+// AUTOMATISATION COMPTABLE & FISCALE
+// ==========================================
+
+model AccountingRecord {
+  id              String   @id @default(cuid())
+  transactionId   String   @unique
+  transaction     Transaction @relation(fields: [transactionId], references: [id])
+  
+  invoiceUrl      String   // Lien vers le PDF généré (LegalPlace/S3)
+  documentType    String   // FACTURE_VENTE, FACTURE_ACHAT, COMMISSION
+  
+  taxAmount       Float    // Calcul automatique de la TVA
+  netAmount       Float    // Ce qui reste dans la poche d'ELA
+  
+  aiNote          String   // La note créée par l'IA pour le comptable
+  isSyncedToSheets Boolean @default(false)
+  
+  createdAt       DateTime @default(now())
 }

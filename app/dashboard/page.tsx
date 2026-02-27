@@ -27,7 +27,10 @@ import {
   GrainTexture,
   NeuralWeb,
   CyberGlitch,
-  Vortex3D
+  Vortex3D,
+  OmniSphere,
+  HolographicInterface,
+  GlitchText
 } from "@/components/AdvancedVisuals";
 import { CognitiveThought } from "@/components/CognitiveThought";
 
@@ -107,37 +110,40 @@ export default function DashboardPage() {
       <GrainTexture />
       <NeuralWeb />
       <Vortex3D />
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-20">
+        <OmniSphere />
+      </div>
       <MagneticCursor />
       {/* 2. CORTEX VISUEL: NEUROSCHEMA BACKGROUND */}
       <NeuroSchema />
 
       {/* Top Header */}
-      <BlurFade yOffset={-20} className="h-20 border-b border-white/5 flex items-center justify-between px-8 bg-[#0b0c10]/80 backdrop-blur-xl sticky top-0 z-20">
-        <div className="flex items-center gap-4 text-gray-400 w-1/3 group">
-          <LineIconSearch size={18} className="group-hover:text-[#66fcf1] transition-colors" />
+      <BlurFade yOffset={-20} className="h-16 md:h-20 border-b border-white/5 flex items-center justify-between px-4 md:px-8 bg-[#0b0c10]/80 backdrop-blur-xl sticky top-0 z-20">
+        <div className="flex items-center gap-4 text-gray-400 w-1/2 md:w-1/3 group">
+          <LineIconSearch size={18} className="group-hover:text-white transition-colors" />
           <input
             type="text"
-            placeholder="Interroger l'Omniscience..."
-            className="bg-transparent border-none outline-none text-white w-full placeholder-gray-600 font-light focus:ring-0 text-sm"
+            placeholder="Command /"
+            className="bg-transparent border-none outline-none text-white w-full placeholder-gray-600 font-medium focus:ring-0 text-sm hidden md:block"
           />
         </div>
 
-        <div className="flex items-center gap-6">
-          <button className="relative text-gray-500 hover:text-[#66fcf1] transition-colors btn-haptic">
+        <div className="flex items-center gap-4 md:gap-6">
+          <button className="relative text-gray-500 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center">
             <LineIconBell size={20} />
-            <span className="absolute top-0 right-0 w-1.5 h-1.5 bg-[#66fcf1] rounded-full animate-pulse shadow-[0_0_8px_#66fcf1]"></span>
+            <span className="absolute top-2 right-2 w-2 h-2 bg-white rounded-full animate-pulse shadow-sm"></span>
           </button>
-          <div className="flex items-center gap-3 border-l border-white/5 pl-6">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1f2833] to-[#0b0c10] border border-white/10 flex items-center justify-center text-[10px] font-black shadow-inner">
+          <div className="flex items-center gap-3 border-l border-white/5 pl-4 md:pl-6">
+            <div className="w-9 h-9 md:w-8 md:h-8 rounded-full bg-gradient-to-br from-white/10 to-transparent border border-white/10 flex items-center justify-center text-[10px] font-black shadow-inner">
               {userName.substring(0, 2).toUpperCase()}
             </div>
-            <div className="text-right">
+            <div className="hidden md:block text-right">
               <p className="text-xs font-bold text-white tracking-tight leading-tight">{userName}</p>
-              <p className={`text-[8px] uppercase tracking-[0.2em] font-black ${userTier === 'grand_horloger' ? 'text-[#66fcf1]' : 'text-gray-600'}`}>
-                {userTier === 'grand_horloger' ? 'Horloger Suprême' : 'Abonné'}
+              <p className={`text-[9px] uppercase tracking-widest font-black ${userTier === 'grand_horloger' ? 'text-white' : 'text-gray-500'}`}>
+                {userTier === 'grand_horloger' ? 'Architect' : 'User'}
               </p>
             </div>
-            <LineIconChevronDown size={14} className="text-gray-600" />
+            <LineIconChevronDown size={14} className="text-gray-600 hidden md:block" />
           </div>
         </div>
       </BlurFade>
@@ -145,9 +151,11 @@ export default function DashboardPage() {
       <div className="p-8 max-w-7xl mx-auto relative z-10">
         <div className="mb-8">
           <CyberGlitch>
-            <h1 className="text-3xl font-black mb-2 tracking-tighter uppercase italic">Hyper-Flux Command</h1>
+            <h1 className="text-4xl font-black mb-2 tracking-tighter uppercase italic">
+              <GlitchText text="Hyper-Flux Command" />
+            </h1>
           </CyberGlitch>
-          <p className="text-gray-500 text-sm">
+          <p className="text-[#66fcf1] text-[10px] font-mono tracking-[0.4em] uppercase opacity-70">
             {userTier === 'grand_horloger'
               ? `Status: OMNISCIENCE ACTIVE. Réseau neuronal synchronisé à 100%.`
               : `Système sécurisé. Prêt pour le déploiement de masse.`}
@@ -158,16 +166,16 @@ export default function DashboardPage() {
           <CognitiveThought />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
           {/* Sovereignty Gauge Card - Cadran Principal */}
-          <BlurFade delay={0.1} className="lg:col-span-1 md:col-span-1">
-            <div className="card-saphir flex flex-col items-center justify-center h-full group">
+          <BlurFade delay={0.1} className="sm:col-span-2 lg:col-span-1">
+            <div className="card-saphir flex flex-col items-center justify-center h-full group min-h-[220px]">
               <SovereigntyGauge
                 score={sovereignty?.score || 0}
                 title={sovereignty?.title || "Evaluating..."}
                 nextMilestone={sovereignty?.nextMilestone || 100}
               />
-              <div className="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-[10px] text-gray-600 font-mono text-center">
+              <div className="mt-4 opacity-50 md:opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-[10px] text-gray-500 font-mono text-center">
                 MOUVEMENT CALIBRE ELA-v10.4<br />PRECISION 0.01s /// AUTO-SYNCHRO
               </div>
             </div>
@@ -175,13 +183,13 @@ export default function DashboardPage() {
 
           {stats && stats.map((stat, i) => (
             <BlurFade key={i} delay={0.1 + (i * 0.1)} duration={0.8} className="group">
-              <div className="card-saphir h-full flex flex-col justify-between">
+              <div className="card-saphir h-full flex flex-col justify-between min-h-[160px]">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <p className="text-gray-600 text-[9px] font-black uppercase tracking-[0.2em] mb-2">{stat?.title || 'Metric'}</p>
-                    <h3 className="text-3xl font-black text-white tracking-tighter stat-value">{stat?.value || '0'}</h3>
+                    <p className="text-gray-500 text-[10px] md:text-[9px] font-bold uppercase tracking-widest mb-2">{stat?.title || 'Metric'}</p>
+                    <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight stat-value">{stat?.value || '0'}</h3>
                   </div>
-                  <div className={`p-2.5 rounded-lg border border-white/5 bg-white/5 ${stat.color} group-hover:border-[#66fcf1]/30 transition-all duration-500`}>
+                  <div className={`p-2.5 rounded-xl border border-white/5 bg-white/5 ${stat.color} group-hover:bg-white/10 transition-all duration-500`}>
                     {stat.icon && <stat.icon size={18} />}
                   </div>
                 </div>
@@ -189,15 +197,15 @@ export default function DashboardPage() {
                 {/* Progressive Disclosure: Hidden info revealed on hover */}
                 <div className="mt-auto">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-[#66fcf1] font-mono text-[10px] font-black bg-[#66fcf1]/5 px-2 py-0.5 rounded border border-[#66fcf1]/10">
+                    <span className="text-white font-mono text-[10px] font-bold bg-white/10 px-2 py-0.5 rounded-md border border-white/5">
                       ▲ {stat.change}
                     </span>
-                    <span className="text-gray-700 text-[9px] uppercase font-bold tracking-widest">Temps Réel</span>
+                    <span className="text-gray-600 text-[9px] uppercase font-bold tracking-widest hidden md:inline">Live</span>
                   </div>
 
-                  <div className="h-0 group-hover:h-8 overflow-hidden transition-all duration-500 opacity-0 group-hover:opacity-100">
-                    <p className="text-[9px] text-gray-500 font-light leading-relaxed">
-                      Données traitées par le moteur souverain. Optimisation mécanique en cours...
+                  <div className="h-0 md:group-hover:h-8 overflow-hidden transition-all duration-500 opacity-0 md:group-hover:opacity-100 hidden md:block">
+                    <p className="text-[10px] text-gray-500 font-medium leading-relaxed">
+                      Traitement mécanique souverain en cours...
                     </p>
                   </div>
                 </div>
@@ -285,7 +293,7 @@ export default function DashboardPage() {
                       itemStyle={{ color: '#fff' }}
                       cursor={{ stroke: '#66fcf1', strokeWidth: 1 }}
                     />
-                    <ReferenceLine y={85} stroke="#ef4444" strokeDasharray="5 5" strokeOpacity={0.3} label={{ position: 'right', value: 'CRITIQUE', fill: '#ef4444', fontSize: 8, fontWeight: 'bold', tracking: '0.2em' }} />
+                    <ReferenceLine y={85} stroke="#ef4444" strokeDasharray="5 5" strokeOpacity={0.3} label={{ position: 'right', value: 'CRITIQUE', fill: '#ef4444', fontSize: 8, fontWeight: 'bold' }} />
                     <Area type="monotone" dataKey="score" stroke="#66fcf1" strokeWidth={1} fillOpacity={1} fill="url(#colorScore)" animationDuration={2000} />
                   </AreaChart>
                 </ResponsiveContainer>
@@ -299,38 +307,38 @@ export default function DashboardPage() {
 
           <BlurFade delay={0.6} className="space-y-6">
             <div className="card-saphir">
-              <h3 className="text-xs font-black uppercase tracking-[0.3em] text-[#66fcf1] mb-6">Commandes Rapides</h3>
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-6">Commandes Rapides</h3>
               <div className="space-y-3">
-                <button className="w-full p-3 rounded-xl bg-white/[0.02] border border-white/5 hover:bg-white/5 hover:border-[#66fcf1]/30 transition-all text-left flex items-center gap-4 group btn-haptic">
-                  <div className="w-9 h-9 rounded-lg bg-[#66fcf1]/5 text-[#66fcf1] flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <LineIconZap size={18} />
+                <button className="w-full p-3 md:p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-4 group min-h-[44px]">
+                  <div className="w-10 h-10 rounded-xl bg-white/5 text-white flex flex-shrink-0 items-center justify-center group-hover:scale-105 transition-transform">
+                    <LineIconZap size={20} />
                   </div>
                   <div>
-                    <p className="font-bold text-xs text-white">Lancer une campagne</p>
-                    <p className="text-[9px] text-gray-600 uppercase font-bold tracking-wider">Email & Réseaux Sociaux</p>
+                    <p className="font-bold text-sm text-white">Nouvelle Campagne</p>
+                    <p className="text-[10px] text-gray-500 uppercase font-medium tracking-wide">Multi-Canal</p>
                   </div>
                 </button>
 
-                <button className="w-full p-3 rounded-xl bg-white/[0.02] border border-white/5 hover:bg-white/5 hover:border-[#66fcf1]/30 transition-all text-left flex items-center gap-4 group btn-haptic">
-                  <div className="w-9 h-9 rounded-lg bg-[#45a29e]/10 text-[#45a29e] flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <LineIconUsers size={18} />
+                <button className="w-full p-3 md:p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-4 group min-h-[44px]">
+                  <div className="w-10 h-10 rounded-xl bg-white/5 text-white flex flex-shrink-0 items-center justify-center group-hover:scale-105 transition-transform">
+                    <LineIconUsers size={20} />
                   </div>
                   <div>
-                    <p className="font-bold text-xs text-white">Ajouter un prospect</p>
-                    <p className="text-[9px] text-gray-600 uppercase font-bold tracking-wider">Enrichissement auto</p>
+                    <p className="font-bold text-sm text-white">Ajouter Prospect</p>
+                    <p className="text-[10px] text-gray-500 uppercase font-medium tracking-wide">Enrichissement</p>
                   </div>
                 </button>
 
                 <Link
                   href="/dashboard/integrations"
-                  className="w-full p-3 rounded-xl bg-[#66fcf1]/5 border border-[#66fcf1]/10 hover:border-[#66fcf1]/50 transition-all text-left flex items-center gap-4 group btn-haptic"
+                  className="w-full p-3 md:p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-4 group min-h-[44px]"
                 >
-                  <div className="w-9 h-9 rounded-lg bg-[#66fcf1]/20 text-[#66fcf1] flex items-center justify-center group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(102,252,241,0.2)]">
-                    <LineIconZap size={18} />
+                  <div className="w-10 h-10 rounded-2xl bg-[#66fcf1]/10 text-[#66fcf1] flex flex-shrink-0 items-center justify-center group-hover:scale-105 transition-transform">
+                    <LineIconZap size={20} />
                   </div>
                   <div>
-                    <p className="font-bold text-xs text-[#66fcf1]">Centre d'Intégrations</p>
-                    <p className="text-[9px] text-gray-600 uppercase font-bold tracking-wider italic">Vérifié par Horloger</p>
+                    <p className="font-bold text-sm text-[#66fcf1]">Intégrations</p>
+                    <p className="text-[10px] text-gray-500 uppercase font-medium tracking-wide">Connectez l'API</p>
                   </div>
                 </Link>
               </div>

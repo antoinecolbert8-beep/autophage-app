@@ -7,6 +7,7 @@ import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Suspense } from "react";
 import Loading from "@/app/loading";
 import { ReferralTracker } from "./ReferralTracker";
+import { NeuralPulse } from "./AdvancedVisuals";
 
 /**
  * PAGE TRANSITION VARIANTS
@@ -73,6 +74,8 @@ export default function ClientLayoutWrapper({
                 <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#1f2833]/10 rounded-full blur-[128px] opacity-20" />
                 <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02]" />
             </div>
+
+            <NeuralPulse />
 
             {/* Global Navigation - Controlled by Matrix Logic */}
             {showSidebar && <Navigation />}
