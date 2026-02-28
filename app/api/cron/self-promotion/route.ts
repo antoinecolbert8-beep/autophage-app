@@ -10,12 +10,12 @@ export const dynamic = 'force-dynamic';
  * It triggers the 'Self-Promotion' engine, ensuring the system grows even when you sleep.
  */
 export async function GET(req: Request) {
-    // 1. Verify Authentication (Vercel Cron Header)
-    // In production, uncomment this check:
-    // const authHeader = req.headers.get('authorization');
-    // if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    //     return new Response('Unauthorized', { status: 401 });
-    // }
+    // Verify Auth
+    const authHeader = req.headers.get('authorization');
+    const cronSecret = process.env.CRON_SECRET;
+    if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+        return new Response('Unauthorized', { status: 401 });
+    }
 
     try {
         console.log("/// CRON: WAKING UP GENESIS SELF-PROMOTION ///");
