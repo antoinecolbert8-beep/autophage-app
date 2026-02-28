@@ -15,7 +15,7 @@ export abstract class BaseAgent {
   constructor(name: string, role: string) {
     this.name = name;
     this.role = role;
-    this.model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+    this.model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   }
 
   /**

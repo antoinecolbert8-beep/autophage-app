@@ -12,7 +12,7 @@ function getClients() {
         const apiKey = process.env.VERTEX_AI_API_KEY || process.env.GOOGLE_API_KEY;
         if (apiKey) {
             genAI = new GoogleGenerativeAI(apiKey);
-            vertexModel = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+            vertexModel = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
         }
     }
 
