@@ -6,6 +6,7 @@ import { verifyPassword } from "@/lib/auth-utils";
 export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
+            id: "credentials",
             name: "Sovereign Access",
             credentials: {
                 email: { label: "Email", type: "email" },
@@ -61,6 +62,7 @@ export const authOptions: NextAuthOptions = {
         strategy: "jwt",
     },
     secret: process.env.NEXTAUTH_SECRET || "ela-sovereign-fallback-secret-for-build",
+    debug: process.env.NODE_ENV === 'development',
 };
 
 // 🛡️ SECURITY AUDIT: Validate NextAuth configuration
