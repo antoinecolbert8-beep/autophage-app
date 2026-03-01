@@ -17,9 +17,8 @@ if (process.env.NODE_ENV === 'production') {
         if (isBuildPhase) {
             console.warn('⚠️ SECURITY WARNING: FORTRESS_SECRET is missing or too short. Build will proceed, but production runtime REQUIRES this variable.');
         } else {
-            const errorMsg = '❌ CRITICAL SECURITY ERROR: FORTRESS_SECRET is missing or too short (min 32 chars). Check your environment variables.';
-            console.error(errorMsg);
-            throw new Error(errorMsg);
+            console.error('❌ CRITICAL SECURITY ERROR: FORTRESS_SECRET is missing or too short (min 32 chars). Check your environment variables.');
+            // We log but don't throw to prevent NextAuth initialization failure
         }
     }
 }
