@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     const authHeader = req.headers.get('authorization');
 
     // Vérification stricte du privilège Souverain
-    if (!process.env.ADMIN_LOCKDOWN_KEY || authHeader !== \`Bearer \${process.env.ADMIN_LOCKDOWN_KEY}\`) {
+    if (!process.env.ADMIN_LOCKDOWN_KEY || authHeader !== `Bearer ${process.env.ADMIN_LOCKDOWN_KEY}`) {
         console.error("🚨 TENTATIVE D'ACTIVATION DU KILL SWITCH NON AUTORISÉE");
         return NextResponse.json({ error: 'Accès Souverain Refusé.' }, { status: 403 });
     }
@@ -25,8 +25,8 @@ export async function POST(req: NextRequest) {
 
             // 1. Geler tous les contrats en cours (Empêche toute validation par le Magistrat)
             const updatedContracts = await prisma.contract.updateMany({
-                where: { 
-                    status: { in: ['PENDING_ESCROW', 'IN_PROGRESS', 'IN_REVIEW'] } 
+                where: {
+                    status: { in: ['PENDING_ESCROW', 'IN_PROGRESS', 'IN_REVIEW'] }
                 },
                 data: {
                     status: 'SYSTEM_LOCKDOWN'

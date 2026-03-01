@@ -19,17 +19,17 @@ export const validateProofOfWork = async (
 ): Promise<{ isValid: boolean; score: number; feedback: string }> => {
     // Dans un système réel, ici on ferait un fetch/scrape de l'URL pour obtenir le contenu brut.
     // Pour cet exemple, on simule l'extraction du texte.
-    const extractedContent = \`[Contenu simulé provenant de \${proofOfWorkUrl}]\`;
+    const extractedContent = `[Contenu simulé provenant de ${proofOfWorkUrl}]`;
 
-    const prompt = \`
+    const prompt = `
     Tu es le Magistrat IA de la plateforme ELA.
     Ta mission est d'évaluer le livrable d'un sous-traitant de manière objective.
     
     Consignes initiales du contrat (AI Prompt) :
-    "\${initialPrompt}"
+    "${initialPrompt}"
     
-    Livrable soumis (depuis \${proofOfWorkUrl}) :
-    "\${extractedContent}"
+    Livrable soumis (depuis ${proofOfWorkUrl}) :
+    "${extractedContent}"
     
     Évalue si le livrable respecte les consignes.
     Format JSON attendu :
@@ -38,12 +38,12 @@ export const validateProofOfWork = async (
        "score": 0-100,
        "feedback": "Explication claire et professionnelle du score"
     }
-    \`;
+    `;
 
     try {
         const result = await model.generateContent(prompt);
         const text = result.response.text();
-        const jsonMatch = text.match(/\\{[\\s\\S]*\\}/);
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
             return JSON.parse(jsonMatch[0]);
         }
@@ -60,14 +60,14 @@ export const resolveDispute = async (
     sellerEvidence: string,
     initialPrompt: string
 ): Promise<MagistrateVerdict> => {
-    const prompt = \`
+    const prompt = `
     Tu es le Magistrat Suprême de la plateforme souveraine ELA.
     Tu dois trancher un litige commercial de manière incorruptible.
     
-    Consigne initiale du contrat : "\${initialPrompt}"
+    Consigne initiale du contrat : "${initialPrompt}"
     
-    Preuves de l'Acheteur : "\${buyerEvidence}"
-    Preuves du Vendeur : "\${sellerEvidence}"
+    Preuves de l'Acheteur : "${buyerEvidence}"
+    Preuves du Vendeur : "${sellerEvidence}"
     
     Analyse les faits, détermine qui a tort et qui a raison.
     Tu dois rendre un des 3 verdicts stricts suivants :
@@ -81,12 +81,12 @@ export const resolveDispute = async (
        "justification": "Explication stricte et légale du verdict",
        "confidenceScore": 0-100
     }
-    \`;
+    `;
 
     try {
         const result = await model.generateContent(prompt);
         const text = result.response.text();
-        const jsonMatch = text.match(/\\{[\\s\\S]*\\}/);
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
             return JSON.parse(jsonMatch[0]) as MagistrateVerdict;
         }
