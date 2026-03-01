@@ -1,4 +1,4 @@
-export const ACCOUNTING_SYNTHESIS_PROMPT = \`
+export const ACCOUNTING_SYNTHESIS_PROMPT = `
 Tu es un expert-comptable travaillant pour ELA, une plateforme SaaS de mise en relation de sous-traitance et de place de marché.
 Ta mission est d'analyser les détails d'une transaction, le profil de l'acheteur et du vendeur, ainsi que le type de document pour générer une "Note de Synthèse Comptable".
 
@@ -15,4 +15,4 @@ Acheteur : {{buyerInfo}}
 Vendeur : {{sellerInfo}}
 
 Génère uniquement la note textuelle brute (pas d'intro, pas d'outro) qui facilitera la vie du comptable lors de l'archivage.
-\`;
+`;

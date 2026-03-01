@@ -5,7 +5,9 @@ import { DAILY_RECAP_PROMPT } from '../prompts/daily-recap';
 import { generateContentWithGemini } from '../gemini-content';
 // import { publishToNetworks } from '../publisher';
 
-const connection = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
+const connection = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
+  maxRetriesPerRequest: null,
+});
 
 export const recapQueue = new Queue('daily-recap', { connection });
 
@@ -45,8 +47,8 @@ export const recapWorker = new Worker('daily-recap', async job => {
   if (events.length === 0) return; // Nothing to recap
 
   const eventsListStr = events.map(e =>
-\`- [\${e.time}] \${e.type.toUpperCase()}: \${e.description} \${e.value ? \`(\${e.value}\${e.currency || '€'})\` : ''}\`
-  ).join('\\n');
+    `- [${e.timestamp}] ${e.type.toUpperCase()}: ${e.description} ${e.value ? `(${e.value}${e.currency || '€'})` : ''}`
+  ).join('\n');
 
   const prompt = DAILY_RECAP_PROMPT.replace('{{events_list}}', eventsListStr);
 
@@ -66,7 +68,7 @@ export const recapWorker = new Worker('daily-recap', async job => {
 
     return { success: true, postsGenerated: 1 };
   } catch (error) {
-    console.error(`Failed to generate recap for org ${ orgId }`, error);
+    console.error(`Failed to generate recap for org ${orgId}`, error);
     throw error;
   }
 }, { connection });

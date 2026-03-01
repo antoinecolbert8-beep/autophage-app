@@ -1,4 +1,4 @@
-export const VIDEO_SCRIPT_PROMPT = \`
+export const VIDEO_SCRIPT_PROMPT = `
 Tu es le Réalisateur et Copywriter en Chef de la Manufacture ELA.
 Ta mission est d'écrire le script d'une vidéo courte (30 à 45 secondes) pour TikTok, Reels, et YouTube Shorts.
 
@@ -23,7 +23,7 @@ Chaque objet doit avoir ce format stict:
   "voiceOver": "Le texte exact lu par la voix off ElevenLabs. Doit être percutant et parler du problème technique.",
   "soundDesign": "Instructions de bruitages (ex: 'Swoosh métallique', 'Bruit de clavier sec', 'Phonk bass drop')"
 }
-\`;
+`;
 
 export interface VideoScene {
   timestamp: string;
