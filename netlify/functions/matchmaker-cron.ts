@@ -27,8 +27,8 @@ export const handler = schedule('0 9 * * *', async (event) => {
         });
 
         if (!response.ok) {
-            console.error(\`Status: \${response.status}\`);
-            throw new Error(\`Failed to trigger matchmaker API: \${response.statusText}\`);
+            console.error(`Status: ${response.status}`);
+            throw new Error(`Failed to trigger matchmaker API: ${response.statusText}`);
         }
 
         const data = await response.json();
