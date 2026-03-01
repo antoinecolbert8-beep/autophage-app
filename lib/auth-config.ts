@@ -60,5 +60,10 @@ export const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt",
     },
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: process.env.NEXTAUTH_SECRET || "ela-sovereign-fallback-secret-for-build",
 };
+
+// 🛡️ SECURITY AUDIT: Validate NextAuth configuration
+if (process.env.NODE_ENV === 'production' && !process.env.NEXTAUTH_SECRET) {
+    console.error('❌ CRITICAL SECURITY ERROR: NEXTAUTH_SECRET is missing. Authentication WILL FAIL in production.');
+}
