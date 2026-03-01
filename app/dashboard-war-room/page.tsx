@@ -28,11 +28,45 @@ import { CognitiveThought } from "@/components/CognitiveThought";
 export default function WarRoomPage() {
   const [revenue, setRevenue] = useState(12450);
   const [isDominating, setIsDominating] = useState(false);
+  const [pulseEvents, setPulseEvents] = useState<any[]>([]);
   const [logs, setLogs] = useState([
     { id: 1, type: "SYSTEM", msg: "Attaque marketing lancée sur le secteur Retail...", time: "NOMINAL" },
     { id: 2, type: "BOT-142", msg: "500 emails envoyés (Taux ouverture: 82%)", time: "ACTIVE" },
     { id: 3, type: "VOX", msg: "Appel terminé avec CEO (Durée: 4m12s) -> RDV Pris", time: "SUCCESS" },
   ]);
+
+  // Fetch Pulse Data
+  useEffect(() => {
+    const fetchPulse = async () => {
+      try {
+        const res = await fetch('/api/v1/pulse');
+        const data = await res.json();
+        if (data.success && data.pulse) {
+          setPulseEvents(data.pulse);
+
+          // Add latest pulse to logs if it's new
+          if (data.pulse.length > 0) {
+            const latest = data.pulse[0];
+            setLogs(prev => {
+              if (prev.some(l => l.msg.includes(latest.orgName || latest.title))) return prev;
+              return [{
+                id: Date.now(),
+                type: "PULSE",
+                msg: `${latest.title}: ${latest.value} sécurisés par ${latest.orgName || 'un client'}`,
+                time: "JUST NOW"
+              }, ...prev].slice(0, 10);
+            });
+          }
+        }
+      } catch (err) {
+        console.error("Pulse fetch failed:", err);
+      }
+    };
+
+    fetchPulse();
+    const interval = setInterval(fetchPulse, 5000); // Poll every 5 seconds
+    return () => clearInterval(interval);
+  }, []);
 
   // Revenue Ticker
   useEffect(() => {
@@ -126,7 +160,7 @@ export default function WarRoomPage() {
           {/* Global Scan Panel */}
           <div className="col-span-8 flex flex-col gap-8">
             <GlassCard3D className="flex-1 p-0 overflow-hidden group">
-              <TacticalMap />
+              <TacticalMap events={pulseEvents} />
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 {/* Tactical Radar */}
                 <div className="w-[800px] h-[800px] border border-red-600/5 rounded-full animate-[spin_60s_linear_infinite]" />

@@ -5,7 +5,7 @@
  * Le niveau visuel le plus élevé jamais créé
  */
 
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 
 // 🌟 Mesh Gradient Animé (comme Stripe)
@@ -451,48 +451,112 @@ export const GrainTexture = () => {
 };
 
 // 🗺️ Tactical Map (World Map with neural attack points)
-export const TacticalMap = () => {
+export const TacticalMap = ({ events = [] }: { events?: any[] }) => {
+  // Mapping of cities to SVG coordinates (1000x500 viewBox)
+  const cityCoords: Record<string, { x: number, y: number }> = {
+    'Seoul': { x: 830, y: 160 },
+    'Paris': { x: 480, y: 130 },
+    'New York': { x: 260, y: 170 },
+    'Tokyo': { x: 860, y: 170 },
+    'Dubai': { x: 620, y: 220 },
+    'Berlin': { x: 520, y: 110 },
+    'London': { x: 470, y: 110 },
+    'San Francisco': { x: 130, y: 180 },
+    'Singapore': { x: 780, y: 320 },
+    'Sydney': { x: 880, y: 400 },
+  };
+
   return (
-    <div className="absolute inset-0 pointer-events-none opacity-20">
+    <div className="absolute inset-0 pointer-events-none opacity-40">
       <svg className="w-full h-full" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid slice">
         {/* Simplified World Outline */}
         <path
           d="M150,150 L200,140 L250,160 L300,150 L350,180 L320,250 L280,300 L200,320 L150,280 Z"
           fill="none" stroke="#dc2626" strokeWidth="0.5" strokeDasharray="2 2"
+          className="opacity-20"
         />
         <path
           d="M500,100 L600,80 L700,120 L750,200 L700,300 L600,350 L500,320 Z"
           fill="none" stroke="#dc2626" strokeWidth="0.5" strokeDasharray="2 2"
+          className="opacity-20"
         />
         <path
           d="M800,250 L850,220 L900,280 L880,350 L820,320 Z"
           fill="none" stroke="#dc2626" strokeWidth="0.5" strokeDasharray="2 2"
+          className="opacity-20"
         />
 
-        {/* Animated Attack Points */}
-        {[...Array(15)].map((_, i) => (
-          <g key={i}>
-            <motion.circle
-              cx={Math.random() * 800 + 100}
-              cy={Math.random() * 300 + 100}
-              r="2"
-              fill="#dc2626"
-              animate={{ scale: [1, 2, 1], opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: Math.random() * 3 + 2, repeat: Infinity }}
-            />
-            <motion.circle
-              cx={Math.random() * 800 + 100}
-              cy={Math.random() * 300 + 100}
-              r="15"
-              fill="none"
-              stroke="#dc2626"
-              strokeWidth="0.2"
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: [0, 0.5, 0] }}
-              transition={{ duration: 4, repeat: Infinity, delay: Math.random() * 5 }}
-            />
-          </g>
+        {/* Static Background Nodes (Faint) */}
+        {[...Array(20)].map((_, i) => (
+          <circle
+            key={`bg-${i}`}
+            cx={100 + (i * 453) % 800}
+            cy={100 + (i * 721) % 300}
+            r="0.5"
+            fill="#dc2626"
+            className="opacity-10"
+          />
         ))}
+
+        {/* Dynamic Pulse Events from API */}
+        <AnimatePresence>
+          {events.map((event) => {
+            const coords = event.location ? cityCoords[event.location.city] : null;
+            if (!coords) return null;
+
+            return (
+              <g key={event.id}>
+                {/* Core Point */}
+                <motion.circle
+                  cx={coords.x}
+                  cy={coords.y}
+                  r="3"
+                  fill="#ff0000"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                />
+
+                {/* Adrenaline Ripples */}
+                <motion.circle
+                  cx={coords.x}
+                  cy={coords.y}
+                  r="20"
+                  fill="none"
+                  stroke="#dc2626"
+                  strokeWidth="0.5"
+                  initial={{ scale: 0, opacity: 0.8 }}
+                  animate={{ scale: [0, 1.5, 2], opacity: [0.8, 0.4, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
+                />
+                <motion.circle
+                  cx={coords.x}
+                  cy={coords.y}
+                  r="40"
+                  fill="none"
+                  stroke="#dc2626"
+                  strokeWidth="0.2"
+                  initial={{ scale: 0, opacity: 0.5 }}
+                  animate={{ scale: [0, 1.2, 1.5], opacity: [0.5, 0.2, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeOut", delay: 0.5 }}
+                />
+
+                {/* City Label (Optional/Faint) */}
+                <motion.text
+                  x={coords.x + 8}
+                  y={coords.y + 4}
+                  fill="#dc2626"
+                  fontSize="8"
+                  className="font-mono font-bold uppercase tracking-tighter opacity-60"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.6 }}
+                >
+                  {event.location.city}
+                </motion.text>
+              </g>
+            );
+          })}
+        </AnimatePresence>
       </svg>
     </div>
   );
