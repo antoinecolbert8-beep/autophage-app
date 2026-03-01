@@ -680,6 +680,8 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      {/* Deployment Verification Marker -- Version 1.0.1 */}
+      <div className="hidden" id="deploy-marker-v101"></div>
     </div>
   );
 }
