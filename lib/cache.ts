@@ -1,47 +1,15 @@
-import { createClient } from 'redis';
+import { getRedisConnection } from './redis-provider';
+import type IORedis from 'ioredis';
 
 /**
  * PERFORMANCE CACHING LAYER
- * Redis-based caching for massive performance gains
+ * Redis-based caching via unified RedisProvider
  */
 
-// Redis client singleton
-let redisClient: ReturnType<typeof createClient> | null = null;
 const memoryCache = new Map<string, { value: any; expires: number }>();
 
-export async function getRedisClient() {
-    if (!process.env.REDIS_URL) {
-        console.warn('[Redis] REDIS_URL not set, bypassing Redis...');
-        return null;
-    }
-
-    if (!redisClient) {
-        try {
-            redisClient = createClient({
-                url: process.env.REDIS_URL,
-                socket: {
-                    reconnectStrategy: (retries) => {
-                        if (retries > 5) {
-                            console.error('[Redis] Max reconnection attempts reached');
-                            return new Error('Max reconnection attempts');
-                        }
-                        return Math.min(retries * 100, 3000);
-                    }
-                }
-            });
-
-            redisClient.on('error', (err) => console.error('[Redis] Error:', err));
-            redisClient.on('connect', () => console.log('[Redis] Connected'));
-
-            await redisClient.connect();
-        } catch (error) {
-            console.error('[Redis] Connection failed:', error);
-            redisClient = null;
-            return null;
-        }
-    }
-
-    return redisClient;
+export async function getRedisClient(): Promise<IORedis | null> {
+    return getRedisConnection();
 }
 
 /**
@@ -85,7 +53,8 @@ export class Cache {
             const client = await getRedisClient();
             if (client) {
                 const serialized = JSON.stringify(value);
-                await client.setEx(key, ttlSeconds, serialized);
+                // ioredis uses setex(key, ttl, value)
+                await client.setex(key, ttlSeconds, serialized);
                 console.log(`[Cache:Redis] SET: ${key} (TTL: ${ttlSeconds}s)`);
             } else {
                 // Memory Fallback
@@ -165,7 +134,7 @@ export class Cache {
         try {
             const client = await getRedisClient();
             if (client) {
-                return await client.incrBy(key, by);
+                return await client.incrby(key, by);
             }
             return 0;
         } catch (error) {
@@ -214,7 +183,7 @@ export class Cache {
         try {
             const client = await getRedisClient();
             if (client) {
-                await client.flushAll();
+                await client.flushall();
                 console.log('[Cache] FLUSHED ALL');
             }
         } catch (error) {

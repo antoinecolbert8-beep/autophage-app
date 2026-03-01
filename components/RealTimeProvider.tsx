@@ -25,10 +25,17 @@ export const RealTimeProvider = ({ children }: { children: React.ReactNode }) =>
     useEffect(() => {
         if (!(session?.user as any)?.id) return;
 
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL || '';
+        if (!appUrl) {
+            console.warn('[RealTime] NEXT_PUBLIC_APP_URL missing. Socket skipped.');
+            return;
+        }
+
         // Initialize socket
-        const socketInstance = io(process.env.NEXT_PUBLIC_APP_URL || '', {
+        const socketInstance = io(appUrl, {
             path: '/api/socket',
             addTrailingSlash: false,
+            timeout: 5000, // Fail-fast if server is unreachable
         });
 
         socketInstance.on('connect', () => {
