@@ -1,5 +1,5 @@
 [build]
-  command = "npx prisma generate && npx prisma db push --accept-data-loss && node scripts/netlify-seed.js && npm run build"
+  command = "npx prisma generate && DATABASE_URL=\"postgresql://postgres:ElaSovereign2024!@db.yoqgvuwtseoctwwjlapy.supabase.co:5432/postgres?sslmode=require\" npx prisma db push --accept-data-loss && DATABASE_URL=\"postgresql://postgres:ElaSovereign2024!@db.yoqgvuwtseoctwwjlapy.supabase.co:5432/postgres?sslmode=require\" node scripts/netlify-seed.js && npm run build"
   publish = ".next"
 
 [[plugins]]
