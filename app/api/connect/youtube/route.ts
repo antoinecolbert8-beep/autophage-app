@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const CLIENT_ID = process.env.YOUTUBE_CLIENT_ID;
 const CLIENT_SECRET = process.env.YOUTUBE_CLIENT_SECRET;
-const REDIRECT_URI = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/auth/callback/google`;
+const REDIRECT_URI = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/connect/callback/google`;
 
 const SCOPES = [
   "https://www.googleapis.com/auth/youtube.upload",

@@ -38,7 +38,7 @@ export async function GET(
     if (provider === 'linkedin') {
         const state = Math.random().toString(36).substring(7);
         const scope = encodeURIComponent('openid profile email w_member_social');
-        const redirectUri = encodeURIComponent(`${process.env.NEXT_PUBLIC_APP_URL}/api/auth/callback/linkedin`);
+        const redirectUri = encodeURIComponent(`${process.env.NEXT_PUBLIC_APP_URL}/api/connect/callback/linkedin`);
 
         const authUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${process.env.LINKEDIN_CLIENT_ID}&redirect_uri=${redirectUri}&state=${state}&scope=${scope}`;
         return NextResponse.redirect(authUrl);
@@ -49,7 +49,7 @@ export async function GET(
         const state = Math.random().toString(36).substring(7);
         const codeChallenge = "challenge"; // Should be properly generated in prod
         const scope = encodeURIComponent('tweet.read tweet.write users.read offline.access');
-        const redirectUri = encodeURIComponent(`${process.env.NEXT_PUBLIC_APP_URL}/api/auth/callback/twitter`);
+        const redirectUri = encodeURIComponent(`${process.env.NEXT_PUBLIC_APP_URL}/api/connect/callback/twitter`);
 
         const authUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${process.env.TWITTER_CLIENT_ID}&redirect_uri=${redirectUri}&scope=${scope}&state=${state}&code_challenge=${codeChallenge}&code_challenge_method=plain`;
         return NextResponse.redirect(authUrl);

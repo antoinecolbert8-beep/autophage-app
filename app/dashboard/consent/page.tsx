@@ -20,7 +20,7 @@ export default function ConsentPage() {
     ];
 
     const handleConnect = (providerId: string) => {
-        router.push(`/api/auth/${providerId}`);
+        router.push(`/api/connect/${providerId}`);
     };
 
     return (

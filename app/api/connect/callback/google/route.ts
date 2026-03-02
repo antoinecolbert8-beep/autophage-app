@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const CLIENT_ID = process.env.YOUTUBE_CLIENT_ID;
 const CLIENT_SECRET = process.env.YOUTUBE_CLIENT_SECRET;
-const REDIRECT_URI = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/auth/callback/google`;
+const REDIRECT_URI = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/connect/callback/google`;
 
 /**
  * GET /api/auth/callback/google
@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
                 <li>Révoquez l'accès à votre application</li>
                 <li>Réessayez l'autorisation</li>
               </ol>
-              <a href="/api/auth/youtube">🔄 Réessayer</a>
+              <a href="/api/connect/youtube">🔄 Réessayer</a>
             </div>
           </body>
         </html>
@@ -236,7 +236,7 @@ YOUTUBE_REFRESH_TOKEN=${tokens.refresh_token}
     );
   } catch (error: any) {
     console.error("Erreur lors de l'échange du code:", error);
-    
+
     return new NextResponse(
       `
       <!DOCTYPE html>
@@ -255,7 +255,7 @@ YOUTUBE_REFRESH_TOKEN=${tokens.refresh_token}
             <h1>❌ Erreur lors de l'authentification</h1>
             <p><strong>Message:</strong> ${error.message}</p>
             <pre>${JSON.stringify(error, null, 2)}</pre>
-            <a href="/api/auth/youtube">🔄 Réessayer</a>
+            <a href="/api/connect/youtube">🔄 Réessayer</a>
           </div>
         </body>
       </html>
