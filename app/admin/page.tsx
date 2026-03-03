@@ -124,13 +124,8 @@ export default function AdminLoginPage() {
             </button>
           </form>
 
-          {/* Credentials Hint (for demo purposes - remove in production) */}
-          <div className="mt-8 p-4 bg-white/5 border border-white/10 rounded-xl">
-            <p className="text-xs text-gray-500 font-mono text-center">
-              <span className="text-gray-400">Credentials:</span><br />
-              <span className="text-white">admin@ela-revolution.com</span> / <span className="text-white">GodMode2024!</span>
-            </p>
-          </div>
+          {/* Access restricted — No hints in production */}
+
         </div>
 
         {/* Footer */}

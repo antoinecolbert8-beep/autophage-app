@@ -15,6 +15,19 @@ import {
 } from "@/components/AppIcons";
 import { LiveUsersCounter } from "./LiveUsersCounter";
 import { CyberGlitch } from "./AdvancedVisuals";
+import { signOut } from "next-auth/react";
+
+function LogoutButton() {
+  return (
+    <button
+      onClick={() => signOut({ callbackUrl: '/login' })}
+      className="w-full flex items-center gap-3 px-4 py-3 rounded-[14px] text-gray-400 hover:text-white hover:bg-white/5 transition-all text-left font-medium text-sm min-h-[44px]"
+    >
+      <LineIconLogOut size={20} />
+      <span>Déconnexion</span>
+    </button>
+  );
+}
 
 export default function Navigation() {
   const pathname = usePathname();
@@ -128,12 +141,10 @@ export default function Navigation() {
             }`}
         >
           <LineIconSettings size={20} />
-          <span className="text-sm">Paramètres</span>
+          <span className="text-sm flex-1">Paramètres</span>
+          <span className="text-[8px] bg-[#66fcf1]/10 text-[#66fcf1] border border-[#66fcf1]/20 px-1.5 py-0.5 rounded font-black uppercase tracking-widest">⚡ GOD</span>
         </Link>
-        <button className="w-full flex items-center gap-3 px-4 py-3 rounded-[14px] text-gray-400 hover:text-white hover:bg-white/5 transition-all text-left font-medium text-sm min-h-[44px]">
-          <LineIconLogOut size={20} />
-          <span>Déconnexion</span>
-        </button>
+        <LogoutButton />
       </div>
     </aside>
 

@@ -833,6 +833,9 @@ model AIProfile {
   vatNumber    String?   // Obligatoire pour Reverse Charge B2B en UE
   countryCode  String?   @default("FR") // ISO Pays (ex: FR, US, DE)
 
+  // ⚡ GOD MODE: Autonomous feature toggle states (JSON)
+  godModeConfig String? // JSON: {"selfPromotion":true,"linkedinBot":false,...}
+
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 
