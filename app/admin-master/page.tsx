@@ -156,7 +156,17 @@ export default function AdminMasterPage() {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+          <Link href="/admin-master/brain">
+            <GlassCard3D className="p-8 group hover:bg-white/[0.02] cursor-pointer transition-all border-white/5 hover:border-[#66fcf1]/40 h-full">
+              <div className="w-14 h-14 bg-[#66fcf1]/10 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                🧠
+              </div>
+              <h3 className="font-black text-lg mb-2 tracking-tight uppercase text-[#66fcf1]">Cerveau ELA</h3>
+              <p className="text-[11px] text-gray-500 font-light italic leading-relaxed uppercase tracking-wider">Contrôle total : DB, God Mode, Stripe, Crons, IA.</p>
+            </GlassCard3D>
+          </Link>
+
           <GlassCard3D className="p-8 group hover:bg-white/[0.02] cursor-pointer transition-all border-white/5 hover:border-red-600/30">
             <div className="w-14 h-14 bg-red-600/10 rounded-2xl flex items-center justify-center text-red-600 mb-6 group-hover:scale-110 transition-transform">
               <Database size={28} />
