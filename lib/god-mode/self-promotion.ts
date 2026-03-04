@@ -600,3 +600,14 @@ export class ELASelfPromoter {
         }
     }
 }
+
+/**
+ * 🚀 Named exports for cron routes
+ */
+export async function godModeLinkedInEngage() {
+    return ELASelfPromoter.orchestrateHourlyCheck();
+}
+
+export async function godModeSelfPromote() {
+    return ELASelfPromoter.orchestrateHourlyCheck();
+}

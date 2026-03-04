@@ -35,14 +35,12 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ status: DEFAULT_STATUS });
         }
 
-        // @ts-ignore — godModeConfig added to schema, Prisma client will regenerate on next build
-        let aiProfile = await (prisma.aIProfile as any).findUnique({
+        let aiProfile = await prisma.aIProfile.findUnique({
             where: { organizationId: user.organizationId }
         });
 
         if (!aiProfile) {
-            // @ts-ignore — godModeConfig added to schema
-            aiProfile = await (prisma.aIProfile as any).create({
+            aiProfile = await prisma.aIProfile.create({
                 data: {
                     organizationId: user.organizationId,
                     godModeConfig: JSON.stringify(DEFAULT_STATUS)

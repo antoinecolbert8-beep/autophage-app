@@ -30,13 +30,32 @@ async function activateAdmin() {
                 data: {
                     name: 'Genesis Admin Corp',
                     domain: 'genesis.ai',
-                    plan: 'enterprise',
-                    tier: 'grand_horloger',
-                    credits: 999999,
+                    tier: 'enterprise',
+                    creditBalance: 999999,
+                    status: 'active'
                 }
             });
             console.log('✅ Created Admin Organization:', org.id);
         }
+
+        // Ensure AIProfile exists for God Mode toggles
+        const aiProfile = await prisma.aIProfile.upsert({
+            where: { organizationId: org.id },
+            update: {},
+            create: {
+                organizationId: org.id,
+                godModeConfig: JSON.stringify({
+                    selfPromotion: true,
+                    linkedinBot: true,
+                    emailSequences: true,
+                    viralEngine: true,
+                    autoEngage: true,
+                    shopifyBroadcast: true,
+                    crm_sync: true
+                })
+            }
+        });
+        console.log('✅ AI Profile (God Mode) Activated');
 
         const hashedPassword = hashPassword(ADMIN_PASSWORD);
 

@@ -6,6 +6,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import OpenAI from "openai";
 import { getSocialPostPrompt } from "@/lib/prompts/social-posts";
+import { DalleService } from "@/lib/ai/dalle";
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || process.env.VERTEX_AI_API_KEY || "");
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || "" });
@@ -152,7 +153,28 @@ function parseAIResponse(text: string, platform: string): ContentOutput {
 }
 
 /**
- * Génère une image avec Gemini (description pour Midjourney/DALL-E)
+ * Génère une image avec DALL-E 3 (ou retourne le prompt si seulement le texte est demandé)
+ */
+export async function generateImageWithDalle(
+  topic: string,
+  style: "realistic" | "illustration" | "minimalist" | "3d" = "realistic",
+  aspectRatio: "square" | "portrait" = "square"
+): Promise<string> {
+  try {
+    const prompt = await generateImagePrompt(topic, style);
+    const size = aspectRatio === "portrait" ? "1024x1792" : "1024x1024";
+
+    // Si on est en mode "Automatique", on génère l'image
+    const imageUrl = await DalleService.generateImage(prompt, size as any);
+    return imageUrl;
+  } catch (error) {
+    console.warn("⚠️ DALL-E 3 failed, returning prompt text instead.");
+    return await generateImagePrompt(topic, style);
+  }
+}
+
+/**
+ * Génère un prompt détaillé pour créer une image
  */
 export async function generateImagePrompt(
   topic: string,
@@ -163,16 +185,15 @@ export async function generateImagePrompt(
 
   const prompt = `Génère un prompt détaillé pour créer une image ${style} sur le thème : "${topic}".
 
-Le prompt doit être optimisé pour Midjourney/DALL-E et inclure :
+Le prompt doit être optimisé pour DALL-E 3 et Midjourney.
+Inclure :
 - Sujet principal
 - Style artistique (${style})
-- Couleurs dominantes
-- Ambiance/émotion
-- Composition
-- Éclairage
-- Détails techniques (8K, professional, etc.)
+- Couleurs et éclairage
+- Composition et focale
+- Style cinématographique et premium
 
-Format : Un seul paragraphe, descriptif et précis.`;
+Format : Un seul paragraphe descriptif en anglais pour une meilleure précision avec DALL-E.`;
 
   const result = await model.generateContent(prompt);
   return result.response.text();

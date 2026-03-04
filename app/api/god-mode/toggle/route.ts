@@ -44,8 +44,7 @@ export async function POST(req: NextRequest) {
         }
 
         // Get existing config
-        // @ts-ignore — godModeConfig added to schema, Prisma client will regenerate on next build
-        const aiProfile = await (prisma.aIProfile as any).findUnique({
+        const aiProfile = await prisma.aIProfile.findUnique({
             where: { organizationId: user.organizationId }
         });
 
@@ -61,14 +60,12 @@ export async function POST(req: NextRequest) {
         currentConfig[feature] = !!enabled;
 
         if (aiProfile) {
-            // @ts-ignore — godModeConfig added to schema
-            await (prisma.aIProfile as any).update({
+            await prisma.aIProfile.update({
                 where: { organizationId: user.organizationId },
                 data: { godModeConfig: JSON.stringify(currentConfig) }
             });
         } else {
-            // @ts-ignore — godModeConfig added to schema
-            await (prisma.aIProfile as any).create({
+            await prisma.aIProfile.create({
                 data: {
                     organizationId: user.organizationId,
                     godModeConfig: JSON.stringify(currentConfig)
