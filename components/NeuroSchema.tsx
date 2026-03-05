@@ -2,20 +2,20 @@
 
 import { useRef, useMemo, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Points, PointMaterial } from "@react-three/drei";
+import { Points, PointMaterial, Line } from "@react-three/drei";
 import * as THREE from "three";
 
 function Network({ count = 100 }) {
-    const points = useRef<THREE.Points>(null!);
-    const linesGeometry = useRef<THREE.BufferGeometry>(null!);
+    const pointsRef = useRef<THREE.Points>(null!);
 
     // Generate random points in a sphere
-    const { particles, lines } = useMemo(() => {
+    const { particles, linePoints } = useMemo(() => {
         const p = new Float32Array(count * 3);
-        const l = [];
+        const lineCoords: [number, number, number][] = [];
+
         for (let i = 0; i < count; i++) {
-            const theta = THREE.MathUtils.randFloatSpread(360);
-            const phi = THREE.MathUtils.randFloatSpread(360);
+            const theta = (Math.random() * 2 - 1) * Math.PI;
+            const phi = (Math.random() * 2 - 1) * Math.PI;
             const r = 2 + Math.random() * 0.5;
 
             p[i * 3] = Math.sin(theta) * Math.cos(phi) * r;
@@ -25,28 +25,40 @@ function Network({ count = 100 }) {
 
         // Connect random pairs
         for (let i = 0; i < count; i++) {
-            if (Math.random() > 0.7) {
+            if (Math.random() > 0.85) {
                 const target = Math.floor(Math.random() * count);
-                l.push(p[i * 3], p[i * 3 + 1], p[i * 3 + 2]);
-                l.push(p[target * 3], p[target * 3 + 1], p[target * 3 + 2]);
+                lineCoords.push(
+                    [p[i * 3], p[i * 3 + 1], p[i * 3 + 2]],
+                    [p[target * 3], p[target * 3 + 1], p[target * 3 + 2]]
+                );
             }
         }
-        return { particles: p, lines: new Float32Array(l) };
+
+        return { particles: p, linePoints: lineCoords };
     }, [count]);
 
     useFrame((state) => {
         const t = state.clock.getElapsedTime();
-        if (points.current) {
-            points.current.rotation.x = t * 0.05;
-            points.current.rotation.y = t * 0.08;
+        if (pointsRef.current) {
+            pointsRef.current.rotation.x = t * 0.05;
+            pointsRef.current.rotation.y = t * 0.08;
             const scale = 1 + Math.sin(t * 1.5) * 0.02;
-            points.current.scale.set(scale, scale, scale);
+            pointsRef.current.scale.set(scale, scale, scale);
         }
     });
 
+    // Group line pairs into segments
+    const lineSegments = useMemo(() => {
+        const segments: [[number, number, number], [number, number, number]][] = [];
+        for (let i = 0; i < linePoints.length - 1; i += 2) {
+            segments.push([linePoints[i], linePoints[i + 1]]);
+        }
+        return segments;
+    }, [linePoints]);
+
     return (
         <group rotation={[0, 0, Math.PI / 4]}>
-            <Points ref={points} positions={particles} stride={3} frustumCulled={false}>
+            <Points ref={pointsRef} positions={particles} stride={3} frustumCulled={false}>
                 <PointMaterial
                     transparent
                     color="#66fcf1"
@@ -56,17 +68,16 @@ function Network({ count = 100 }) {
                     opacity={0.6}
                 />
             </Points>
-            <lineSegments>
-                <bufferGeometry>
-                    <bufferAttribute
-                        attach="attributes-position"
-                        count={lines.length / 3}
-                        array={lines}
-                        itemSize={3}
-                    />
-                </bufferGeometry>
-                <lineBasicMaterial color="#66fcf1" transparent opacity={0.1} />
-            </lineSegments>
+            {lineSegments.map((seg, i) => (
+                <Line
+                    key={i}
+                    points={seg}
+                    color="#66fcf1"
+                    lineWidth={0.3}
+                    transparent
+                    opacity={0.1}
+                />
+            ))}
         </group>
     );
 }
