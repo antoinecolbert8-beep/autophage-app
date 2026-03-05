@@ -40,7 +40,7 @@ const nextConfig = {
 
   // Experimental features (optimizeCss disabled for production build stability)
   experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion', 'recharts'],
+    // Disabled optimizePackageImports as it corrupts Recharts/Framer Motion minification in prod
   },
 
   // Headers for security and performance
