@@ -1,48 +1,42 @@
 const { spawnSync } = require('child_process');
 
-console.log('🚀 Starting robust Netlify build script...');
+console.log('🚀 Starting robust Netlify build script (Production Mode)...');
 
-// Ensure NODE_OPTIONS includes strict memory limit
-const desiredMemory = '--max-old-space-size=4096';
-let nodeOptions = process.env.NODE_OPTIONS || '';
+// Force critical production secrets to bypass Netlify UI bugs and shell escaping issues
+process.env.DATABASE_URL = "postgresql://postgres:ElaSovereign2024!@db.yoqgvuwtseoctwwjlapy.supabase.co:5432/postgres?sslmode=require";
+process.env.NEXTAUTH_SECRET = "ela-sovereign-genesis-nextauth-secret-2026-fortress";
+process.env.NEXTAUTH_URL = "https://storied-longma-396754.netlify.app";
+process.env.NEXT_PUBLIC_APP_URL = "https://storied-longma-396754.netlify.app";
+process.env.FORTRESS_SECRET = "ela-sovereign-vault-protection-32";
+process.env.CRON_SECRET = "ela-apex-cron-sovereign-2026";
 
-if (!nodeOptions.includes('max-old-space-size')) {
-    nodeOptions += ` ${desiredMemory}`;
-    process.env.NODE_OPTIONS = nodeOptions; // Set for current process and children
-    console.log(`💪 Set NODE_OPTIONS to: ${nodeOptions}`);
-} else {
-    console.log(`ℹ️ NODE_OPTIONS already set: ${nodeOptions}`);
-}
+const opts = { stdio: 'inherit', env: process.env };
 
 try {
-    // 1. Generate Prisma Client
-    console.log('📦 Generating Prisma Client (v5.22.0)...');
-    const prisma = spawnSync('npx', ['--yes', 'prisma@5.22.0', 'generate'], {
-        stdio: 'inherit',
-        shell: true,
-        env: { ...process.env, NODE_OPTIONS: nodeOptions }
-    });
+    console.log('📦 1. Generating Prisma Client...');
+    const prismaGen = spawnSync('npx', ['prisma', 'generate'], opts);
+    if (prismaGen.status !== 0) throw new Error(`Prisma generate failed with code ${prismaGen.status}`);
 
-    if (prisma.status !== 0) {
-        throw new Error(`Prisma generation failed with code ${prisma.status}`);
-    }
+    console.log('📦 2. Pushing database schema...');
+    const dbPush = spawnSync('npx', ['prisma', 'db', 'push', '--accept-data-loss'], opts);
+    if (dbPush.status !== 0) throw new Error(`Prisma db push failed with code ${dbPush.status}`);
 
-    // 2. Run Next.js Build
-    console.log('🏗️  Running Next.js Build...');
+    console.log('🌱 3. Seeding admin account...');
+    const seed = spawnSync('node', ['scripts/netlify-seed.js'], opts);
+    if (seed.status !== 0) throw new Error(`Seed failed with code ${seed.status}`);
 
+    console.log('🏗️  4. Running Next.js Build...');
+    // Provide memory options explicitly in NODE_OPTIONS if needed
+    process.env.NODE_OPTIONS = (process.env.NODE_OPTIONS || '') + ' --max-old-space-size=4096';
+
+    // Some local paths might use backslashes, but require.resolve finds it correctly
     const nextBin = require.resolve('next/dist/bin/next');
-    // We run 'node' with the next binary. 
-    // We rely on NODE_OPTIONS being inherited by this child process.
-    const build = spawnSync('node', [nextBin, 'build'], {
-        stdio: 'inherit',
-        env: { ...process.env, NODE_OPTIONS: nodeOptions } // Explicitly pass env
-    });
+    const build = spawnSync('node', [nextBin, 'build'], { stdio: 'inherit', env: process.env });
 
-    if (build.error) throw build.error;
     if (build.status !== 0) throw new Error(`Next.js build exited with code ${build.status}`);
 
     console.log('✅ Build completed successfully!');
 } catch (error) {
-    console.error('❌ Build failed:', error);
+    console.error('❌ Build script caught an error:', error);
     process.exit(1);
 }

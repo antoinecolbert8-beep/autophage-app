@@ -1,5 +1,5 @@
 [build]
-  command = "bash scripts/build-prod.sh"
+  command = "node scripts/netlify-build.js"
   publish = ".next"
 
 [[plugins]]
