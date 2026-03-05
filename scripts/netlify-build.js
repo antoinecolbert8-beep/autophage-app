@@ -18,13 +18,17 @@ try {
     const prismaGen = spawnSync('npx', ['--yes', 'prisma', 'generate'], opts);
     if (prismaGen.status !== 0) throw new Error(`Prisma generate failed with code ${prismaGen.status}`);
 
-    console.log('📦 2. Pushing database schema...');
-    const dbPush = spawnSync('npx', ['--yes', 'prisma', 'db', 'push', '--accept-data-loss'], opts);
-    if (dbPush.status !== 0) throw new Error(`Prisma db push failed with code ${dbPush.status}`);
+    if (process.env.NETLIFY) {
+        console.log('⚠️ 2/3. Skipping prisma db push and admin seed on Netlify build (prevent connections errors).');
+    } else {
+        console.log('📦 2. Pushing database schema...');
+        const dbPush = spawnSync('npx', ['--yes', 'prisma', 'db', 'push', '--accept-data-loss'], opts);
+        if (dbPush.status !== 0) throw new Error(`Prisma db push failed with code ${dbPush.status}`);
 
-    console.log('🌱 3. Seeding admin account...');
-    const seed = spawnSync('node', ['scripts/netlify-seed.js'], opts);
-    if (seed.status !== 0) throw new Error(`Seed failed with code ${seed.status}`);
+        console.log('🌱 3. Seeding admin account...');
+        const seed = spawnSync('node', ['scripts/netlify-seed.js'], opts);
+        if (seed.status !== 0) throw new Error(`Seed failed with code ${seed.status}`);
+    }
 
     console.log('🏗️  4. Running Next.js Build...');
     // Provide memory options explicitly in NODE_OPTIONS if needed
