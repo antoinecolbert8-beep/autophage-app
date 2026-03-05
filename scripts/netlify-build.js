@@ -3,7 +3,8 @@ const { spawnSync } = require('child_process');
 console.log('🚀 Starting robust Netlify build script (Production Mode)...');
 
 // Force critical production secrets to bypass Netlify UI bugs and shell escaping issues
-process.env.DATABASE_URL = "postgresql://postgres:ElaSovereign2024!@db.yoqgvuwtseoctwwjlapy.supabase.co:5432/postgres?sslmode=require";
+// URL encode the exclamation mark (! => %21) to prevent ANY bash history expansion errors
+process.env.DATABASE_URL = "postgresql://postgres:ElaSovereign2024%21@db.yoqgvuwtseoctwwjlapy.supabase.co:5432/postgres?sslmode=require";
 process.env.NEXTAUTH_SECRET = "ela-sovereign-genesis-nextauth-secret-2026-fortress";
 process.env.NEXTAUTH_URL = "https://storied-longma-396754.netlify.app";
 process.env.NEXT_PUBLIC_APP_URL = "https://storied-longma-396754.netlify.app";
@@ -14,11 +15,11 @@ const opts = { stdio: 'inherit', env: process.env };
 
 try {
     console.log('📦 1. Generating Prisma Client...');
-    const prismaGen = spawnSync('npx', ['prisma', 'generate'], opts);
+    const prismaGen = spawnSync('npx', ['--yes', 'prisma', 'generate'], opts);
     if (prismaGen.status !== 0) throw new Error(`Prisma generate failed with code ${prismaGen.status}`);
 
     console.log('📦 2. Pushing database schema...');
-    const dbPush = spawnSync('npx', ['prisma', 'db', 'push', '--accept-data-loss'], opts);
+    const dbPush = spawnSync('npx', ['--yes', 'prisma', 'db', 'push', '--accept-data-loss'], opts);
     if (dbPush.status !== 0) throw new Error(`Prisma db push failed with code ${dbPush.status}`);
 
     console.log('🌱 3. Seeding admin account...');
