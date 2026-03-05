@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "next dev -p 3000",
     "dev:https": "node server.js",
-    "build": "node scripts/netlify-build.js",
+    "build": "next build",
+    "build:netlify": "CI=false NODE_OPTIONS='--max-old-space-size=4096' npx prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "prisma generate",
@@ -68,6 +69,7 @@
     "next-auth": "^4.24.13",
     "openai": "^4.24.1",
     "pdf-parse": "^1.1.1",
+    "pg": "^8.20.0",
     "postcss": "^8",
     "react": "^18",
     "react-dom": "^18",
