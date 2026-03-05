@@ -1,5 +1,5 @@
 [build]
-  command = "npx prisma generate && next build"
+  command = "DATABASE_URL='postgresql://postgres.yoqgvuwtseoctwwjlapy:ElaSovereign2026Gen@aws-1-eu-west-1.pooler.supabase.com:6543/postgres?sslmode=require&pgbouncer=true' NEXTAUTH_SECRET='ela-sovereign-genesis-nextauth-secret-2026-fortress' NEXTAUTH_URL='https://storied-longma-396754.netlify.app' NEXT_PUBLIC_APP_URL='https://storied-longma-396754.netlify.app' CI=false NODE_OPTIONS='--max-old-space-size=4096' npx prisma generate && next build"
   publish = ".next"
 
 

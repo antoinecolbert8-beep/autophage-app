@@ -32,9 +32,8 @@ async function main() {
                 data: {
                     name: 'ELA Admin Corp',
                     domain: 'ela-admin.io',
-                    plan: 'enterprise',
-                    tier: 'grand_horloger',
-                    credits: 999999,
+                    tier: 'enterprise',
+                    creditBalance: 999999,
                 }
             });
             console.log('[SEED] Created org:', org.id);

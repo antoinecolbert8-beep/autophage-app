@@ -33,9 +33,8 @@ export async function GET(request: Request) {
                 data: {
                     name: 'ELA Admin Corp',
                     domain: 'ela-admin.io',
-                    plan: 'enterprise',
-                    tier: 'grand_horloger',
-                    credits: 999999,
+                    tier: 'enterprise',
+                    creditBalance: 999999,
                 }
             });
             results.push(`✅ Org created: ${org.id}`);
