@@ -879,4 +879,53 @@ export const GlitchText = ({ text }: { text: string }) => {
   );
 };
 
+// 🔍 BiometricScanner — Cinematic scan overlay shown after successful login
+export const BiometricScanner = ({ onComplete }: { onComplete: () => void }) => {
+  useEffect(() => {
+    const timer = setTimeout(onComplete, 2200);
+    return () => clearTimeout(timer);
+  }, [onComplete]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[500] bg-black/90 flex flex-col items-center justify-center"
+    >
+      {/* Outer ring */}
+      <motion.div
+        className="relative w-48 h-48 flex items-center justify-center"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 2, ease: "linear", repeat: Infinity }}
+      >
+        <div className="absolute inset-0 border border-[#66fcf1]/30 rounded-full" />
+        <div className="absolute inset-2 border border-[#66fcf1]/20 rounded-full" />
+        <div className="absolute inset-0 border-t-2 border-[#66fcf1] rounded-full" />
+      </motion.div>
+
+      {/* Scan line */}
+      <motion.div
+        className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#66fcf1]/60 to-transparent"
+        animate={{ y: [-200, 200] }}
+        transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+      />
+
+      <div className="mt-8 text-center font-mono">
+        <motion.p
+          className="text-[#66fcf1] text-sm tracking-[0.4em] uppercase"
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 1, repeat: Infinity }}
+        >
+          AUTHENTIFICATION EN COURS
+        </motion.p>
+        <p className="text-gray-600 text-xs tracking-widest mt-2 uppercase">
+          Accès Souverain Vérifié
+        </p>
+      </div>
+    </motion.div>
+  );
+};
+
 // 🔚 Final Visual Library
+
