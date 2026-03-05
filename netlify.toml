@@ -2,8 +2,7 @@
   command = "node scripts/netlify-build.js"
   publish = ".next"
 
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
+
 
 # Forwarding API Routes for Netlify Functions (Optional if using raw Next.js, but required for custom Netlify Scheduled Functions built outside of Next boundary)
 [functions]
