@@ -4,7 +4,8 @@ console.log('🚀 Starting robust Netlify build script (Production Mode)...');
 
 // Force critical production secrets to bypass Netlify UI bugs and shell escaping issues
 // URL encode the exclamation mark (! => %21) to prevent ANY bash history expansion errors
-process.env.DATABASE_URL = "postgresql://postgres:ElaSovereign2024%21@db.yoqgvuwtseoctwwjlapy.supabase.co:5432/postgres?sslmode=require";
+// Use the IPv4 Transaction Pooler URL because Netlify build runners require it for Supabase
+process.env.DATABASE_URL = "postgresql://postgres.yoqgvuwtseoctwwjlapy:elacolbert2026%21@aws-1-eu-west-1.pooler.supabase.com:6543/postgres?sslmode=require&pgbouncer=true";
 process.env.NEXTAUTH_SECRET = "ela-sovereign-genesis-nextauth-secret-2026-fortress";
 process.env.NEXTAUTH_URL = "https://storied-longma-396754.netlify.app";
 process.env.NEXT_PUBLIC_APP_URL = "https://storied-longma-396754.netlify.app";
