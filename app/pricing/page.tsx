@@ -119,7 +119,7 @@ export default function PricingPage() {
               <Link href="/signup?plan=god_mode" className="w-full py-5 bg-white text-black rounded-xl font-black text-[10px] uppercase tracking-[0.3em] text-center transition-all btn-haptic">ACTIVER LA SOUVERAINETÉ</Link>
             </div>
 
-            {/* NETWORK EMPIRE (The Reseller/Media Tier) */}
+            {/* NETWORK INFRASTRUCTURE (The Reseller/Media Tier) */}
             <div className="card-saphir p-12 bg-[#66fcf1]/5 border-[#66fcf1]/30 group hover:border-[#66fcf1] transition-all relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#66fcf1]/10 blur-3xl -z-10" />
               <h3 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-[#66fcf1]">Infrastructure Scale</h3>

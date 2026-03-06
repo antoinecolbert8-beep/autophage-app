@@ -127,7 +127,7 @@ const PLATFORMS: PlatformConfig[] = [
         icon: Youtube,
         color: "text-rose-500",
         gradient: "from-rose-600 to-red-900",
-        description: "Dominez le SEO vidéo via l'Agent VISION. Publiez des Shorts et vidéos longues automatiquement.",
+        description: "Pilotez le SEO vidéo via l'Agent VISION. Publiez des Shorts et vidéos longues automatiquement.",
         fields: [
             { key: "apiKey", label: "YouTube API Key", placeholder: "AIza..." },
             { key: "channelId", label: "Channel ID", placeholder: "UC..." },
@@ -476,10 +476,10 @@ export default function IntegrationsPage() {
                     <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03]" />
                     <div className="relative z-10">
                         <h2 className="text-3xl font-black mb-4 tracking-tighter stat-value text-white">
-                            🌐 EMPIRE DIGITAL <span className="text-[#66fcf1]">CONNECTÉ</span>
+                            🌐 INFRASTRUCTURE DIGITALE <span className="text-[#66fcf1]">CONNECTÉE</span>
                         </h2>
                         <p className="text-gray-500 max-w-xl leading-relaxed text-sm font-light">
-                            Entrez vos clés API une seule fois. ELA active son <span className="text-[#66fcf1] font-bold">Calibre Souverain</span> :
+                            Entrez vos clés API une seule fois. ELA active son <span className="text-[#66fcf1] font-bold">Système Souverain</span> :
                             publication autonome 24/7, diffusion multi-canal et synchronisation atomique.
                         </p>
                     </div>

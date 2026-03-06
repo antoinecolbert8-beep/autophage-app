@@ -21,13 +21,13 @@ export default function WhatsAppCommandPage() {
             <div className="p-8 max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                     <div>
-                        <h2 className="text-3xl font-black mb-6">Contrôlez votre empire depuis votre poche.</h2>
+                        <h2 className="text-3xl font-black mb-6">Contrôlez votre infrastructure depuis votre poche.</h2>
                         <p className="text-gray-400 text-lg mb-8 leading-relaxed">
                             HIVE est votre interface de commande WhatsApp. Envoyez des instructions vocales ou textuelles pour piloter l'&ensemble de votre infrastructure ELA.
                         </p>
 
                         <div className="bg-[#13131f] border border-white/5 rounded-2xl p-6 mb-8">
-                            <h3 className="font-bold mb-4 text-green-400">Grimoire de l'Empereur (Commandes)</h3>
+                            <h3 className="font-bold mb-4 text-green-400">Console de Pilotage (Commandes)</h3>
                             <ul className="space-y-3 font-mono text-sm text-gray-300">
                                 <li className="flex items-center gap-2"><span className="text-green-500">/stats</span> Rapport journalier instantané</li>
                                 <li className="flex items-center gap-2"><span className="text-green-500">/deploy [x]</span> Lance une nouvelle campagne</li>

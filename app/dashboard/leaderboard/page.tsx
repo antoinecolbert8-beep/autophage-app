@@ -40,7 +40,7 @@ const TIER_REWARDS: Record<number, { label: string; color: string; icon: any }> 
     1: { label: 'Pro 7j', color: 'text-blue-400', icon: Zap },
     3: { label: '100 Crédits', color: 'text-emerald-400', icon: Gift },
     5: { label: 'Pro Permanent', color: 'text-violet-400', icon: Star },
-    10: { label: 'Empire Builder', color: 'text-amber-400', icon: Crown },
+    10: { label: 'Infrastructure Builder', color: 'text-amber-400', icon: Crown },
     25: { label: 'God Mode', color: 'text-rose-400', icon: Trophy },
 };
 
@@ -139,7 +139,7 @@ export default function LeaderboardPage() {
                         Leaderboard ELA
                     </div>
                     <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-violet-400 via-pink-400 to-amber-400 bg-clip-text text-transparent mb-2">
-                        Empire Classement
+                        Classement Performance
                     </h1>
                     <p className="text-gray-400 text-lg">Les bâtisseurs qui dominent cette semaine</p>
                 </motion.div>
@@ -335,8 +335,8 @@ export default function LeaderboardPage() {
                                 <div
                                     key={t.active}
                                     className={`rounded-xl border p-3 text-center transition-all ${reached
-                                            ? 'border-violet-500/50 bg-violet-900/20'
-                                            : 'border-gray-800/60 opacity-60'
+                                        ? 'border-violet-500/50 bg-violet-900/20'
+                                        : 'border-gray-800/60 opacity-60'
                                         }`}
                                 >
                                     <div className="text-2xl font-extrabold text-white mb-0.5">{t.active}</div>

@@ -53,8 +53,8 @@ export default function FeaturesPage() {
               <span className="text-[10px] font-black text-[#66fcf1] uppercase tracking-[0.3em]">MANUFACTURE ELA // INFRASTRUCTURE</span>
             </div>
             <h1 className="text-5xl md:text-9xl font-black mb-10 tracking-tighter uppercase stat-value text-white">PUISSANCE<br /><span className="text-[#66fcf1]">SOUVERAINE.</span></h1>
-            <p className="text-xl text-gray-500 max-w-2xl mx-auto font-light italic leading-relaxed">
-              &bdquo; ELA synchronise vos calibres stratégiques haute technologie pour une domination totale du marché. &rdquo;
+            <p className="text-xl text-gray-500 max-w-2xl mx-auto font-light leading-relaxed">
+              " ELA synchronise votre infrastructure stratégique haute technologie pour une performance totale du marché. "
             </p>
           </div>
 
@@ -133,10 +133,10 @@ export default function FeaturesPage() {
           <div className="mt-32 text-center snap-start">
             <div className="card-saphir border-[#66fcf1]/20 p-20 max-w-4xl mx-auto shadow-[0_0_100px_rgba(102,252,241,0.05)]">
               <h2 className="text-4xl md:text-7xl font-black text-white mb-8 stat-value tracking-tighter">
-                PRÊT À <span className="text-[#66fcf1]">DOMINER ?</span>
+                PRÊT À <span className="text-[#66fcf1]">SCALER ?</span>
               </h2>
               <p className="text-xl text-gray-500 mb-12 font-light italic leading-relaxed">
-                Initialisez votre infrastructure et lancez vos calibres stratégiques dès aujourd'hui.
+                Initialisez votre infrastructure et lancez vos agents stratégiques dès aujourd'hui.
               </p>
               <Link
                 href="/signup"

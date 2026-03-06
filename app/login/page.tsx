@@ -94,8 +94,8 @@ export default function LoginPage() {
               <h1 className="text-3xl font-black mb-3 tracking-tighter uppercase text-white stat-value">
                 BON RETOUR.
               </h1>
-              <p className="text-gray-500 text-[11px] font-light italic leading-relaxed uppercase tracking-[0.1em]">
-                &bdquo; Ré-activez vos protocoles de domination. &rdquo;
+              <p className="text-gray-500 text-[11px] font-light leading-relaxed uppercase tracking-[0.1em]">
+                " Ré-activez vos protocoles opérationnels. "
               </p>
             </div>
 
@@ -108,7 +108,7 @@ export default function LoginPage() {
 
             <form onSubmit={handleSubmit} className="space-y-8">
               <div className="space-y-3">
-                <label className="block text-[8px] font-black uppercase tracking-[0.3em] text-gray-600 ml-1">CALIBRE EMAIL</label>
+                <label className="block text-[8px] font-black uppercase tracking-[0.3em] text-gray-600 ml-1">IDENTIFIANT EMAIL</label>
                 <div className="relative">
                   <input
                     type="email"
@@ -165,7 +165,7 @@ export default function LoginPage() {
 
             <div className="mt-10 pt-10 border-t border-white/5 text-center">
               <p className="text-gray-600 text-[9px] font-black uppercase tracking-[0.2em]">
-                PAS ENCORE DE CALIBRE ?{" "}
+                PAS ENCORE DE COMPTE ?{" "}
                 <Link href="/signup" className="text-white hover:text-[#66fcf1] transition-colors ml-2 underline underline-offset-4 decoration-[#66fcf1]/30">
                   CRÉER UN COMPTE
                 </Link>

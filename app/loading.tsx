@@ -26,12 +26,12 @@ const TICKER_AGENTS = [
     "Influencer Detection", "Video Generator", "Revenue Autopilot", "Multi-Language",
     "Lead Scoring AI", "ROI Calculator", "Meeting Assistant AI", "Proposal Generator",
     "Competitive Intelligence", "SMS Automation", "White-Label Program", "Email Warmup",
-    "Domination Globale", "Infrastructure Souveraine", "IA Transmission Layer", "Orchestration Autonome"
+    "Performance Globale", "Infrastructure Souveraine", "IA Transmission Layer", "Orchestration Autonome"
 ];
 
 const MESSAGES = [
     "Initialisation du Protocole Souveraineté...",
-    "Déploiement de la Matrice Empire...",
+    "Déploiement de l'Infrastructure...",
     "Synchronisation des Unités Autonomes...",
     "Verrouillage des Clés de Cryptage...",
     "Activation du Flywheel Stratégique...",
@@ -187,7 +187,7 @@ export default function Loading() {
                     <div className="flex justify-between items-center text-[9px] font-mono text-gray-600 tracking-[0.2em] uppercase px-1">
                         <span className="flex items-center gap-2">
                             <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></span>
-                            Protocole Empire Alpha-2
+                            Protocole Infrastructure Alpha-2
                         </span>
                         <span>Souveraineté : Verrouillée</span>
                     </div>

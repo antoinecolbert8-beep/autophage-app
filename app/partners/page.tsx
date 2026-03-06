@@ -72,7 +72,7 @@ export default function PartnersPage() {
                                 <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter uppercase text-white">
                                     VOTRE <span className="text-[#66fcf1]">DASHBOARD.</span>
                                 </h1>
-                                <p className="text-gray-500 font-light italic tracking-widest uppercase text-xs">Domination active // ID: {userId.substring(0, 8)}</p>
+                                <p className="text-gray-500 font-light tracking-widest uppercase text-xs">Infrastructure active // ID: {userId.substring(0, 8)}</p>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -146,9 +146,9 @@ export default function PartnersPage() {
                             <div className="text-center mb-32">
                                 <h1 className="text-6xl md:text-9xl font-black mb-8 tracking-tighter uppercase text-white leading-[0.9]">
                                     BÂTISSEZ VOTRE<br />
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#66fcf1] to-blue-400">EMPIRE DE REVENUS.</span>
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#66fcf1] to-blue-400">INFRASTRUCTURE DE REVENUS.</span>
                                 </h1>
-                                <p className="text-xl text-gray-500 max-w-2xl mx-auto font-light italic leading-relaxed mb-12">
+                                <p className="text-xl text-gray-500 max-w-2xl mx-auto font-light leading-relaxed mb-12">
                                     Rejoignez l'élite des ambassadeurs ELA. Touchez 30% de commission récurrente à vie sur chaque abonnement.
                                 </p>
                                 <Link href="/signup?ref=partner-program" className="inline-flex items-center gap-4 px-12 py-6 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-[0.3em] hover:bg-[#66fcf1] transition-all group btn-haptic">
@@ -205,7 +205,7 @@ export default function PartnersPage() {
                                                 <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-gray-600">
                                                     <span>ENTRÉE</span>
                                                     <span>ASCENSION</span>
-                                                    <span className="text-[#66fcf1]">DOMINATION MÉCANIQUE</span>
+                                                    <span className="text-[#66fcf1]">PERFORMANCE INDUSTRIELLE</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -235,7 +235,7 @@ export default function PartnersPage() {
                                     L'intégration est instantanée. Accédez à votre tableau de bord partenaire et commencez à distribuer vos liens de tracking dès aujourd'hui.
                                 </p>
                                 <Link href="/signup?ref=partner-program" className="px-16 py-6 bg-[#66fcf1] text-[#0b0c10] rounded-2xl font-black text-xs uppercase tracking-[0.4em] hover:shadow-[0_0_50px_rgba(102,252,241,0.3)] transition-all btn-haptic">
-                                    INITIALISER MON EMPIRE
+                                    INITIALISER MON SCALE
                                 </Link>
                             </section>
                         </>

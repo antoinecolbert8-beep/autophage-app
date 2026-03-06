@@ -184,10 +184,10 @@ function SignupContent() {
                   <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter uppercase text-white stat-value">
                     {plan === "god_mode" ? "ACTIVER LA SOUVERAINETÉ." : "REJOINDRE L'INFRASTRUCTURE."}
                   </h1>
-                  <p className="text-gray-500 text-[11px] font-light italic leading-relaxed uppercase tracking-[0.1em]">
+                  <p className="text-gray-500 text-[11px] font-light leading-relaxed uppercase tracking-[0.1em]">
                     {plan === "god_mode"
-                      ? "\" Initialisation du protocole de souveraineté numérique absolue. \""
-                      : "\" Activez votre infrastructure et commencez votre scale immédiatement. \""}
+                      ? " Initialisation du protocole de souveraineté numérique absolue. "
+                      : " Activez votre infrastructure et commencez votre scale immédiatement. "}
                   </p>
                 </div>
 
@@ -290,7 +290,7 @@ function SignupContent() {
                 </h2>
                 <div className="grid gap-6">
                   {(plan === "god_mode" ? [
-                    { label: "Agents Illimités", desc: "Orchestration totale sans restriction de calibre." },
+                    { label: "Agents Illimités", desc: "Orchestration totale sans restriction d'agent." },
                     { label: "Crédits Infinis", desc: "Génération APEX et PULSE haute fréquence illimitée." },
                     { label: "Support Prioritaire", desc: "Ligne directe avec les architectes ELA 24/7." },
                     { label: "Dedicated Tenant", desc: "Infrastructure isolée pour une sécurité maximale." },

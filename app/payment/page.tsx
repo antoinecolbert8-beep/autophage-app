@@ -90,10 +90,10 @@ export default function PaymentPage() {
                             <span className="text-[8px] font-black text-[#66fcf1] uppercase tracking-[0.3em]">SYNCHRONISATION STRIPE // SÉCURISÉ</span>
                         </div>
                         <h1 className="text-3xl font-black mb-4 tracking-tighter uppercase text-white stat-value">
-                            FINALISER LE CALIBRE.
+                            FINALISER LA SOUSCRIPTION.
                         </h1>
-                        <p className="text-gray-500 text-[11px] font-light italic leading-relaxed uppercase tracking-[0.1em]">
-                            &bdquo; Vous allez être redirigé vers l'interface de scellement transactionnel de niveau 1. &rdquo;
+                        <p className="text-gray-500 text-[11px] font-light leading-relaxed uppercase tracking-[0.1em]">
+                            " Vous allez être redirigé vers l'interface de sécurisation transactionnelle de haut niveau. "
                         </p>
                     </div>
 
@@ -118,7 +118,7 @@ export default function PaymentPage() {
                         </div>
 
                         <div className="border-t border-white/5 pt-8">
-                            <p className="text-[8px] font-black text-gray-600 uppercase tracking-[0.3em] mb-4 ml-1">CALIBRES INCLUS :</p>
+                            <p className="text-[8px] font-black text-gray-600 uppercase tracking-[0.3em] mb-4 ml-1">AGENTS INCLUS :</p>
                             <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                 {plan.features.map((feature, i) => (
                                     <li key={i} className="flex items-center gap-3 text-[10px] text-gray-500 font-light italic">
@@ -152,7 +152,7 @@ export default function PaymentPage() {
                         ) : (
                             <>
                                 <CreditCard className="w-5 h-5" />
-                                ACTIVER LE CALIBRE ({plan.price}€)
+                                ACTIVER LA SOUSCRIPTION ({plan.price}€)
                             </>
                         )}
                     </button>

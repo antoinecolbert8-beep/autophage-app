@@ -12,7 +12,7 @@ export default function AgentsPage() {
             agents: [
                 {
                     name: "APEX",
-                    role: "X/Social Domination",
+                    role: "X/Social Scale",
                     img: "/agents/nexus_v2.png?v=4",
                     desc: "Sature l'espace sémantique sur X et Instagram en boucle autonome.",
                     gradient: "from-pink-500 to-rose-600",
@@ -112,11 +112,11 @@ export default function AgentsPage() {
             <div className="max-w-7xl mx-auto mb-20 text-center md:text-left">
                 <Link href="/" className="text-[#66fcf1] hover:text-[#45a29e] mb-8 inline-block font-black text-[10px] uppercase tracking-[0.2em]">← RETOUR AU CADRAN</Link>
                 <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/10 mb-10 backdrop-blur-xl">
-                    <span className="text-[10px] font-black text-[#66fcf1] uppercase tracking-[0.3em]">MANUFACTURE ELA // CALIBRES D'ÉLITE</span>
+                    <span className="text-[10px] font-black text-[#66fcf1] uppercase tracking-[0.3em]">MANUFACTURE ELA // AGENTS D'ÉLITE</span>
                 </div>
                 <h1 className="text-5xl md:text-8xl font-black mb-8 uppercase leading-[0.9] tracking-tighter stat-value text-white">13 FORCES<br /><span className="text-[#66fcf1]">SOUVERAINES.</span></h1>
-                <p className="text-xl text-gray-500 max-w-3xl font-light italic leading-relaxed">
-                    &bdquo; Ne gérez plus des outils. Pilotez une force d'élite automatisée organisée pour la domination totale. &rdquo;
+                <p className="text-xl text-gray-500 max-w-3xl font-light leading-relaxed">
+                    " Ne gérez plus des outils. Pilotez une force d'élite automatisée organisée pour la performance totale. "
                 </p>
             </div>
 
@@ -165,7 +165,7 @@ export default function AgentsPage() {
             <div className="max-w-7xl mx-auto pt-32 pb-40 border-t border-white/5 snap-start">
                 <div className="mb-16">
                     <h2 className="text-5xl font-black uppercase mb-4 tracking-tighter stat-value text-white">LA FONDATION</h2>
-                    <p className="text-gray-500 font-light italic">Les calibres de support spécialisés qui stabilisent votre empire.</p>
+                    <p className="text-gray-500 font-light">Les agents de support spécialisés qui stabilisent votre infrastructure.</p>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
                     {foundations.map((agent, j) => (

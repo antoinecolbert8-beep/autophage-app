@@ -42,8 +42,8 @@ export default function PressPage() {
                         <h1 className="text-5xl md:text-8xl font-black mb-8 tracking-tighter uppercase text-white">
                             L'I.A. QUI DESSINE<br /><span className="text-[#66fcf1]">LE FUTUR DU SaaS.</span>
                         </h1>
-                        <p className="text-xl text-gray-500 max-w-2xl mx-auto font-light italic leading-relaxed">
-                            &bdquo; ELA n'est pas un outil. C'est l'infrastructure souveraine de la performance automatisée. &rdquo;
+                        <p className="text-xl text-gray-500 max-w-2xl mx-auto font-light leading-relaxed">
+                            " ELA n'est pas un outil. C'est l'infrastructure souveraine de la performance automatisée. "
                         </p>
                     </div>
 

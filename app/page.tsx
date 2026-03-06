@@ -238,7 +238,7 @@ export default function Home() {
               { icon: "🤖", title: "ENGAGEMENT BOT", desc: "Réponses IA aux commentaires et likes intelligents.", tag: "PHASE 2" },
               { icon: "📡", title: "TRENDING TOPICS", desc: "Scraping stratégique Reddit, Google Trends et Twitter.", tag: "PHASE 2" },
               { icon: "⏱️", title: "FREQUENCY OPTIMIZER", desc: "2-5 publications adaptatives par cycle solaire.", tag: "PHASE 2" },
-              { icon: "♻️", title: "CONTENT RECYCLING", desc: "Repurpose automatique des calibres les plus performants.", tag: "PHASE 2" },
+              { icon: "♻️", title: "CONTENT RECYCLING", desc: "Repurpose automatique des agents les plus performants.", tag: "PHASE 2" },
               { icon: "🎯", title: "RETARGETING PIXELS", desc: "Audiences custom basées sur l'engagement réel.", tag: "PHASE 3" },
               { icon: "👥", title: "INFLUENCER ENGINE", desc: "Identification et outreach automatique micro-influences.", tag: "PHASE 3" },
               { icon: "🎬", title: "VIDEO GENERATOR", desc: "Scripts Reels/TikTok auto avec voiceover ElevenLabs.", tag: "PHASE 3" },

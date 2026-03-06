@@ -12,7 +12,7 @@ type Message = {
 
 export default function ContactPage() {
     const [messages, setMessages] = useState<Message[]>([
-        { role: "assistant", content: "Salutations. Je suis l'IA ELA. Comment puis-je vous assister dans votre domination du marché aujourd'hui ?" }
+        { role: "assistant", content: "Salutations. Je suis l'IA ELA. Comment puis-je vous assister dans votre performance aujourd'hui ?" }
     ]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -148,7 +148,7 @@ export default function ContactPage() {
                             </button>
                         </form>
                         <div className="text-center mt-6">
-                            <p className="text-[10px] text-gray-700 font-mono tracking-[0.3em] uppercase">POWERED BY ELA // CALIBRE VOCAL v2.4</p>
+                            <p className="text-[10px] text-gray-700 font-mono tracking-[0.3em] uppercase">POWERED BY ELA // AGENT VOCAL v2.4</p>
                         </div>
                     </div>
                 </div>
