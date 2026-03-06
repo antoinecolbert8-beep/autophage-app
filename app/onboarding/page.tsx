@@ -31,7 +31,7 @@ const PLATFORMS = [
         icon: Linkedin,
         color: "bg-white/5",
         glow: "hover:border-[#66fcf1]/50",
-        description: "FORCE B2B // CALIBRE RÉSEAU",
+        description: "FORCE B2B // PERFORMANCE RÉSEAU",
         connectUrl: "/dashboard/integrations?platform=linkedin",
     },
     {
@@ -40,7 +40,7 @@ const PLATFORMS = [
         icon: Twitter,
         color: "bg-white/5",
         glow: "hover:border-[#66fcf1]/50",
-        description: "VIRALITÉ HAUTE FRÉQUENCE",
+        description: "VIRALITÉ HAUT PERFORMANCE",
         connectUrl: "/dashboard/integrations?platform=twitter",
     },
     {
@@ -209,7 +209,7 @@ export default function OnboardingPage() {
                 <motion.div {...fadeUp} className="text-center mb-16">
                     {isWelcome && (
                         <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-xl">
-                            <span className="text-[10px] font-black text-[#66fcf1] uppercase tracking-[0.3em]">CALIBRATION // INITIALISATION</span>
+                            <span className="text-[10px] font-black text-[#66fcf1] uppercase tracking-[0.3em]">INFRASTRUCTURE // INITIALISATION</span>
                         </div>
                     )}
                     <h1 className="text-4xl md:text-6xl font-black mb-6 tracking-tighter uppercase stat-value text-white">
@@ -218,8 +218,8 @@ export default function OnboardingPage() {
                             300 SECONDES.
                         </span>
                     </h1>
-                    <p className="text-gray-500 text-[11px] font-light italic leading-relaxed uppercase tracking-[0.1em]">
-                        &bdquo; Synchronisez vos calibres stratégiques pour obtenir un résultat immédiat. &rdquo;
+                    <p className="text-gray-500 text-[11px] font-light leading-relaxed uppercase tracking-[0.1em]">
+                        " Synchronisez votre infrastructure stratégique pour obtenir un résultat immédiat. "
                     </p>
                 </motion.div>
 
@@ -264,8 +264,8 @@ export default function OnboardingPage() {
                     {step === 1 && (
                         <motion.div key="step1" {...fadeUp} className="card-saphir p-10 relative group">
                             <h2 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-[#66fcf1]">Phase 01 // Connexion</h2>
-                            <p className="text-gray-500 text-[11px] font-light italic leading-relaxed mb-10">
-                                Sélectionnez le calibre social que vous souhaitez synchroniser aujourd'hui.
+                            <p className="text-gray-500 text-[11px] font-light leading-relaxed mb-10">
+                                Sélectionnez l'infrastructure sociale que vous souhaitez synchroniser aujourd'hui.
                             </p>
 
                             <div className="grid gap-3 mb-6">
@@ -309,7 +309,7 @@ export default function OnboardingPage() {
                                     className="w-full py-5 bg-[#66fcf1] text-[#0b0c10] font-black text-[10px] uppercase tracking-[0.3em] rounded-xl hover:shadow-[0_0_40px_rgba(102,252,241,0.4)] transition-all btn-haptic flex items-center justify-center gap-3"
                                 >
                                     <Link2 className="w-4 h-4" />
-                                    CONNECTER LE CALIBRE
+                                    CONNECTER L'INFRASTRUCTURE
                                 </motion.button>
                             )}
 
@@ -318,7 +318,7 @@ export default function OnboardingPage() {
                                     onClick={() => setStep(2)}
                                     className="w-full py-5 bg-white text-black font-black text-[10px] uppercase tracking-[0.3em] rounded-xl transition-all btn-haptic flex items-center justify-center gap-3"
                                 >
-                                    SUITE PROTOCOLAIRE <ArrowRight className="w-4 h-4" />
+                                    SUITE OPÉRATIONNELLE <ArrowRight className="w-4 h-4" />
                                 </button>
                             )}
                         </motion.div>
@@ -328,20 +328,20 @@ export default function OnboardingPage() {
                     {step === 2 && (
                         <motion.div key="step2" {...fadeUp} className="card-saphir p-10">
                             <h2 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-[#66fcf1]">Phase 02 // Génération</h2>
-                            <p className="text-gray-500 text-[11px] font-light italic leading-relaxed mb-10">
-                                Définissez l'angle d'attaque stratégique — l'IA orchestrera la mécanique.
+                            <p className="text-gray-500 text-[11px] font-light leading-relaxed mb-10">
+                                Définissez votre axe stratégique — l'IA orchestrera la mécanique.
                             </p>
 
                             <div className="mb-10">
                                 <label className="block text-[8px] font-black uppercase tracking-[0.3em] mb-4 text-gray-600">
-                                    OBJECTIF DU CALIBRE
+                                    OBJECTIF STRATÉGIQUE
                                 </label>
                                 <input
                                     type="text"
                                     value={topic}
                                     onChange={(e) => setTopic(e.target.value)}
                                     onKeyDown={(e) => e.key === "Enter" && !isGenerating && topic.trim() && handleGenerate()}
-                                    placeholder="Ex: productivité, automatisation IA, domination..."
+                                    placeholder="Ex: productivité, automatisation IA, performance..."
                                     className="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-5 text-white placeholder-gray-800 focus:outline-none focus:border-[#66fcf1]/50 transition-all text-[11px] font-black uppercase tracking-[0.1em]"
                                 />
                             </div>
@@ -354,7 +354,7 @@ export default function OnboardingPage() {
                                 {isGenerating ? (
                                     <><Loader2 className="w-4 h-4 animate-spin" /> SYNCHRONISATION...</>
                                 ) : (
-                                    <><Sparkles className="w-4 h-4" /> GÉNÉRER LE CALIBRE</>
+                                    <><Sparkles className="w-4 h-4" /> GÉNÉRER LE PLAN</>
                                 )}
                             </button>
                         </motion.div>
@@ -364,8 +364,8 @@ export default function OnboardingPage() {
                     {step === 3 && (
                         <motion.div key="step3" {...fadeUp} className="card-saphir p-10">
                             <h2 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-[#66fcf1]">Phase 03 // Publication</h2>
-                            <p className="text-gray-500 text-[11px] font-light italic leading-relaxed mb-10">
-                                Le calibre est prêt. Vérifiez l'alignement avant l'exécution finale.
+                            <p className="text-gray-500 text-[11px] font-light leading-relaxed mb-10">
+                                Votre plan est prêt. Vérifiez l'alignement avant l'exécution finale.
                             </p>
 
                             {generatedPost && !publishResult && (
@@ -398,7 +398,7 @@ export default function OnboardingPage() {
                                             {isPublishing ? (
                                                 <><Loader2 className="w-4 h-4 animate-spin" /> EXÉCUTION...</>
                                             ) : (
-                                                <><Rocket className="w-4 h-4" /> PUBLIER LE CALIBRE</>
+                                                <><Rocket className="w-4 h-4" /> PUBLIER LE PLAN</>
                                             )}
                                         </button>
                                     </div>
@@ -416,9 +416,9 @@ export default function OnboardingPage() {
                                         }`}
                                 >
                                     <p className="text-2xl font-black mb-4 stat-value text-white uppercase tracking-tighter">
-                                        {publishResult.success ? "SYNCHRONISATION TERMINÉE" : "ERREUR DE CALIBRE"}
+                                        {publishResult.success ? "SYNCHRONISATION TERMINÉE" : "ERREUR D'INFRASTRUCTURE"}
                                     </p>
-                                    <p className="text-[11px] text-gray-500 italic leading-relaxed mb-10 font-light">"{publishResult.message}"</p>
+                                    <p className="text-[11px] text-gray-500 leading-relaxed mb-10 font-light">"{publishResult.message}"</p>
                                     <button
                                         onClick={handleGoToDashboard}
                                         className="w-full py-5 bg-[#66fcf1] text-[#0b0c10] font-black text-[10px] uppercase tracking-[0.3em] rounded-xl transition-all btn-haptic flex items-center justify-center gap-3"

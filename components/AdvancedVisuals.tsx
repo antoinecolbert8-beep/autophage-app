@@ -404,12 +404,13 @@ export const NeuralWeb = () => {
   );
 };
 
-// ⚡ Cyber Glitch Utility
-return (
-  <div className="relative">
-    {children}
-  </div>
-);
+export const CyberGlitch = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="relative">
+      {children}
+    </div>
+  );
+};
 
 // ⚠️ System Notification Overlay (Subtle)
 export const GlobalInterference = ({ active }: { active: boolean }) => {
