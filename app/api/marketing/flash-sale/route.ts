@@ -8,10 +8,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 // import { stripe } from "@/lib/stripe"; // Assume standard stripe lib
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || "");
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+import { getOpenAIClient } from "@/lib/ai/openai-client";
 
 export async function POST(req: NextRequest) {
+    const openai = getOpenAIClient();
     // Protéger la route
     const authHeader = req.headers.get('authorization');
     if (process.env.ADMIN_LOCKDOWN_KEY && authHeader !== `Bearer ${process.env.ADMIN_LOCKDOWN_KEY}`) {
@@ -37,8 +37,16 @@ export async function POST(req: NextRequest) {
             Format : 3 phrases courtes.
         `;
 
-        const result = await model.generateContent(prompt);
-        const postCopy = result.response.text();
+        const completion = await openai.chat.completions.create({
+            model: "gpt-4o",
+            messages: [
+                { role: "system", content: "Tu es le fondateur d'ELA. Tu lances une 'Flash Sale' (Low-Ticket Tripwire)." },
+                { role: "user", content: prompt }
+            ],
+            temperature: 0.8
+        });
+
+        const postCopy = completion.choices[0].message.content || "";
 
         // TODO: Appeler Stripe pour créer dynamiquement un Coupon ou un Payment Link
         /*

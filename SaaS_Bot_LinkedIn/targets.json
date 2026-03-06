@@ -1,52 +1,34 @@
-{
-  "description": "Cibles de démarchage ELA - CEOs, Directeurs, Freelances Premium (Profils LinkedIn à fort potentiel d'achat)",
-  "strategy": "Visiter + liker un post récent pour attirer l'attention. Le bot répond ensuite aux commentaires intelligemment via RAG.",
-  "posts": [
-    "https://www.linkedin.com/posts/frederic-mazzella_mobilite-covoiturage-innovation-activity-7150000000000000001",
-    "https://www.linkedin.com/posts/roxanne-varza_startups-tech-entrepreneuriat-activity-7150000000000000002",
-    "https://www.linkedin.com/posts/benoit-petit-ceo_intelligence-artificielle-saas-automatisation-activity-7150000000000000003"
-  ],
-  "profiles": [
-    "https://www.linkedin.com/in/frederic-mazzella/",
-    "https://www.linkedin.com/in/roxanne-varza/",
-    "https://www.linkedin.com/in/benoit-petit-entrepreneur/",
-    "https://www.linkedin.com/in/stanislas-niox-chateau/",
-    "https://www.linkedin.com/in/jeremie-berrebi/",
-    "https://www.linkedin.com/in/pauline-roux-startup/",
-    "https://www.linkedin.com/in/yann-thebault-coo/",
-    "https://www.linkedin.com/in/clement-delangue/",
-    "https://www.linkedin.com/in/baptiste-roziere/",
-    "https://www.linkedin.com/in/adrien-cognard/",
-    "https://www.linkedin.com/in/thomas-rebaud/",
-    "https://www.linkedin.com/in/aline-lerner/",
-    "https://www.linkedin.com/in/edouard-di-meco/",
-    "https://www.linkedin.com/in/pierre-gaubil/",
-    "https://www.linkedin.com/in/nicolas-dessaigne/",
-    "https://www.linkedin.com/in/jean-baptiste-rudelle/",
-    "https://www.linkedin.com/in/cecile-rosenrauch/",
-    "https://www.linkedin.com/in/david-nogueira-cto/",
-    "https://www.linkedin.com/in/yoann-benmeziane/",
-    "https://www.linkedin.com/in/mathieu-venuti/"
-  ],
-  "keywords_to_engage": [
-    "automatisation",
-    "productivité",
-    "IA",
-    "intelligence artificielle",
-    "SaaS",
-    "startup",
-    "croissance",
-    "scale",
-    "revenue",
-    "ROI",
-    "recrutement",
-    "équipe",
-    "freelance",
-    "consultant"
-  ],
-  "dm_templates": {
-    "ceo": "Bonjour [PRENOM], j'ai vu votre post sur [SUJET]. Chez ELA, nous automatisons ce processus en 72h. Curieux d'échanger 15min ?",
-    "founder": "Bonjour [PRENOM], votre vision sur [SUJET] est exactement pourquoi nous avons créé ELA. Un outil qui travaille pendant que vous dormez. Intéressé ?",
-    "consultant": "Bonjour [PRENOM], vous gérez plusieurs clients ? ELA automatise les propositions commerciales et le suivi client. Je peux vous montrer en 15min."
+[
+  {
+    "action": "VISIT",
+    "url": "https://www.linkedin.com/in/frederic-mazzella/"
+  },
+  {
+    "action": "VISIT",
+    "url": "https://www.linkedin.com/in/roxanne-varza/"
+  },
+  {
+    "action": "VISIT",
+    "url": "https://www.linkedin.com/in/benoit-petit-entrepreneur/"
+  },
+  {
+    "action": "VISIT",
+    "url": "https://www.linkedin.com/in/stanislas-niox-chateau/"
+  },
+  {
+    "action": "VISIT",
+    "url": "https://www.linkedin.com/in/jeremie-berrebi/"
+  },
+  {
+    "action": "LIKE",
+    "url": "https://www.linkedin.com/posts/frederic-mazzella_mobilite-covoiturage-innovation-activity-7150000000000000001"
+  },
+  {
+    "action": "LIKE",
+    "url": "https://www.linkedin.com/posts/roxanne-varza_startups-tech-entrepreneuriat-activity-7150000000000000002"
+  },
+  {
+    "action": "LIKE",
+    "url": "https://www.linkedin.com/posts/benoit-petit-ceo_intelligence-artificielle-saas-automatisation-activity-7150000000000000003"
   }
-}
+]
