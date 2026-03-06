@@ -120,7 +120,7 @@ function SignupContent() {
             <div className="w-8 h-8 border-2 border-[#66fcf1] rounded-full border-t-transparent animate-spin" />
           </div>
           <h1 className="text-3xl font-black mb-6 stat-value text-white uppercase tracking-tighter">PROTOCOLE INITIALISÉ</h1>
-          <p className="text-gray-500 text-[11px] font-light italic leading-relaxed uppercase tracking-[0.1em]">
+          <p className="text-gray-500 text-[11px] font-light leading-relaxed uppercase tracking-[0.1em]">
             " Un certificat de synchronisation a été envoyé à <strong className="text-white">{email}</strong>. Vérifiez votre boîte de réception pour valider l'accès. "
           </p>
         </div>
