@@ -152,13 +152,13 @@ export default function DashboardPage() {
         <div className="mb-8">
           <CyberGlitch>
             <h1 className="text-4xl font-black mb-2 tracking-tighter uppercase italic">
-              <GlitchText text="Hyper-Flux Command" />
+              <GlitchText text="Système de Commande" />
             </h1>
           </CyberGlitch>
           <p className="text-[#66fcf1] text-[10px] font-mono tracking-[0.4em] uppercase opacity-70">
             {userTier === 'grand_horloger'
-              ? `Status: OMNISCIENCE ACTIVE. Réseau neuronal synchronisé à 100%.`
-              : `Système sécurisé. Prêt pour le déploiement de masse.`}
+              ? `Status: SYSTÈM SYNC. Réseau neuronal opérationnel à 100%.`
+              : `Environnement sécurisé. Prêt pour l'exécution.`}
           </p>
         </div>
 

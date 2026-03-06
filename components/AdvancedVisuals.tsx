@@ -17,7 +17,7 @@ export const MeshGradient = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-40">
+    <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-20">
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/30 via-purple-500/20 to-pink-500/30" />
       <div className="absolute top-0 left-0 w-full h-full">
         {[...Array(20)].map((_, i) => (
@@ -408,15 +408,15 @@ export const NeuralWeb = () => {
 export const CyberGlitch = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="relative group">
-      <div className="absolute inset-0 bg-red-500/10 opacity-0 group-hover:opacity-100 group-hover:animate-pulse -z-10 blur-sm transition-opacity" />
-      <div className="group-hover:animate-[glitch_0.3s_ease-in-out_infinite] transition-all">
+      <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 -z-10 blur-md transition-opacity" />
+      <div className="group-hover:opacity-90 transition-all">
         {children}
       </div>
     </div>
   );
 };
 
-// ⚠️ Global Interference (Emergency/Dominance Overlay)
+// ⚠️ System Notification Overlay (Subtle)
 export const GlobalInterference = ({ active }: { active: boolean }) => {
   return (
     <AnimatePresence>
@@ -427,10 +427,8 @@ export const GlobalInterference = ({ active }: { active: boolean }) => {
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-[200] pointer-events-none overflow-hidden"
         >
-          <div className="absolute inset-0 bg-red-600/5 animate-[glitch_0.2s_infinite] mix-blend-overlay" />
-          <div className="absolute inset-0 bg-gradient-to-t from-red-600/10 via-transparent to-red-600/10 animate-pulse" />
-          <div className="absolute top-0 left-0 w-full h-[2px] bg-red-600/40 animate-[move_2s_linear_infinite] shadow-[0_0_15px_#dc2626]" />
-          <div className="absolute bottom-0 left-0 w-full h-[2px] bg-red-600/40 animate-[move_2s_linear_infinite_reverse] shadow-[0_0_15px_#dc2626]" />
+          <div className="absolute inset-0 bg-blue-600/[0.02] animate-pulse" />
+          <div className="absolute top-0 left-0 w-full h-[1px] bg-blue-500/20" />
         </motion.div>
       )}
     </AnimatePresence>
@@ -472,17 +470,17 @@ export const TacticalMap = ({ events = [] }: { events?: any[] }) => {
         {/* Simplified World Outline */}
         <path
           d="M150,150 L200,140 L250,160 L300,150 L350,180 L320,250 L280,300 L200,320 L150,280 Z"
-          fill="none" stroke="#dc2626" strokeWidth="0.5" strokeDasharray="2 2"
+          fill="none" stroke="#66fcf1" strokeWidth="0.5" strokeDasharray="2 2"
           className="opacity-20"
         />
         <path
           d="M500,100 L600,80 L700,120 L750,200 L700,300 L600,350 L500,320 Z"
-          fill="none" stroke="#dc2626" strokeWidth="0.5" strokeDasharray="2 2"
+          fill="none" stroke="#66fcf1" strokeWidth="0.5" strokeDasharray="2 2"
           className="opacity-20"
         />
         <path
           d="M800,250 L850,220 L900,280 L880,350 L820,320 Z"
-          fill="none" stroke="#dc2626" strokeWidth="0.5" strokeDasharray="2 2"
+          fill="none" stroke="#66fcf1" strokeWidth="0.5" strokeDasharray="2 2"
           className="opacity-20"
         />
 
@@ -523,7 +521,7 @@ export const TacticalMap = ({ events = [] }: { events?: any[] }) => {
                   cy={coords.y}
                   r="20"
                   fill="none"
-                  stroke="#dc2626"
+                  stroke="#66fcf1"
                   strokeWidth="0.5"
                   initial={{ scale: 0, opacity: 0.8 }}
                   animate={{ scale: [0, 1.5, 2], opacity: [0.8, 0.4, 0] }}
@@ -534,7 +532,7 @@ export const TacticalMap = ({ events = [] }: { events?: any[] }) => {
                   cy={coords.y}
                   r="40"
                   fill="none"
-                  stroke="#dc2626"
+                  stroke="#66fcf1"
                   strokeWidth="0.2"
                   initial={{ scale: 0, opacity: 0.5 }}
                   animate={{ scale: [0, 1.2, 1.5], opacity: [0.5, 0.2, 0] }}
@@ -609,14 +607,14 @@ export const Scanline = () => {
 // 🖐️ Biometric Scanner (High-Security Overlay)
 export const BiometricScanner = ({ onComplete }: { onComplete?: () => void }) => {
   const [progress, setProgress] = useState(0);
-  const [status, setStatus] = useState("SCANNING_BIOMETRIC_DATA");
+  const [status, setStatus] = useState("AUTHENTICATING_IDENTITY");
 
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress(prev => {
         if (prev >= 100) {
           clearInterval(interval);
-          setStatus("ACCESS_GRANTED_SOUVERAIN");
+          setStatus("IDENTITY_VERIFIED");
           setTimeout(() => onComplete?.(), 1000);
           return 100;
         }
@@ -683,7 +681,7 @@ export const BiometricScanner = ({ onComplete }: { onComplete?: () => void }) =>
       </div>
 
       <div className="absolute bottom-10 font-mono text-[9px] text-gray-700 tracking-[0.3em] uppercase">
-        ENCRYPTED_SOUVERAIN_PROTOCOL_v4.0 // ELA_BIOMETRIC
+        ENCRYPTED_SECURITY_PROTOCOL_v4.0 // ELA_AUTH
       </div>
     </div>
   );
@@ -879,5 +877,7 @@ export const GlitchText = ({ text }: { text: string }) => {
   );
 };
 
+
 // 🔚 Final Visual Library
+
 

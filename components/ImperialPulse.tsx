@@ -6,15 +6,21 @@ import { PulseEngine, PulseEvent } from "@/lib/realtime-pulse";
 
 // Helper for high-dopamine sound effects
 const playPulseSound = (type: string) => {
+    if (typeof window === 'undefined') return;
+
     const sounds: Record<string, string> = {
         'SALE_COMPLETED': '/sounds/cash-register.mp3',
         'LEAD_CAPTURED': '/sounds/power-up.mp3',
         'AGENT_EXECUTED': '/sounds/digital-blip.mp3'
     };
 
-    const audio = new Audio(sounds[type] || '/sounds/default-pulse.mp3');
-    audio.volume = 0.2;
-    audio.play().catch(() => { }); // Ignore interaction blocked errors
+    try {
+        const audio = new Audio(sounds[type] || '/sounds/default-pulse.mp3');
+        audio.volume = 0.2;
+        audio.play().catch(() => { }); // Ignore interaction blocked errors
+    } catch (e) {
+        console.warn('Audio playback failed:', e);
+    }
 };
 
 export const ImperialPulse = () => {

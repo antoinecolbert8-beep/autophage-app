@@ -93,7 +93,7 @@ export default function Navigation() {
                 }`}
             >
               <LineIconZap size={20} className="relative z-10" />
-              <span className="text-[10px] md:text-sm relative z-10">War Room</span>
+              <span className="text-[10px] md:text-sm relative z-10">Centre Stratégique</span>
             </Link>
 
             <Link
@@ -126,7 +126,7 @@ export default function Navigation() {
                 }`}
             >
               <LineIconUsers size={20} />
-              <span className="text-[10px] md:text-sm">Swarm</span>
+              <span className="text-[10px] md:text-sm">Agents</span>
             </Link>
           </div>
         )}

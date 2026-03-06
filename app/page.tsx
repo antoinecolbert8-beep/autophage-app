@@ -16,7 +16,6 @@ import {
 
 import BlurFade from "@/components/ui/blur-fade";
 import { GrainTexture, TextReveal, CyberGlitch } from "@/components/AdvancedVisuals";
-import { DominationTicker } from "@/components/DominationTicker";
 
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -30,7 +29,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7] font-sans selection:bg-[#66fcf1]/30 overflow-x-hidden snap-y snap-mandatory scroll-smooth">
-      <DominationTicker />
       <GrainTexture />
 
       {/* --- HEADER --- */}
@@ -44,7 +42,7 @@ export default function Home() {
               <div className="w-8 h-8 border border-[#66fcf1] rounded-full border-t-transparent animate-[spin_3s_linear_infinite]" />
               <div className="absolute inset-0 bg-[#66fcf1]/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
             </div>
-            <span className="text-2xl font-black tracking-[0.3em] uppercase text-white stat-value pt-1">
+            <span className="text-2xl font-black tracking-tight uppercase text-white pt-1">
               ELA
             </span>
           </Link>
@@ -54,7 +52,7 @@ export default function Home() {
               <Link
                 key={item}
                 href={`/${item.toLowerCase().replace('press', 'press')}`}
-                className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 hover:text-[#66fcf1] transition-all relative group"
+                className="text-[11px] font-bold uppercase tracking-wider text-gray-500 hover:text-[#66fcf1] transition-all relative group"
               >
                 {item === 'Press' ? 'Presse' : item}
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-[#66fcf1] transition-all group-hover:w-full" />
@@ -63,12 +61,12 @@ export default function Home() {
           </nav>
 
           <div className="hidden md:flex items-center gap-8">
-            <Link href="/login" className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 hover:text-white transition-colors">LOGIN</Link>
+            <Link href="/login" className="text-[11px] font-bold uppercase tracking-wider text-gray-500 hover:text-white transition-colors">LOGIN</Link>
             <Link
               href="/signup"
-              className="px-8 py-3.5 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-black text-[10px] uppercase tracking-[0.3em] transition-all hover:shadow-[0_0_30px_rgba(102,252,241,0.3)] btn-haptic"
+              className="px-8 py-3.5 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-bold text-[11px] uppercase tracking-wider transition-all hover:shadow-lg btn-haptic"
             >
-              INITIALISER
+              DÉMARRER
             </Link>
           </div>
 
@@ -98,9 +96,9 @@ export default function Home() {
                   </Link>
                 ))}
                 <div className="h-px bg-white/5 w-24" />
-                <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="text-[12px] font-black uppercase tracking-[0.4em] text-gray-500">SE CONNECTER</Link>
-                <Link href="/signup" onClick={() => setMobileMenuOpen(false)} className="py-6 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-black text-[12px] uppercase tracking-[0.4em] text-center btn-haptic">
-                  INITIALISER LE PROTOCOLE
+                <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="text-[12px] font-bold uppercase tracking-wider text-gray-500">SE CONNECTER</Link>
+                <Link href="/signup" onClick={() => setMobileMenuOpen(false)} className="py-6 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-bold text-[12px] uppercase tracking-wider text-center btn-haptic">
+                  DÉMARRER L'EXPÉRIENCE
                 </Link>
               </nav>
             </motion.div>
@@ -119,33 +117,33 @@ export default function Home() {
           {/* Breaking News / Press Banner */}
           <Link href="/press" className="inline-flex items-center gap-4 px-6 py-2 rounded-full bg-[#66fcf1]/10 border border-[#66fcf1]/30 mb-8 backdrop-blur-xl group hover:bg-[#66fcf1]/20 transition-all duration-500 animate-bounce">
             <span className="w-2 h-2 rounded-full bg-[#66fcf1] shadow-[0_0_10px_#66fcf1]"></span>
-            <span className="text-[9px] font-black tracking-[0.2em] uppercase text-[#66fcf1]">COMMUNIQUÉ OFFICIEL : DÉPLOIEMENT DU CALIBRE V10.4 SOUVERAIN</span>
+            <span className="text-[10px] font-bold tracking-wider uppercase text-[#66fcf1]">COMMUNIQUÉ OFFICIEL : DÉPLOIEMENT DU MOTEUR V10.4</span>
             <ArrowRight size={12} className="text-[#66fcf1] group-hover:translate-x-1 transition-transform" />
           </Link>
 
           {/* Trust Badge (Mechanical) */}
           <div className="inline-flex items-center gap-4 px-6 py-2.5 rounded-full bg-white/5 border border-white/10 mb-16 backdrop-blur-xl group hover:border-[#66fcf1]/30 transition-all duration-700">
             <div className="w-2 h-2 rounded-full bg-[#66fcf1] animate-pulse shadow-[0_0_10px_#66fcf1]"></div>
-            <span className="text-[10px] font-black tracking-[0.4em] uppercase text-gray-600 group-hover:text-[#66fcf1] transition-colors italic">CALIBRE SOUVERAIN V10.4 // OPÉRATIONNEL</span>
+            <span className="text-[11px] font-bold tracking-wider uppercase text-gray-600 group-hover:text-[#66fcf1] transition-colors italic">VERSION 10.4 // OPÉRATIONNEL</span>
           </div>
 
-          <h1 className="text-5xl md:text-[10rem] font-black tracking-tighter mb-12 leading-[0.85] uppercase stat-value text-white">
-            <TextReveal>MAÎTRISE ALGORITHMIQUE.</TextReveal>
+          <h1 className="text-5xl md:text-[8rem] font-black tracking-tight mb-12 leading-[0.9] uppercase text-white">
+            <TextReveal>INTELLIGENCE INDUSTRIELLE.</TextReveal>
           </h1>
 
-          <p className="text-xl md:text-3xl text-gray-500 max-w-4xl mx-auto mb-16 leading-tight font-light tracking-[0.1em] px-2 italic uppercase">
-            &bdquo; Le temps est l'alliage noble de votre succès.<br />Automatisez votre héritage avec une précision séculaire. &rdquo;
+          <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-16 leading-relaxed font-light tracking-wide px-2 italic uppercase">
+            &bdquo; Automatisez vos performances avec une précision chirurgicale.<br />L'excellence au service de votre croissance. &rdquo;
           </p>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 w-full">
             <CyberGlitch>
-              <Link href="/signup" className="w-full md:w-auto px-16 py-7 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-black text-[12px] uppercase tracking-[0.4em] hover:shadow-[0_0_60px_rgba(102,252,241,0.5)] transition-all btn-haptic block text-center">
-                INITIALISER LE PROTOCOLE
+              <Link href="/signup" className="w-full md:w-auto px-16 py-7 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-bold text-[12px] uppercase tracking-wider hover:shadow-xl transition-all btn-haptic block text-center">
+                DÉMARRER MAINTENANT
               </Link>
             </CyberGlitch>
 
-            <Link href="/agents" className="w-full md:w-auto px-12 py-7 bg-white/5 border border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.4em] text-white hover:bg-white/10 transition-all btn-haptic group">
-              CATALOGUE DES CALIBRES <span className="ml-2 group-hover:translate-x-1 inline-block transition-transform">→</span>
+            <Link href="/agents" className="w-full md:w-auto px-12 py-7 bg-white/5 border border-white/10 rounded-xl font-bold text-[11px] uppercase tracking-wider text-white hover:bg-white/10 transition-all btn-haptic group">
+              DÉCOUVRIR LES AGENTS <span className="ml-2 group-hover:translate-x-1 inline-block transition-transform">→</span>
             </Link>
           </div>
         </div>
@@ -159,11 +157,11 @@ export default function Home() {
             <div className="flex animate-marquee whitespace-nowrap gap-28 items-center w-max hover:paused">
               {[...Array(4)].map((_, setIndex) => (
                 <div key={setIndex} className="flex gap-28 shrink-0 items-center animate-marquee">
-                  <span className="text-xl font-black tracking-[0.4em] text-white">HOROLOGY</span>
-                  <span className="text-xl font-black tracking-[0.4em] text-white">PRECISION</span>
-                  <span className="text-xl font-black tracking-[0.4em] text-white">EXCELLENCE</span>
-                  <span className="text-xl font-black tracking-[0.4em] text-white">DOMINATION</span>
-                  <span className="text-xl font-black tracking-[0.4em] text-white">SOUVERAINE</span>
+                  <span className="text-xl font-bold tracking-widest text-white">INDUSTRIAL</span>
+                  <span className="text-xl font-bold tracking-widest text-white">PRECISION</span>
+                  <span className="text-xl font-bold tracking-widest text-white">INTELLIGENCE</span>
+                  <span className="text-xl font-bold tracking-widest text-white">PERFORMANCE</span>
+                  <span className="text-xl font-bold tracking-widest text-white">STRATEGIC</span>
                 </div>
               ))}
             </div>
@@ -178,22 +176,22 @@ export default function Home() {
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center max-w-4xl mx-auto mb-40">
             <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full border border-white/10 bg-white/5 mb-10 backdrop-blur-xl">
-              <span className="text-gray-500 font-black text-[10px] uppercase tracking-[0.4em]">MANUFACTURE ELA // CALIBRATION V10.4</span>
+              <span className="text-gray-500 font-bold text-[11px] uppercase tracking-wider">WORKSPACE ELA // MOTEUR V10.4</span>
             </div>
-            <h2 className="text-5xl md:text-8xl font-black mb-8 stat-value text-white uppercase tracking-tighter">
+            <h2 className="text-5xl md:text-7xl font-black mb-8 text-white uppercase tracking-tight">
               L'EXCELLENCE<br />
-              <span className="text-[#66fcf1]">MÉCANIQUE.</span>
+              <span className="text-[#66fcf1]">OPÉRATIONNELLE.</span>
             </h2>
             <p className="text-xl text-gray-500 font-light tracking-wide italic leading-relaxed">
-              &bdquo; Pendant qu'ils dorment, vos <span className="text-[#66fcf1] font-bold">Calibres IA</span> saturent le marché avec une précision de 0.01 micro-seconde. &rdquo;
+              &bdquo; Pendant que le marché stagne, vos <span className="text-[#66fcf1] font-bold">Agents IA</span> exécutent votre vision avec une précision absolue. &rdquo;
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {[
-              { title: "+148K€ / AN", desc: "VALEUR INCRÉMENTALE MOYENNE", color: "#66fcf1", icon: LineIconTrendingUp },
+              { title: "+148K€ / AN", desc: "VALEUR GÉNÉRÉE MOYENNE", color: "#66fcf1", icon: LineIconTrendingUp },
               { title: "+3.200H / AN", desc: "GAIN DE TEMPS OPÉRATIONNEL", color: "#66fcf1", icon: LineIconZap },
-              { title: "R.O.I. X12", desc: "MULTIPLICATEUR DE SOUVERAINETÉ", color: "#66fcf1", icon: LineIconStar }
+              { title: "R.O.I. X12", desc: "MULTIPLICATEUR DE PERFORMANCE", color: "#66fcf1", icon: LineIconStar }
             ].map((item, i) => (
               <div
                 key={i}
@@ -204,8 +202,8 @@ export default function Home() {
                   <div className="absolute inset-0 bg-[#66fcf1]/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
 
-                <h3 className="text-5xl font-black mb-4 stat-value text-white tracking-tighter">{item.title}</h3>
-                <p className="text-gray-600 uppercase text-[9px] font-black tracking-[0.4em] mb-10">{item.desc}</p>
+                <h3 className="text-5xl font-black mb-4 text-white tracking-tight">{item.title}</h3>
+                <p className="text-gray-600 uppercase text-[10px] font-bold tracking-wider mb-10">{item.desc}</p>
 
                 {/* Precision Mechanical Line */}
                 <div className="w-full h-px bg-white/5 relative">
@@ -224,14 +222,14 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-4xl mx-auto mb-40">
             <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full border border-white/10 bg-white/5 mb-10 backdrop-blur-xl">
-              <span className="text-[#66fcf1] font-black text-[10px] uppercase tracking-[0.4em]">MANUFACTURE ELA // ARCHITECTURE</span>
+              <span className="text-[#66fcf1] font-bold text-[11px] uppercase tracking-wider">VERSION 10.4 // INFRASTRUCTURE</span>
             </div>
-            <h2 className="text-5xl md:text-8xl font-black mb-10 stat-value text-white uppercase tracking-tighter">
-              20 COMPLICATIONS<br />
-              <span className="text-[#66fcf1]">SOUVERAINES.</span>
+            <h2 className="text-5xl md:text-7xl font-black mb-10 text-white uppercase tracking-tight">
+              20 SOLUTIONS<br />
+              <span className="text-[#66fcf1]">STRATÉGIQUES.</span>
             </h2>
             <p className="text-xl text-gray-500 font-light tracking-wide italic leading-relaxed">
-              &bdquo; Des pièces d'orfèvrerie algorithmique conçues pour dominer chaque aspect de votre <span className="text-white font-bold">Empire Digital</span>. &rdquo;
+              &bdquo; Des outils d'intelligence conçus pour optimiser chaque aspect de votre <span className="text-white font-bold">Organisation Digitale</span>. &rdquo;
             </p>
           </div>
 
@@ -258,14 +256,14 @@ export default function Home() {
 
                 <div className="flex items-center justify-between mb-10">
                   <span className="text-4xl grayscale group-hover:grayscale-0 transition-all duration-500">{feature.icon}</span>
-                  <span className="text-[9px] font-black text-gray-700 uppercase tracking-[0.4em] group-hover:text-[#66fcf1] transition-colors">{feature.tag}</span>
+                  <span className="text-[10px] font-bold text-gray-700 uppercase tracking-wider group-hover:text-[#66fcf1] transition-colors">{feature.tag}</span>
                 </div>
 
-                <h3 className="text-2xl font-black mb-4 text-white tracking-tighter stat-value uppercase">
+                <h3 className="text-2xl font-black mb-4 text-white tracking-tight uppercase">
                   {feature.title}
                 </h3>
 
-                <p className="text-[11px] text-gray-600 leading-relaxed font-light group-hover:text-gray-400 transition-colors uppercase tracking-wider">
+                <p className="text-[12px] text-gray-600 leading-relaxed font-light group-hover:text-gray-400 transition-colors uppercase tracking-wide">
                   {feature.desc}
                 </p>
 
@@ -277,9 +275,9 @@ export default function Home() {
           <div className="text-center mt-40">
             <Link
               href="/features"
-              className="inline-flex items-center gap-8 px-16 py-7 bg-white/5 border border-white/10 rounded-xl font-black text-[12px] uppercase tracking-[0.4em] text-white hover:bg-white hover:text-[#0b0c10] transition-all group btn-haptic"
+              className="inline-flex items-center gap-8 px-16 py-7 bg-white/5 border border-white/10 rounded-xl font-bold text-[12px] uppercase tracking-wider text-white hover:bg-white hover:text-[#0b0c10] transition-all group btn-haptic"
             >
-              EXPLORER LA MANUFACTURE
+              EXPLORER L'INFRASTRUCTURE
               <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
             </Link>
           </div>
@@ -295,15 +293,15 @@ export default function Home() {
               <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full border border-white/10 bg-white/5 mb-10 backdrop-blur-xl">
                 <span className="text-gray-600 font-black text-[10px] uppercase tracking-[0.4em]">MANUFACTURE ELA // LA COLLECTION</span>
               </div>
-              <h2 className="text-5xl md:text-8xl font-black mb-10 stat-value text-white uppercase tracking-tighter">
-                9 PIÈCES<br />
-                <span className="text-[#66fcf1]">D'HORLOGERIE.</span>
+              <h2 className="text-5xl md:text-7xl font-black mb-10 text-white uppercase tracking-tight">
+                9 AGENTS<br />
+                <span className="text-[#66fcf1]">AUTONOMES.</span>
               </h2>
               <p className="text-gray-500 max-w-2xl text-xl font-light italic leading-relaxed">
-                &bdquo; Chaque calibre IA est une prouesse d'ingénierie. Une orchestration continue sans la moindre friction humaine. &rdquo;
+                &bdquo; Chaque agent IA est une solution d'ingénierie. Une orchestration continue sans la moindre friction humaine. &rdquo;
               </p>
             </div>
-            <Link href="/agents" className="px-10 py-5 rounded-xl border border-[#66fcf1]/20 bg-[#66fcf1]/5 hover:bg-[#66fcf1]/10 transition-all font-black text-[10px] uppercase tracking-[0.3em] text-[#66fcf1] flex items-center gap-4 group btn-haptic">
+            <Link href="/agents" className="px-10 py-5 rounded-xl border border-[#66fcf1]/20 bg-[#66fcf1]/5 hover:bg-[#66fcf1]/10 transition-all font-bold text-[11px] uppercase tracking-wider text-[#66fcf1] flex items-center gap-4 group btn-haptic">
               CONSULTER L'ÉCOSYSTÈME <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
@@ -327,15 +325,15 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0b0c10] via-[#0b0c10]/20 to-transparent"></div>
 
                 <div className="absolute bottom-0 left-0 w-full p-10">
-                  <div className="w-fit px-4 py-1.5 rounded-full bg-[#66fcf1]/10 border border-[#66fcf1]/20 text-[9px] font-black mb-6 uppercase tracking-[0.3em] text-[#66fcf1] backdrop-blur-md">
+                  <div className="w-fit px-4 py-1.5 rounded-full bg-[#66fcf1]/10 border border-[#66fcf1]/20 text-[9px] font-bold mb-6 uppercase tracking-wider text-[#66fcf1] backdrop-blur-md">
                     {agent.role}
                   </div>
-                  <h3 className="text-4xl font-black mb-3 text-white tracking-tighter stat-value uppercase">{agent.name}</h3>
-                  <p className="text-[9px] text-gray-500 uppercase font-black tracking-[0.2em] mb-8 leading-relaxed">
+                  <h3 className="text-4xl font-black mb-3 text-white tracking-tight uppercase">{agent.name}</h3>
+                  <p className="text-[10px] text-gray-500 uppercase font-bold tracking-wider mb-8 leading-relaxed">
                     {agent.desc}
                   </p>
-                  <Link href="/agents" className="w-full py-5 bg-white/5 border border-white/10 text-white rounded-xl font-black text-[10px] uppercase tracking-[0.3em] hover:bg-white hover:text-[#0b0c10] transition-all flex items-center justify-center gap-3 group btn-haptic">
-                    DÉPLOYER <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                  <Link href="/agents" className="w-full py-5 bg-white/5 border border-white/10 text-white rounded-xl font-bold text-[11px] uppercase tracking-wider hover:bg-white hover:text-[#0b0c10] transition-all flex items-center justify-center gap-3 group btn-haptic">
+                    CONFIGURER <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </div>
               </div>
@@ -353,18 +351,18 @@ export default function Home() {
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-40 relative z-10">
           <div className="flex-1 space-y-12">
             <div className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full border border-[#66fcf1]/20 bg-[#66fcf1]/5 mb-4">
-              <span className="text-[#66fcf1] font-black text-[10px] uppercase tracking-[0.4em]">CALIBRE HIVE // TRANSMISSION VOCALE</span>
+              <span className="text-[#66fcf1] font-bold text-[11px] uppercase tracking-wider">MOTEUR HIVE // TRANSMISSION VOCALE</span>
             </div>
-            <h2 className="text-5xl md:text-[7rem] font-black mb-8 leading-[0.85] stat-value text-white uppercase tracking-tighter">
-              L'EMPIRE RÉPOND<br />
+            <h2 className="text-5xl md:text-[6rem] font-black mb-8 leading-[0.9] text-white uppercase tracking-tight">
+              LE SYSTÈME RÉPOND<br />
               <span className="text-[#66fcf1]">À VOTRE VOIX.</span>
             </h2>
-            <p className="text-2xl text-gray-500 leading-relaxed font-light italic uppercase tracking-wider">
-              &bdquo; Libérez-vous des interfaces conventionnelles. Le <span className="text-white font-bold">Mouvement HIVE</span> synchronise votre flotte d'agents par un simple scellement vocal. &rdquo;
+            <p className="text-2xl text-gray-500 leading-relaxed font-light italic uppercase tracking-wide">
+              &bdquo; Libérez-vous des interfaces conventionnelles. Le <span className="text-white font-bold">Moteur HIVE</span> synchronise votre flotte d'agents par une simple commande vocale. &rdquo;
             </p>
 
-            <Link href="#pricing" className="inline-flex px-16 py-7 bg-[#66fcf1] text-[#0b0c10] font-black text-[12px] uppercase tracking-[0.4em] rounded-xl hover:shadow-[0_0_60px_rgba(102,252,241,0.5)] transition-all flex items-center gap-4 group btn-haptic">
-              CONNECTER VOTRE CALIBRE
+            <Link href="#pricing" className="inline-flex px-16 py-7 bg-[#66fcf1] text-[#0b0c10] font-bold text-[12px] uppercase tracking-wider rounded-xl hover:shadow-xl transition-all flex items-center gap-4 group btn-haptic">
+              ACTIVER VOTRE AGENT
               <ArrowRight className="group-hover:translate-x-2 transition-transform" />
             </Link>
           </div>
@@ -403,7 +401,7 @@ export default function Home() {
                   >
                     [SYSTEM] Bien reçu. J'active NEXUS sur LinkedIn.
                     <br /><br />
-                    Cible : CEO Tech @ Paris. Extraction des calibres en cours... 🦾
+                    Cible : CEO Tech @ Paris. Recherche d'agents en cours... 🦾
                   </motion.div>
                 </div>
 
@@ -425,12 +423,12 @@ export default function Home() {
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-40">
-            <h2 className="text-5xl md:text-[8rem] font-black mb-10 stat-value text-white uppercase tracking-tighter leading-tight">
+            <h2 className="text-5xl md:text-[7rem] font-black mb-10 text-white uppercase tracking-tight leading-[0.9]">
               L'AVANTAGE<br />
-              <span className="text-[#66fcf1]">INJUSTE.</span>
+              <span className="text-[#66fcf1]">STRATÉGIQUE.</span>
             </h2>
-            <p className="text-xl text-gray-500 max-w-2xl mx-auto font-light italic uppercase tracking-widest">
-              &bdquo; Le monde se divise en deux : ceux qui règlent les complications, et ceux qui les subissent. &rdquo;
+            <p className="text-xl text-gray-500 max-w-2xl mx-auto font-light italic uppercase tracking-wide">
+              &bdquo; Le monde se divise en deux : ceux qui automatisent, et ceux qui sont dépassés. &rdquo;
             </p>
           </div>
 
@@ -438,26 +436,26 @@ export default function Home() {
             {[
               {
                 title: "OMNIPRÉSENCE",
-                desc: "Saturez l'espace numérique avec une régularité de métronome. LinkedIn, X, TikTok — un seul calibre pour tout dominer.",
-                accent: "CHRONOGI // ALLIAGE"
+                desc: "Saturez l'espace numérique avec une régularité chirurgicale. LinkedIn, X, TikTok — un seul agent pour tout piloter.",
+                accent: "STRATEGIC // DEP"
               },
               {
                 title: "PRÉCISION",
-                desc: "Hooks neuromarketing taillés au diamant. Capturez l'attention en 0.01 micro-seconde avant que l'oeil ne cligne.",
-                accent: "CALIBRE // SAPHIR"
+                desc: "Hooks neuromarketing taillés avec expertise. Capturez l'attention instantanément avant que l'oeil ne cligne.",
+                accent: "ENGINE // PRECISION"
               },
               {
-                title: "SOUVERAINETÉ",
-                desc: "Transformez chaque tick d'horloge en revenus passifs. Votre business devient une complication perpétuelle de profit.",
-                accent: "HERITAGE // NOBLE"
+                title: "PERFORMANCE",
+                desc: "Transformez chaque seconde en retour sur investissement. Votre business devient un moteur perpétuel de croissance.",
+                accent: "INDUSTRIAL // GROWTH"
               }
             ].map((item, i) => (
               <div key={i} className={`card-saphir flex flex-col items-center text-center p-16 group hover:border-[#66fcf1]/40 transition-all duration-1000 ${i === 1 ? 'md:translate-y-16' : i === 2 ? 'md:translate-y-32' : ''}`}>
-                <div className="mb-12 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-[9px] font-black uppercase tracking-[0.5em] text-gray-700 group-hover:text-[#66fcf1] transition-colors backdrop-blur-xl">
+                <div className="mb-12 px-6 py-2 rounded-full bg-white/5 border border-white/10 text-[11px] font-bold uppercase tracking-wider text-gray-700 group-hover:text-[#66fcf1] transition-colors backdrop-blur-xl">
                   {item.accent}
                 </div>
-                <h3 className="text-4xl font-black mb-10 stat-value text-white tracking-tighter uppercase">{item.title}</h3>
-                <p className="text-gray-500 text-[11px] leading-relaxed font-light uppercase tracking-wider">{item.desc}</p>
+                <h3 className="text-4xl font-black mb-10 text-white tracking-tight uppercase">{item.title}</h3>
+                <p className="text-gray-500 text-[11px] leading-relaxed font-light uppercase tracking-wide">{item.desc}</p>
 
                 <div className="mt-16 w-16 h-px bg-white/10 group-hover:bg-[#66fcf1]/40 group-hover:w-24 transition-all duration-700" />
               </div>
@@ -473,30 +471,30 @@ export default function Home() {
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-32">
             <div className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-xl">
-              <span className="text-[10px] font-black text-[#66fcf1] uppercase tracking-[0.3em]">TARIFS // ALLIAGE NOBLE</span>
+              <span className="text-[11px] font-bold text-[#66fcf1] uppercase tracking-wider">OFFRES // PERFORMANCE</span>
             </div>
-            <h2 className="text-5xl md:text-8xl font-black mb-10 stat-value text-white tracking-tighter uppercase">INVESTISSEZ DANS<br /><span className="text-[#66fcf1]">VOTRE HÉRITAGE.</span></h2>
+            <h2 className="text-5xl md:text-[6rem] font-black mb-10 text-white tracking-tight uppercase leading-[0.9]">INVESTISSEZ DANS<br /><span className="text-[#66fcf1]">VOTRE PERFORMANCE.</span></h2>
             <p className="text-xl text-gray-500 font-light italic max-w-2xl mx-auto leading-relaxed">
-              &bdquo; Rentabilité mécanique. Performance garantie par le scellement algorithmique. &rdquo;
+              &bdquo; Rentabilité industrielle. Performance garantie par nos solutions algorithmiques. &rdquo;
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
             {/* STARTER */}
             <div className="card-saphir p-12 flex flex-col group hover:border-white/20 transition-all">
-              <h3 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-gray-500">Mouvement Starter</h3>
+              <h3 className="text-[11px] uppercase font-bold tracking-wider mb-4 text-gray-500">Solution Starter</h3>
               <div className="flex items-baseline gap-1 mb-10 text-white">
-                <span className="text-6xl font-black stat-value tracking-tighter">37€</span>
-                <span className="text-gray-700 text-[10px] font-mono uppercase tracking-widest">/mois</span>
+                <span className="text-6xl font-black tracking-tight">37€</span>
+                <span className="text-gray-700 text-[11px] font-mono uppercase tracking-wider">/mois</span>
               </div>
-              <p className="text-[11px] text-gray-600 mb-10 min-h-[40px] font-light italic leading-relaxed">L'essentiel pour automatiser vos premières complications.</p>
+              <p className="text-[12px] text-gray-600 mb-10 min-h-[40px] font-light italic leading-relaxed">L'essentiel pour automatiser vos premières opérations.</p>
               <div className="space-y-6 mb-12 border-t border-white/5 pt-10">
-                <div className="flex items-center gap-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> 1 CALIBRE IA</div>
-                <div className="flex items-center gap-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> 1.000 CRÉDITS</div>
-                <div className="flex items-center gap-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> SUPPORT STANDARD</div>
-                <div className="flex items-center gap-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> ACCÈS CADRAN LIVE</div>
+                <div className="flex items-center gap-4 text-[11px] font-bold text-gray-400 uppercase tracking-wide"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> 1 AGENT IA</div>
+                <div className="flex items-center gap-4 text-[11px] font-bold text-gray-400 uppercase tracking-wide"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> 1.000 CRÉDITS</div>
+                <div className="flex items-center gap-4 text-[11px] font-bold text-gray-400 uppercase tracking-wide"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> SUPPORT STANDARD</div>
+                <div className="flex items-center gap-4 text-[11px] font-bold text-gray-400 uppercase tracking-wide"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> ACCÈS DASHBOARD</div>
               </div>
-              <Link href="/signup?plan=starter" className="w-full py-5 border border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.3em] text-center hover:bg-white hover:text-black transition-all btn-haptic">INITIALISER</Link>
+              <Link href="/signup?plan=starter" className="w-full py-5 border border-white/10 rounded-xl font-bold text-[11px] uppercase tracking-wide text-center hover:bg-white hover:text-black transition-all btn-haptic">ACCÉDER</Link>
             </div>
 
             {/* PRO */}
@@ -511,13 +509,13 @@ export default function Home() {
               </div>
               <p className="text-[11px] text-gray-500 mb-10 min-h-[40px] font-light italic leading-relaxed">La suite de complications complète pour scaler votre Empire.</p>
               <div className="space-y-6 mb-12 border-t border-white/5 pt-10">
-                <div className="flex items-center gap-4 text-[10px] font-bold text-white uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> 3 CALIBRES IA</div>
-                <div className="flex items-center gap-4 text-[10px] font-bold text-white uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> 2.500 CRÉDITS</div>
-                <div className="flex items-center gap-4 text-[10px] font-bold text-white uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> COMMANDE VOCALE HIVE</div>
-                <div className="flex items-center gap-4 text-[10px] font-bold text-white uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> SUPPORT PRIORITAIRE</div>
-                <div className="flex items-center gap-4 text-[10px] font-bold text-white uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> INTÉGRATION CRM</div>
+                <div className="flex items-center gap-4 text-[11px] font-bold text-white uppercase tracking-wide"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> 3 AGENTS IA</div>
+                <div className="flex items-center gap-4 text-[11px] font-bold text-white uppercase tracking-wide"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> 2.500 CRÉDITS</div>
+                <div className="flex items-center gap-4 text-[11px] font-bold text-white uppercase tracking-wide"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> COMMANDE VOCALE HIVE</div>
+                <div className="flex items-center gap-4 text-[11px] font-bold text-white uppercase tracking-wide"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> SUPPORT PRIORITAIRE</div>
+                <div className="flex items-center gap-4 text-[11px] font-bold text-white uppercase tracking-wide"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> INTÉGRATION CRM</div>
               </div>
-              <Link href="/signup?plan=growth" className="w-full py-5 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-black text-[10px] uppercase tracking-[0.3em] text-center hover:shadow-[0_0_40px_rgba(102,252,241,0.4)] transition-all btn-haptic">DÉPLOYER LA FORCE</Link>
+              <Link href="/signup?plan=growth" className="w-full py-5 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-bold text-[11px] uppercase tracking-wide text-center hover:shadow-lg transition-all btn-haptic">DÉPLOYER LA PERFORMANCE</Link>
             </div>
 
             {/* GOD MODE */}
@@ -529,12 +527,12 @@ export default function Home() {
               </div>
               <p className="text-[11px] text-[#c5c6c7] mb-10 min-h-[40px] font-light italic leading-relaxed">Pour ceux qui ne concurrencent pas, mais qui règnent par la Précision.</p>
               <div className="space-y-6 mb-12 border-t border-white/5 pt-10">
-                <div className="flex items-center gap-4 text-[10px] font-bold text-[#c5c6c7] uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> DOMINATION TOTALE</div>
-                <div className="flex items-center gap-4 text-[10px] font-bold text-[#c5c6c7] uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> CRÉDITS ILLIMITÉS</div>
-                <div className="flex items-center gap-4 text-[10px] font-bold text-[#c5c6c7] uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> SERVEUR DÉDIÉ</div>
-                <div className="flex items-center gap-4 text-[10px] font-bold text-[#c5c6c7] uppercase tracking-widest"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> ACCÈS DIRECT ARCHITECTES</div>
+                <div className="flex items-center gap-4 text-[11px] font-bold text-[#c5c6c7] uppercase tracking-wide"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> PERFORMANCE TOTALE</div>
+                <div className="flex items-center gap-4 text-[11px] font-bold text-[#c5c6c7] uppercase tracking-wide"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> CRÉDITS ILLIMITÉS</div>
+                <div className="flex items-center gap-4 text-[11px] font-bold text-[#c5c6c7] uppercase tracking-wide"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> SERVEUR DÉDIÉ</div>
+                <div className="flex items-center gap-4 text-[11px] font-bold text-[#c5c6c7] uppercase tracking-wide"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> ACCÈS DIRECT ARCHITECTES</div>
               </div>
-              <Link href="/signup?plan=god_mode" className="w-full py-5 bg-white text-black rounded-xl font-black text-[10px] uppercase tracking-[0.3em] text-center transition-all btn-haptic">INITIALISER GOD MODE</Link>
+              <Link href="/signup?plan=god_mode" className="w-full py-5 bg-white text-black rounded-xl font-bold text-[11px] uppercase tracking-wide text-center transition-all btn-haptic">ACCÉDER À L'EXPÉRIENCE</Link>
             </div>
           </div>
 
@@ -552,15 +550,15 @@ export default function Home() {
         <div className="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row items-center gap-20">
           <div className="flex-1">
             <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full border border-white/10 bg-white/5 mb-10">
-              <span className="text-[#66fcf1] font-black text-[10px] uppercase tracking-[0.4em]">FORGEZ L'EMPIRE</span>
+              <span className="text-[#66fcf1] font-bold text-[11px] uppercase tracking-wider">WORKSPACE STRATÉGIQUE</span>
             </div>
-            <h2 className="text-5xl md:text-7xl font-black mb-8 text-white uppercase tracking-tighter leading-none">
-              REJOIGNEZ LA<br /><span className="text-[#66fcf1]">MANUFACTURE.</span>
+            <h2 className="text-5xl md:text-7xl font-black mb-8 text-white uppercase tracking-tight leading-none">
+              REJOIGNEZ LE<br /><span className="text-[#66fcf1]">WORKSPACE.</span>
             </h2>
             <p className="text-xl text-gray-500 font-light italic leading-relaxed mb-12">
-              Devenez un maillon de notre infrastructure. Touchez <span className="text-white font-bold">30% de commission récurrente à vie</span> sur chaque calibre déployé via votre lien de tracking.
+              Devenez un maillon de notre infrastructure. Touchez <span className="text-white font-bold">30% de commission récurrente à vie</span> sur chaque agent déployé via votre lien de tracking.
             </p>
-            <Link href="/partners" className="inline-flex items-center gap-4 px-12 py-6 bg-white text-black rounded-xl font-black text-[10px] uppercase tracking-[0.3em] hover:bg-[#66fcf1] transition-all btn-haptic">
+            <Link href="/partners" className="inline-flex items-center gap-4 px-12 py-6 bg-white text-black rounded-xl font-bold text-[11px] uppercase tracking-wider hover:bg-[#66fcf1] transition-all btn-haptic">
               ACCÉDER AU PROGRAMME PARTENAIRE
             </Link>
           </div>
@@ -575,13 +573,13 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="space-y-6">
-                  <div className="flex items-center gap-4 text-[10px] font-black text-[#66fcf1] uppercase tracking-[0.4em]">
+                  <div className="flex items-center gap-4 text-[11px] font-bold text-[#66fcf1] uppercase tracking-wide">
                     <div className="w-8 h-px bg-[#66fcf1]" /> REVENUS PASSIFS RÉCURRENTS
                   </div>
-                  <div className="flex items-center gap-4 text-[10px] font-black text-gray-600 uppercase tracking-[0.4em]">
+                  <div className="flex items-center gap-4 text-[11px] font-bold text-gray-600 uppercase tracking-wide">
                     <div className="w-8 h-px bg-white/10" /> PAIEMENTS AUTOMATISÉS
                   </div>
-                  <div className="flex items-center gap-4 text-[10px] font-black text-gray-600 uppercase tracking-[0.4em]">
+                  <div className="flex items-center gap-4 text-[11px] font-bold text-gray-600 uppercase tracking-wide">
                     <div className="w-8 h-px bg-white/10" /> TRACKING SÉCURISÉ (90 JOURS)
                   </div>
                 </div>
@@ -608,8 +606,8 @@ export default function Home() {
                   <div className="absolute inset-0 bg-[#66fcf1]/5 rounded-full blur-xl" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-black text-white stat-value tracking-tighter uppercase">EMPIRE LABORATORY</h2>
-                  <p className="text-[10px] text-[#66fcf1] font-black uppercase tracking-[0.4em]">MANUFACTURE D'IA DE HAUTE PRÉCISION</p>
+                  <h2 className="text-3xl font-black text-white tracking-tight uppercase">ELA WORKSPACE</h2>
+                  <p className="text-[11px] text-[#66fcf1] font-bold uppercase tracking-wider">INTELLIGENCE IA DE HAUTE PRÉCISION</p>
                 </div>
               </div>
               <p className="text-[11px] text-gray-500 font-light italic leading-relaxed uppercase tracking-[0.1em] max-w-sm">
@@ -627,9 +625,9 @@ export default function Home() {
             {/* Links Columns */}
             <div className="md:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-12">
               {[
-                { title: "CALIBRES", links: ["Vox", "Nexus", "Sentinel", "Hive"] },
+                { title: "AGENTS", links: ["Vox", "Nexus", "Sentinel", "Hive"] },
                 {
-                  title: "MANUFACTURE", links: [
+                  title: "INFRASTRUCTURE", links: [
                     { name: "Genèse", href: "#" },
                     { name: "Espace Presse", href: "/press" },
                     { name: "Affiliation", href: "/partners" },

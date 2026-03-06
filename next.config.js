@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   productionBrowserSourceMaps: true,
-  output: "standalone",
+  // output: "standalone",
   eslint: {
     ignoreDuringBuilds: true,
   },
