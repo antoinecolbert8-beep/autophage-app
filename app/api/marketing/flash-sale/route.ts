@@ -59,12 +59,12 @@ export async function POST(req: NextRequest) {
         });
         */
 
-        const mockPaymentLink = `https://buy.stripe.com/test_flashsale?code=FLASH_${slots}`;
+        const paymentLink = process.env.FLASH_SALE_PAYMENT_LINK || `https://buy.stripe.com/test_flashsale?code=FLASH_${slots}`;
 
         return NextResponse.json({
             success: true,
             marketingCopy: postCopy,
-            paymentLink: mockPaymentLink, // Lien dynamique Stripe
+            paymentLink: paymentLink,
             scarcity: `Limité à ${slots} utilisations.`
         });
 
