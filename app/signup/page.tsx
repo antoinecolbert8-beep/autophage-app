@@ -121,7 +121,7 @@ function SignupContent() {
           </div>
           <h1 className="text-3xl font-black mb-6 stat-value text-white uppercase tracking-tighter">PROTOCOLE INITIALISÉ</h1>
           <p className="text-gray-500 text-[11px] font-light italic leading-relaxed uppercase tracking-[0.1em]">
-            &bdquo; Un certificat de synchronisation a été envoyé à <strong className="text-white">{email}</strong>. Vérifiez votre boîte de réception pour valider l'accès. &rdquo;
+            " Un certificat de synchronisation a été envoyé à <strong className="text-white">{email}</strong>. Vérifiez votre boîte de réception pour valider l'accès. "
           </p>
         </div>
       </div>
@@ -182,12 +182,12 @@ function SignupContent() {
                     </span>
                   </div>
                   <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter uppercase text-white stat-value">
-                    {plan === "god_mode" ? "ACTIVER LE GOD MODE." : "REJOINDRE L'EMPIRE."}
+                    {plan === "god_mode" ? "ACTIVER LA SOUVERAINETÉ." : "REJOINDRE L'INFRASTRUCTURE."}
                   </h1>
                   <p className="text-gray-500 text-[11px] font-light italic leading-relaxed uppercase tracking-[0.1em]">
                     {plan === "god_mode"
-                      ? "&bdquo; Initialisation du protocole de souveraineté numérique absolue. &rdquo;"
-                      : "&bdquo; Activez votre calibre et commencez votre domination immédiatement. &rdquo;"}
+                      ? "\" Initialisation du protocole de souveraineté numérique absolue. \""
+                      : "\" Activez votre infrastructure et commencez votre scale immédiatement. \""}
                   </p>
                 </div>
 
@@ -270,7 +270,7 @@ function SignupContent() {
                       {loading ? (
                         <div className="w-5 h-5 border-2 border-[#0b0c10] border-t-transparent rounded-full animate-spin" />
                       ) : (
-                        plan === "god_mode" ? "INITIER MON EMPIRE" : "DÉMARRER LA DOMINATION"
+                        plan === "god_mode" ? "INITIER MON INFRASTRUCTURE" : "DÉMARRER LE SCALE"
                       )}
                     </button>
 
@@ -286,7 +286,7 @@ function SignupContent() {
             <div className="lg:col-span-5 space-y-12">
               <div className="relative">
                 <h2 className="text-[12px] font-black uppercase tracking-[0.5em] mb-12 text-[#66fcf1] flex items-center gap-4">
-                  <div className="w-12 h-px bg-[#66fcf1]/30" /> {plan === "god_mode" ? "PRIVILÈGES SOUVERAINS" : "CALIBRES INCLUS"}
+                  <div className="w-12 h-px bg-[#66fcf1]/30" /> {plan === "god_mode" ? "PRIVILÈGES SOUVERAINS" : "FONCTIONNALITÉS INCLUSES"}
                 </h2>
                 <div className="grid gap-6">
                   {(plan === "god_mode" ? [
@@ -298,7 +298,7 @@ function SignupContent() {
                   ] : [
                     { label: "9 Agents IA", desc: "Spécialistes de la saturation sémantique omni-canale." },
                     { label: "Support 24/7", desc: "Accès permanent à l'assistance en français." },
-                    { label: "Sécurité ISO", desc: "Standard militaire pour la protection des calibres." },
+                    { label: "Sécurité ISO", desc: "Standard industriel pour la protection des données." },
                     { label: "Hébergement France", desc: "Souveraineté des données garantie sur le sol européen." },
                     { label: "Mises à jour à vie", desc: "Évolution constante des mécaniques algorithmiques." }
                   ]).map((item, i) => (
@@ -308,7 +308,7 @@ function SignupContent() {
                       </div>
                       <div>
                         <h3 className="text-[10px] font-black uppercase tracking-widest text-white mb-1">{item.label}</h3>
-                        <p className="text-[9px] text-gray-500 font-light italic leading-relaxed">{item.desc}</p>
+                        <p className="text-[9px] text-gray-500 font-light leading-relaxed">{item.desc}</p>
                       </div>
                     </div>
                   ))}
@@ -329,7 +329,7 @@ function SignupContent() {
               {/* Social Proof (Mechanical) */}
               <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-8 italic">
                 <p className="text-[10px] text-gray-500 leading-relaxed font-light mb-6">
-                  &bdquo; ELA a transformé notre orchestration algorithmique. Nous avons automatisé 80% des flux sémantiques. &rdquo;
+                  " ELA a transformé notre orchestration algorithmique. Nous avons automatisé 80% des flux sémantiques. "
                 </p>
                 <div className="flex items-center gap-4">
                   <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10" />

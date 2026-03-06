@@ -28,8 +28,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7] font-sans selection:bg-[#66fcf1]/30 overflow-x-hidden snap-y snap-mandatory scroll-smooth">
-      <GrainTexture />
+    <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7] font-sans selection:bg-[#66fcf1]/30 overflow-x-hidden scroll-smooth">
 
       {/* --- HEADER --- */}
       <header
@@ -66,7 +65,7 @@ export default function Home() {
               href="/signup"
               className="px-8 py-3.5 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-bold text-[11px] uppercase tracking-wider transition-all hover:shadow-lg btn-haptic"
             >
-              DÉMARRER
+              COMMENCER
             </Link>
           </div>
 
@@ -98,7 +97,7 @@ export default function Home() {
                 <div className="h-px bg-white/5 w-24" />
                 <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="text-[12px] font-bold uppercase tracking-wider text-gray-500">SE CONNECTER</Link>
                 <Link href="/signup" onClick={() => setMobileMenuOpen(false)} className="py-6 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-bold text-[12px] uppercase tracking-wider text-center btn-haptic">
-                  DÉMARRER L'EXPÉRIENCE
+                  COMMENCER L'EXPÉRIENCE
                 </Link>
               </nav>
             </motion.div>
@@ -117,30 +116,28 @@ export default function Home() {
           {/* Breaking News / Press Banner */}
           <Link href="/press" className="inline-flex items-center gap-4 px-6 py-2 rounded-full bg-[#66fcf1]/10 border border-[#66fcf1]/30 mb-8 backdrop-blur-xl group hover:bg-[#66fcf1]/20 transition-all duration-500 animate-bounce">
             <span className="w-2 h-2 rounded-full bg-[#66fcf1] shadow-[0_0_10px_#66fcf1]"></span>
-            <span className="text-[10px] font-bold tracking-wider uppercase text-[#66fcf1]">COMMUNIQUÉ OFFICIEL : DÉPLOIEMENT DU MOTEUR V10.4</span>
+            <span className="text-[10px] font-bold tracking-wider uppercase text-[#66fcf1]">MISE À JOUR : DÉPLOIEMENT DU MOTEUR V10.4</span>
             <ArrowRight size={12} className="text-[#66fcf1] group-hover:translate-x-1 transition-transform" />
           </Link>
 
           {/* Trust Badge (Mechanical) */}
           <div className="inline-flex items-center gap-4 px-6 py-2.5 rounded-full bg-white/5 border border-white/10 mb-16 backdrop-blur-xl group hover:border-[#66fcf1]/30 transition-all duration-700">
             <div className="w-2 h-2 rounded-full bg-[#66fcf1] animate-pulse shadow-[0_0_10px_#66fcf1]"></div>
-            <span className="text-[11px] font-bold tracking-wider uppercase text-gray-600 group-hover:text-[#66fcf1] transition-colors italic">VERSION 10.4 // OPÉRATIONNEL</span>
+            <span className="text-[11px] font-bold tracking-wider uppercase text-gray-600 group-hover:text-[#66fcf1] transition-colors italic">VERSION 10.4 // INFRASTRUCTURE ACTIVE</span>
           </div>
 
           <h1 className="text-5xl md:text-[8rem] font-black tracking-tight mb-12 leading-[0.9] uppercase text-white">
-            <TextReveal>INTELLIGENCE INDUSTRIELLE.</TextReveal>
+            <TextReveal>SOUVERAINETÉ NUMÉRIQUE.</TextReveal>
           </h1>
 
-          <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-16 leading-relaxed font-light tracking-wide px-2 italic uppercase">
-            &bdquo; Automatisez vos performances avec une précision chirurgicale.<br />L'excellence au service de votre croissance. &rdquo;
+          <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-16 leading-relaxed font-light tracking-wide px-2 uppercase">
+            " Automatisez vos performances avec une précision chirurgicale.<br />L'excellence au service de votre croissance. "
           </p>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 w-full">
-            <CyberGlitch>
-              <Link href="/signup" className="w-full md:w-auto px-16 py-7 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-bold text-[12px] uppercase tracking-wider hover:shadow-xl transition-all btn-haptic block text-center">
-                DÉMARRER MAINTENANT
-              </Link>
-            </CyberGlitch>
+            <Link href="/signup" className="w-full md:w-auto px-16 py-7 bg-[#66fcf1] text-[#0b0c10] rounded-xl font-bold text-[12px] uppercase tracking-wider hover:shadow-xl transition-all btn-haptic block text-center">
+              COMMENCER MAINTENANT
+            </Link>
 
             <Link href="/agents" className="w-full md:w-auto px-12 py-7 bg-white/5 border border-white/10 rounded-xl font-bold text-[11px] uppercase tracking-wider text-white hover:bg-white/10 transition-all btn-haptic group">
               DÉCOUVRIR LES AGENTS <span className="ml-2 group-hover:translate-x-1 inline-block transition-transform">→</span>
@@ -157,11 +154,11 @@ export default function Home() {
             <div className="flex animate-marquee whitespace-nowrap gap-28 items-center w-max hover:paused">
               {[...Array(4)].map((_, setIndex) => (
                 <div key={setIndex} className="flex gap-28 shrink-0 items-center animate-marquee">
-                  <span className="text-xl font-bold tracking-widest text-white">INDUSTRIAL</span>
-                  <span className="text-xl font-bold tracking-widest text-white">PRECISION</span>
-                  <span className="text-xl font-bold tracking-widest text-white">INTELLIGENCE</span>
+                  <span className="text-xl font-bold tracking-widest text-white">SOUVERAINETÉ</span>
+                  <span className="text-xl font-bold tracking-widest text-white">PRÉCISION</span>
+                  <span className="text-xl font-bold tracking-widest text-white">INFRASTRUCTURE</span>
                   <span className="text-xl font-bold tracking-widest text-white">PERFORMANCE</span>
-                  <span className="text-xl font-bold tracking-widest text-white">STRATEGIC</span>
+                  <span className="text-xl font-bold tracking-widest text-white">STRATÉGIQUE</span>
                 </div>
               ))}
             </div>
@@ -182,8 +179,8 @@ export default function Home() {
               L'EXCELLENCE<br />
               <span className="text-[#66fcf1]">OPÉRATIONNELLE.</span>
             </h2>
-            <p className="text-xl text-gray-500 font-light tracking-wide italic leading-relaxed">
-              &bdquo; Pendant que le marché stagne, vos <span className="text-[#66fcf1] font-bold">Agents IA</span> exécutent votre vision avec une précision absolue. &rdquo;
+            <p className="text-xl text-gray-500 font-light tracking-wide leading-relaxed">
+              " Pendant que le marché stagne, vos <span className="text-[#66fcf1] font-bold">Agents IA</span> exécutent votre vision avec une précision absolue. "
             </p>
           </div>
 
@@ -228,8 +225,8 @@ export default function Home() {
               20 SOLUTIONS<br />
               <span className="text-[#66fcf1]">STRATÉGIQUES.</span>
             </h2>
-            <p className="text-xl text-gray-500 font-light tracking-wide italic leading-relaxed">
-              &bdquo; Des outils d'intelligence conçus pour optimiser chaque aspect de votre <span className="text-white font-bold">Organisation Digitale</span>. &rdquo;
+            <p className="text-xl text-gray-500 font-light tracking-wide leading-relaxed">
+              " Des outils d'intelligence conçus pour optimiser chaque aspect de votre <span className="text-white font-bold">Infrastructure Digitale</span>. "
             </p>
           </div>
 
@@ -297,8 +294,8 @@ export default function Home() {
                 9 AGENTS<br />
                 <span className="text-[#66fcf1]">AUTONOMES.</span>
               </h2>
-              <p className="text-gray-500 max-w-2xl text-xl font-light italic leading-relaxed">
-                &bdquo; Chaque agent IA est une solution d'ingénierie. Une orchestration continue sans la moindre friction humaine. &rdquo;
+              <p className="text-gray-500 max-w-2xl text-xl font-light leading-relaxed">
+                " Chaque agent IA est une solution d'ingénierie. Une orchestration continue sans la moindre friction humaine. "
               </p>
             </div>
             <Link href="/agents" className="px-10 py-5 rounded-xl border border-[#66fcf1]/20 bg-[#66fcf1]/5 hover:bg-[#66fcf1]/10 transition-all font-bold text-[11px] uppercase tracking-wider text-[#66fcf1] flex items-center gap-4 group btn-haptic">
@@ -308,10 +305,10 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { name: "VOX", role: "Telephony Expert", img: "/agents/vox_v2.png?v=4", desc: "MOUVEMENT VOCAL AUTONOME" },
-              { name: "NEXUS", role: "Sales & Outreach", img: "/agents/nexus_v2.png?v=4", desc: "OUTREACH HAUTE PRÉCISION" },
-              { name: "SENTINEL", role: "Legal & Compliance", img: "/agents/sentinel_v2.png?v=4", desc: "GARDE-TEMPS JURIDIQUE" },
-              { name: "HIVE", role: "Swarm Commander", img: "/agents/hive_v2.png?v=4", desc: "TOURBILLON DE COMMANDE" },
+              { name: "VOX", role: "Expert Téléphonie", img: "/agents/vox_v2.png?v=4", desc: "FLUX VOCAL AUTONOME" },
+              { name: "NEXUS", role: "Prospection & Leads", img: "/agents/nexus_v2.png?v=4", desc: "OUTREACH HAUTE PRÉCISION" },
+              { name: "SENTINEL", role: "Conformité & Légal", img: "/agents/sentinel_v2.png?v=4", desc: "SÉCURITÉ DES DONNÉES" },
+              { name: "HIVE", role: "Orchestrateur Swarm", img: "/agents/hive_v2.png?v=4", desc: "COMMANDEMENT CENTRAL" },
             ].map((agent, i) => (
               <div
                 key={i}
@@ -357,8 +354,8 @@ export default function Home() {
               LE SYSTÈME RÉPOND<br />
               <span className="text-[#66fcf1]">À VOTRE VOIX.</span>
             </h2>
-            <p className="text-2xl text-gray-500 leading-relaxed font-light italic uppercase tracking-wide">
-              &bdquo; Libérez-vous des interfaces conventionnelles. Le <span className="text-white font-bold">Moteur HIVE</span> synchronise votre flotte d'agents par une simple commande vocale. &rdquo;
+            <p className="text-2xl text-gray-500 leading-relaxed font-light uppercase tracking-wide">
+              " Libérez-vous des interfaces conventionnelles. Le <span className="text-white font-bold">Moteur HIVE</span> synchronise votre flotte d'agents par une simple commande vocale. "
             </p>
 
             <Link href="#pricing" className="inline-flex px-16 py-7 bg-[#66fcf1] text-[#0b0c10] font-bold text-[12px] uppercase tracking-wider rounded-xl hover:shadow-xl transition-all flex items-center gap-4 group btn-haptic">
@@ -392,7 +389,7 @@ export default function Home() {
                     whileInView={{ opacity: 1, x: 0 }}
                     className="bg-[#005c4b]/80 backdrop-blur-xl p-6 rounded-3xl rounded-tr-none ml-auto w-fit max-w-[90%] text-sm text-white/90 border border-white/10 shadow-2xl font-light italic"
                   >
-                    &bdquo; Lance une campagne de prospection sur les CEO tech à Paris. &rdquo;
+                    " Lance une campagne de prospection sur les CEO tech à Paris. "
                   </motion.div>
                   <motion.div
                     initial={{ opacity: 0, x: -20 }}
@@ -427,8 +424,8 @@ export default function Home() {
               L'AVANTAGE<br />
               <span className="text-[#66fcf1]">STRATÉGIQUE.</span>
             </h2>
-            <p className="text-xl text-gray-500 max-w-2xl mx-auto font-light italic uppercase tracking-wide">
-              &bdquo; Le monde se divise en deux : ceux qui automatisent, et ceux qui sont dépassés. &rdquo;
+            <p className="text-xl text-gray-500 max-w-2xl mx-auto font-light uppercase tracking-wide">
+              " Le monde se divise en deux : ceux qui automatisent, et ceux qui sont dépassés. "
             </p>
           </div>
 
@@ -474,8 +471,8 @@ export default function Home() {
               <span className="text-[11px] font-bold text-[#66fcf1] uppercase tracking-wider">OFFRES // PERFORMANCE</span>
             </div>
             <h2 className="text-5xl md:text-[6rem] font-black mb-10 text-white tracking-tight uppercase leading-[0.9]">INVESTISSEZ DANS<br /><span className="text-[#66fcf1]">VOTRE PERFORMANCE.</span></h2>
-            <p className="text-xl text-gray-500 font-light italic max-w-2xl mx-auto leading-relaxed">
-              &bdquo; Rentabilité industrielle. Performance garantie par nos solutions algorithmiques. &rdquo;
+            <p className="text-xl text-gray-500 font-light max-w-2xl mx-auto leading-relaxed">
+              " Rentabilité industrielle. Performance garantie par nos solutions algorithmiques. "
             </p>
           </div>
 
@@ -487,7 +484,7 @@ export default function Home() {
                 <span className="text-6xl font-black tracking-tight">37€</span>
                 <span className="text-gray-700 text-[11px] font-mono uppercase tracking-wider">/mois</span>
               </div>
-              <p className="text-[12px] text-gray-600 mb-10 min-h-[40px] font-light italic leading-relaxed">L'essentiel pour automatiser vos premières opérations.</p>
+              <p className="text-[12px] text-gray-600 mb-10 min-h-[40px] font-light leading-relaxed">L'essentiel pour automatiser vos premières opérations.</p>
               <div className="space-y-6 mb-12 border-t border-white/5 pt-10">
                 <div className="flex items-center gap-4 text-[11px] font-bold text-gray-400 uppercase tracking-wide"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> 1 AGENT IA</div>
                 <div className="flex items-center gap-4 text-[11px] font-bold text-gray-400 uppercase tracking-wide"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> 1.000 CRÉDITS</div>
@@ -502,12 +499,12 @@ export default function Home() {
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 py-1.5 bg-[#66fcf1] rounded-full text-[8px] font-black uppercase tracking-[0.3em] text-[#0b0c10]">
                 RECOMMANDE
               </div>
-              <h3 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-[#66fcf1]">Mouvement Pro</h3>
+              <h3 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-[#66fcf1]">Structure Pro</h3>
               <div className="flex items-baseline gap-1 mb-10 text-white">
                 <span className="text-6xl font-black stat-value tracking-tighter">197€</span>
                 <span className="text-gray-700 text-[10px] font-mono uppercase tracking-widest">/mois</span>
               </div>
-              <p className="text-[11px] text-gray-500 mb-10 min-h-[40px] font-light italic leading-relaxed">La suite de complications complète pour scaler votre Empire.</p>
+              <p className="text-[11px] text-gray-500 mb-10 min-h-[40px] font-light leading-relaxed">La suite d'outils complète pour scaler votre Infrastructure.</p>
               <div className="space-y-6 mb-12 border-t border-white/5 pt-10">
                 <div className="flex items-center gap-4 text-[11px] font-bold text-white uppercase tracking-wide"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> 3 AGENTS IA</div>
                 <div className="flex items-center gap-4 text-[11px] font-bold text-white uppercase tracking-wide"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> 2.500 CRÉDITS</div>
@@ -520,12 +517,12 @@ export default function Home() {
 
             {/* GOD MODE */}
             <div className="card-saphir p-12 bg-gradient-to-br from-[#1f2833]/40 to-black/40 border-white/10 group">
-              <h3 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-[#c5c6c7]">Mouvement Suprême</h3>
+              <h3 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-[#c5c6c7]">Structure Souveraine</h3>
               <div className="flex items-baseline gap-1 mb-10 text-white">
                 <span className="text-6xl font-black stat-value tracking-tighter">497€</span>
                 <span className="text-gray-700 text-[10px] font-mono uppercase tracking-widest">/mois</span>
               </div>
-              <p className="text-[11px] text-[#c5c6c7] mb-10 min-h-[40px] font-light italic leading-relaxed">Pour ceux qui ne concurrencent pas, mais qui règnent par la Précision.</p>
+              <p className="text-[11px] text-[#c5c6c7] mb-10 min-h-[40px] font-light leading-relaxed">Pour ceux qui ne concurrencent pas, mais qui dirigent par la Précision.</p>
               <div className="space-y-6 mb-12 border-t border-white/5 pt-10">
                 <div className="flex items-center gap-4 text-[11px] font-bold text-[#c5c6c7] uppercase tracking-wide"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> PERFORMANCE TOTALE</div>
                 <div className="flex items-center gap-4 text-[11px] font-bold text-[#c5c6c7] uppercase tracking-wide"><CheckCircle2 className="w-4 h-4 text-[#66fcf1]" /> CRÉDITS ILLIMITÉS</div>
@@ -555,8 +552,8 @@ export default function Home() {
             <h2 className="text-5xl md:text-7xl font-black mb-8 text-white uppercase tracking-tight leading-none">
               REJOIGNEZ LE<br /><span className="text-[#66fcf1]">WORKSPACE.</span>
             </h2>
-            <p className="text-xl text-gray-500 font-light italic leading-relaxed mb-12">
-              Devenez un maillon de notre infrastructure. Touchez <span className="text-white font-bold">30% de commission récurrente à vie</span> sur chaque agent déployé via votre lien de tracking.
+            <p className="text-xl text-gray-500 font-light leading-relaxed mb-12">
+              Devenez un maillon de notre infrastructure de scale. Touchez <span className="text-white font-bold">30% de commission récurrente à vie</span> sur chaque agent déployé via votre lien de tracking.
             </p>
             <Link href="/partners" className="inline-flex items-center gap-4 px-12 py-6 bg-white text-black rounded-xl font-bold text-[11px] uppercase tracking-wider hover:bg-[#66fcf1] transition-all btn-haptic">
               ACCÉDER AU PROGRAMME PARTENAIRE
@@ -606,12 +603,12 @@ export default function Home() {
                   <div className="absolute inset-0 bg-[#66fcf1]/5 rounded-full blur-xl" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-black text-white tracking-tight uppercase">ELA WORKSPACE</h2>
-                  <p className="text-[11px] text-[#66fcf1] font-bold uppercase tracking-wider">INTELLIGENCE IA DE HAUTE PRÉCISION</p>
+                  <h2 className="text-3xl font-black text-white tracking-tight uppercase">ELA INFRASTRUCTURE</h2>
+                  <p className="text-[11px] text-[#66fcf1] font-bold uppercase tracking-wider">L'IA SOUVERAINE AU SERVICE DU SCALE</p>
                 </div>
               </div>
-              <p className="text-[11px] text-gray-500 font-light italic leading-relaxed uppercase tracking-[0.1em] max-w-sm">
-                &bdquo; Nous ne créons pas seulement des algorithmes. Nous forgeons les calibres qui orchestreront le futur de votre souveraineté numérique. &rdquo;
+              <p className="text-[11px] text-gray-500 font-light leading-relaxed uppercase tracking-[0.1em] max-w-sm">
+                " Nous ne créons pas seulement des algorithmes. Nous forgeons l'infrastructure qui orchestrera le futur de votre souveraineté numérique. "
               </p>
               <div className="flex gap-6">
                 {['Twitter', 'LinkedIn', 'Instagram'].map((social) => (

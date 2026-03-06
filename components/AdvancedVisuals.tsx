@@ -17,10 +17,10 @@ export const MeshGradient = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-20">
-      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/30 via-purple-500/20 to-pink-500/30" />
+    <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-10">
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-500/20 via-blue-500/10 to-slate-500/20" />
       <div className="absolute top-0 left-0 w-full h-full">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(10)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute rounded-full blur-3xl"
@@ -73,9 +73,9 @@ export const Particles3D = () => {
       color: string;
     }> = [];
 
-    const colors = ['#06b6d4', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981'];
+    const colors = ['#64748b', '#3b82f6', '#1e293b'];
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 40; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -83,7 +83,7 @@ export const Particles3D = () => {
         vx: (Math.random() - 0.5) * 0.5,
         vy: (Math.random() - 0.5) * 0.5,
         vz: (Math.random() - 0.5) * 2,
-        size: Math.random() * 3 + 1,
+        size: Math.random() * 2 + 1,
         color: colors[Math.floor(Math.random() * colors.length)],
       });
     }
@@ -189,7 +189,7 @@ export const MagneticCursor = () => {
         }}
         transition={{ type: "spring", stiffness: 500, damping: 28 }}
       >
-        <div className="w-4 h-4 bg-cyan-400 rounded-full" />
+        <div className="w-3 h-3 bg-blue-400 rounded-full" />
       </motion.div>
       <motion.div
         className="fixed pointer-events-none z-50"
@@ -200,7 +200,7 @@ export const MagneticCursor = () => {
         }}
         transition={{ type: "spring", stiffness: 150, damping: 15 }}
       >
-        <div className="w-10 h-10 border-2 border-cyan-400/50 rounded-full" />
+        <div className="w-10 h-10 border border-blue-400/30 rounded-full" />
       </motion.div>
     </>
   );
@@ -209,7 +209,7 @@ export const MagneticCursor = () => {
 // 🌊 Vagues animées (comme Apple)
 export const AnimatedWaves = () => {
   return (
-    <div className="absolute bottom-0 left-0 right-0 h-64 overflow-hidden opacity-20">
+    <div className="absolute bottom-0 left-0 right-0 h-64 overflow-hidden opacity-10">
       <svg className="absolute bottom-0 w-full h-full" viewBox="0 0 1440 320" preserveAspectRatio="none">
         <motion.path
           fill="url(#wave-gradient)"
@@ -221,16 +221,16 @@ export const AnimatedWaves = () => {
             ]
           }}
           transition={{
-            duration: 10,
+            duration: 20,
             repeat: Infinity,
             ease: "easeInOut"
           }}
         />
         <defs>
           <linearGradient id="wave-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#06b6d4" />
-            <stop offset="50%" stopColor="#8b5cf6" />
-            <stop offset="100%" stopColor="#ec4899" />
+            <stop offset="0%" stopColor="#1e293b" />
+            <stop offset="50%" stopColor="#334155" />
+            <stop offset="100%" stopColor="#475569" />
           </linearGradient>
         </defs>
       </svg>
@@ -255,7 +255,7 @@ export const SpotlightEffect = () => {
     <div
       className="fixed pointer-events-none z-30 transition-opacity duration-300"
       style={{
-        background: `radial-gradient(circle 600px at ${position.x}px ${position.y}px, rgba(6, 182, 212, 0.15), transparent 80%)`,
+        background: `radial-gradient(circle 600px at ${position.x}px ${position.y}px, rgba(59, 130, 246, 0.08), transparent 80%)`,
         width: '100%',
         height: '100%',
         top: 0,
@@ -355,10 +355,10 @@ export const NeuralWeb = () => {
   const [nodes, setNodes] = useState<{ x: number; y: number; connections: number[] }[]>([]);
 
   useEffect(() => {
-    const newNodes = Array.from({ length: 40 }).map(() => ({
+    const newNodes = Array.from({ length: 20 }).map(() => ({
       x: Math.random() * 100,
       y: Math.random() * 100,
-      connections: Array.from({ length: 3 }).map(() => Math.floor(Math.random() * 40))
+      connections: Array.from({ length: 2 }).map(() => Math.floor(Math.random() * 20))
     }));
     setNodes(newNodes);
   }, []);
@@ -405,16 +405,11 @@ export const NeuralWeb = () => {
 };
 
 // ⚡ Cyber Glitch Utility
-export const CyberGlitch = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className="relative group">
-      <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 -z-10 blur-md transition-opacity" />
-      <div className="group-hover:opacity-90 transition-all">
-        {children}
-      </div>
-    </div>
-  );
-};
+return (
+  <div className="relative">
+    {children}
+  </div>
+);
 
 // ⚠️ System Notification Overlay (Subtle)
 export const GlobalInterference = ({ active }: { active: boolean }) => {
@@ -439,7 +434,7 @@ export const GlobalInterference = ({ active }: { active: boolean }) => {
 export const GrainTexture = () => {
   return (
     <div
-      className="fixed inset-0 pointer-events-none z-50 opacity-[0.025]"
+      className="fixed inset-0 pointer-events-none z-50 opacity-[0.01]"
       style={{
         backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
         backgroundRepeat: 'repeat',
@@ -470,8 +465,8 @@ export const TacticalMap = ({ events = [] }: { events?: any[] }) => {
         {/* Simplified World Outline */}
         <path
           d="M150,150 L200,140 L250,160 L300,150 L350,180 L320,250 L280,300 L200,320 L150,280 Z"
-          fill="none" stroke="#66fcf1" strokeWidth="0.5" strokeDasharray="2 2"
-          className="opacity-20"
+          fill="none" stroke="#334155" strokeWidth="0.5" strokeDasharray="2 2"
+          className="opacity-10"
         />
         <path
           d="M500,100 L600,80 L700,120 L750,200 L700,300 L600,350 L500,320 Z"
@@ -509,7 +504,7 @@ export const TacticalMap = ({ events = [] }: { events?: any[] }) => {
                   cx={coords.x}
                   cy={coords.y}
                   r="3"
-                  fill="#ff0000"
+                  fill="#3b82f6"
                   initial={{ scale: 0, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0, opacity: 0 }}
@@ -543,7 +538,7 @@ export const TacticalMap = ({ events = [] }: { events?: any[] }) => {
                 <motion.text
                   x={coords.x + 8}
                   y={coords.y + 4}
-                  fill="#dc2626"
+                  fill="#64748b"
                   fontSize="8"
                   className="font-mono font-bold uppercase tracking-tighter opacity-60"
                   initial={{ opacity: 0 }}
@@ -592,11 +587,11 @@ export const Vortex3D = () => {
 // 📺 CRT Scanline Effect
 export const Scanline = () => {
   return (
-    <div className="fixed inset-0 pointer-events-none z-[60] overflow-hidden opacity-[0.03]">
+    <div className="fixed inset-0 pointer-events-none z-[60] overflow-hidden opacity-[0.01]">
       <motion.div
         className="w-full h-[100px] bg-gradient-to-b from-transparent via-white to-transparent"
         animate={{ top: ["-100px", "100%"] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
         style={{ position: 'absolute' }}
       />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,118,0.06))] bg-[length:100%_4px,3px_100%]" />
@@ -681,7 +676,7 @@ export const BiometricScanner = ({ onComplete }: { onComplete?: () => void }) =>
       </div>
 
       <div className="absolute bottom-10 font-mono text-[9px] text-gray-700 tracking-[0.3em] uppercase">
-        ENCRYPTED_SECURITY_PROTOCOL_v4.0 // ELA_AUTH
+        ENCRYPTED_SECURITY_v4.0 // ELA_INFRASTRUCTURE
       </div>
     </div>
   );
@@ -731,7 +726,7 @@ export const OmniSphere = () => {
       ))}
 
       <div className="relative z-10 text-center">
-        <h4 className="text-[#66fcf1] font-black text-xs uppercase tracking-[0.5em] mb-2">OMNISCIENCE_CORE</h4>
+        <h4 className="text-blue-400 font-black text-xs uppercase tracking-[0.5em] mb-2">INFRASTRUCTURE_CORE</h4>
         <div className="w-16 h-[2px] bg-gradient-to-r from-transparent via-[#66fcf1] to-transparent mx-auto" />
       </div>
     </div>
@@ -762,7 +757,7 @@ export const NeuralPulse = () => {
           initial={{ scale: 0, opacity: 0.5 }}
           animate={{ scale: 10, opacity: 0 }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="absolute w-12 h-12 border border-cyan-500 rounded-full"
+          className="absolute w-12 h-12 border border-blue-500/30 rounded-full"
           style={{ left: p.x - 24, top: p.y - 24 }}
         />
       ))}
@@ -808,10 +803,10 @@ export const DataTsunami = ({ active }: { active: boolean }) => {
       return;
     }
     const interval = setInterval(() => {
-      const chars = "010101-ERROR-DOMINANCE-ELA-SYNC-MARKET-CAPTURE-ROI-999";
+      const chars = "SOUVERAINETE-SYNC-INFRASTRUCTURE-ELA-SCALE-METRICS-ROI";
       const line = Array(15).fill(0).map(() => chars[Math.floor(Math.random() * chars.length)]).join("");
       setData(prev => [line, ...prev].slice(0, 40));
-    }, 50);
+    }, 200);
     return () => clearInterval(interval);
   }, [active]);
 
@@ -822,7 +817,7 @@ export const DataTsunami = ({ active }: { active: boolean }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[250] pointer-events-none flex font-mono text-[8px] text-red-600/20 leading-none overflow-hidden"
+          className="fixed inset-0 z-[250] pointer-events-none flex font-mono text-[8px] text-blue-500/10 leading-none overflow-hidden"
         >
           {[...Array(20)].map((_, i) => (
             <div key={i} className="flex-1 whitespace-nowrap overflow-hidden transition-all duration-1000" style={{ writingMode: 'vertical-rl' }}>
@@ -843,13 +838,13 @@ export const HolographicInterface = ({ children }: { children: React.ReactNode }
     <motion.div
       initial={{ rotateX: 20, rotateY: -10, translateZ: 50, opacity: 0 }}
       animate={{ rotateX: 10, rotateY: -5, translateZ: 0, opacity: 1 }}
-      className="relative p-6 border border-cyan-500/30 bg-cyan-950/20 backdrop-blur-3xl rounded-3xl shadow-[0_0_50px_rgba(6,182,212,0.1)] overflow-hidden group"
+      className="relative p-6 border border-slate-500/30 bg-slate-900/20 backdrop-blur-3xl rounded-3xl shadow-[0_0_50px_rgba(59,130,246,0.05)] overflow-hidden group"
       style={{ transformStyle: 'preserve-3d' }}
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent pointer-events-none" />
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-50" />
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-500/10 to-transparent pointer-events-none" />
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-slate-400 to-transparent opacity-30" />
       <div className="relative z-10">{children}</div>
-      <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-cyan-500/10 blur-[40px] rounded-full group-hover:bg-cyan-500/20 transition-all" />
+      <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-500/5 blur-[40px] rounded-full group-hover:bg-blue-500/10 transition-all" />
     </motion.div>
   );
 };
@@ -859,20 +854,6 @@ export const GlitchText = ({ text }: { text: string }) => {
   return (
     <div className="relative inline-block">
       <span className="relative z-10">{text}</span>
-      <motion.span
-        className="absolute top-0 left-0 -z-10 text-red-500 opacity-70"
-        animate={{ x: [-2, 2, -1, 0], y: [1, -1, 0] }}
-        transition={{ duration: 0.2, repeat: Infinity, repeatType: 'mirror' }}
-      >
-        {text}
-      </motion.span>
-      <motion.span
-        className="absolute top-0 left-0 -z-20 text-blue-500 opacity-70"
-        animate={{ x: [2, -2, 1, 0], y: [-1, 1, 0] }}
-        transition={{ duration: 0.2, repeat: Infinity, repeatType: 'mirror', delay: 0.1 }}
-      >
-        {text}
-      </motion.span>
     </div>
   );
 };
