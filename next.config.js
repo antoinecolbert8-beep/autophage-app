@@ -9,7 +9,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   // Performance optimizations
-  swcMinify: true,
+  swcMinify: false, // NUCLEAR FIX: Prevent SWC from corrupting Recharts/Framer variables in production
   reactStrictMode: true,
   poweredByHeader: false,
 
