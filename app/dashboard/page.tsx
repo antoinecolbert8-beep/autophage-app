@@ -16,8 +16,18 @@ import { RealTimeActivityFeed } from "@/components/RealTimeActivityFeed";
 import { useSession } from "next-auth/react";
 import dynamic from 'next/dynamic';
 import BlurFade from "@/components/ui/blur-fade";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
-import { SovereigntyGauge } from "@/components/SovereigntyGauge";
+
+// Remplacement des imports stricts Recharts par un Wrapper Dynamique (Bypass SSR bug 'reading S')
+const DashboardChart = dynamic(() => import('@/components/DashboardChart'), {
+  ssr: false,
+  loading: () => <div className="w-full h-full flex items-center justify-center text-xs text-cyan-500/50 animate-pulse">Initialisation Data...</div>
+});
+
+const SovereigntyGauge = dynamic(() => import('@/components/SovereigntyGauge').then(m => m.SovereigntyGauge), {
+  ssr: false,
+  loading: () => <div className="w-[180px] h-[180px] rounded-full border border-cyan-500/20 animate-spin" />
+});
+
 import { ImperialPulse } from "@/components/ImperialPulse";
 import { getSovereigntyStats } from "@/actions/sovereignty-actions";
 import {
@@ -114,10 +124,8 @@ export default function DashboardPage() {
         <OmniSphere />
       </div>
       <MagneticCursor />
-      {/* 2. CORTEX VISUEL: NEUROSCHEMA BACKGROUND */}
       <NeuroSchema />
-
-      {/* Top Header */}
+      {/* Top Header - Restored */}
       <BlurFade yOffset={-20} className="h-16 md:h-20 border-b border-white/5 flex items-center justify-between px-4 md:px-8 bg-[#0b0c10]/80 backdrop-blur-xl sticky top-0 z-20">
         <div className="flex items-center gap-4 text-gray-400 w-1/2 md:w-1/3 group">
           <LineIconSearch size={18} className="group-hover:text-white transition-colors" />
@@ -256,47 +264,7 @@ export default function DashboardPage() {
               </div>
 
               <div className="h-[320px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={mockChartData}>
-                    <defs>
-                      <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#66fcf1" stopOpacity={0.1} />
-                        <stop offset="95%" stopColor="#66fcf1" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.02)" vertical={false} />
-                    <XAxis
-                      dataKey="name"
-                      stroke="#1f2833"
-                      fontSize={10}
-                      tickLine={false}
-                      axisLine={false}
-                      tick={{ fill: '#45a29e' }}
-                    />
-                    <YAxis
-                      stroke="#1f2833"
-                      fontSize={10}
-                      tickLine={false}
-                      axisLine={false}
-                      domain={[0, 100]}
-                      tick={{ fill: '#45a29e' }}
-                    />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: '#1f2833',
-                        borderColor: 'rgba(255,255,255,0.1)',
-                        borderRadius: '12px',
-                        fontSize: '10px',
-                        backdropFilter: 'blur(20px)',
-                        boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
-                      }}
-                      itemStyle={{ color: '#fff' }}
-                      cursor={{ stroke: '#66fcf1', strokeWidth: 1 }}
-                    />
-                    <ReferenceLine y={85} stroke="#ef4444" strokeDasharray="5 5" strokeOpacity={0.3} label={{ position: 'right', value: 'CRITIQUE', fill: '#ef4444', fontSize: 8, fontWeight: 'bold' }} />
-                    <Area type="monotone" dataKey="score" stroke="#66fcf1" strokeWidth={1} fillOpacity={1} fill="url(#colorScore)" animationDuration={2000} />
-                  </AreaChart>
-                </ResponsiveContainer>
+                <DashboardChart data={mockChartData} />
               </div>
 
               <div className="absolute bottom-4 right-6 text-[8px] text-gray-700 font-bold tracking-[0.4em] uppercase">

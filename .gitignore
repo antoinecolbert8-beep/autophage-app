@@ -78,3 +78,6 @@ prisma/migrations/dev.db
 
 # Legacy / Export
 GENESIS_FRONTEND_EXPORT/
+
+# Local Netlify folder
+.netlify

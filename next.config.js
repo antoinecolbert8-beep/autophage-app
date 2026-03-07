@@ -38,6 +38,8 @@ const nextConfig = {
   // Font optimization
   optimizeFonts: true,
 
+  transpilePackages: ['three', '@react-three/fiber', '@react-three/drei', 'framer-motion'],
+
   // Experimental features (optimizeCss disabled for production build stability)
   experimental: {
     // Disabled optimizePackageImports as it corrupts Recharts/Framer Motion minification in prod
