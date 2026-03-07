@@ -16,29 +16,42 @@ export default function DashboardLayout({
     const router = useRouter();
     const { data: session, status } = useSession();
     const [authorized, setAuthorized] = useState(false);
+    const [checked, setChecked] = useState(false);
 
     useEffect(() => {
-        if (status === 'loading') return; // Wait for session to resolve
-
-        if (status === 'authenticated' && session?.user) {
+        // On localhost — always allow, no session needed (dev mode)
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
             setAuthorized(true);
+            setChecked(true);
             return;
         }
 
-        // Not authenticated — redirect to login
+        if (status === 'loading') return;
+
+        if (status === 'authenticated' && session?.user) {
+            setAuthorized(true);
+            setChecked(true);
+            return;
+        }
+
         if (status === 'unauthenticated') {
+            setChecked(true);
             router.push('/login');
         }
     }, [session, status, router]);
 
-    // Show spinner while loading
-    if (status === 'loading' || !authorized) {
+    // Show spinner only during initial check (very brief on localhost)
+    if (!checked) {
         return (
             <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center flex-col gap-4">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-                <p className="text-gray-500 text-sm font-mono">Vérification des accès...</p>
+                <p className="text-gray-500 text-sm font-mono">Initialisation...</p>
             </div>
         );
+    }
+
+    if (!authorized) {
+        return null;
     }
 
     return (

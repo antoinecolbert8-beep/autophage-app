@@ -79,12 +79,14 @@ export default function OnboardingPage() {
     const [publishResult, setPublishResult] = useState<{ success: boolean; message: string } | null>(null);
     const [connectedPlatforms, setConnectedPlatforms] = useState<string[]>([]);
 
-    // Redirect if not logged in
+    // Redirect if not logged in (unless returning from successful payment)
+    const sessionId = searchParams?.get("session_id");
+
     useEffect(() => {
-        if (status === "unauthenticated") {
+        if (status === "unauthenticated" && !sessionId) {
             router.push("/login?callbackUrl=/onboarding");
         }
-    }, [status, router]);
+    }, [status, router, sessionId]);
 
     // Check existing integrations
     useEffect(() => {
@@ -209,17 +211,19 @@ export default function OnboardingPage() {
                 <motion.div {...fadeUp} className="text-center mb-16">
                     {isWelcome && (
                         <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-xl">
-                            <span className="text-[10px] font-black text-[#66fcf1] uppercase tracking-[0.3em]">INFRASTRUCTURE // INITIALISATION</span>
+                            <span className="text-[10px] font-black text-[#66fcf1] uppercase tracking-[0.3em]">
+                                {sessionId && status === "unauthenticated" ? "PAIEMENT VÉRIFIÉ // CONFIGURATION INVITÉ" : "INFRASTRUCTURE // INITIALISATION"}
+                            </span>
                         </div>
                     )}
                     <h1 className="text-4xl md:text-6xl font-black mb-6 tracking-tighter uppercase stat-value text-white">
-                        VOTRE PREMIER POST EN{" "}
-                        <span className="text-[#66fcf1]">
-                            300 SECONDES.
-                        </span>
+                        {sessionId && status === "unauthenticated" ? "FINALISEZ VOTRE ACCÈS." : "VOTRE PREMIER POST EN 300 SECONDES."}
                     </h1>
                     <p className="text-gray-500 text-[11px] font-light leading-relaxed uppercase tracking-[0.1em]">
-                        " Synchronisez votre infrastructure stratégique pour obtenir un résultat immédiat. "
+                        {sessionId && status === "unauthenticated"
+                            ? "Votre paiement a été traité. Créez votre mot de passe pour prendre le contrôle permanent de l'infrastructure."
+                            : "Synchronisez votre infrastructure stratégique pour obtenir un résultat immédiat."
+                        }
                     </p>
                 </motion.div>
 

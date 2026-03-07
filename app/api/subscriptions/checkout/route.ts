@@ -10,30 +10,23 @@ import { createCheckoutSession, PLANS } from "@/lib/stripe-pricing";
  */
 export async function POST(request: NextRequest) {
   try {
-    // Auth check: must be logged in
-    const session = await getServerSession(authOptions) as any;
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const body = await request.json();
-    const { planId } = body;
+    const { planId, email: guestEmail } = body;
 
-    // Use server session for security, not client-provided values
-    const userId = session.user.id;
-    const userEmail = session.user.email;
-    const organizationId = session.user.organizationId;
+    // Auth check: prioritize session, fallback to guestEmail
+    const session = await getServerSession(authOptions) as any;
+
+    const userId = session?.user?.id;
+    const userEmail = session?.user?.email || guestEmail;
+    const organizationId = session?.user?.organizationId;
+
+    if (!userEmail) {
+      return NextResponse.json({ error: "Email requis pour le checkout invité." }, { status: 401 });
+    }
 
     if (!planId) {
       return NextResponse.json(
         { error: "Missing required field: planId" },
-        { status: 400 }
-      );
-    }
-
-    if (!userId || !organizationId) {
-      return NextResponse.json(
-        { error: "User session missing required fields. Please log in again." },
         { status: 400 }
       );
     }
@@ -45,13 +38,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+
     const checkoutSession = await createCheckoutSession({
       userId,
       userEmail,
       organizationId,
       planId: planId as keyof typeof PLANS,
-      successUrl: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?success=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancelUrl: `${process.env.NEXT_PUBLIC_APP_URL}/pricing?canceled=true`,
+      successUrl: `${appUrl}/onboarding?welcome=true&session_id={CHECKOUT_SESSION_ID}`,
+      cancelUrl: `${appUrl}/pricing?canceled=true`,
     });
 
     return NextResponse.json({

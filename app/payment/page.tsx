@@ -15,12 +15,14 @@ export default function PaymentPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    // Redirect to login if not authenticated
+    // AUDIT: Guest Checkout enabled - No mandatory redirect to login
+    // Users can pay first, account creation happens post-payment or via email capture
     useEffect(() => {
+        // We log it for tracking but don't block
         if (status === "unauthenticated") {
-            router.push("/login?callbackUrl=/payment");
+            console.log("[International Audit] Guest context detected - allowing session initiation.");
         }
-    }, [status, router]);
+    }, [status]);
 
     const plan = PLANS[planKey] || PLANS.STARTER;
 
@@ -35,11 +37,17 @@ export default function PaymentPage() {
                 return;
             }
 
-            // For all other plans, use the authenticated checkout API
+            // For all other plans, use the checkout API
+            // AUDIT: Support Guest email capture if not logged in
+            const guestEmail = localStorage.getItem('ela_guest_email');
+
             const response = await fetch('/api/subscriptions/checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ planId: planKey }),
+                body: JSON.stringify({
+                    planId: planKey,
+                    email: session?.user?.email || guestEmail || undefined
+                }),
             });
 
             const data = await response.json();
@@ -141,7 +149,8 @@ export default function PaymentPage() {
                     {/* CTA Button */}
                     <button
                         onClick={handlePayment}
-                        disabled={loading || status !== "authenticated"}
+                        // AUDIT: Allow interaction for everyone to maximize conversion
+                        disabled={loading}
                         className="w-full py-6 bg-[#66fcf1] text-[#0b0c10] font-black text-[12px] uppercase tracking-[0.4em] rounded-xl hover:shadow-[0_0_50px_rgba(102,252,241,0.4)] transition-all flex items-center justify-center gap-4 btn-haptic disabled:opacity-50 mb-8"
                     >
                         {loading ? (

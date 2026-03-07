@@ -18,6 +18,22 @@ export const authOptions: NextAuthOptions = {
                 console.log('🔓 AUTH: Authorize called for', credentials?.email);
                 if (!credentials?.email || !credentials?.password) return null;
 
+                // DEV MODE BYPASS: Allow local testing without a real database
+                if (process.env.NODE_ENV === 'development') {
+                    const DEV_EMAIL = process.env.DEV_ADMIN_EMAIL || 'admin@ela.com';
+                    const DEV_PASSWORD = process.env.DEV_ADMIN_PASSWORD || 'admin123';
+                    if (credentials.email === DEV_EMAIL && credentials.password === DEV_PASSWORD) {
+                        console.warn('⚠️ DEV MODE: Using mock admin session bypass');
+                        return {
+                            id: 'dev-admin-001',
+                            email: DEV_EMAIL,
+                            name: 'Admin ELA',
+                            role: 'admin',
+                            organizationId: 'dev-org-001'
+                        } as any;
+                    }
+                }
+
                 try {
                     const user = await prisma.user.findUnique({
                         where: { email: credentials.email }
@@ -44,6 +60,21 @@ export const authOptions: NextAuthOptions = {
                     };
                 } catch (err) {
                     console.error('❌ AUTH: Database error during authorization', err);
+                    // DEV FALLBACK: if DB is unreachable, try the dev credentials one more time
+                    if (process.env.NODE_ENV === 'development') {
+                        console.warn('⚠️ DEV FALLBACK: DB unreachable, checking dev credentials');
+                        const DEV_EMAIL = process.env.DEV_ADMIN_EMAIL || 'admin@ela.com';
+                        const DEV_PASSWORD = process.env.DEV_ADMIN_PASSWORD || 'admin123';
+                        if (credentials.email === DEV_EMAIL && credentials.password === DEV_PASSWORD) {
+                            return {
+                                id: 'dev-admin-001',
+                                email: DEV_EMAIL,
+                                name: 'Admin ELA',
+                                role: 'admin',
+                                organizationId: 'dev-org-001'
+                            } as any;
+                        }
+                    }
                     return null;
                 }
             }

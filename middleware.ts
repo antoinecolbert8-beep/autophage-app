@@ -42,7 +42,9 @@ export async function middleware(request: NextRequest) {
         }
 
         // 5. DASHBOARD — must be authenticated
-        if (pathname.startsWith('/dashboard') && !token) {
+        // DEV MODE BYPASS: Allow dashboard access without auth in development for local testing
+        const isDev = process.env.NODE_ENV === 'development';
+        if (pathname.startsWith('/dashboard') && !token && !isDev) {
             return NextResponse.redirect(new URL('/login', request.url));
         }
 

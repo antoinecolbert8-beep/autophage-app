@@ -149,9 +149,9 @@ export function calculateUsageCost(type: "SHORT" | "REEL" | "CARROUSEL", plan: P
  * AUDIT FIX: success_url pointe vers /onboarding?welcome=true pour guider le nouvel utilisateur.
  */
 export async function createCheckoutSession(params: {
-  userId: string;
+  userId?: string;
   userEmail: string;
-  organizationId: string;
+  organizationId?: string;
   planId: PlanId;
   successUrl: string;
   cancelUrl: string;
@@ -183,9 +183,9 @@ export async function createCheckoutSession(params: {
 
   const session = await stripe.checkout.sessions.create({
     customer_email: userEmail,
-    client_reference_id: userId,
+    client_reference_id: userId || "guest_" + Date.now(),
     mode: "subscription",
-    payment_method_types: ["card"],
+    automatic_payment_methods: { enabled: true },
     line_items: [
       {
         price: plan.stripePriceId,
@@ -194,11 +194,12 @@ export async function createCheckoutSession(params: {
     ],
     subscription_data: {
       metadata: {
-        userId,
-        organizationId,
+        userId: userId || "",
+        organizationId: organizationId || "",
         plan: planId,
         tierId: planId,
         monthlyCredits: plan.quota.toString(),
+        isGuest: (!userId).toString(),
       },
     },
     success_url: onboardingSuccessUrl,

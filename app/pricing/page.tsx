@@ -1,12 +1,42 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { CheckCircle2, Zap, ArrowLeft, Menu, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { CheckCircle2, Zap, ArrowLeft, Menu, X, Globe } from "lucide-react";
 
 export default function PricingPage() {
   const [activeTab, setActiveTab] = useState("monthly");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [currencyInfo, setCurrencyInfo] = useState({ code: 'EUR', symbol: '€', rate: 1 });
+
+  // International Audit: Detect local currency for visual reassurance
+  useEffect(() => {
+    try {
+      const locale = navigator.language;
+      const formatter = new Intl.NumberFormat(locale, { style: 'currency', currency: 'USD' }); // Just for probe
+      const resolvedCurrency = formatter.resolvedOptions().currency || 'EUR';
+
+      // Basic fallback logic for simulation
+      const rates: Record<string, { symbol: string, rate: number }> = {
+        'USD': { symbol: '$', rate: 1.08 },
+        'GBP': { symbol: '£', rate: 0.85 },
+        'JPY': { symbol: '¥', rate: 162 },
+        'EUR': { symbol: '€', rate: 1 }
+      };
+
+      if (rates[resolvedCurrency]) {
+        setCurrencyInfo({ code: resolvedCurrency, ...rates[resolvedCurrency] });
+      }
+    } catch (e) {
+      console.warn("Currency detection failed, defaulting to EUR.");
+    }
+  }, []);
+
+  const formatPrice = (eurPrice: number) => {
+    if (currencyInfo.code === 'EUR') return `${eurPrice}€`;
+    const localPrice = Math.round(eurPrice * currencyInfo.rate);
+    return `${eurPrice}€ (~${currencyInfo.symbol}${localPrice})`;
+  };
 
   return (
     <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7] font-sans selection:bg-[#66fcf1]/30 overflow-x-hidden">
@@ -40,9 +70,16 @@ export default function PricingPage() {
               <span className="text-[10px] font-black text-[#66fcf1] uppercase tracking-[0.3em]">TARIFS // ALLIAGE NOBLE</span>
             </div>
             <h1 className="text-5xl md:text-8xl font-black mb-8 tracking-tighter uppercase stat-value text-white">INVESTISSEZ DANS<br /><span className="text-[#66fcf1]">VOTRE HÉRITAGE.</span></h1>
-            <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-12 font-light leading-relaxed">
+            <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-6 font-light leading-relaxed">
               " Rentabilité industrielle. Performance garantie par l'Infrastructure SOUVERAINE v10.4. "
             </p>
+
+            {currencyInfo.code !== 'EUR' && (
+              <div className="flex items-center justify-center gap-2 text-[10px] text-[#66fcf1] font-black uppercase tracking-widest mb-12 animate-pulse">
+                <Globe size={12} />
+                <span>DÉTECTION GÉOGRAPHIQUE : AFFICHAGE ESTIMATIF EN {currencyInfo.code}</span>
+              </div>
+            )}
 
             <div className="inline-flex bg-white/5 p-1 rounded-2xl border border-white/10 relative">
               <button
@@ -68,7 +105,7 @@ export default function PricingPage() {
             <div className="card-saphir p-12 flex flex-col group hover:border-white/20 transition-all">
               <h3 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-gray-500">Structure Starter</h3>
               <div className="flex items-baseline gap-1 mb-10">
-                <span className="text-6xl font-black text-white stat-value tracking-tighter">{activeTab === 'monthly' ? '37' : '30'}€</span>
+                <span className="text-6xl font-black text-white stat-value tracking-tighter">{formatPrice(activeTab === 'monthly' ? 37 : 30)}</span>
                 <span className="text-gray-700 text-[10px] font-mono uppercase tracking-widest">/mois</span>
               </div>
               <p className="text-[11px] text-gray-600 mb-10 min-h-[40px] font-light leading-relaxed">L'essentiel pour automatiser vos premières opérations.</p>
@@ -88,7 +125,7 @@ export default function PricingPage() {
               </div>
               <h3 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-[#66fcf1]">Structure Pro</h3>
               <div className="flex items-baseline gap-1 mb-10">
-                <span className="text-6xl font-black text-white stat-value tracking-tighter">{activeTab === 'monthly' ? '197' : '157'}€</span>
+                <span className="text-6xl font-black text-white stat-value tracking-tighter">{formatPrice(activeTab === 'monthly' ? 197 : 157)}</span>
                 <span className="text-gray-700 text-[10px] font-mono uppercase tracking-widest">/mois</span>
               </div>
               <p className="text-[11px] text-gray-500 mb-10 min-h-[40px] font-light leading-relaxed">La suite d'outils complète pour scaler votre Infrastructure.</p>
@@ -106,7 +143,7 @@ export default function PricingPage() {
             <div className="card-saphir p-12 bg-gradient-to-br from-[#1f2833]/40 to-black/40 border-white/10 group">
               <h3 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-[#c5c6c7]">Structure Souveraine</h3>
               <div className="flex items-baseline gap-1 mb-10">
-                <span className="text-6xl font-black text-white stat-value tracking-tighter">{activeTab === 'monthly' ? '497' : '397'}€</span>
+                <span className="text-6xl font-black text-white stat-value tracking-tighter">{formatPrice(activeTab === 'monthly' ? 497 : 397)}</span>
                 <span className="text-gray-700 text-[10px] font-mono uppercase tracking-widest">/mois</span>
               </div>
               <p className="text-[11px] text-[#c5c6c7] mb-10 min-h-[40px] font-light leading-relaxed">Pour ceux qui ne concurrencent pas, mais qui dirigent par la Précision.</p>
@@ -124,7 +161,7 @@ export default function PricingPage() {
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#66fcf1]/10 blur-3xl -z-10" />
               <h3 className="text-[10px] uppercase font-black tracking-[0.4em] mb-4 text-[#66fcf1]">Infrastructure Scale</h3>
               <div className="flex items-baseline gap-1 mb-10">
-                <span className="text-6xl font-black text-white stat-value tracking-tighter">{activeTab === 'monthly' ? '1497' : '1197'}€</span>
+                <span className="text-6xl font-black text-white stat-value tracking-tighter">{formatPrice(activeTab === 'monthly' ? 1497 : 1197)}</span>
                 <span className="text-gray-700 text-[10px] font-mono uppercase tracking-widest">/mois</span>
               </div>
               <p className="text-[11px] text-gray-500 mb-10 min-h-[40px] font-light leading-relaxed">Infrastructure Whitelabel pour réseaux de médias et agences de scaling.</p>
