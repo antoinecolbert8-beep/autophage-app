@@ -7,7 +7,7 @@
     "dev": "next dev -p 3000",
     "dev:https": "node server.js",
     "build": "next build",
-    "build:netlify": "CI=false NODE_OPTIONS='--max-old-space-size=4096' npx prisma generate && next build",
+    "build:netlify": "CI=false NODE_OPTIONS='--max-old-space-size=4096' prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "prisma generate",
@@ -41,6 +41,7 @@
     "@notionhq/client": "^5.8.0",
     "@pinecone-database/pinecone": "^2.0.0",
     "@prisma/client": "^4.16.2",
+    "prisma": "^4.16.2",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
     "@supabase/supabase-js": "^2.90.1",
@@ -95,7 +96,6 @@
     "@types/fluent-ffmpeg": "^2.1.24",
     "@types/pdf-parse": "^1.1.4",
     "dotenv": "^17.2.3",
-    "prisma": "^4.16.2",
     "puppeteer": "^24.38.0"
   }
 }

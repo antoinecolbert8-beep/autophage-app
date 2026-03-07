@@ -1,5 +1,5 @@
 [build]
-  command = "CI=false NODE_OPTIONS='--max-old-space-size=4096' ./node_modules/.bin/prisma generate && next build"
+  command = "npm install --include=dev && CI=false NODE_OPTIONS='--max-old-space-size=4096' ./node_modules/.bin/prisma generate && next build"
   publish = ".next"
 
 [[plugins]]
