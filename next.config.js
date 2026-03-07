@@ -41,6 +41,14 @@ const nextConfig = {
   // Experimental features (optimizeCss disabled for production build stability)
   experimental: {
     // Disabled optimizePackageImports as it corrupts Recharts/Framer Motion minification in prod
+    serverComponentsExternalPackages: ['@prisma/client', 'prisma']
+  },
+
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals.push('@prisma/client');
+    }
+    return config;
   },
 
   // Headers for security and performance
