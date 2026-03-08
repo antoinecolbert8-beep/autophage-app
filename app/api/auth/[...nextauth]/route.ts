@@ -5,6 +5,11 @@ import { verifyPassword } from "@/lib/auth-utils";
 
 export const dynamic = 'force-dynamic';
 
+// Force absolute URL for NextAuth in Netlify Serverless Environments to prevent "Invalid URL" crash
+if (!process.env.NEXTAUTH_URL) {
+    process.env.NEXTAUTH_URL = process.env.URL || process.env.NEXT_PUBLIC_APP_URL || "https://ela-revolution.com";
+}
+
 export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({

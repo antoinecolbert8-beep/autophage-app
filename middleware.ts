@@ -31,13 +31,16 @@ export async function middleware(request: NextRequest) {
         const adminPaths = ['/admin-master', '/dashboard-war-room'];
         const isAdminPath = adminPaths.some(path => pathname.startsWith(path));
 
+        const baseUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_APP_URL || process.env.URL || 'https://ela-revolution.com';
+        const absoluteUrl = request.url?.startsWith('http') ? request.url : baseUrl;
+
         if (isAdminPath && process.env.NODE_ENV !== 'development') {
             if (!token) {
-                return NextResponse.redirect(new URL('/login', request.url));
+                return NextResponse.redirect(new URL('/login', absoluteUrl));
             }
             if (token.role !== 'admin') {
                 console.warn(`[Fortress] Blocked ${pathname} — role: ${token.role}`);
-                return NextResponse.redirect(new URL('/dashboard', request.url));
+                return NextResponse.redirect(new URL('/dashboard', absoluteUrl));
             }
         }
 
@@ -45,7 +48,7 @@ export async function middleware(request: NextRequest) {
         // DEV MODE BYPASS: Allow dashboard access without auth in development for local testing
         const isDev = process.env.NODE_ENV === 'development';
         if (pathname.startsWith('/dashboard') && !token && !isDev) {
-            return NextResponse.redirect(new URL('/login', request.url));
+            return NextResponse.redirect(new URL('/login', absoluteUrl));
         }
 
         // Copy security headers from fortress to final response
