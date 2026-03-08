@@ -1,29 +1,36 @@
-import type { Config } from "@netlify/functions"
+import { schedule } from '@netlify/functions';
 
-export default async (req: Request) => {
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-    const cronSecret = process.env.CRON_SECRET;
+export const handler = schedule('*/15 * * * *', async (event) => {
+    console.log("/// NETLIFY CRON: TRIGGERING DOMINATION PROTOCOL (15m) ///");
 
-    console.log(`[NETLIFY CRON] Triggering Domination at ${appUrl}`);
+    const API_URL = process.env.URL || process.env.NEXT_PUBLIC_APP_URL || '';
+    const CRON_SECRET = process.env.CRON_SECRET || '';
+
+    if (!API_URL) {
+        console.error("Missing API_URL or NEXT_PUBLIC_APP_URL environment variable.");
+        return { statusCode: 500, body: 'Missing API_URL' };
+    }
 
     try {
-        const response = await fetch(`${appUrl}/api/cron/domination`, {
+        const response = await fetch(`${API_URL}/api/cron/domination`, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${cronSecret}`
+                Authorization: `Bearer ${CRON_SECRET}`
             }
         });
 
         const data = await response.text();
-        console.log(`[NETLIFY CRON] Response: ${response.status} - ${data}`);
+        console.log(`Domination Response (${response.status}):`, data);
 
-        return new Response(`Domination triggered: ${response.status}`);
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ message: "Domination triggered successfully", data })
+        };
     } catch (error: any) {
-        console.error(`[NETLIFY CRON] Error: ${error.message}`);
-        return new Response(`Domination failed: ${error.message}`, { status: 500 });
+        console.error("Failed to trigger domination:", error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: error.message })
+        };
     }
-}
-
-export const config: Config = {
-    schedule: "*/15 * * * *"
-}
+});
