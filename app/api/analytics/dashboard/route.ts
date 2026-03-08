@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { searchParams } = new URL(req.url);
+        const searchParams = req.nextUrl.searchParams;
         const timeframe = (searchParams.get('timeframe') || '7d') as '7d' | '30d' | '90d';
 
         // Get cached analytics

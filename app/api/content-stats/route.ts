@@ -14,7 +14,7 @@ const statSchema = z.object({
 });
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
+  const searchParams = req.nextUrl.searchParams;
   const postId = searchParams.get("postId");
   if (!postId) {
     return NextResponse.json({ error: "postId requis" }, { status: 400 });
