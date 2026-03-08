@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { fortressMiddleware } from '@/lib/security/middleware';
-import { Omniscience } from '@/lib/security/omniscience';
 import { getToken } from 'next-auth/jwt';
 
 /**
@@ -10,8 +9,7 @@ import { getToken } from 'next-auth/jwt';
  */
 export async function middleware(request: NextRequest) {
     try {
-        // 1. OMNISCIENCE
-        Omniscience.observeRequest(request);
+        // 1. OMNISCIENCE disabled in Edge middleware due to Prisma/Eval limitations
 
         // 2. FORTRESS RATE LIMITING & SECURITY HEADERS
         const fortressResponse = await fortressMiddleware(request);
