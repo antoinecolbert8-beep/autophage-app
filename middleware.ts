@@ -31,7 +31,7 @@ export async function middleware(request: NextRequest) {
         const adminPaths = ['/admin-master', '/dashboard-war-room'];
         const isAdminPath = adminPaths.some(path => pathname.startsWith(path));
 
-        if (isAdminPath) {
+        if (isAdminPath && process.env.NODE_ENV !== 'development') {
             if (!token) {
                 return NextResponse.redirect(new URL('/login', request.url));
             }

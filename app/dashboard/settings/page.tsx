@@ -282,8 +282,8 @@ export default function SettingsPage() {
         <div className="flex items-center gap-3">
           <div
             className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest border transition-all duration-500 ${activeCount > 0
-                ? "bg-[#66fcf1]/10 text-[#66fcf1] border-[#66fcf1]/20"
-                : "bg-white/5 text-gray-500 border-white/5"
+              ? "bg-[#66fcf1]/10 text-[#66fcf1] border-[#66fcf1]/20"
+              : "bg-white/5 text-gray-500 border-white/5"
               }`}
           >
             <span
@@ -370,44 +370,87 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* PROFIL */}
-        <div className="rounded-2xl bg-[#0f0f1a] border border-white/5 p-6">
-          <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-6">
-            Profil
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-[10px] text-gray-500 mb-2 uppercase tracking-widest font-bold">
-                Nom complet
-              </label>
-              <input
-                type="text"
-                defaultValue=""
-                placeholder="Votre nom"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#66fcf1]/50 outline-none transition-colors text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] text-gray-500 mb-2 uppercase tracking-widest font-bold">
-                Email
-              </label>
-              <input
-                type="email"
-                defaultValue=""
-                placeholder="votre@email.com"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-[#66fcf1]/50 outline-none transition-colors text-sm"
-              />
+        {/* PROFIL SOUVERAIN (GAMIFIÉ) */}
+        <div className="rounded-2xl bg-gradient-to-br from-[#0a0f12] to-[#0d141b] border border-white/5 overflow-hidden shadow-2xl relative">
+          <div className="absolute top-0 right-0 p-8 opacity-10">
+            <LineIconUsers size={120} />
+          </div>
+
+          <div className="p-8 relative z-10">
+            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#66fcf1] mb-8 flex items-center gap-2 drop-shadow-[0_0_10px_rgba(102,252,241,0.5)]">
+              <LineIconZap size={14} /> Profil Souverain
+            </h2>
+
+            <div className="flex flex-col md:flex-row gap-12">
+
+              {/* Avatar & Level */}
+              <div className="flex flex-col items-center">
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-[#66fcf1]/20 blur-xl rounded-full opacity-50 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative w-28 h-28 rounded-full bg-gradient-to-br from-[#0a0a0f] to-[#121c22] border-2 border-[#66fcf1]/30 flex flex-col items-center justify-center p-2">
+                    <span className="text-[10px] text-[#66fcf1] font-bold tracking-widest uppercase mb-1">Niveau</span>
+                    <span className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">12</span>
+                  </div>
+                </div>
+                <div className="mt-4 text-center">
+                  <h3 className="text-lg font-bold text-white">Fondateur ELA</h3>
+                  <p className="text-xs text-blue-400 font-mono mt-1">XP : 8,450 / 12,000</p>
+                </div>
+              </div>
+
+              {/* Stats & Guild */}
+              <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                <div className="bg-black/40 border border-white/5 rounded-xl p-5 hover:border-purple-500/30 transition-colors">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400">
+                      <LineIconBarChart size={16} />
+                    </span>
+                    <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Score AQCI</span>
+                  </div>
+                  <div className="flex items-end gap-2">
+                    <span className="text-3xl font-black text-white">124.5</span>
+                    <span className="text-xs text-green-400 mb-1 font-mono">+12.4%</span>
+                  </div>
+                </div>
+
+                <div className="bg-black/40 border border-white/5 rounded-xl p-5 hover:border-blue-500/30 transition-colors">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">
+                      <LineIconUsers size={16} />
+                    </span>
+                    <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Coalition</span>
+                  </div>
+                  <div>
+                    <span className="text-lg font-bold text-white block">La Cité d'Or</span>
+                    <span className="text-xs text-blue-400 opacity-80 uppercase tracking-widest block mt-1">Rang: Fondateur</span>
+                  </div>
+                </div>
+
+                <div className="sm:col-span-2">
+                  <div className="w-full bg-black/40 border border-white/5 rounded-xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                      <label className="block text-[10px] text-gray-500 mb-2 uppercase tracking-widest font-bold">Lien de Parrainage Actif (Spore)</label>
+                      <div className="flex items-center gap-2">
+                        <code className="bg-black border border-[#66fcf1]/20 text-[#66fcf1] px-4 py-2 rounded-lg text-sm">ref.ela-revolution.com/a4f89d</code>
+                      </div>
+                    </div>
+                    <button className="px-6 py-2.5 bg-gradient-to-r from-[#66fcf1]/10 to-blue-500/10 hover:from-[#66fcf1]/20 hover:to-blue-500/20 text-[#66fcf1] hover:text-white border border-[#66fcf1]/30 rounded-xl text-xs font-black uppercase tracking-widest transition-all">
+                      Partager
+                    </button>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
-          <button className="mt-4 px-6 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm font-bold hover:bg-white/10 transition-all">
-            Sauvegarder
-          </button>
         </div>
 
         {/* SÉCURITÉ */}
         <div className="rounded-2xl bg-[#0f0f1a] border border-white/5 p-6">
-          <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-6">
-            Sécurité
+          <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-6 flex items-center gap-2">
+            <LineIconShield size={14} className="text-gray-400" />
+            Sécurité & Authentification
           </h2>
 
           <div className="flex items-center justify-between py-4 border-b border-white/5">

@@ -40,7 +40,7 @@ async function activateAdmin() {
 
         // 1. Check/create admin organization
         let org = await orgModel.findFirst({
-            where: { name: 'ELA Revolution - Admin' }
+            where: { domain: 'ela-revolution.com' }
         });
 
         if (!org) {
@@ -48,9 +48,8 @@ async function activateAdmin() {
                 data: {
                     name: 'ELA Revolution - Admin',
                     domain: 'ela-revolution.com',
-                    plan: 'enterprise',
-                    tier: 'grand_horloger',
-                    credits: 999999,
+                    tier: 'enterprise',
+                    creditBalance: 999999,
                 }
             });
             console.log('✅ Organisation admin créée:', org.id);

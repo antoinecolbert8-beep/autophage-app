@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import readline from 'readline';
 import { hashPassword } from '../lib/auth-utils';
+import { PrismaClient } from '@prisma/client';
 
 dotenv.config();
 

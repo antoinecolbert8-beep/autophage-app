@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
 import Navigation from "@/components/navigation";
+import GamificationNav from "@/components/GamificationNav";
 import { RealTimeProvider } from '@/components/RealTimeProvider';
 import { Toaster } from 'sonner';
 
@@ -58,7 +59,8 @@ export default function DashboardLayout({
         <RealTimeProvider>
             <div className="flex h-screen bg-[#0a0a0f] overflow-hidden">
                 <Navigation />
-                <main className="flex-1 w-full md:ml-64 pb-24 md:pb-0 h-full overflow-y-auto overflow-x-hidden scroll-smooth transition-all duration-300">
+                <main className="flex-1 w-full md:ml-64 pb-24 md:pb-0 h-full overflow-y-auto overflow-x-hidden scroll-smooth transition-all duration-300 relative">
+                    <GamificationNav />
                     {children}
                 </main>
             </div>

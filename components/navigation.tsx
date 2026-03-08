@@ -119,6 +119,22 @@ export default function Navigation() {
             </Link>
 
             <Link
+              href="/dashboard/referral"
+              className={`flex flex-col md:flex-row items-center justify-between gap-1 md:gap-3 p-3 md:px-4 md:py-3 rounded-[14px] font-medium transition-all min-h-[44px] min-w-[44px] ${isActive("/dashboard/referral")
+                ? "bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20"
+                : "text-fuchsia-400/70 hover:text-fuchsia-400 hover:bg-fuchsia-500/10"
+                }`}
+            >
+              <div className="flex flex-col md:flex-row items-center gap-1 md:gap-3">
+                <LineIconZap size={20} className="animate-pulse drop-shadow-[0_0_8px_rgba(217,70,239,0.8)]" />
+                <span className="text-[10px] md:text-sm font-bold">Spore Protocol</span>
+              </div>
+              <span className="hidden md:inline-block text-[8px] bg-fuchsia-500 text-black px-1.5 py-0.5 rounded uppercase tracking-widest font-black shrink-0">
+                Bonus XP
+              </span>
+            </Link>
+
+            <Link
               href="/dashboard/agent"
               className={`flex flex-col md:flex-row items-center gap-1 md:gap-3 p-3 md:px-4 md:py-3 rounded-[14px] font-medium transition-all min-h-[44px] min-w-[44px] ${isActive("/dashboard/agent")
                 ? "bg-white/10 text-white border border-white/5"

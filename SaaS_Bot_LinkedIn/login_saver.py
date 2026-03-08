@@ -20,10 +20,10 @@ USER_AGENTS = [
 ]
 
 
-def build_context(playwright, force_login: bool = False):
+def build_context(playwright, force_login: bool = False, headless: bool = True):
     """Crée un contexte Playwright en chargeant un état existant si présent."""
     browser = playwright.chromium.launch(
-        headless=False,
+        headless=headless,
         args=["--disable-blink-features=AutomationControlled"],
     )
 
@@ -51,7 +51,7 @@ def save_session(force_login: bool = False):
     print("ℹ️ Le bot va utiliser votre connexion internet actuelle (iPhone).")
 
     with sync_playwright() as p:
-        browser, context, user_agent = build_context(p, force_login)
+        browser, context, user_agent = build_context(p, force_login, headless=False)
         print(f"🎭 User-Agent appliqué : {user_agent}")
 
         page = context.new_page()

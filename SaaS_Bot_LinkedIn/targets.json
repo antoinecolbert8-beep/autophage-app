@@ -1,34 +1,14 @@
-[
-  {
-    "action": "VISIT",
-    "url": "https://www.linkedin.com/in/frederic-mazzella/"
-  },
-  {
-    "action": "VISIT",
-    "url": "https://www.linkedin.com/in/roxanne-varza/"
-  },
-  {
-    "action": "VISIT",
-    "url": "https://www.linkedin.com/in/benoit-petit-entrepreneur/"
-  },
-  {
-    "action": "VISIT",
-    "url": "https://www.linkedin.com/in/stanislas-niox-chateau/"
-  },
-  {
-    "action": "VISIT",
-    "url": "https://www.linkedin.com/in/jeremie-berrebi/"
-  },
-  {
-    "action": "LIKE",
-    "url": "https://www.linkedin.com/posts/frederic-mazzella_mobilite-covoiturage-innovation-activity-7150000000000000001"
-  },
-  {
-    "action": "LIKE",
-    "url": "https://www.linkedin.com/posts/roxanne-varza_startups-tech-entrepreneuriat-activity-7150000000000000002"
-  },
-  {
-    "action": "LIKE",
-    "url": "https://www.linkedin.com/posts/benoit-petit-ceo_intelligence-artificielle-saas-automatisation-activity-7150000000000000003"
-  }
-]
+{
+  "posts": [
+    "https://www.linkedin.com/posts/frederic-mazzella_mobilite-covoiturage-innovation-activity-7150000000000000001",
+    "https://www.linkedin.com/posts/roxanne-varza_startups-tech-entrepreneuriat-activity-7150000000000000002",
+    "https://www.linkedin.com/posts/benoit-petit-ceo_intelligence-artificielle-saas-automatisation-activity-7150000000000000003"
+  ],
+  "profiles": [
+    "https://www.linkedin.com/in/frederic-mazzella/",
+    "https://www.linkedin.com/in/roxanne-varza/",
+    "https://www.linkedin.com/in/benoit-petit-entrepreneur/",
+    "https://www.linkedin.com/in/stanislas-niox-chateau/",
+    "https://www.linkedin.com/in/jeremie-berrebi/"
+  ]
+}

@@ -250,42 +250,52 @@ def sniper_outbound(page: Page, profile_url: str, action_logger: ActionLogger):
 
 def main():
     """Boucle principale du bot d'engagement"""
-    print("🤖 Démarrage du Bot d'Engagement LinkedIn...\n")
+    print("🤖 Démarrage du Bot d'Engagement LinkedIn (Mode Autonome)...\n")
     
     action_logger = ActionLogger()
     
-    with sync_playwright() as p:
-        browser, context, ua = build_context(p)
-        page = context.new_page()
-        StealthConfig.inject_stealth_scripts(page)
+    while True:
+        try:
+            with sync_playwright() as p:
+                browser, context, ua = build_context(p, headless=True)
+                page = context.new_page()
+                StealthConfig.inject_stealth_scripts(page)
+                
+                # Charge les cibles (posts à surveiller + profils à visiter)
+                if not TARGETS_FILE.exists():
+                    print("❌ Fichier targets.json manquant. Crée-le avec la structure:")
+                    print(json.dumps({"posts": ["url1", "url2"], "profiles": ["url1", "url2"]}, indent=2))
+                    browser.close()
+                    continue
+                
+                with open(TARGETS_FILE, "r", encoding="utf-8") as f:
+                    targets = json.load(f)
+                
+                # Écoute les commentaires
+                for post_url in targets.get("posts", []):
+                    print(f"\n👂 Écoute des commentaires sur: {post_url}")
+                    comments = listen_for_comments(page, post_url, action_logger)
+                    
+                    print(f"📊 {len(comments)} nouveaux commentaires détectés")
+                    
+                    for comment in comments:
+                        reply_to_comment(page, comment, action_logger)
+                
+                # Sniper outbound
+                for profile_url in targets.get("profiles", [])[:3]:  # Limite 3 profils par session
+                    sniper_outbound(page, profile_url, action_logger)
+                    StealthConfig.human_delay(10000, 20000)  # Pause entre chaque profil
+                
+                browser.close()
+                print("\n✅ Cycle d'engagement terminé")
         
-        # Charge les cibles (posts à surveiller + profils à visiter)
-        if not TARGETS_FILE.exists():
-            print("❌ Fichier targets.json manquant. Crée-le avec la structure:")
-            print(json.dumps({"posts": ["url1", "url2"], "profiles": ["url1", "url2"]}, indent=2))
-            browser.close()
-            return
-        
-        with open(TARGETS_FILE, "r", encoding="utf-8") as f:
-            targets = json.load(f)
-        
-        # Écoute les commentaires
-        for post_url in targets.get("posts", []):
-            print(f"\n👂 Écoute des commentaires sur: {post_url}")
-            comments = listen_for_comments(page, post_url, action_logger)
+        except Exception as e:
+            print(f"❌ Erreur critique durant le cycle: {e}")
             
-            print(f"📊 {len(comments)} nouveaux commentaires détectés")
-            
-            for comment in comments:
-                reply_to_comment(page, comment, action_logger)
-        
-        # Sniper outbound
-        for profile_url in targets.get("profiles", [])[:3]:  # Limite 3 profils par session
-            sniper_outbound(page, profile_url, action_logger)
-            StealthConfig.human_delay(10000, 20000)  # Pause entre chaque profil
-        
-        browser.close()
-        print("\n✅ Cycle d'engagement terminé")
+        # Repos aléatoire (30-60 min)
+        delay_sec = random.randint(1800, 3600)
+        print(f"⏳ Attente de {delay_sec // 60} minutes avant le prochain scan...")
+        time.sleep(delay_sec)
 
 
 if __name__ == "__main__":

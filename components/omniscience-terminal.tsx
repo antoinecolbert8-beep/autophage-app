@@ -30,7 +30,6 @@ export const OmniscienceTerminal = () => {
                 { lvl: 'SUCC', msg: 'Lead Enricher Agent finalized task', path: 'AGENT-007' },
                 { lvl: 'WARN', msg: 'Rate Limit Threshold approached (80%)', path: 'API/GATEWAY' },
                 { lvl: 'INFO', msg: 'Pulse check: Heartbeat signal received', path: 'CRON/SELF-PROMO' },
-                { lvl: 'SUCC', msg: 'Payment Processed: €99.00', path: 'STRIPE/WEBHOOK' },
                 { lvl: 'INFO', msg: 'User navigation', path: '/dashboard/settings' },
                 { lvl: 'INFO', msg: 'LinkedIn Auto-Poster Triggered', path: 'GOD-MODE/AUTO' },
                 { lvl: 'CRIT', msg: 'Anomalous attempt detected (SQLi attempt blocked)', path: 'WAF/SHIELD' },

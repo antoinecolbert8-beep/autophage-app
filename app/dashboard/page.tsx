@@ -274,41 +274,55 @@ export default function DashboardPage() {
           </BlurFade>
 
           <BlurFade delay={0.6} className="space-y-6">
-            <div className="card-saphir">
-              <h3 className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-6">Commandes Rapides</h3>
+            <div className="card-saphir border-[#66fcf1]/10 bg-gradient-to-br from-[#0a0f12] to-[#0d141b]">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#66fcf1] flex items-center gap-2">
+                  <LineIconShield size={14} /> Missions Actives
+                </h3>
+                <span className="text-[9px] font-mono text-[#66fcf1] border border-[#66fcf1]/30 bg-[#66fcf1]/10 px-2 py-0.5 rounded uppercase">Quotidiennes</span>
+              </div>
+
               <div className="space-y-3">
-                <button className="w-full p-3 md:p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-4 group min-h-[44px]">
-                  <div className="w-10 h-10 rounded-xl bg-white/5 text-white flex flex-shrink-0 items-center justify-center group-hover:scale-105 transition-transform">
-                    <LineIconZap size={20} />
+                {/* Quest 1 */}
+                <div className="w-full p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-[#66fcf1]/30 hover:bg-[#66fcf1]/5 transition-all group relative overflow-hidden cursor-pointer">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_0%,rgba(102,252,241,0.1),transparent_50%)] opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative z-10 flex items-start gap-4">
+                    <div className="w-8 h-8 rounded-lg bg-[#66fcf1]/10 text-[#66fcf1] flex flex-shrink-0 items-center justify-center shadow-[0_0_10px_rgba(102,252,241,0.2)]">
+                      <LineIconZap size={16} />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-bold text-sm text-white group-hover:text-[#66fcf1] transition-colors leading-tight">Campagne d'Acquisition</p>
+                      <p className="text-[10px] text-gray-500 font-medium tracking-wide mt-1">Générer 10 nouveaux signaux qualifiés sur LinkedIn.</p>
+                      <div className="flex items-center gap-3 mt-3">
+                        <span className="text-[10px] font-mono text-fuchsia-400 font-bold bg-fuchsia-500/10 px-2 py-0.5 rounded border border-fuchsia-500/20">+150 XP</span>
+                        <span className="text-[10px] font-mono text-cyan-400 font-bold bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">+5 AQCI</span>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-bold text-sm text-white">Nouvelle Campagne</p>
-                    <p className="text-[10px] text-gray-500 uppercase font-medium tracking-wide">Multi-Canal</p>
-                  </div>
-                </button>
+                </div>
 
-                <button className="w-full p-3 md:p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-4 group min-h-[44px]">
-                  <div className="w-10 h-10 rounded-xl bg-white/5 text-white flex flex-shrink-0 items-center justify-center group-hover:scale-105 transition-transform">
-                    <LineIconUsers size={20} />
+                {/* Quest 2 */}
+                <div className="w-full p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-purple-500/30 hover:bg-purple-500/5 transition-all group relative overflow-hidden cursor-pointer">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_0%,rgba(168,85,247,0.1),transparent_50%)] opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative z-10 flex items-start gap-4">
+                    <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex flex-shrink-0 items-center justify-center shadow-[0_0_10px_rgba(168,85,247,0.2)]">
+                      <LineIconUsers size={16} />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex justify-between items-start">
+                        <p className="font-bold text-sm text-white group-hover:text-purple-400 transition-colors leading-tight">Effort de Coalition</p>
+                        <span className="text-[9px] font-mono text-purple-400 uppercase">Guilde</span>
+                      </div>
+                      <p className="text-[10px] text-gray-500 font-medium tracking-wide mt-1">Atteindre un revenu collectif de 5,000€ ce mois-ci.</p>
+                      <div className="w-full bg-black/50 h-1.5 rounded-full mt-3 overflow-hidden border border-white/5">
+                        <div className="bg-purple-500 h-full w-[65%]" />
+                      </div>
+                      <div className="flex items-center gap-3 mt-2">
+                        <span className="text-[10px] font-mono text-yellow-500 font-bold bg-yellow-500/10 px-2 py-0.5 rounded border border-yellow-500/20">Trésor Légendaire</span>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-bold text-sm text-white">Ajouter Prospect</p>
-                    <p className="text-[10px] text-gray-500 uppercase font-medium tracking-wide">Enrichissement</p>
-                  </div>
-                </button>
-
-                <Link
-                  href="/dashboard/integrations"
-                  className="w-full p-3 md:p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:bg-white/10 transition-all text-left flex items-center gap-4 group min-h-[44px]"
-                >
-                  <div className="w-10 h-10 rounded-2xl bg-[#66fcf1]/10 text-[#66fcf1] flex flex-shrink-0 items-center justify-center group-hover:scale-105 transition-transform">
-                    <LineIconZap size={20} />
-                  </div>
-                  <div>
-                    <p className="font-bold text-sm text-[#66fcf1]">Intégrations</p>
-                    <p className="text-[10px] text-gray-500 uppercase font-medium tracking-wide">Connectez l'API</p>
-                  </div>
-                </Link>
+                </div>
               </div>
             </div>
 
