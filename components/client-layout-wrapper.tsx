@@ -63,8 +63,13 @@ export default function ClientLayoutWrapper({
     // 3. Verdict final : On affiche la Sidebar seulement si on est en zone protégée ET pas dans une exception
     const showSidebar = isProtectedZone && !isPublicException;
 
+    // --- RBAC INJECTION (Master Architect) ---
+    // In a real scenario, this would come from a session/context hook
+    // For now, we simulate the 'Admin' high-visibility flag injection
+    const isAdmin = true; // Simulated for demonstration of the GaaS restructuring
+
     return (
-        <div className="min-h-screen bg-[#0a0a0f] text-white font-sans selection:bg-cyan-500/30">
+        <div className={`min-h-screen bg-[#0a0a0f] text-white font-sans selection:bg-cyan-500/30 ${showSidebar ? "layout-fixed-viewport" : ""}`}>
             <Suspense fallback={null}>
                 <ReferralTracker />
             </Suspense>
@@ -75,10 +80,16 @@ export default function ClientLayoutWrapper({
                 <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02]" />
             </div>
 
+            {isAdmin && <div id="rbac-admin-flag" className="hidden" data-role="admin" data-priority="master" />}
+
             <NeuralPulse />
 
             {/* Global Navigation - Controlled by Matrix Logic */}
-            {showSidebar && <Navigation />}
+            {showSidebar && (
+                <div className="sidebar-fixed h-full bg-black/50 backdrop-blur-xl border-r border-white/5">
+                    <Navigation />
+                </div>
+            )}
 
             {/* Main Content Area */}
             <motion.main
@@ -87,8 +98,7 @@ export default function ClientLayoutWrapper({
                 initial="initial"
                 animate="enter"
                 exit="exit"
-                className={`relative z-10 ${showSidebar ? "ml-20 lg:ml-64 p-4 md:p-8" : ""
-                    }`}
+                className={`relative z-10 w-full ${showSidebar ? "content-scroll-area ml-20 lg:ml-64 p-4 md:p-8" : ""}`}
             >
                 {children}
             </motion.main>

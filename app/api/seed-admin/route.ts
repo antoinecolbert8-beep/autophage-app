@@ -14,7 +14,8 @@ function hashPassword(password: string): string {
 
 export async function GET(request: Request) {
     // Simple auth check
-    const url = new URL(request.url);
+    const baseUrl = process.env.URL || process.env.NEXT_PUBLIC_APP_URL || 'https://teal-dolphin-3e5ce9.netlify.app';
+    const url = new URL(request.url, baseUrl);
     const secret = url.searchParams.get('secret');
     if (secret !== SEED_SECRET) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

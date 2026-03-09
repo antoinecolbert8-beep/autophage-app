@@ -17,8 +17,11 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return; // Prevent double submission
+
     setError("");
     setLoading(true);
+    console.log("🔓 [AuthGateway] Initializing secure handshake for:", email);
 
     try {
       const result = await signIn("credentials", {
@@ -125,7 +128,7 @@ export default function LoginPage() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between px-1">
                   <label className="block text-[8px] font-black uppercase tracking-[0.3em] text-gray-600">CLÉ DE SÉCURITÉ</label>
-                  <Link href="/auth/forgot-password" name="forgot-password" className="text-[8px] font-black uppercase tracking-[0.2em] text-gray-700 hover:text-[#66fcf1] transition-colors">
+                  <Link href="/auth/forgot-password" title="forgot-password" className="text-[8px] font-black uppercase tracking-[0.2em] text-gray-700 hover:text-[#66fcf1] transition-colors">
                     OUBLI ?
                   </Link>
                 </div>
@@ -133,6 +136,11 @@ export default function LoginPage() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && email && password) {
+                      handleSubmit(e);
+                    }
+                  }}
                   className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#66fcf1]/40 text-white placeholder:text-gray-800 transition-all text-[11px] font-black uppercase tracking-wider"
                   placeholder="••••••••"
                   required

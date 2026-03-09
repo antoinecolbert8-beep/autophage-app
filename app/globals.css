@@ -26,16 +26,7 @@
 }
 
 @layer base {
-  body {
-    @apply bg-[#0b0c10] text-[#c5c6c7] font-sans tracking-wide;
-    min-height: 100vh;
-    scroll-behavior: smooth;
-  }
 
-  h1,
-  h2,
-  h3,
-  h4,
   h5,
   h6 {
     @apply font-display font-black tracking-tighter text-white;
@@ -111,6 +102,30 @@
   /* Modern Gradients */
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600;
+  }
+
+  /* Structural Lockdown */
+  .layout-fixed-viewport {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex;
+  }
+
+  .content-scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+    scrollbar-gutter: stable;
+  }
+
+  .sidebar-fixed {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
   }
 }
 

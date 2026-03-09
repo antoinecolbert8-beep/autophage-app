@@ -20,20 +20,25 @@ export const authOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials) {
-                if (!credentials?.email || !credentials?.password) return null;
-                const user = await prisma.user.findUnique({
-                    where: { email: credentials.email }
-                }) as any;
-                if (!user || !user.password) return null;
-                const isValid = verifyPassword(credentials.password, user.password);
-                if (!isValid) return null;
-                return {
-                    id: user.id,
-                    email: user.email,
-                    name: user.name,
-                    role: user.role,
-                    organizationId: user.organizationId
-                };
+                try {
+                    if (!credentials?.email || !credentials?.password) return null;
+                    const user = await prisma.user.findUnique({
+                        where: { email: credentials.email }
+                    }) as any;
+                    if (!user || !user.password) return null;
+                    const isValid = verifyPassword(credentials.password, user.password);
+                    if (!isValid) return null;
+                    return {
+                        id: user.id,
+                        email: user.email,
+                        name: user.name,
+                        role: user.role,
+                        organizationId: user.organizationId
+                    };
+                } catch (error) {
+                    console.error("❌ [NextAuth] Database Authorization Error:", error);
+                    return null;
+                }
             }
         })
     ],
@@ -55,7 +60,13 @@ export const authOptions: NextAuthOptions = {
                 }
             }
             return session;
-        }
+        },
+        async redirect({ url, baseUrl }) {
+            // Force absolute redirects to prevent relative URL construction crashes on Netlify
+            if (url.startsWith("/")) return `${baseUrl}${url}`;
+            else if (new URL(url).origin === baseUrl) return url;
+            return baseUrl;
+        },
     },
     pages: {
         signIn: "/login",
@@ -67,6 +78,17 @@ export const authOptions: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET || "ela-sovereign-fallback-secret-for-build",
 };
 
-const handler = NextAuth(authOptions);
+const handler = async (req: any, res: any) => {
+    // Dynamic NEXTAUTH_URL detection for Netlify Serverless environment
+    const host = req.headers.get("host");
+    const protocol = host?.includes("localhost") ? "http" : "https";
+    const origin = `${protocol}://${host}`;
+
+    if (process.env.NODE_ENV === "production" || host) {
+        process.env.NEXTAUTH_URL = origin;
+    }
+
+    return await NextAuth(req, res, authOptions);
+};
 
 export { handler as GET, handler as POST };

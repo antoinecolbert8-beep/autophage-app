@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
         return new NextResponse('Unauthorized', { status: 401 });
     }
 
-    const { searchParams } = new URL(req.url);
+    const { searchParams } = req.nextUrl;
     const type = searchParams.get('type');
 
     const results: any = {};

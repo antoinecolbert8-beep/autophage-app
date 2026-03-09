@@ -159,9 +159,23 @@ export default function WarRoomPage() {
 
           {/* Global Scan Panel */}
           <div className="col-span-8 flex flex-col gap-8">
-            <GlassCard3D className="flex-1 p-0 overflow-hidden group">
+            <GlassCard3D
+              className="flex-1 p-0 overflow-hidden group cursor-crosshair relative"
+              onClick={() => {
+                const event = {
+                  id: Date.now(),
+                  type: "SCAN",
+                  msg: "Initialisation d'un scan de proximité haute résolution...",
+                  time: "IN PROGRESS"
+                };
+                setLogs(prev => [event, ...prev].slice(0, 10));
+                setTimeout(() => {
+                  setLogs(prev => prev.map(l => l.id === event.id ? { ...l, msg: "Scan terminé. 12 nouvelles opportunités identifiées.", time: "SUCCESS" } : l));
+                }, 2000);
+              }}
+            >
               <TacticalMap events={pulseEvents} />
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-active:scale-95 transition-transform duration-300">
                 {/* Tactical Radar */}
                 <div className="w-[800px] h-[800px] border border-red-600/5 rounded-full animate-[spin_60s_linear_infinite]" />
                 <div className="w-[600px] h-[600px] border border-red-600/5 rounded-full absolute animate-[spin_40s_linear_infinite_reverse]" />
@@ -188,7 +202,7 @@ export default function WarRoomPage() {
                     <span className="text-red-600">SATURATION.</span>
                   </h2>
                   <div className="mt-6 flex items-center justify-center gap-4">
-                    <span className="px-3 py-1 bg-red-600/10 border border-red-600/20 text-[9px] font-black text-red-500 uppercase tracking-[0.2em]">TARGET AQ: 100%</span>
+                    <span className="px-3 py-1 bg-red-600/10 border border-red-600/20 text-[9px] font-black text-red-500 uppercase tracking-[0.2em]">TOUCH_TO_SCAN</span>
                     <span className="px-3 py-1 bg-white/5 border border-white/10 text-[9px] font-black text-gray-500 uppercase tracking-[0.2em]">OPERATIONAL_SYNC</span>
                   </div>
                 </div>

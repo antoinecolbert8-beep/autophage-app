@@ -15,7 +15,7 @@ const preferenceSchema = z.object({
 });
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
+  const { searchParams } = req.nextUrl;
   const userId = searchParams.get("userId");
   if (!userId) {
     return NextResponse.json({ error: "userId requis" }, { status: 400 });

@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { db as prisma } from "@/core/db";
 
 // Simple connection endpoint for Admin (In a real app, uses full OAuth 2.0 flow)
@@ -74,8 +74,8 @@ export async function POST(req: Request) {
     }
 }
 
-export async function GET(req: Request) {
-    const { searchParams } = new URL(req.url);
+export async function GET(req: NextRequest) {
+    const { searchParams } = req.nextUrl;
     const orgId = searchParams.get('orgId');
 
     if (!orgId) {

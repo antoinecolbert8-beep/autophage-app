@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { searchByIntent, nativeTranslate } from '@/lib/ai/discovery';
 
 export async function GET(req: NextRequest) {
-    const { searchParams } = new URL(req.url);
+    const { searchParams } = req.nextUrl;
     const intent = searchParams.get('intent');
     const lang = searchParams.get('lang') || 'fr'; // Langue cible pour le "Polyglotte Natif"
 
