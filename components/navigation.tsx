@@ -135,8 +135,8 @@ export default function Navigation() {
             </Link>
 
             <Link
-              href="/dashboard/agent"
-              className={`flex flex-col md:flex-row items-center gap-1 md:gap-3 p-3 md:px-4 md:py-3 rounded-[14px] font-medium transition-all min-h-[44px] min-w-[44px] ${isActive("/dashboard/agent")
+              href="/agent-swarm"
+              className={`flex flex-col md:flex-row items-center gap-1 md:gap-3 p-3 md:px-4 md:py-3 rounded-[14px] font-medium transition-all min-h-[44px] min-w-[44px] ${isActive("/agent-swarm")
                 ? "bg-white/10 text-white border border-white/5"
                 : "text-gray-400 hover:text-white hover:bg-white/5"
                 }`}
