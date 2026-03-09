@@ -8,6 +8,9 @@ import {
     ChevronLeft, Check, X, Plus, Eye, EyeOff, Loader2, Zap, Shield, RefreshCw,
     Youtube, Mail, Target, Share2, Ghost, PenLine, Hash, Code
 } from "lucide-react";
+import { SocialFlowDiagram } from "@/components/SocialFlowDiagram";
+import { IntegrationsMap } from "@/components/IntegrationsMap";
+import { CinematicOAuth } from "@/components/CinematicOAuth";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -382,10 +385,6 @@ function IntegrationCard({
 }
 
 // ─── Page ────────────────────────────────────────────────────────────────────
-
-import { SocialFlowDiagram } from "@/components/SocialFlowDiagram";
-import { IntegrationsMap } from "@/components/IntegrationsMap";
-import { CinematicOAuth } from "@/components/CinematicOAuth";
 
 export default function IntegrationsPage() {
     const [integrations, setIntegrations] = useState<Integration[]>([]);

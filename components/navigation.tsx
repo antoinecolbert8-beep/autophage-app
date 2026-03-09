@@ -144,6 +144,17 @@ export default function Navigation() {
               <LineIconUsers size={20} />
               <span className="text-[10px] md:text-sm">Agents</span>
             </Link>
+
+            <Link
+              href="/dashboard/integrations"
+              className={`flex flex-col md:flex-row items-center gap-1 md:gap-3 p-3 md:px-4 md:py-3 rounded-[14px] font-medium transition-all min-h-[44px] min-w-[44px] ${isActive("/dashboard/integrations")
+                ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shadow-[0_0_15px_rgba(6,182,212,0.1)]"
+                : "text-gray-400 hover:text-white hover:bg-white/5"
+                }`}
+            >
+              <LineIconZap size={20} className={isActive("/dashboard/integrations") ? "text-cyan-400" : ""} />
+              <span className="text-[10px] md:text-sm">Command Center</span>
+            </Link>
           </div>
         )}
       </nav>
