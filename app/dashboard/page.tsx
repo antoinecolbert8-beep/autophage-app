@@ -40,7 +40,10 @@ import {
   Vortex3D,
   OmniSphere,
   HolographicInterface,
-  GlitchText
+  GlitchText,
+  SpotlightEffect,
+  Scanline,
+  NeuralPulse
 } from "@/components/AdvancedVisuals";
 import { CognitiveThought } from "@/components/CognitiveThought";
 
@@ -120,6 +123,9 @@ export default function DashboardPage() {
       <GrainTexture />
       <NeuralWeb />
       <Vortex3D />
+      <SpotlightEffect />
+      <Scanline />
+      <NeuralPulse />
       <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-20">
         <OmniSphere />
       </div>
