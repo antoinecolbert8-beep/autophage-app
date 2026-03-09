@@ -13,7 +13,7 @@ export default function AgentsPage() {
                 {
                     name: "APEX",
                     role: "X/Social Scale",
-                    img: "/agents/nexus_v2.png?v=4",
+                    img: "/agents_assets/nexus_v2.png?v=4",
                     desc: "Sature l'espace sémantique sur X et Instagram en boucle autonome.",
                     gradient: "from-pink-500 to-rose-600",
                     capabilities: ["Rédaction virale IA", "Publication auto", "Calendrier 24/7"]
@@ -21,7 +21,7 @@ export default function AgentsPage() {
                 {
                     name: "VISION",
                     role: "YouTube/Shorts SEO",
-                    img: "/agents/vox_v2.png?v=4",
+                    img: "/agents_assets/vox_v2.png?v=4",
                     desc: "Décline le contenu viral en scripts vidéos et Shorts pour l'autorité long terme.",
                     gradient: "from-blue-500 to-indigo-500",
                     capabilities: ["Scripts Vidéo IA", "Chapitrage SEO", "Titres à fort clic"]
@@ -36,7 +36,7 @@ export default function AgentsPage() {
                 {
                     name: "NEXUS",
                     role: "LinkedIn Authority",
-                    img: "/agents/nexus_v2.png?v=4",
+                    img: "/agents_assets/nexus_v2.png?v=4",
                     desc: "Prospecte et crée une autorité In-Bound sur le réseau professionnel n°1.",
                     gradient: "from-[#667eea] to-[#764ba2]",
                     capabilities: ["Outreach Professionnel", "Ghostwriting LinkedIn", "Lead Scoring"]
@@ -44,7 +44,7 @@ export default function AgentsPage() {
                 {
                     name: "CORE",
                     role: "Email/Substack",
-                    img: "/agents/vox_v2.png?v=4",
+                    img: "/agents_assets/vox_v2.png?v=4",
                     desc: "Gère votre liste de contacts (Souveraineté) pour ne jamais dépendre d'un algorithme.",
                     gradient: "from-amber-500 to-orange-600",
                     capabilities: ["Newsletters Hebdo", "Drip Campaigns", "Extraction FAQ HIVE"]
@@ -59,7 +59,7 @@ export default function AgentsPage() {
                 {
                     name: "FORGE",
                     role: "E-Commerce Hub",
-                    img: "/agents/sentinel_v2.png?v=4",
+                    img: "/agents_assets/sentinel_v2.png?v=4",
                     desc: "Optimise votre boutique Shopify et lance des promos basées sur les stocks.",
                     gradient: "from-green-500 to-emerald-600",
                     capabilities: ["Descriptions Produits IA", "Sync Inventaire", "Promos Autonomes"]
@@ -67,7 +67,7 @@ export default function AgentsPage() {
                 {
                     name: "HIVE",
                     role: "WhatsApp Closer",
-                    img: "/agents/hive_v2.png?v=4",
+                    img: "/agents_assets/hive_v2.png?v=4",
                     desc: "Ferme les ventes et répond aux questions via WhatsApp 24h/24.",
                     gradient: "from-emerald-400 to-teal-500",
                     capabilities: ["Vente assistée par chat", "Support Client IA", "Commandes par message"]
@@ -82,7 +82,7 @@ export default function AgentsPage() {
                 {
                     name: "PULSE",
                     role: "Ads Scalability",
-                    img: "/agents/hive_v2.png?v=4",
+                    img: "/agents_assets/hive_v2.png?v=4",
                     desc: "Transforme vos meilleurs contenus organiques en publicités Meta/Google rentables.",
                     gradient: "from-cyan-500 to-blue-600",
                     capabilities: ["Ad Copy Créatif", "Ciblage Audiences", "Optimisation ROAS"]
@@ -90,7 +90,7 @@ export default function AgentsPage() {
                 {
                     name: "ECHO",
                     role: "Affiliate Leverage",
-                    img: "/agents/sentinel_v2.png?v=4",
+                    img: "/agents_assets/sentinel_v2.png?v=4",
                     desc: "Recrute vos clients en ambassadeurs et automatise les commissions.",
                     gradient: "from-violet-500 to-indigo-700",
                     capabilities: ["Recrutement Affiliés", "Suivi Commissions", "Kits de Com Auto"]
@@ -100,11 +100,11 @@ export default function AgentsPage() {
     ];
 
     const foundations = [
-        { name: "VOX", role: "Telephony", img: "/agents/vox_v2.png?v=4", gradient: "from-blue-400 to-blue-600", desc: "Réceptionniste vocale intelligente." },
-        { name: "SENTINEL", role: "Legal", img: "/agents/sentinel_v2.png?v=4", gradient: "from-slate-500 to-slate-700", desc: "Conformité RGPD et audit contrats." },
-        { name: "ORACLE", role: "Intelligence", img: "/agents/vox_v2.png?v=4", gradient: "from-purple-500 to-indigo-600", desc: "Analyses prédictives et ROI." },
-        { name: "GHOST", role: "Enrichment", img: "/agents/nexus_v2.png?v=4", gradient: "from-gray-500 to-gray-700", desc: "Scraping et enrichissement leads." },
-        { name: "SYNC", role: "Lifecycle", img: "/agents/hive_v2.png?v=4", gradient: "from-teal-500 to-emerald-600", desc: "Unification données et CRM." },
+        { name: "VOX", role: "Telephony", img: "/agents_assets/vox_v2.png?v=4", gradient: "from-blue-400 to-blue-600", desc: "Réceptionniste vocale intelligente." },
+        { name: "SENTINEL", role: "Legal", img: "/agents_assets/sentinel_v2.png?v=4", gradient: "from-slate-500 to-slate-700", desc: "Conformité RGPD et audit contrats." },
+        { name: "ORACLE", role: "Intelligence", img: "/agents_assets/vox_v2.png?v=4", gradient: "from-purple-500 to-indigo-600", desc: "Analyses prédictives et ROI." },
+        { name: "GHOST", role: "Enrichment", img: "/agents_assets/nexus_v2.png?v=4", gradient: "from-gray-500 to-gray-700", desc: "Scraping et enrichissement leads." },
+        { name: "SYNC", role: "Lifecycle", img: "/agents_assets/hive_v2.png?v=4", gradient: "from-teal-500 to-emerald-600", desc: "Unification données et CRM." },
     ];
 
     return (
