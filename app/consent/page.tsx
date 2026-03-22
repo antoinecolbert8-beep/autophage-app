@@ -1,144 +1,90 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Shield, Check, AlertTriangle, Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
+import { Shield, Lock, Eye, CheckCircle, AlertCircle, Info } from "lucide-react";
 
 export default function ConsentPage() {
-    const router = useRouter();
-    const [loading, setLoading] = useState(true);
-    const [saving, setSaving] = useState(false);
-    const [preferences, setPreferences] = useState({
-        gdpr_consent: false,
-        ai_data_usage: false,
-        marketing_emails: false
-    });
-
-    useEffect(() => {
-        // Load existing preferences
-        fetch('/api/user/preferences')
-            .then(res => res.json())
-            .then(data => {
-                if (data.success && data.data) {
-                    setPreferences({
-                        gdpr_consent: data.data.gdpr_consent,
-                        ai_data_usage: data.data.ai_data_usage,
-                        marketing_emails: data.data.marketing_emails
-                    });
-                }
-            })
-            .finally(() => setLoading(false));
-    }, []);
-
-    const handleSave = async () => {
-        if (!preferences.gdpr_consent) {
-            alert("Veuillez accepter les conditions générales pour continuer.");
-            return;
-        }
-
-        setSaving(true);
-        try {
-            const res = await fetch('/api/user/preferences', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(preferences)
-            });
-
-            if (res.ok) {
-                router.push('/dashboard');
-            }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setSaving(false);
-        }
-    };
-
-    if (loading) {
-        return (
-            <div className="min-h-screen bg-[#0a0a0f] text-white flex items-center justify-center">
-                <Loader2 className="animate-spin text-blue-500" size={48} />
-            </div>
-        );
-    }
-
     return (
-        <div className="min-h-screen bg-[#0a0a0f] text-white flex items-center justify-center p-6">
-            <div className="max-w-xl w-full bg-[#13131f] border border-white/5 rounded-2xl p-8 shadow-2xl relative overflow-hidden">
-                {/* Decorative background element */}
-                <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-600/10 rounded-full blur-3xl"></div>
+        <main className="min-h-screen bg-[#050508] bg-luxe-gradient flex flex-col items-center justify-center p-6 relative overflow-hidden">
+            {/* Background Orbs */}
+            <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-[#0066FF]/10 rounded-full blur-[120px] animate-pulse" />
+            <div className="absolute bottom-[-10%] left-[-5%] w-96 h-96 bg-[#FF007A]/10 rounded-full blur-[120px] animate-pulse" />
 
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="p-2 bg-blue-500/10 rounded-lg">
-                        <Shield className="text-blue-400" size={24} />
+            <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="w-full max-w-4xl bg-white/5 backdrop-blur-2xl neon-white-border rounded-3xl p-8 md:p-12 relative z-10"
+            >
+                <div className="flex flex-col items-center text-center mb-12">
+                    <div className="w-16 h-16 bg-gradient-to-tr from-[#0066FF] to-[#FF007A] rounded-2xl flex items-center justify-center mb-6 neon-white-shadow">
+                        <Shield className="w-8 h-8 text-white" />
                     </div>
-                    <h1 className="text-2xl font-black tracking-tight">PROTECTION DES DONNÉES</h1>
+                    <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
+                        Audit de <span className="text-gradient-luxe">Souveraineté</span>
+                    </h1>
+                    <p className="text-white/60 text-lg max-w-2xl">
+                        Validation des couches de sécurité ELA et revue de conformité RGPD. Vos données sont sanctuarisées selon le protocole AES-256 GCM.
+                    </p>
                 </div>
 
-                <p className="text-gray-400 mb-8 leading-relaxed">
-                    ELA AI respecte les normes **RGPD (GDPR)**. Vos données sont chiffrées au repos via le protocole FORTRESS. Veuillez configurer vos préférences avant d'accéder à votre tableau de bord.
-                </p>
-
-                <div className="space-y-4 mb-8">
-                    <label className={`flex items-start gap-4 cursor-pointer p-4 rounded-xl border transition-all ${preferences.gdpr_consent ? 'bg-blue-500/10 border-blue-500/30' : 'bg-[#0a0a0f] border-white/5 hover:border-white/10'}`}>
-                        <input
-                            type="checkbox"
-                            checked={preferences.gdpr_consent}
-                            onChange={(e) => setPreferences({ ...preferences, gdpr_consent: e.target.checked })}
-                            className="mt-1 w-5 h-5 rounded bg-white/10 border-white/20 accent-blue-500 cursor-pointer"
-                        />
-                        <div>
-                            <span className="text-sm font-bold block mb-1">Conditions Générales (CGU/CGV)</span>
-                            <span className="text-xs text-gray-400">J'accepte le traitement de mes données pour le fonctionnement du service.</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                    <div className="space-y-6">
+                        <div className="flex gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                            <Lock className="w-6 h-6 text-[#0066FF] shrink-0" />
+                            <div>
+                                <h3 className="font-semibold mb-1">Chiffrement End-to-End</h3>
+                                <p className="text-sm text-white/50">Flux synchronisés via tunnels TLS 1.3 propriétaires.</p>
+                            </div>
                         </div>
-                    </label>
-
-                    <label className={`flex items-start gap-4 cursor-pointer p-4 rounded-xl border transition-all ${preferences.ai_data_usage ? 'bg-purple-500/10 border-purple-500/30' : 'bg-[#0a0a0f] border-white/5 hover:border-white/10'}`}>
-                        <input
-                            type="checkbox"
-                            checked={preferences.ai_data_usage}
-                            onChange={(e) => setPreferences({ ...preferences, ai_data_usage: e.target.checked })}
-                            className="mt-1 w-5 h-5 rounded bg-white/10 border-white/20 accent-purple-500 cursor-pointer"
-                        />
-                        <div>
-                            <span className="text-sm font-bold block mb-1">Entraînement IA & Amélioration</span>
-                            <span className="text-xs text-gray-400">J'autorise l'utilisation anonymisée de mes interactions pour améliorer les agents ELA.</span>
+                        <div className="flex gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                            <Eye className="w-6 h-6 text-[#FF007A] shrink-0" />
+                            <div>
+                                <h3 className="font-semibold mb-1">Transparence Algorithmique</h3>
+                                <p className="text-sm text-white/50">Journalisation complète des décisions du Swarm.</p>
+                            </div>
                         </div>
-                    </label>
-
-                    <label className={`flex items-start gap-4 cursor-pointer p-4 rounded-xl border transition-all ${preferences.marketing_emails ? 'bg-green-500/10 border-green-500/30' : 'bg-[#0a0a0f] border-white/5 hover:border-white/10'}`}>
-                        <input
-                            type="checkbox"
-                            checked={preferences.marketing_emails}
-                            onChange={(e) => setPreferences({ ...preferences, marketing_emails: e.target.checked })}
-                            className="mt-1 w-5 h-5 rounded bg-white/10 border-white/20 accent-green-500 cursor-pointer"
-                        />
-                        <div>
-                            <span className="text-sm font-bold block mb-1">Communications & Stratégies</span>
-                            <span className="text-xs text-gray-400">Recevoir des rapports de performance et des nouvelles opportunités par email.</span>
-                        </div>
-                    </label>
+                    </div>
+                    <div className="bg-[#13131f] rounded-2xl p-6 border border-white/10">
+                        <h3 className="flex items-center gap-2 font-semibold mb-4">
+                            <Info className="w-5 h-5 text-white/40" />
+                            Limites de l'IA
+                        </h3>
+                        <ul className="space-y-3 text-sm text-white/60">
+                            <li className="flex items-start gap-2">
+                                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
+                                <span>Pas de décision financière sans validation humaine "Hard-Sync".</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
+                                <span>Isolation stricte des environnements Client vs Engine.</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <AlertCircle className="w-4 h-4 text-yellow-500 mt-0.5 shrink-0" />
+                                <span>Temps de rétention des logs limité à 7 jours glissants.</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div className="flex gap-4">
-                    <Link href="/api/auth/signout" className="flex-1 py-3 text-center rounded-lg border border-white/10 hover:bg-white/5 transition-colors font-bold text-gray-400 hover:text-white flex items-center justify-center gap-2">
-                        Se Déconnecter
-                    </Link>
-                    <button
-                        onClick={handleSave}
-                        disabled={saving}
-                        className="flex-1 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:opacity-50 transition-all font-black text-white rounded-lg shadow-lg shadow-blue-900/20 flex items-center justify-center gap-2"
-                    >
-                        {saving ? <Loader2 className="animate-spin" size={20} /> : <Check size={20} />}
-                        ACTIVER LE SHIELD
-                    </button>
+                <div className="flex flex-col md:flex-row gap-4 items-center justify-between pt-8 border-t border-white/10">
+                    <div className="flex items-center gap-3">
+                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                        <span className="text-sm font-mono text-white/40 uppercase tracking-widest">Sovereign Audit Active</span>
+                    </div>
+                    <div className="flex gap-4">
+                        <button className="px-8 py-3 rounded-full border border-white/10 hover:bg-white/5 transition-all font-medium">
+                            Détails Techniques
+                        </button>
+                        <button onClick={() => window.location.href = '/login'} className="px-8 py-3 rounded-full bg-white text-[#050508] hover:bg-[#0066FF] hover:text-white transition-all font-bold">
+                            Accepter & Continuer
+                        </button>
+                    </div>
                 </div>
-
-                <div className="mt-6 flex items-center justify-center gap-2 text-[10px] text-gray-500 uppercase tracking-widest font-bold">
-                    <Shield size={12} /> Encrypted via Fortress Protocol v1.0
-                </div>
-            </div>
-        </div>
+            </motion.div>
+            
+            <footer className="absolute bottom-8 text-white/20 text-xs font-mono tracking-widest uppercase">
+                &copy; 2026 ELA REVOLUTION - PROTOCOLE DE CONFIANCE SOUVERAINE
+            </footer>
+        </main>
     );
 }

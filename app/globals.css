@@ -2,189 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CACHE BUSTER: FORCE REBUILD 2026-01-29 V5 - ELA MASTER */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
-
 :root {
-  /* L'Alliage Noble - High Horology Palette */
-  --noir-abyssal: #0b0c10;
-  --gris-siderurgique: #1f2833;
-  --bleu-electrique: #66fcf1;
-  --chrome: #c5c6c7;
-  --vert-sarcelle: #45a29e;
-
-  --bg-primary: var(--noir-abyssal);
-  --bg-secondary: var(--gris-siderurgique);
-  --accent-primary: var(--bleu-electrique);
-  --text-primary: #ffffff;
-  --text-secondary: var(--vert-sarcelle);
-
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 11, 12, 16;
-  --background-end-rgb: 31, 40, 51;
+  --primary: 221.2 83.2% 53.3%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  
+  /* Luxe Futuriste Palette */
+  --noir-maison: #050508;
+  --cyber-blue: #0066FF;
+  --cyber-pink: #FF007A;
+  --neon-white: #FFFFFF;
 }
 
 @layer base {
-
-  h5,
-  h6 {
-    @apply font-display font-black tracking-tighter text-white;
-  }
-
-  /* Monospaced hierarchy for numbers */
-  .stat-value {
-    font-family: 'JetBrains Mono', var(--font-inter), monospace;
-    font-weight: 700;
+  body {
+    @apply bg-[#050508] text-white selection:bg-white/10;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
-@layer components {
-
-  /* Glassmorphism Card (Verre Saphir) */
-  .card-saphir {
-    background: rgba(31, 40, 51, 0.4);
-    @apply backdrop-blur-[20px] border border-white/5 rounded-2xl p-6 transition-all duration-500 ease-out;
-    box-shadow:
-      0 4px 24px -1px rgba(0, 0, 0, 0.6),
-      inset 0 1px 1px 0 rgba(255, 255, 255, 0.05);
+@layer utilities {
+  .bg-luxe-gradient {
+    background: radial-gradient(circle at top right, rgba(0, 102, 255, 0.15), transparent),
+                radial-gradient(circle at bottom left, rgba(255, 0, 122, 0.15), transparent),
+                #050508;
+  }
+  
+  .text-gradient-luxe {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#0066FF] to-[#FF007A];
   }
 
-  .card-saphir:hover {
-    @apply border-white/10 bg-white/[0.05];
-    box-shadow: 0 0 30px rgba(102, 252, 241, 0.05);
-    transform: translateY(-2px);
+  .neon-white-shadow {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
   }
 
-  /* Haptic Interactive Elements */
-  .btn-haptic {
-    @apply transition-all duration-200 active:translate-y-[1px] active:scale-[0.98];
+  .neon-white-border {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05);
   }
-
-  /* Precision Loading Bar */
-  .loading-bar-precision {
-    @apply fixed top-0 left-0 w-full h-[2px] bg-transparent overflow-hidden z-[9999];
-  }
-
-  .loading-bar-precision::after {
-    content: '';
-    @apply absolute top-0 left-0 h-full bg-[#66fcf1];
-    width: 30%;
-    animation: loading-precision 4s ease-in-out infinite;
-    box-shadow: 0 0 10px #66fcf1;
-  }
-
-  /* Neon Buttons */
-  .btn-neon {
-    @apply relative px-6 py-3 rounded-lg font-bold uppercase tracking-wider text-sm transition-all duration-300 overflow-hidden;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    background-size: 200% 100%;
-    animation: shine 3s infinite linear;
-  }
-
-  /* Utilities from Antoine v1 */
-  .glass-panel {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-  }
-
-  .neon-text-blue {
-    color: var(--cyber-blue);
-    text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
-  }
-
-  .neon-text-pink {
-    color: var(--cyber-pink);
-    text-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
-  }
-
-  /* Modern Gradients */
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600;
-  }
-
-  /* Structural Lockdown */
-  .layout-fixed-viewport {
-    height: 100vh;
-    height: 100dvh;
-    overflow: hidden;
-    display: flex;
-  }
-
-  .content-scroll-area {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: 100%;
-    scrollbar-gutter: stable;
-  }
-
-  .sidebar-fixed {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 100;
-  }
-}
-
-@keyframes loading-precision {
-  0% {
-    transform: translateX(-100%);
-  }
-
-  50% {
-    transform: translateX(100%);
-    width: 10%;
-  }
-
-  100% {
-    transform: translateX(200%);
-  }
-}
-
-@keyframes pulse-precision {
-
-  0%,
-  100% {
-    opacity: 0.8;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 1;
-    transform: scale(1.02);
-  }
-}
-
-.animate-pulse-precision {
-  animation: pulse-precision 3s ease-in-out infinite;
-}
-
-/* Legacy Limova Styles restored for page.tsx */
-.btn-limova {
-  @apply px-8 py-4 rounded-full border border-white/10 bg-white/5 text-white font-medium hover:bg-white/10 transition-all duration-300;
-  backdrop-filter: blur(10px);
-}
-
-
-/* Marquee Animation */
-@keyframes marquee {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-marquee {
-  display: flex;
-  animation: marquee 30s linear infinite;
-}
-
-.paused {
-  animation-play-state: paused;
 }
