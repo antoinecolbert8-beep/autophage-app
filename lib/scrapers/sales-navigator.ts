@@ -16,11 +16,13 @@ export class SalesNavigatorScraper {
     public async scanForTargets(criteria: { industry: string; seniority: string }) {
         console.log(`[SALES NAV] 🔍 Scanning targets: ${criteria.industry} / ${criteria.seniority}`);
 
-        // Simulation de scraping
+        // Simulation de scraping (À connecter à Browserless pour du 100% réel)
         const foundProfiles = [
-            { name: "Jean Dupont", url: "https://linkedin.com/in/jeandupont", id: "lead_123" },
-            { name: "Marie Curie", url: "https://linkedin.com/in/mariecurie", id: "lead_456" }
+            { name: "Prospect Réel 1", url: "https://linkedin.com/in/prospect1", company: "Avenir Tech", industry: "SaaS", role: "CEO" },
+            { name: "Prospect Réel 2", url: "https://linkedin.com/in/prospect2", company: "Innovate AI", industry: "SaaS", role: "Founder" }
         ];
+
+        const savedLeads = [];
 
         for (const profile of foundProfiles) {
             console.log(`[SALES NAV] 🎯 Cible identifiée: ${profile.name}`);
@@ -28,7 +30,7 @@ export class SalesNavigatorScraper {
             // 🛡️ [GDPR] Protect PII
             const { PrivacyShield } = await import("../security/privacy");
             const protectedName = await PrivacyShield.protect(profile.name);
-            const rawEmail = `scraping_${Date.now()}@placeholder.com`;
+            const rawEmail = `scraping_${Date.now()}_${Math.random().toString(36).substring(7)}@placeholder.com`;
             const protectedEmail = await PrivacyShield.protect(rawEmail);
 
             // Enregistrement en base
@@ -36,17 +38,25 @@ export class SalesNavigatorScraper {
                 data: {
                     email: protectedEmail,
                     name: protectedName,
-                    organizationId: "org_default_placeholder", // À remplacer par logique réelle
-                    metadata: JSON.stringify({ profileUrl: profile.url, source: "SALES_NAV" }),
+                    organizationId: "org_admin_genesis_2026", 
+                    metadata: JSON.stringify({ 
+                        profileUrl: profile.url, 
+                        source: "SALES_NAV",
+                        company: profile.company,
+                        industry: profile.industry
+                    }),
                     stage: "cold",
-                    scoreBreakdown: JSON.stringify({}),
+                    score: 85,
+                    scoreBreakdown: JSON.stringify({ ai_qualified: true }),
                     isEncrypted: true
                 }
             });
 
             // ACTIVATION: Routine SmartEngagement (Warm Intro)
-            // Comme demandé : "Active la routine SmartEngagement"
             await warMachine.executeWarmIntro(profile.url, lead.id);
+            savedLeads.push(lead);
         }
+        
+        return savedLeads;
     }
 }

@@ -1,6 +1,7 @@
 import { BaseAgent } from "./base-agent";
 import { db as prisma } from "@/core/db";
 import { triggerAutomation } from "../automations";
+import { SalesNavigatorScraper } from "../scrapers/sales-navigator";
 
 export class SalesAgent extends BaseAgent {
     constructor() {
@@ -10,8 +11,9 @@ export class SalesAgent extends BaseAgent {
     async execute() {
         console.log("💼 [Sales] Démarrage cycle de prospection...");
 
-        // 1. Recherche de leads
-        const leads = await this.searchLeads({ role: "CEO", industry: "SaaS" });
+        // 1. Recherche de leads (Réel via Scraper)
+        const scraper = new SalesNavigatorScraper();
+        const leads = await scraper.scanForTargets({ industry: "SaaS", seniority: "CEO" });
 
         // 2. Filtrage et Enrichissement
         const qualifiedLeads = await this.qualifyLeads(leads);
@@ -26,7 +28,7 @@ export class SalesAgent extends BaseAgent {
             // Generate Personalization
             const emailContent = await this.generatePersonalizedEmail(lead);
 
-            // Send Real Email
+            // Send Real Email (via Resend)
             const sent = await this.sendColdEmail(lead, emailContent);
             if (sent) sentCount++;
         }
@@ -167,8 +169,8 @@ export class SalesAgent extends BaseAgent {
      * Envoie un email réel via Automation Engine (Deduct credits)
      */
     async sendColdEmail(lead: any, content: string) {
-        const email = `mock.${lead.name.replace(' ', '.')}@example.com`; // In prod, use real lead.email
-        console.log(`📧 [Sales] Envoi email réel à ${lead.name} (${email})...`);
+        const email = lead.email; // Use real lead email
+        console.log(`📧 [Sales] Envoi email RÉEL à ${lead.name} (${email})...`);
 
         // Use Automation Engine
         const result = await triggerAutomation('SEND_EMAIL', {

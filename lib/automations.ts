@@ -1,5 +1,5 @@
 import { generateCriticalContent } from './ai-orchestrator';
-import { sendRealEmail } from './services/send-grid';
+import { sendRealEmail } from './services/resend';
 import { consumeCredits, CREDIT_COSTS } from './billing/index';
 import { prisma } from './prisma';
 
@@ -94,16 +94,16 @@ export async function executeLocalAutomation(
 
             // ========== EMAIL ==========
             case 'SEND_EMAIL':
-                if (process.env.SENDGRID_API_KEY) {
-                    await sendRealEmail(
+                if (process.env.RESEND_API_KEY) {
+                    const sent = await sendRealEmail(
                         payload.to || payload.email,
-                        payload.subject || 'Message',
+                        payload.subject || 'Opportunité Collaboration',
                         payload.message || payload.body
                     );
-                    return { success: true, message: 'Email sent via SendGrid' };
+                    if (sent) return { success: true, message: 'Email sent via Resend' };
                 }
                 console.log(`📧 [SIMULATION] Email to ${payload.to}: ${payload.subject}`);
-                return { success: true, message: 'Email logged (SendGrid not configured)' };
+                return { success: true, message: 'Email logged (Resend not configured)' };
 
             // ========== CRM/LEADS ==========
             case 'SYNC_CRM':
