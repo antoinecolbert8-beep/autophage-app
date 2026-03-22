@@ -14,7 +14,7 @@ async function main() {
 
   // 0. Activation du Worker Social (BullMQ)
   console.log("👷 Initialisation du Worker Social...");
-  socialWorker.on('ready', () => console.log("✅ Worker Social prêt et à l'écoute."));
+  socialWorker?.on('ready', () => console.log("✅ Worker Social prêt et à l'écoute."));
 
   // 1. Démarre le système d'auto-réparation
   console.log("🔧 Activation du système d'auto-réparation...");

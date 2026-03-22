@@ -8,7 +8,7 @@ import { updateAIProfileForOrg } from '../workers/ai-profile-worker';
  * Consomme les jobs de la queue 'social-publishing'.
  */
 
-let socialWorker: Worker | null = null;
+export let socialWorker: Worker | null = null;
 
 export function startSocialWorker() {
     const connection = getSocialRedisConnection();

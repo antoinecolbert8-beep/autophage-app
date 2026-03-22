@@ -118,19 +118,20 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7] overflow-hidden relative font-sans">
-      <MeshGradient />
-      <Particles3D />
-      <GrainTexture />
-      <NeuralWeb />
-      <Vortex3D />
-      <SpotlightEffect />
-      <Scanline />
-      <NeuralPulse />
-      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-20">
+      {/* SAFE MODE: Disabling heavy visuals */}
+      {/* <MeshGradient /> */}
+      {/* <Particles3D /> */}
+      {/* <GrainTexture /> */}
+      {/* <NeuralWeb /> */}
+      {/* <Vortex3D /> */}
+      {/* <SpotlightEffect /> */}
+      {/* <Scanline /> */}
+      {/* <NeuralPulse /> */}
+      {/* <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-20">
         <OmniSphere />
-      </div>
-      <MagneticCursor />
-      <NeuroSchema />
+      </div> */}
+      {/* <MagneticCursor /> */}
+      {/* <NeuroSchema /> */}
       {/* Top Header - Restored */}
       <BlurFade yOffset={-20} className="h-16 md:h-20 border-b border-white/5 flex items-center justify-between px-4 md:px-8 bg-[#0b0c10]/80 backdrop-blur-xl sticky top-0 z-20">
         <div className="flex items-center gap-4 text-gray-400 w-1/2 md:w-1/3 group">

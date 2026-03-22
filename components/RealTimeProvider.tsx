@@ -23,7 +23,9 @@ export const RealTimeProvider = ({ children }: { children: React.ReactNode }) =>
     const [isConnected, setIsConnected] = useState(false);
 
     useEffect(() => {
-        if (!(session?.user as any)?.id) return;
+        // DISABLED: Socket connection causing renderer crashes and CORS loops
+        // if (!(session?.user as any)?.id) return;
+        return;
 
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || '';
         if (!appUrl) {

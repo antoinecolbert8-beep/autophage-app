@@ -84,9 +84,9 @@ const handler = async (req: any, res: any) => {
     const protocol = host?.includes("localhost") ? "http" : "https";
     const origin = `${protocol}://${host}`;
 
-    if (process.env.NODE_ENV === "production" || host) {
-        process.env.NEXTAUTH_URL = origin;
-    }
+    // if (process.env.NODE_ENV === "production" || host) {
+    //    process.env.NEXTAUTH_URL = origin;
+    // }
 
     return await NextAuth(req, res, authOptions);
 };

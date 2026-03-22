@@ -40,6 +40,11 @@ export default function LoginPage() {
         // Trigger cinematic scan before redirect
         setLoading(false);
         setIsScanning(true);
+        // Force redirect after 1.5s regardless of scanner animation
+        setTimeout(() => {
+          router.push("/dashboard");
+          router.refresh();
+        }, 1500);
       }
     } catch (err: any) {
       setError(err.message || "Erreur de connexion. Réessayez.");
