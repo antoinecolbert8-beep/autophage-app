@@ -31,17 +31,81 @@ export class SalesAgent extends BaseAgent {
             if (sent) sentCount++;
         }
 
+        // 4. Tentative de closing sur les leads existants (Warm)
+        const closedCount = await this.closeWarmLeads();
+
         await this.logAction("PROSPECTING_CYCLE", {
             found: leads.length,
             qualified: qualifiedLeads.length,
-            sent: sentCount
+            sent: sentCount,
+            closed: closedCount
         });
 
         return {
             status: "COMPLETED",
             leadsFound: leads.length,
-            invitesSent: sentCount
+            invitesSent: sentCount,
+            dealsClosed: closedCount
         };
+    }
+
+    /**
+     * Tente de convertir les leads "warm" en clients (Converted)
+     */
+    async closeWarmLeads() {
+        console.log("💰 [Sales] Tentative de Closing sur les leads Warm...");
+        
+        const warmLeads = await prisma.lead.findMany({
+            where: { stage: 'warm' },
+            take: 10
+        });
+
+        let closed = 0;
+        for (const lead of warmLeads) {
+            // Chance de conversion boostée par l'IA (Simulation)
+            const conversionChance = Math.random() > 0.7; // 30% de closing
+
+            if (conversionChance) {
+                console.log(`🤑 [Sales] DEAL CLOSED: ${lead.name} de ${lead.company} !`);
+                
+                await prisma.lead.update({
+                    where: { id: lead.id },
+                    data: { stage: 'converted' }
+                });
+
+                // Simulation de paiement (Update MRR de l'organisation)
+                await this.processPayment(lead);
+                closed++;
+            }
+        }
+        return closed;
+    }
+
+    async processPayment(lead: any) {
+        const organization = await prisma.organization.findUnique({
+            where: { id: lead.organizationId }
+        });
+
+        if (organization) {
+            const planValue = 499; // Standard Enterprise Plan (Simulation)
+            await prisma.organization.update({
+                where: { id: organization.id },
+                data: { 
+                    mrr: { increment: planValue },
+                    creditBalance: { increment: 5000 }
+                }
+            });
+
+            // Log Transaction
+            await (prisma as any).creditPurchase.create({
+                data: {
+                    credits: 5000,
+                    amountPaid: planValue,
+                    organizationId: organization.id,
+                    paymentIntentId: `pi_auto_${Date.now()}`
+                }
+            });
+        }
     }
 
     /**
