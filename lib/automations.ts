@@ -1,7 +1,7 @@
 import { generateCriticalContent } from './ai-orchestrator';
 import { sendRealEmail } from './services/resend';
 import { consumeCredits, CREDIT_COSTS } from './billing/index';
-import { prisma } from './prisma';
+import { prisma } from '../core/db';
 
 /**
  * 🔥 LOCAL AUTOMATION ENGINE

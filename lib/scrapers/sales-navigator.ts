@@ -4,7 +4,7 @@
  */
 
 import { LinkedInWarMachine } from "../god-mode/tactical/linkedin-machine";
-import { prisma } from "../prisma";
+import { prisma } from "../../core/db";
 const warMachine = new LinkedInWarMachine();
 
 export class SalesNavigatorScraper {
@@ -13,8 +13,15 @@ export class SalesNavigatorScraper {
      * TARGETING & ACTIVATION
      * Scanne Sales Nav pour trouver les leads correspondant aux critères "High Ticket".
      */
-    public async scanForTargets(criteria: { industry: string; seniority: string }) {
+    public async scanForTargets(criteria: { industry: string; seniority: string }, organizationId?: string) {
         console.log(`[SALES NAV] 🔍 Scanning targets: ${criteria.industry} / ${criteria.seniority}`);
+
+        // Dyn lookup if not provided
+        let targetOrgId = organizationId;
+        if (!targetOrgId) {
+            const org = await prisma.organization.findFirst({ where: { status: "active" } });
+            targetOrgId = org?.id || "default_org";
+        }
 
         // Simulation de scraping (À connecter à Browserless pour du 100% réel)
         const foundProfiles = [
@@ -38,7 +45,7 @@ export class SalesNavigatorScraper {
                 data: {
                     email: protectedEmail,
                     name: protectedName,
-                    organizationId: "org_admin_genesis_2026", 
+                    organizationId: targetOrgId, 
                     metadata: JSON.stringify({ 
                         profileUrl: profile.url, 
                         source: "SALES_NAV",

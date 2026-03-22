@@ -57,17 +57,30 @@ export async function POST(request: NextRequest) {
               include: { buyer: true, seller: true }
             });
 
-            // Génération immédiate de la trace comptable Google Sheets
+            // 1. Création de la Transaction liée au Contrat
             if (session.payment_intent) {
-              const accountingRecord = await prisma.accountingRecord.create({
+              const transaction = await prisma.transaction.create({
                 data: {
-                  transactionId: typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent.id,
-                  taxAmount: 0, // Sera recalculé par le sync si manquant
-                  netAmount: (session.amount_total || 0) / 100, // Brut temporaire avant commission
+                  contractId: contract.id,
+                  userId: contract.buyerId,
+                  stripeChargeId: typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent.id,
+                  type: 'PAYMENT',
+                  amount: (session.amount_total || 0) / 100,
+                  currency: session.currency?.toUpperCase() || 'EUR',
+                  status: 'COMPLETED'
+                }
+              });
+
+              // 2. Génération de la trace comptable liée à la Transaction
+              await prisma.accountingRecord.create({
+                data: {
+                  transactionId: transaction.id,
+                  documentType: 'INVOICE',
+                  taxAmount: 0,
+                  netAmount: (session.amount_total || 0) / 100,
                   isSyncedToSheets: false,
                   invoiceUrl: session.invoice ? String(session.invoice) : '',
-                  aiNote: 'Stripe Escrow Lock - B2B Contract',
-                  contractId: contract.id
+                  aiNote: 'Stripe Escrow Lock - B2B Contract'
                 }
               });
             }

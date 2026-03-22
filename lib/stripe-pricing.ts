@@ -107,8 +107,10 @@ export function calculateServiceFee(aiCost: number, plan: PlanId): number {
   const discounts = {
     STARTER: 0,      // Pas de réduction
     PRO: 0.1,        // -10%
-    BUSINESS: 0.2,   // -20%
-    ENTERPRISE: 0.3, // -30%
+    SUPREME: 0.2,    // -20%
+    EMPIRE: 0.3,     // -30%
+    BUSINESS: 0.2,   // Legacy compat
+    ENTERPRISE: 0.3, // Legacy compat
   };
 
   const baseFee = aiCost * markup;
@@ -185,7 +187,7 @@ export async function createCheckoutSession(params: {
     customer_email: userEmail,
     client_reference_id: userId || "guest_" + Date.now(),
     mode: "subscription",
-    automatic_payment_methods: { enabled: true },
+    payment_method_types: ["card"], // Specific allowed methods instead of automatic if SDK is older
     line_items: [
       {
         price: plan.stripePriceId,

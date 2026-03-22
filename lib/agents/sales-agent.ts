@@ -11,12 +11,17 @@ export class SalesAgent extends BaseAgent {
     async execute() {
         console.log("💼 [Sales] Démarrage cycle de prospection...");
 
+        // 0. Récupération de l'Org Admin pour les crédits
+        const org = await prisma.organization.findFirst({ where: { status: "active" } });
+        if (!org) throw new Error("Aucune organisation active trouvée.");
+        const orgId = org.id;
+
         // 1. Recherche de leads (Réel via Scraper)
         const scraper = new SalesNavigatorScraper();
-        const leads = await scraper.scanForTargets({ industry: "SaaS", seniority: "CEO" });
+        const leads = await scraper.scanForTargets({ industry: "SaaS", seniority: "CEO" }, orgId);
 
         // 2. Filtrage et Enrichissement
-        const qualifiedLeads = await this.qualifyLeads(leads);
+        const qualifiedLeads = await this.qualifyLeads(leads, orgId);
 
         // 3. Action: Cold Email (Real)
         let sentCount = 0;
@@ -26,10 +31,10 @@ export class SalesAgent extends BaseAgent {
             if (sentCount >= DAILY_LIMIT) break;
 
             // Generate Personalization
-            const emailContent = await this.generatePersonalizedEmail(lead);
+            const emailContent = await this.generatePersonalizedEmail(lead, orgId);
 
             // Send Real Email (via Resend)
-            const sent = await this.sendColdEmail(lead, emailContent);
+            const sent = await this.sendColdEmail(lead, emailContent, orgId);
             if (sent) sentCount++;
         }
 
@@ -142,12 +147,13 @@ export class SalesAgent extends BaseAgent {
     /**
      * Qualifie les leads via Automation Engine (Deduct credits)
      */
-    async qualifyLeads(leads: any[]) {
+    async qualifyLeads(leads: any[], orgId: string) {
         console.log("🧠 [Sales] Qualification réelle via IA...");
         const qualified = [];
         for (const lead of leads) {
             const result = await triggerAutomation('QUALIFY_LEAD_AI', {
-                lead: { name: lead.name, role: lead.role, company: lead.company }
+                lead: { name: lead.name, role: lead.role, company: lead.company },
+                organizationId: orgId
             });
 
             if (result.success && result.data?.score > 70) {
@@ -158,9 +164,10 @@ export class SalesAgent extends BaseAgent {
         return qualified;
     }
 
-    async generatePersonalizedEmail(lead: any) {
+    async generatePersonalizedEmail(lead: any, orgId: string) {
         const result = await triggerAutomation('GENERATE_SMART_RESPONSE', {
-            context: `Write a short cold email to ${lead.name} from ${lead.company}. Value prop: Automation.`
+            context: `Write a short cold email to ${lead.name} from ${lead.company}. Value prop: Automation.`,
+            organizationId: orgId
         });
         return result.success ? result.data.text : "Fallback email";
     }
@@ -168,7 +175,7 @@ export class SalesAgent extends BaseAgent {
     /**
      * Envoie un email réel via Automation Engine (Deduct credits)
      */
-    async sendColdEmail(lead: any, content: string) {
+    async sendColdEmail(lead: any, content: string, orgId: string) {
         const email = lead.email; // Use real lead email
         console.log(`📧 [Sales] Envoi email RÉEL à ${lead.name} (${email})...`);
 
@@ -176,7 +183,8 @@ export class SalesAgent extends BaseAgent {
         const result = await triggerAutomation('SEND_EMAIL', {
             to: email,
             subject: "Collaboration Opportunité",
-            message: content
+            message: content,
+            organizationId: orgId
         });
 
         if (result.success) {
