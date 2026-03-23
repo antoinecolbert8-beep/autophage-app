@@ -46,7 +46,7 @@ export const MeshGradient = React.memo(() => {
       </div>
     </div>
   );
-};
+});
 
 // 🎬 Particules 3D (Optimisé : 18 particules au lieu de 40)
 export const Particles3D = React.memo(() => {
@@ -159,7 +159,7 @@ export const Particles3D = React.memo(() => {
   }, []);
 
   return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" />;
-};
+});
 
 // 🎯 Curseur Custom (Optimisé)
 export const MagneticCursor = React.memo(() => {
@@ -205,7 +205,7 @@ export const MagneticCursor = React.memo(() => {
       </motion.div>
     </>
   );
-};
+});
 
 // 🌊 Vagues (Optimisé)
 export const AnimatedWaves = React.memo(() => {
@@ -237,7 +237,7 @@ export const AnimatedWaves = React.memo(() => {
       </svg>
     </div>
   );
-};
+});
 
 // ✨ Effet de lumière qui suit la souris
 export const SpotlightEffect = () => {
@@ -403,7 +403,7 @@ export const NeuralWeb = React.memo(() => {
       </svg>
     </div>
   );
-};
+});
 
 export const CyberGlitch = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -862,5 +862,3 @@ export const GlitchText = ({ text }: { text: string }) => {
 
 
 // 🔚 Final Visual Library
-
-

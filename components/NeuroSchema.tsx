@@ -77,4 +77,4 @@ export const NeuroSchema = React.memo(() => {
             style={{ zIndex: 0 }}
         />
     );
-}
+});
