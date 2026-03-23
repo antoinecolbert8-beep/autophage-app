@@ -52,6 +52,12 @@ export class CampaignCommander {
             while (attempts < maxRetries && !success) {
                 try {
                     attempts++;
+                    // Fallback for simulation if no Meta ID
+                    if (!env.META_AD_SET_ID || env.META_AD_SET_ID === "REMPLACER") {
+                        console.log("🌐 [Simulation] Meta Ads ID missing. Simulating mass redistribution...");
+                        success = true;
+                        break;
+                    }
                     await AdManager.updateAdSetBudget(env.META_AD_SET_ID || "", budget);
                     await AdManager.updateAdCreative(env.META_AD_SET_ID || "", adCopy);
                     success = true;

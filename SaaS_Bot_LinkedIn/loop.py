@@ -19,8 +19,8 @@ from autopilot import run_sequence, load_targets_from_file, Path
 
 
 def run_loop():
-    min_gap = float(os.getenv("RUN_MIN_GAP_MIN", 45))
-    max_gap = float(os.getenv("RUN_MAX_GAP_MIN", 120))
+    min_gap = float(os.getenv("RUN_MIN_GAP_MIN", 15))
+    max_gap = float(os.getenv("RUN_MAX_GAP_MIN", 45))
     headless = os.getenv("HEADLESS", "true").lower() == "true"
 
     targets_path = Path("targets.json")

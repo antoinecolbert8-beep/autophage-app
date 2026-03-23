@@ -8,12 +8,14 @@ import { db as prisma } from "@/core/db";
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY!);
 
 export abstract class BaseAgent {
-  protected name: string;
+  public name: string;
+  public description: string;
   protected role: string;
   protected model: any;
 
   constructor(name: string, role: string) {
     this.name = name;
+    this.description = role; // Use role as description for now
     this.role = role;
     this.model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   }

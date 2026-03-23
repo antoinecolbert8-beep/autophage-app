@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 
-export type PulseType = 'LEAD_CAPTURED' | 'SALE_COMPLETED' | 'AGENT_EXECUTED' | 'POST_VIRAL' | 'SYSTEM_UPGRADE';
+export type PulseType = 'LEAD_CAPTURED' | 'SALE_COMPLETED' | 'AGENT_EXECUTED' | 'POST_VIRAL' | 'SYSTEM_UPGRADE' | 'PROSPECT_ENGAGED';
 
 export interface PulseEvent {
     id: string;
@@ -71,6 +71,16 @@ class RealtimePulse extends EventEmitter {
         this.emitPulse({
             type: 'AGENT_EXECUTED',
             message: `L'agent ${agentName} vient d'optimiser votre infrastructure.`
+        });
+    }
+
+    /**
+     * Helper to trigger engagement event
+     */
+    notifyEngagement(type: 'OPEN' | 'CLICK', prospectName: string) {
+        this.emitPulse({
+            type: 'PROSPECT_ENGAGED',
+            message: `🔥 Prospect ${prospectName} vient de ${type === 'OPEN' ? 'LIRE' : 'CLIQUER SUR'} votre mail !`
         });
     }
 }

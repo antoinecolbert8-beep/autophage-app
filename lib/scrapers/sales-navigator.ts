@@ -7,14 +7,22 @@ import { LinkedInWarMachine } from "../god-mode/tactical/linkedin-machine";
 import { prisma } from "../../core/db";
 const warMachine = new LinkedInWarMachine();
 
+export interface SearchCriteria {
+    industry?: string;
+    seniority?: string;
+    location?: string;
+    role?: string;
+    title?: string; // Added title filter
+}
+
 export class SalesNavigatorScraper {
 
     /**
      * TARGETING & ACTIVATION
      * Scanne Sales Nav pour trouver les leads correspondant aux critères "High Ticket".
      */
-    public async scanForTargets(criteria: { industry: string; seniority: string }, organizationId?: string) {
-        console.log(`[SALES NAV] 🔍 Scanning targets: ${criteria.industry} / ${criteria.seniority}`);
+    public async scanForTargets(criteria: SearchCriteria, organizationId?: string) {
+        console.log(`[SALES NAV] 🔍 Scanning targets: Industry: ${criteria.industry || 'N/A'} / Seniority: ${criteria.seniority || 'N/A'} / Title: ${criteria.title || 'N/A'}`);
 
         // Dyn lookup if not provided
         let targetOrgId = organizationId;

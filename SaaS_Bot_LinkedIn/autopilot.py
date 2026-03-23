@@ -83,6 +83,14 @@ def load_targets_from_file(path: Path) -> List[Target]:
         data = json.loads(path.read_text(encoding="utf-8"))
         if isinstance(data, list):
             return [t for t in data if "action" in t and "url" in t]
+        elif isinstance(data, dict):
+            # Convert structured format back to flat sequence for loop.py
+            flat = []
+            for url in data.get("profiles", []):
+                flat.append({"action": "VISIT", "url": url})
+            for url in data.get("posts", []):
+                flat.append({"action": "LIKE", "url": url})
+            return flat
     except Exception as e:
         print(f"⚠️ Impossible de lire {path}: {e}")
     return []

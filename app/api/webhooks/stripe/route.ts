@@ -8,6 +8,7 @@ import {
 import { triggerAutomation } from '@/lib/automations';
 import { prisma } from '@/core/db';
 import { triggerEvidenceBroadcast } from '@/lib/jobs/evidence-broadcaster';
+import { LedgerService } from '@/modules/treasury/ledger.service';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2023-10-16',
@@ -85,7 +86,64 @@ export async function POST(request: NextRequest) {
               });
             }
           }
-          // 🪙 2. ACHAT UNILATÉRAL DE CRÉDITS (Comportement original)
+          // 💎 2. PAIEMENT PLAN ENTERPRISE (VIA STATIC LINK OU DYNAMIQUE)
+          else if (session.metadata?.plan_type === 'enterprise' || session.client_reference_id) {
+            const leadId = session.metadata?.leadId || session.client_reference_id;
+            let organizationId = session.metadata?.organizationId;
+            const credits = session.metadata?.credits || '5000';
+
+            console.log(`💎 Processing Enterprise Payment (Lead: ${leadId})`);
+
+            // 🔍 Recheche du Lead et de l'Org si manquants
+            if (leadId && !organizationId) {
+                const lead = await prisma.lead.findUnique({
+                    where: { id: leadId },
+                    select: { organizationId: true }
+                });
+                organizationId = lead?.organizationId;
+            }
+
+            if (!organizationId) {
+                console.error("❌ Impossible de trouver l'organisation pour ce paiement.");
+                return NextResponse.json({ error: "Org not found" }, { status: 400 });
+            }
+
+            console.log(`💎 Enterprise Plan Secured for Org: ${organizationId}`);
+
+            // Update Lead
+            if (leadId && leadId !== 'new') {
+                await prisma.lead.update({
+                    where: { id: leadId },
+                    data: { stage: 'converted' }
+                });
+            }
+
+            // Update Organization (MRR + Credits)
+            await prisma.organization.update({
+                where: { id: organizationId },
+                data: {
+                    mrr: { increment: (session.amount_total || 49900) / 100 },
+                    creditBalance: { increment: parseInt(credits || '5000') },
+                    status: 'active'
+                }
+            });
+
+            // Log Transaction (Legacy)
+            await prisma.creditPurchase.create({
+                data: {
+                    organizationId,
+                    credits: parseInt(credits || '5000'),
+                    paymentIntentId: typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id || 'manual',
+                    timestamp: new Date()
+                }
+            });
+
+            // 💰 REAL REVENUE RECORDING (Triggering WarChest & Freelance Cycle)
+            const amountCents = session.amount_total || 49900;
+            const piId = typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id || `pi_${Date.now()}`;
+            await LedgerService.recordRevenue(amountCents, piId, session.customer as string);
+          }
+          // 🪙 3. ACHAT UNILATÉRAL DE CRÉDITS (Comportement original)
           else {
             const { handlePaymentSuccess } = await import('@/lib/billing/index');
             handlePaymentSuccess(session.id).catch(e =>

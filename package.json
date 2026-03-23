@@ -21,6 +21,7 @@
     "feedback:loop": "tsx scripts/run-feedback-loop.ts",
     "agents:run": "tsx scripts/start-agents.ts",
     "agents:check": "tsx scripts/check-agents.ts",
+    "freelance:run": "tsx scripts/freelance-cycle.ts",
     "deploy": "tsx scripts/deploy-production.ts",
     "self-healing:check": "tsx scripts/self-healing-check.ts",
     "health": "tsx scripts/health-check.ts",

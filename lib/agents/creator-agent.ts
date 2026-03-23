@@ -1,5 +1,6 @@
 import { BaseAgent } from "./base-agent";
 import { triggerAutomation } from "../automations";
+import { db as prisma } from "@/core/db";
 
 export class CreatorAgent extends BaseAgent {
   constructor() {
@@ -45,10 +46,10 @@ export class CreatorAgent extends BaseAgent {
   private async identifyNiche() {
     const prompt = `Tu es un expert en identification de niches SaaS. Identifie UNE niche hyper-spécifique. Return JSON: { "name": "...", "problem": "...", "solution": "...", "marketSize": "...", "pricing": "..." }`;
 
-    const result = await triggerAutomation('GENERATE_SMART_RESPONSE', { context: prompt });
+    const result = await triggerAutomation('GENERATE_SMART_RESPONSE', { prompt });
     if (!result.success) return null;
 
-    const text = result.data.text;
+    const text = result.data.response;
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
       const niche = JSON.parse(jsonMatch[0]);
@@ -62,10 +63,10 @@ export class CreatorAgent extends BaseAgent {
   private async generateConcept(niche: any) {
     const prompt = `Crée le concept détaillé d'un micro-SaaS pour cette niche: ${niche.name}. Return JSON: { "name": "...", "pitch": "...", "features": [], "stack": "...", "gtm": "..." }`;
 
-    const result = await triggerAutomation('GENERATE_SMART_RESPONSE', { context: prompt });
+    const result = await triggerAutomation('GENERATE_SMART_RESPONSE', { prompt });
     if (!result.success) return { name: niche.name, features: [] };
 
-    const text = result.data.text;
+    const text = result.data.response;
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
       return JSON.parse(jsonMatch[0]);
@@ -79,8 +80,8 @@ export class CreatorAgent extends BaseAgent {
 
     const prompt = `Génère le code d'un MVP fonctionnel (one-page app/page.tsx Tailwind) pour: ${concept.name}. Features: ${concept.features?.join(", ")}`;
 
-    const result = await triggerAutomation('GENERATE_LANDING_COPY', { context: prompt });
-    return result.success ? result.data.text : "// Error generating code";
+    const result = await triggerAutomation('GENERATE_LANDING_COPY', { prompt });
+    return result.success ? result.data.copy : "// Error generating code";
   }
 
   private async generateLandingPage(concept: any) {
@@ -88,29 +89,27 @@ export class CreatorAgent extends BaseAgent {
 
     const prompt = `Crée une landing page HTML Tailwind ultra-convertissante pour: ${concept.name}. Pitch: ${concept.pitch}`;
 
-    const result = await triggerAutomation('GENERATE_LANDING_COPY', { context: prompt });
-    return result.success ? result.data.text : "<html>Error</html>";
+    const result = await triggerAutomation('GENERATE_LANDING_COPY', { prompt });
+    return result.success ? result.data.copy : "<html>Error</html>";
   }
 
   private async launchSales(concept: any, landingPage: string) {
-    console.log(`🚀 [Creator] Lancement commercial: ${concept.name}`);
+    console.log(`🎨 [Creator] Lancement des ventes pour: ${concept.name}`);
 
-    // Notifie les autres agents
-    await this.sendMessage(
-      "Opportunist",
-      `Nouveau produit prêt: ${concept.name}. Lance campagne de promotion !`
-    );
-
-    await this.sendMessage(
-      "Treasurer",
-      `Nouveau flux de revenus potentiel: ${concept.name} à ${concept.pricing || "29€"}/mois`
-    );
+    // 💾 Marketplace Record (ELA Internal Marketplace)
+    const admin = await prisma.user.findFirst({ where: { role: 'admin' } });
+    if (admin) {
+        await prisma.project.create({
+            data: {
+                name: concept.name,
+                description: concept.pitch,
+                organizationId: admin.organizationId,
+                status: 'published',
+                domain: `${concept.name.toLowerCase().replace(/\s+/g, '-')}.ela.ai`
+            }
+        });
+    }
 
     return true;
   }
 }
-
-
-
-
-

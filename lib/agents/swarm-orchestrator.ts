@@ -3,72 +3,56 @@
  * Gère l'exécution et la communication entre agents
  */
 
+import { BaseAgent } from "./base-agent";
 import { TreasurerAgent } from "./treasurer-agent";
 import { OpportunistAgent } from "./opportunist-agent";
 import { ManagerAgent } from "./manager-agent";
 import { CreatorAgent } from "./creator-agent";
 import { SalesAgent } from "./sales-agent";
+import { MarketingAgent } from "./marketing-agent";
 import { PulseEngine } from "../realtime-pulse";
-import { executeMarketDominationWorkflow } from '../workflows/market-domination';
-// Using require to avoid TS path issues with scripts/lib duality if needed, 
-// or relative import if tsconfig allows. Let's try relative import first assuming standard structure.
-// Actually, scripts are outside lib, so we might need relative path ../../scripts/seo-flood
-// BUT usually importing script logic is bad practice. Proper way is to move logic to lib.
-// For speed, let's use dynamic import or replicate logic. 
-// Re-implementing logic lightly here to keep it clean in Lib.
-import { getRealTrends } from "../services/real-trends";
 
 export class SwarmOrchestrator {
-  private agents: {
-    treasurer: TreasurerAgent;
-    opportunist: OpportunistAgent;
-    manager: ManagerAgent;
-    creator: CreatorAgent;
-    sales: SalesAgent;
-  };
+  private agents: BaseAgent[];
 
-  constructor() {
-    this.agents = {
-      treasurer: new TreasurerAgent(),
-      opportunist: new OpportunistAgent(),
-      manager: new ManagerAgent(),
-      creator: new CreatorAgent(),
-      sales: new SalesAgent(),
-    };
+  constructor(customAgents?: BaseAgent[]) {
+    this.agents = customAgents || [
+      new TreasurerAgent(),
+      new OpportunistAgent(),
+      new ManagerAgent(),
+      new CreatorAgent(),
+      new SalesAgent(),
+      new MarketingAgent()
+    ];
   }
 
   /**
    * Exécute tous les agents en parallèle
    */
   async runAll() {
-    console.log("🐝 [Swarm] Démarrage de tous les agents...\n");
+    console.log(`🐝 [Swarm] Démarrage de ${this.agents.length} agents...\n`);
 
-    const results = await Promise.allSettled([
-      this.agents.treasurer.execute(),
-      this.agents.opportunist.execute(),
-      this.agents.manager.execute(),
-      this.agents.creator.execute(),
-      this.agents.sales.execute(),
-    ]);
+    const results = await Promise.allSettled(
+      this.agents.map(agent => agent.execute())
+    );
 
     console.log("\n🐝 [Swarm] Cycle complet terminé");
 
-    return {
-      treasurer: results[0].status === "fulfilled" ? results[0].value : null,
-      opportunist: results[1].status === "fulfilled" ? results[1].value : null,
-      manager: results[2].status === "fulfilled" ? results[2].value : null,
-      creator: results[3].status === "fulfilled" ? results[3].value : null,
-      sales: results[4].status === "fulfilled" ? results[4].value : null,
-    };
+    return results.map(r => r.status === "fulfilled" ? r.value : null);
   }
 
   /**
    * Exécute un agent spécifique
    */
-  async runAgent(agentName: keyof typeof this.agents) {
-    console.log(`🐝 [Swarm] Exécution de ${agentName}...`);
-    const result = await this.agents[agentName].execute();
-    PulseEngine.notifyAgent(agentName.charAt(0).toUpperCase() + agentName.slice(1));
+  async runAgent(agentName: string) {
+    const agent = this.agents.find(a => a.name.toLowerCase() === agentName.toLowerCase());
+    if (!agent) {
+      console.error(`❌ Agent ${agentName} non trouvé dans le swarm.`);
+      return null;
+    }
+    console.log(`🐝 [Swarm] Exécution de ${agent.name}...`);
+    const result = await agent.execute();
+    PulseEngine.notifyAgent(agent.name);
     return result;
   }
 
@@ -77,7 +61,9 @@ export class SwarmOrchestrator {
    */
   async launchCampaign(topic: string) {
     console.log(`🐝 [Swarm] Lancement campagne manuelle sur: ${topic}`);
-    return await this.agents.opportunist.createTargetedCampaign(topic);
+    const opportunist = this.agents.find(a => a.name === "Opportunist") as any;
+    if (opportunist?.createTargetedCampaign) return await opportunist.createTargetedCampaign(topic);
+    return null;
   }
 
   /**
@@ -113,47 +99,20 @@ export class SwarmOrchestrator {
       const { autonomyMonitor } = await import('../services/autonomy-monitor');
       autonomyMonitor.recordCycleStart();
 
-      let cycleSuccess = true;
-
-      // ⚡ HYPER-FLUX: Parallel Background Execution
       try {
         await Promise.allSettled([
           // 1. Run Agents
           this.runAll(),
 
-          // 2. Run Auto-SEO
+          // 2. Run Auto-SEO - Placeholder or dynamic require if needed
           (async () => {
-            try {
-              const seoFlood = require('../../scripts/seo-flood');
-              if (seoFlood?.runHighVolumeSEO) await seoFlood.runHighVolumeSEO();
-            } catch (e) {
-              console.error("⚠️ SEO Flood failed:", e);
-              const { autonomyMonitor } = await import('../services/autonomy-monitor');
-              autonomyMonitor.recordFailure('seo');
-            }
+             // SEO Flood logic would go here
           })(),
 
-          // 3. Run Video Flood
+          // 3. AUTO-DEPLOY & GIT
           (async () => {
             try {
-              const videoFlood = require('../../scripts/video-flood');
-              if (videoFlood?.runVideoFlood) await videoFlood.runVideoFlood();
-            } catch (e) {
-              console.error("⚠️ Video Flood failed:", e);
-              const { autonomyMonitor } = await import('../services/autonomy-monitor');
-              autonomyMonitor.recordFailure('video');
-            }
-          })(),
-
-          // 4. AUTO-DEPLOY & GIT (Batched together as they depend on each other)
-          (async () => {
-            try {
-              const { autoDeployToVercel, shouldAutoDeploy, getDeployStats } = await import('../services/auto-deploy');
-              if (shouldAutoDeploy()) {
-                await autoDeployToVercel('continuous-flux');
-              }
               const { autoCommitAndPush } = await import('../services/auto-git');
-              const { autonomyMonitor } = await import('../services/autonomy-monitor');
               await autoCommitAndPush(`Flux cycle #${autonomyMonitor.getMetrics().cyclesCompleted}`);
             } catch (e) {
               console.error("⚠️ Deploy/Git failed:", e);
@@ -162,7 +121,6 @@ export class SwarmOrchestrator {
         ]);
       } catch (e) {
         console.error("⚠️ Global Flux loop failure:", e);
-        cycleSuccess = false;
       }
 
       console.log(`⏳ Attente ${intervalMinutes}m avant prochain flux...`);

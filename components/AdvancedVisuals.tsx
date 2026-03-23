@@ -8,8 +8,8 @@
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 
-// 🌟 Mesh Gradient Animé (comme Stripe)
-export const MeshGradient = () => {
+// 🌟 Mesh Gradient Animé (Optimisé : 4 bulles au lieu de 10)
+export const MeshGradient = React.memo(() => {
   const [dimensions, setDimensions] = useState({ width: 1920, height: 1080 });
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export const MeshGradient = () => {
     <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-10">
       <div className="absolute inset-0 bg-gradient-to-br from-slate-500/20 via-blue-500/10 to-slate-500/20" />
       <div className="absolute top-0 left-0 w-full h-full">
-        {[...Array(10)].map((_, i) => (
+        {[...Array(4)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute rounded-full blur-3xl"
@@ -48,8 +48,8 @@ export const MeshGradient = () => {
   );
 };
 
-// 🎬 Particules 3D avec profondeur
-export const Particles3D = () => {
+// 🎬 Particules 3D (Optimisé : 18 particules au lieu de 40)
+export const Particles3D = React.memo(() => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -74,8 +74,9 @@ export const Particles3D = () => {
     }> = [];
 
     const colors = ['#64748b', '#3b82f6', '#1e293b'];
+    const particleCount = 18;
 
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -160,8 +161,8 @@ export const Particles3D = () => {
   return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" />;
 };
 
-// 🎯 Curseur Custom Magnétique
-export const MagneticCursor = () => {
+// 🎯 Curseur Custom (Optimisé)
+export const MagneticCursor = React.memo(() => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
 
@@ -206,8 +207,8 @@ export const MagneticCursor = () => {
   );
 };
 
-// 🌊 Vagues animées (comme Apple)
-export const AnimatedWaves = () => {
+// 🌊 Vagues (Optimisé)
+export const AnimatedWaves = React.memo(() => {
   return (
     <div className="absolute bottom-0 left-0 right-0 h-64 overflow-hidden opacity-10">
       <svg className="absolute bottom-0 w-full h-full" viewBox="0 0 1440 320" preserveAspectRatio="none">
@@ -350,15 +351,15 @@ export const GlassCard3D = ({ children, className = "" }: { children: React.Reac
   );
 };
 
-// 🕸️ Neural Web (SVG-based for performance, but ultra-detailed)
-export const NeuralWeb = () => {
+// 🕸️ Neural Web (Optimisé : 10 nodes au lieu de 20)
+export const NeuralWeb = React.memo(() => {
   const [nodes, setNodes] = useState<{ x: number; y: number; connections: number[] }[]>([]);
 
   useEffect(() => {
-    const newNodes = Array.from({ length: 20 }).map(() => ({
+    const newNodes = Array.from({ length: 10 }).map(() => ({
       x: Math.random() * 100,
       y: Math.random() * 100,
-      connections: Array.from({ length: 2 }).map(() => Math.floor(Math.random() * 20))
+      connections: Array.from({ length: 2 }).map(() => Math.floor(Math.random() * 10))
     }));
     setNodes(newNodes);
   }, []);

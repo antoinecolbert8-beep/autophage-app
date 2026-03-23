@@ -3,11 +3,12 @@
 import { SovereigntyManager } from "@/lib/analytics/sovereignty";
 import { db as prisma } from "@/core/db";
 
-export async function getSovereigntyStats() {
-    // In a real app, we'd get the orgId from the session/user
-    // For now, we take the first organization as the "Sovereign" one
-    const org = await prisma.organization.findFirst();
-    if (!org) return null;
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth-config";
 
-    return await SovereigntyManager.calculateScore(org.id);
+export async function getSovereigntyStats() {
+    const session = await getServerSession(authOptions) as any;
+    if (!session?.user?.organizationId) return null;
+
+    return await SovereigntyManager.calculateScore(session.user.organizationId);
 }

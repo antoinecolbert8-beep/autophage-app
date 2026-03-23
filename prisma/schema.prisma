@@ -46,6 +46,8 @@ model User {
   password            String?
   currentPlan         String                   @default("free")
   stripeCustomerId    String?
+  stripeAccountId     String?
+  isAutonomous        Boolean                  @default(false)
   usedQuota           Int                      @default(0)
   monthlyQuota        Int                      @default(10)
   quotaResetDate      DateTime                 @default(now())

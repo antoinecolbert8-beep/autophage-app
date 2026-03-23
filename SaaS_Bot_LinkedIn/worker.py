@@ -79,9 +79,9 @@ def record_action(user_id: Optional[str], platform: str, action: str, target_id:
     """
     Optionnel : envoie l'action vers l'API Next /api/action-history si APP_API_URL et USER_ID sont définis.
     """
-    api_base = os.getenv("APP_API_URL", "http://localhost:3000")
+    api_base = os.getenv("APP_API_URL") or "http://localhost:3000"
     user = user_id or os.getenv("USER_ID")
-    if not api_base or not user:
+    if not user:
         return
 
     payload = {

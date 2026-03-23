@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import React, { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { PulseEngine, PulseEvent } from "@/lib/realtime-pulse";
 

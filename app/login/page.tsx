@@ -37,14 +37,10 @@ export default function LoginPage() {
       }
 
       if (result?.ok) {
-        // Trigger cinematic scan before redirect
+        // Direct redirect for stability
         setLoading(false);
-        setIsScanning(true);
-        // Force redirect after 1.5s regardless of scanner animation
-        setTimeout(() => {
-          router.push("/dashboard");
-          router.refresh();
-        }, 1500);
+        router.push("/dashboard");
+        router.refresh();
       }
     } catch (err: any) {
       setError(err.message || "Erreur de connexion. Réessayez.");
@@ -55,15 +51,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-[#0b0c10] text-[#c5c6c7] font-sans selection:bg-[#66fcf1]/30 overflow-hidden relative">
       <AnimatePresence>
-        {isScanning && (
-          <BiometricScanner
-            onComplete={() => {
-              setIsScanning(false);
-              router.push("/dashboard");
-              router.refresh();
-            }}
-          />
-        )}
+        {/* Scanner bypassed for stability */}
       </AnimatePresence>
 
       {/* Background Glows (Orbital) */}

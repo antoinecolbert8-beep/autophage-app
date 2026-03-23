@@ -59,7 +59,7 @@ const fadeUp = {
     initial: { opacity: 0, y: 24 },
     animate: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: -16 },
-    transition: { duration: 0.35, ease: "easeOut" },
+    transition: { duration: 0.35 },
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -162,7 +162,7 @@ export default function OnboardingPage() {
         setIsPublishing(true);
 
         try {
-            const res = await fetch("/api/posts/publish", {
+            const res = await fetch("/api/social/publish", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

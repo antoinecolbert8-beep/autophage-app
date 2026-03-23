@@ -1,8 +1,6 @@
-"use client";
+import React, { useEffect, useRef } from "react";
 
-import { useEffect, useRef } from "react";
-
-export default function NeuroSchema() {
+export const NeuroSchema = React.memo(() => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
@@ -18,7 +16,7 @@ export default function NeuroSchema() {
         resize();
         window.addEventListener("resize", resize);
 
-        const nodes = Array.from({ length: 60 }, () => ({
+        const nodes = Array.from({ length: 20 }, () => ({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
             vx: (Math.random() - 0.5) * 0.3,

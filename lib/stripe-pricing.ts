@@ -76,7 +76,7 @@ export const PLANS = {
     interval: "month" as const,
     quota: 50000, // Credits massively increased for Empire
     stripePriceId: process.env.STRIPE_PRICE_EMPIRE_LIVE || "price_empire_eur_monthly",
-    paymentLink: "https://buy.stripe.com/4gMfZhcFn9ZZ7GJeUl8EM06",
+    paymentLink: "https://buy.stripe.com/fZu7sL6gZfkj4uxfYp8",
     features: [
       "50000 crédits/mois",
       "Infrastructure Serveur Dédiée",

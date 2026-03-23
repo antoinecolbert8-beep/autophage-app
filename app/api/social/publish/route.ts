@@ -6,8 +6,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { publishToMultiplePlatforms } from "@/lib/social-media-manager";
 
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth-config";
+import { consumeCredits } from "@/lib/billing";
+
 export async function POST(req: NextRequest) {
   try {
+    const session = await getServerSession(authOptions) as any;
+    if (!session?.user?.organizationId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { content, mediaUrls, hashtags, platforms } = await req.json();
 
     if (!content || !platforms || platforms.length === 0) {
@@ -16,6 +25,9 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
+    // 🛡️ DÉBIT DE CRÉDITS
+    await consumeCredits(session.user.organizationId, 'POST_PUBLISH');
 
     console.log(`📱 Publication sur : ${platforms.join(", ")}`);
 

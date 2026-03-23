@@ -1,5 +1,6 @@
 import Stripe from 'stripe';
 import { prisma } from '@/lib/prisma';
+import { LedgerService } from '@/modules/treasury/ledger.service';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
     apiVersion: '2023-10-16',
@@ -255,16 +256,13 @@ export async function handleSubscriptionCreated(subscription: Stripe.Subscriptio
         });
     }
 
-    // Store subscription ID in integration
-    await prisma.integration.updateMany({
-        where: { organizationId, provider: 'stripe' },
-        data: {
-            config: JSON.stringify({
-                subscriptionId: subscription.id,
-                currentPeriodEnd: new Date(subscription.current_period_end * 1000),
-            }),
-        },
-    });
+    // 💰 REAL REVENUE RECORDING (Triggering WarChest & Freelance Cycle)
+    const amountCents = subscription.items.data[0]?.price.unit_amount || 0;
+    if (amountCents > 0) {
+        // Find latest payment intent for the subscription if possible, else use ID
+        const piId = `sub_${subscription.id}_${Date.now()}`;
+        await LedgerService.recordRevenue(amountCents, piId, subscription.customer as string);
+    }
 
     console.log(`✅ Subscription created for org ${organizationId}: ${monthlyCredits} credits/month`);
 }
@@ -284,15 +282,11 @@ export async function handleSubscriptionRenewed(invoice: Stripe.Invoice): Promis
             },
         });
 
-        // Log the credit addition
-        await prisma.creditPurchase.create({
-            data: {
-                organizationId,
-                credits: monthlyCredits,
-                amountPaid: (invoice.amount_paid || 0) / 100,
-                paymentIntentId: invoice.payment_intent as string,
-            },
-        });
+        // 💰 REAL REVENUE RECORDING (Triggering WarChest & Freelance Cycle)
+        const amountCents = invoice.amount_paid || 0;
+        if (amountCents > 0) {
+            await LedgerService.recordRevenue(amountCents, invoice.payment_intent as string, invoice.customer as string);
+        }
 
         console.log(`🔄 Monthly renewal for org ${organizationId}: +${monthlyCredits} credits`);
     }

@@ -16,8 +16,9 @@ export async function sendRealEmail(to: string, subject: string, htmlContent: st
 
     try {
         const { data, error } = await resend.emails.send({
-            from: 'ELA <onboarding@resend.dev>', // Default for unverified domains
+            from: 'ELA <ela.revolution.ia@gmail.com>', 
             to: [to],
+            reply_to: 'ela.revolution.ia@gmail.com',
             subject: subject,
             html: htmlContent,
         });

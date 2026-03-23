@@ -374,7 +374,10 @@ export class ELASelfPromoter {
         let user = await prisma.user.findUnique({ where: { email } });
 
         if (!user) {
-            let org = await prisma.organization.findFirst();
+            let org = await prisma.organization.findFirst({
+                where: { domain: 'ela.ai' }
+            });
+            
             if (!org) {
                 org = await prisma.organization.create({
                     data: { name: 'Sovereign Systems', domain: 'ela.ai' }

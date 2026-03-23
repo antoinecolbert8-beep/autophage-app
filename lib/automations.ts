@@ -41,6 +41,7 @@ export async function executeLocalAutomation(
             case 'GENERATE_SHORT_SCRIPT': creditAction = 'APEX_GENERATION'; break;
             case 'GENERATE_SMART_RESPONSE': creditAction = 'AI_ANALYSIS'; break;
             case 'SEND_EMAIL': creditAction = 'PULSE_OUTREACH'; break;
+            case 'EMAIL_FOLLOWUP': creditAction = 'PULSE_OUTREACH'; break; // Added EMAIL_FOLLOWUP
             case 'PUBLISH_SOCIAL_POST': creditAction = 'SNAP_DISTRIBUTION'; break;
             case 'QUALIFY_LEAD_AI': creditAction = 'AI_ANALYSIS'; break;
             case 'GENERATE_PROSPECT_MESSAGE': creditAction = 'AI_ANALYSIS'; break;
@@ -84,7 +85,7 @@ export async function executeLocalAutomation(
             case 'GENERATE_SMART_RESPONSE':
             case 'GENERATE_LANDING_COPY':
                 result = await generateCriticalContent({
-                    topic: payload.context || payload.query || 'Response',
+                    topic: payload.prompt || payload.context || payload.query || 'Response',
                     platform: 'LINKEDIN',
                     contentType: 'TEXT',
                     tone: 'professional',
