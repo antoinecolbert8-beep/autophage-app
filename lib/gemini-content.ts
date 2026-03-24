@@ -8,7 +8,7 @@ import OpenAI from "openai";
 import { getSocialPostPrompt } from "@/lib/prompts/social-posts";
 import { DalleService } from "@/lib/ai/dalle";
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || process.env.VERTEX_AI_API_KEY || "");
+const genAI = new GoogleGenerativeAI(process.env.VERTEX_AI_API_KEY || process.env.GOOGLE_API_KEY || "");
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || "" });
 
 export type ContentRequest = {
@@ -44,7 +44,7 @@ export type ContentOutput = {
 export async function generateContentWithGemini(
   request: ContentRequest
 ): Promise<ContentOutput> {
-  const modelName = "gemini-1.5-flash";
+  const modelName = "models/gemini-pro";
   const model = genAI.getGenerativeModel({ model: modelName });
 
   const platformSpecs = getPlatformSpecs(request.platform);
@@ -180,7 +180,7 @@ export async function generateImagePrompt(
   topic: string,
   style: "realistic" | "illustration" | "minimalist" | "3d" = "realistic"
 ): Promise<string> {
-  const modelName = "gemini-1.5-flash";
+  const modelName = "gemini-1.5-flash-latest";
   const model = genAI.getGenerativeModel({ model: modelName });
 
   const prompt = `Génère un prompt détaillé pour créer une image ${style} sur le thème : "${topic}".
@@ -206,7 +206,7 @@ export async function analyzeCompetitorContent(
   competitorContent: string[],
   niche: string
 ): Promise<{ insights: string[]; recommendations: string[] }> {
-  const modelName = "gemini-1.5-flash";
+  const modelName = "gemini-1.5-flash-latest";
   const model = genAI.getGenerativeModel({ model: modelName });
 
   const prompt = `Analyse ces contenus performants dans la niche "${niche}" :

@@ -40,24 +40,44 @@ export class LinkedInWarMachine {
      * LOI DU DM "NO-BRAINER"
      * Pitch mathématique après acceptation.
      */
-    public async sendNoBrainerDM(leadId: string, problemDetected: string) {
-        const script = `J'ai audité votre présence digitale. Vous laissez environ 20% de marge sur la table à cause de ${problemDetected}. Mon système Pro corrige ça en 4 clics. Vous voulez voir le rapport ?`;
-
-        console.log(`[WARMACHINE] 🎯 SNIPER DM sent to ${leadId}: "${script}"`);
-        // await linkedinClient.sendMessage(leadId, script);
+    public async sendNoBrainerDM(profileUrl: string, script: string) {
+        console.log(`[WARMACHINE] 🎯 SNIPER DM triggers on ${profileUrl}`);
+        await this.performAction(profileUrl, "message", script);
     }
 
     private async generatePersonalizedNote(profileUrl: string): Promise<string> {
-        // Analyse du profil par LLM
-        return "J'ai vu votre scaling sur la Supply Chain, impressionnant. Une question sur votre stack tech...";
+        // Analyse du profil par LLM (Placeholder logic)
+        return "J'ai vu votre scaling, impressionnant. Une question sur votre stack tech...";
     }
 
     private async performAction(target: string, action: string, payload?: string) {
-        console.log(`[LINKEDIN] Action ${action} sur ${target} ${payload ? `avec: ${payload}` : ""}`);
+        const actionType = action.toLowerCase();
+        console.log(`[LINKEDIN] 🚀 Executing REAL Action ${actionType} on ${target}`);
+        
+        // Use full path to the python bot
+        const botScript = "SaaS_Bot_LinkedIn/worker.py";
+        const finalAction = actionType === 'like_last_post' ? 'like' : actionType;
+        
+        let cmd = `python "${botScript}" --action ${finalAction} --target "${target}"`;
+        if (payload) {
+            cmd += ` --comment "${payload.replace(/"/g, '\\"')}"`;
+        }
+        
+        const { exec } = await import('child_process');
+        exec(cmd, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`[LINKEDIN] Error: ${error.message}`);
+                return;
+            }
+            if (stderr) console.error(`[LINKEDIN] Stderr: ${stderr}`);
+            console.log(`[LINKEDIN] Output: ${stdout}`);
+        });
     }
 
     private async deployGhostObservers(targetUrl: string) {
-        // 5 Ghosts (Profils "Cadres") visitent le profil cible
-        console.log(`[LINKEDIN] 👀 5 Ghosts observent ${targetUrl}`);
+        console.log(`[LINKEDIN] 👀 Deploying 5 Ghost visits to ${targetUrl}`);
+        for (let i = 0; i < 5; i++) {
+            await this.performAction(targetUrl, "visit");
+        }
     }
 }

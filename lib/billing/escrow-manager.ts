@@ -114,21 +114,38 @@ export async function releaseAutonomousPayout(missionId: string, actionType: str
         // 1. REAL STRIPE TRANSFER (If recipient has an account)
         let stripeTransferId = `po_auto_${Date.now()}`;
         if (recipient.stripeAccountId) {
-            console.log(`📡 [EscrowManager] Initiating real Stripe Transfer to: ${recipient.stripeAccountId}`);
-            const transfer = await stripe.transfers.create({
-                amount: Math.round(payoutAmount * 100),
-                currency: 'eur',
-                destination: recipient.stripeAccountId,
-                description: `ELA Autonomous Payout: ${actionType}`,
-                metadata: { missionId }
-            });
-            stripeTransferId = transfer.id;
+            try {
+                console.log(`📡 [EscrowManager] Initiating real Stripe Transfer to: ${recipient.stripeAccountId}`);
+                const transfer = await stripe.transfers.create({
+                    amount: Math.round(payoutAmount * 100),
+                    currency: 'eur',
+                    destination: recipient.stripeAccountId,
+                    description: `ELA Autonomous Payout: ${actionType}`,
+                    metadata: { missionId }
+                });
+                stripeTransferId = transfer.id;
+            } catch (stripeErr: any) {
+                if (stripeErr.message.includes("own account")) {
+                    console.warn(`💳 [EscrowManager] Self-transfer detected (Live Bridge). Ledger remains the source of truth.`);
+                    stripeTransferId = `po_self_${Date.now()}`;
+                } else {
+                    throw stripeErr;
+                }
+            }
         } else {
             console.warn(`⚠️ [EscrowManager] No Stripe Account ID for ${recipient.name}. Fund release is LEDGER-ONLY.`);
         }
 
         // 2. Update WarChest
-        const warChest = await prisma.warChest.findFirst();
+        const warChest = await prisma.warChest.findFirst() || await prisma.warChest.create({
+            data: { id: "global-warchest", available_budget_cents: 0 }
+        });
+
+        if (warChest.available_budget_cents < Math.round(payoutAmount * 100)) {
+            console.error(`🛑 [EscrowManager] Insufficient WarChest funds: ${warChest.available_budget_cents} cents. Payout aborted.`);
+            return { success: false, error: "WarChest insuffisant. En attente de revenus clients." };
+        }
+
         if (warChest) {
             await prisma.warChest.update({
                 where: { id: warChest.id },

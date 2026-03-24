@@ -26,55 +26,61 @@ import {
 import { CognitiveThought } from "@/components/CognitiveThought";
 
 export default function WarRoomPage() {
-  const [revenue, setRevenue] = useState(12450);
+  const [revenue, setRevenue] = useState(0); // Session Revenue (Today)
+  const [warChest, setWarChest] = useState(0);
+  const [stripeBalance, setStripeBalance] = useState(0);
   const [isDominating, setIsDominating] = useState(false);
   const [pulseEvents, setPulseEvents] = useState<any[]>([]);
-  const [logs, setLogs] = useState([
-    { id: 1, type: "SYSTEM", msg: "Attaque marketing lancée sur le secteur Retail...", time: "NOMINAL" },
-    { id: 2, type: "BOT-142", msg: "500 emails envoyés (Taux ouverture: 82%)", time: "ACTIVE" },
-    { id: 3, type: "VOX", msg: "Appel terminé avec CEO (Durée: 4m12s) -> RDV Pris", time: "SUCCESS" },
-  ]);
+  const [logs, setLogs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
-  // Fetch Pulse Data
   useEffect(() => {
-    const fetchPulse = async () => {
-      try {
-        const res = await fetch('/api/v1/pulse');
-        const data = await res.json();
-        if (data.success && data.pulse) {
-          setPulseEvents(data.pulse);
+    setMounted(true);
+  }, []);
 
-          // Add latest pulse to logs if it's new
-          if (data.pulse.length > 0) {
-            const latest = data.pulse[0];
-            setLogs(prev => {
-              if (prev.some(l => l.msg.includes(latest.orgName || latest.title))) return prev;
-              return [{
-                id: Date.now(),
-                type: "PULSE",
-                msg: `${latest.title}: ${latest.value} sécurisés par ${latest.orgName || 'un client'}`,
-                time: "JUST NOW"
-              }, ...prev].slice(0, 10);
-            });
-          }
+  // Fetch Real Stats & Pulse
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [statsRes, pulseRes] = await Promise.all([
+          fetch('/api/v1/stats/war-room'),
+          fetch('/api/v1/pulse')
+        ]);
+        
+        const statsData = await statsRes.json();
+        const pulseData = await pulseRes.json();
+
+        if (statsData.success) {
+          setRevenue(statsData.stats.revenue);
+          setWarChest(statsData.stats.warChest);
+          setStripeBalance(statsData.stats.stripeBalance);
+          setLogs(statsData.stats.logs);
         }
+
+        if (pulseData.success && pulseData.pulse) {
+          setPulseEvents(pulseData.pulse);
+        }
+        setLoading(false);
       } catch (err) {
-        console.error("Pulse fetch failed:", err);
+        console.error("Dashboard fetch failed:", err);
+        setLoading(false);
       }
     };
 
-    fetchPulse();
-    const interval = setInterval(fetchPulse, 5000); // Poll every 5 seconds
+    fetchData();
+    const interval = setInterval(fetchData, 10000); // Base refresh every 10s
     return () => clearInterval(interval);
   }, []);
 
-  // Revenue Ticker
+  // Soft increment for visual flow (on top of real base)
   useEffect(() => {
+    if (loading) return;
     const interval = setInterval(() => {
-      setRevenue(prev => prev + (isDominating ? Math.floor(Math.random() * 500) : Math.floor(Math.random() * 50)));
-    }, isDominating ? 500 : 2000);
+      setRevenue(prev => prev + (isDominating ? Math.floor(Math.random() * 5) : 0.01));
+    }, 1000);
     return () => clearInterval(interval);
-  }, [isDominating]);
+  }, [isDominating, loading]);
 
   return (
     <div className="min-h-screen bg-[#050507] text-[#c5c6c7] overflow-hidden relative font-sans">
@@ -86,6 +92,8 @@ export default function WarRoomPage() {
       <GlobalInterference active={isDominating} />
       <RealityDistortion active={isDominating} />
       <DataTsunami active={isDominating} />
+
+      {!mounted && <div className="fixed inset-0 bg-[#050507] z-[1000]" />}
 
       {/* --- DOMINANCE OVERLAY --- */}
       <AnimatePresence>
@@ -143,8 +151,16 @@ export default function WarRoomPage() {
 
           <div className="flex items-center gap-10">
             <div className="text-right hidden md:block">
-              <p className="text-[8px] font-black text-gray-600 uppercase tracking-[0.3em] mb-1">LOCAL_COORD</p>
-              <p className="text-[10px] font-mono text-white tracking-widest">48.8566 / 2.3522</p>
+              <p className="text-[8px] font-black text-gray-600 uppercase tracking-[0.3em] mb-1">STRIPE_LIQUIDITY</p>
+              <p className="text-[14px] font-mono text-white tracking-widest font-bold">
+                {stripeBalance.toLocaleString()} <span className="text-red-500 text-[10px]">€</span>
+              </p>
+            </div>
+            <div className="text-right hidden md:block">
+              <p className="text-[8px] font-black text-gray-600 uppercase tracking-[0.3em] mb-1">WAR_CHEST_SYSTEM</p>
+              <p className="text-[14px] font-mono text-white/50 tracking-widest">
+                {warChest.toLocaleString()} <span className="text-red-500/50 text-[10px]">€</span>
+              </p>
             </div>
             <div className="px-6 py-2 bg-red-950/20 border border-red-600/30 rounded-lg">
               <div className="font-mono text-red-500 text-xl font-bold">

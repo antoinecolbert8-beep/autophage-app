@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { PrivacyShield } from '../security/privacy';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -15,9 +16,10 @@ export async function sendRealEmail(to: string, subject: string, htmlContent: st
     }
 
     try {
+        const revealedEmail = await PrivacyShield.reveal(to);
         const { data, error } = await resend.emails.send({
             from: 'ELA <ela.revolution.ia@gmail.com>', 
-            to: [to],
+            to: [revealedEmail],
             reply_to: 'ela.revolution.ia@gmail.com',
             subject: subject,
             html: htmlContent,

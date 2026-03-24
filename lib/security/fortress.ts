@@ -11,7 +11,12 @@ const ALGORITHM = 'aes-256-gcm';
 const KEY_LENGTH = 32;
 const IV_LENGTH = 16;
 const SALT_LENGTH = 64;
-const SCRYPT_PARAMS = { N: 32768, r: 8, p: 1 }; // OWASP recommended minimum
+const SCRYPT_PARAMS = { 
+    N: 2048, 
+    r: 8, 
+    p: 1, 
+    maxmem: 64 * 1024 * 1024 
+}; 
 
 
 

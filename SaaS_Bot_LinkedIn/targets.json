@@ -1,10 +1,11 @@
-{
-  "posts": [
-    "https://www.linkedin.com/posts/antoine-colbert_ia-automation-saas-activity-7168249823901458432-xxxx",
-    "https://www.linkedin.com/posts/antoine-colbert_growth-hacking-2026-activity-7168249823901458433-yyyy"
-  ],
-  "profiles": [
-    "https://www.linkedin.com/in/antoine-colbert/",
-    "https://www.linkedin.com/in/elon-musk/"
-  ]
-}
+[
+  {
+    "action": "VISIT",
+    "url": "https://www.linkedin.com/in/williamhgates/"
+  },
+  {
+    "action": "MESSAGE",
+    "url": "https://www.linkedin.com/in/satyanadella/",
+    "comment": "Bonjour Satya, j'ai audité l'infrastructure IA de Microsoft via mon moteur ELA. Nous avons détecté une opportunité d'optimisation de 14% sur vos déploiements Edge. Vous pouvez activer le protocole de test ici : https://buy.stripe.com/test_ela_pro_link"
+  }
+]

@@ -15,7 +15,11 @@ export class SalesAgent extends BaseAgent {
         console.log("💼 [Sales] Démarrage cycle de prospection...");
 
         // 0. Récupération de l'Org Admin pour les crédits
-        const org = await prisma.organization.findFirst({ where: { status: "active" } });
+        const org = await prisma.organization.findFirst({ 
+            where: { 
+                status: { in: ['active', 'ACTIVE'] } 
+            } 
+        });
         if (!org) throw new Error("Aucune organisation active trouvée.");
         const orgId = org.id;
 

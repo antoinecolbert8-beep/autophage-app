@@ -22,7 +22,7 @@ export class ContentGenerationError extends Error {
 
 export async function transformPostToAd(originalPost: string): Promise<AdCopy> {
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         // 1. Apprentissage (Few-Shot Learning)
         const winners = await db.post.findMany({

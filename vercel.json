@@ -11,6 +11,10 @@
     {
       "path": "/api/cron/heartbeat",
       "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/cron/freelance",
+      "schedule": "*/10 * * * *"
     }
   ],
   "headers": [

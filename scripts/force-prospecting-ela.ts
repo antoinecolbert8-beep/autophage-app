@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { SalesAgent } from "../lib/agents/sales-agent";
 
 async function main() {

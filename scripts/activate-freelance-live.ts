@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { prisma } from "../core/db";
 import { triggerAutomation } from "../lib/automations";
 import { releaseAutonomousPayout } from "../lib/billing/escrow-manager";

@@ -75,7 +75,7 @@ export async function consumeCredits(
             where: {
                 id: organizationId,
                 creditBalance: { gte: cost },
-                status: 'active', // Only active orgs can consume
+                status: { in: ['active', 'ACTIVE'] }, // Case-insensitive safety
             },
             data: {
                 creditBalance: { decrement: cost },

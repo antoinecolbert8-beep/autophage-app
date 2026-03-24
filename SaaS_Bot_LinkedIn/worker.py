@@ -75,6 +75,49 @@ def comment_on_post(page: Page, post_url: str, comment: str):
     return True
 
 
+def send_message(page: Page, profile_url: str, text: str):
+    print(f"📩 Tentative d'envoi de message à: {profile_url}")
+    page.goto(profile_url, timeout=60000, wait_until="domcontentloaded")
+    wait_human()
+    
+    # Bouton Message (sélecteur robuste pour mobile/desktop)
+    msg_btn = page.query_selector("button[aria-label*='Message'], button[aria-label*='monter le message'], a[href*='/messaging/thread/']")
+    if not msg_btn:
+        print("⚠️ Bouton Message introuvable. Tentative via bouton 'Plus'...")
+        # Parfois sous 'Plus'
+        page.click("button[aria-label*='Plus'], button[aria-label*='More']")
+        wait_human()
+        msg_btn = page.query_selector("div[role='button'][aria-label*='Message']")
+    
+    if not msg_btn:
+        print("❌ Impossible de trouver le bouton Message. Déjà en contact ?")
+        return False
+    
+    msg_btn.click()
+    wait_human(2, 4)
+    
+    # Zone de texte
+    textarea = page.wait_for_selector("div[role='textbox'], .msg-form__contenteditable", timeout=15000)
+    if not textarea:
+        print("❌ Zone de texte de message introuvable.")
+        return False
+        
+    textarea.click()
+    textarea.fill(text)
+    wait_human()
+    
+    # Envoyer
+    send_btn = page.query_selector("button[type='submit'].msg-form__send-button, .msg-form__send-btn")
+    if send_btn:
+        send_btn.click()
+    else:
+        page.keyboard.press("Enter")
+    
+    wait_human()
+    print("✅ Message envoyé.")
+    return True
+
+
 def record_action(user_id: Optional[str], platform: str, action: str, target_id: Optional[str] = None, context: Optional[dict] = None):
     """
     Optionnel : envoie l'action vers l'API Next /api/action-history si APP_API_URL et USER_ID sont définis.
@@ -127,8 +170,13 @@ def main(action: str, target: Optional[str] = None, comment: Optional[str] = Non
                 raise ValueError("target (URL post) et comment requis pour comment")
             if comment_on_post(page, target, comment):
                 record_action(os.getenv("USER_ID"), "LINKEDIN", "COMMENT", target_id=target, context={"comment": comment})
+        elif action == "message":
+            if not target or not comment:
+                raise ValueError("target (URL profil) et comment (texte message) requis pour message")
+            if send_message(page, target, comment):
+                record_action(os.getenv("USER_ID"), "LINKEDIN", "MESSAGE", target_id=target, context={"text": comment})
         else:
-            raise ValueError("action inconnue. Utilise visit | like | comment")
+            raise ValueError("action inconnue. Utilise visit | like | comment | message")
 
         context.close()
 
@@ -137,7 +185,7 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description="Bot LinkedIn (utilise storage_state.json)")
-    parser.add_argument("--action", required=True, choices=["visit", "like", "comment"])
+    parser.add_argument("--action", required=True, choices=["visit", "like", "comment", "message"])
     parser.add_argument("--target", help="URL du profil ou du post")
     parser.add_argument("--comment", help="Texte du commentaire (pour action comment)")
     parser.add_argument("--headless", action="store_true", help="Mode headless (par défaut off)")

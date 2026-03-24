@@ -58,7 +58,7 @@ export const PLANS = {
     interval: "month" as const,
     quota: 15000,
     stripePriceId: process.env.STRIPE_PRICE_SUPREME_LIVE || "price_supreme_eur_monthly",
-    paymentLink: "https://buy.stripe.com/4gM14n20J4FFe579A18EM05_BUSINESS",
+    paymentLink: "https://buy.stripe.com/4gM14n20J4FFe579A18EM05", // Fixed: Removed _BUSINESS suffix
     features: [
       "15000 crédits/mois",
       "Accès API Dédié",

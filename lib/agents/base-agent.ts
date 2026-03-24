@@ -17,7 +17,7 @@ export abstract class BaseAgent {
     this.name = name;
     this.description = role; // Use role as description for now
     this.role = role;
-    this.model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    this.model = genAI.getGenerativeModel({ model: "models/gemini-pro" });
   }
 
   /**

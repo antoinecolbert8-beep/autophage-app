@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { LedgerService } from "../modules/treasury/ledger.service";
 import { CampaignCommander } from "../modules/growth_engine/campaign_commander";
 import { db } from "../core/db";

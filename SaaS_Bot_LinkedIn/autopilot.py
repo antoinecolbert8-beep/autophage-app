@@ -26,7 +26,7 @@ import json
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
-ActionType = Literal["VISIT", "LIKE", "COMMENT"]
+ActionType = Literal["VISIT", "LIKE", "COMMENT", "MESSAGE"]
 
 
 class Target(TypedDict, total=False):
@@ -65,6 +65,13 @@ def run_sequence(targets: List[Target], headless: bool = True, min_delay: float 
                 else:
                     if comment_on_post(page, url, comment):
                         record_action(os.getenv("USER_ID"), "LINKEDIN", "COMMENT", target_id=url, context={"comment": comment})
+            elif action == "MESSAGE":
+                if not comment:
+                    print("⚠️ MESSAGE sans texte ignoré.")
+                else:
+                    from worker import send_message
+                    if send_message(page, url, comment):
+                        record_action(os.getenv("USER_ID"), "LINKEDIN", "MESSAGE", target_id=url, context={"text": comment})
             else:
                 print(f"⚠️ Action inconnue: {action}")
 
